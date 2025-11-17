@@ -13,7 +13,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <div className="container" style={{ maxWidth: 1200, margin: "0 auto", padding: 24 }}>{children}</div>
+      </body>
     </html>
   );
 }
