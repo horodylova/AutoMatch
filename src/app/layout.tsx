@@ -4,6 +4,9 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "AutoMatch",
   description: "App",
+  icons: {
+    icon: "/icon.svg",
+  },
 };
 
 export default function RootLayout({
