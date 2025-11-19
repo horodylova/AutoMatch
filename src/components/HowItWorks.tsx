@@ -19,7 +19,7 @@ export default function HowItWorks() {
         <div className={styles.content}>
           <p className={styles.paragraph}>Trust your first impulse. There are no wrong answers.</p>
           <div className={styles.divider}></div>
-          <p className={styles.paragraph}>Each response paints your portrait. Then our algorithm matches it against hundreds of automotive personalities in our database.</p>
+          <p className={styles.paragraph}>Each response paints your portrait. Then our algorithm matches it against thousands of automotive personalities in our database.</p>
           <h3 className={styles.subtitle}>Prepare to Be Surprised</h3>
           <p className={styles.paragraph}>We check compatibility by spirit and feel — that intangible “click” when you know: this is it.</p>
           <p className={styles.paragraph}>Whether you’re seeking a luxury match, an electric vehicle, or simply the best car for you — your perfect match is waiting.</p>
