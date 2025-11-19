@@ -201,6 +201,8 @@
   text-align: center;
   transition: all 0.2s ease;
   text-decoration: none;
+  display: block;
+  box-sizing: border-box;
 }
 
 .drawerItem:hover,
