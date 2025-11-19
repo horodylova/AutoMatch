@@ -43,9 +43,28 @@ export default function Page() {
 
   useEffect(() => {
     async function load() {
-      const res = await fetch(`/api/sheet-data?id=${encodeURIComponent(process.env.NEXT_PUBLIC_SHEET_ID || process.env.GOOGLE_SHEETS_SPREADSHEET_ID || "")}&range=${encodeURIComponent(process.env.NEXT_PUBLIC_SHEET_RANGE || process.env.SHEET_NAME || "DATABASE")}`);
+      const sheetId = process.env.NEXT_PUBLIC_SHEET_ID || process.env.GOOGLE_SHEETS_SPREADSHEET_ID || "";
+      const range = process.env.NEXT_PUBLIC_SHEET_RANGE || process.env.SHEET_NAME || "DATABASE";
+      const key = `sheet:${sheetId}:${range}`;
+      try {
+        const cached = typeof window !== "undefined" ? window.sessionStorage.getItem(key) : null;
+        if (cached) {
+          const values = JSON.parse(cached) as Row[];
+          const hdrs = (values[1] || []).map(v => String(v ?? ""));
+          setHeaders(hdrs);
+          const body = values.slice(13);
+          setRows(body);
+          return;
+        }
+      } catch {}
+      const res = await fetch(`/api/sheet-data?id=${encodeURIComponent(sheetId)}&range=${encodeURIComponent(range)}`);
       const data = await res.json();
       const values = (data?.data?.values || []) as Row[];
+      try {
+        if (typeof window !== "undefined") {
+          window.sessionStorage.setItem(key, JSON.stringify(values));
+        }
+      } catch {}
       const hdrs = (values[1] || []).map(v => String(v ?? ""));
       setHeaders(hdrs);
       const body = values.slice(13);
@@ -269,7 +288,12 @@ export default function Page() {
 
   return (
     <div style={{ padding: 16 }}>
-      <h1>Scores</h1>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <h1>Scores</h1>
+        <a href="/sheets">
+          <button style={{ padding: "8px 12px", borderRadius: 8, border: "1px solid #ccc", background: "#fff" }}>Open Dataset</button>
+        </a>
+      </div>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12, marginBottom: 16 }}>
         <div>
           <div>Family</div>

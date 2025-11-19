@@ -1,0 +1,195 @@
+.section {
+  position: relative;
+  background-color: var(--kendo-color-app-surface);
+  background-image: none;
+  background-repeat: no-repeat;
+  background-position: right center;
+  background-size: 520px auto;
+  padding: 96px 24px 56px;
+  scroll-margin-top: 80px;
+}
+
+.hero {
+  max-width: 900px;
+  margin: 0 auto 24px;
+  text-align: center;
+  grid-column: 1 / -1;
+}
+
+.heroTitle {
+  margin: 0 0 8px 0;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  font-size: clamp(32px, 6vw, 56px);
+  line-height: 1.1;
+  color: var(--kendo-color-on-app-surface);
+}
+
+.heroSubtitle {
+  margin: 0 0 8px 0;
+  font-size: clamp(16px, 2.8vw, 22px);
+  line-height: 1.5;
+  color: rgba(230, 214, 180, 0.85);
+}
+
+.heroWords {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-size: clamp(18px, 3.2vw, 26px);
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.heroWord {
+  color: var(--kendo-color-on-app-surface);
+  text-shadow: 0 0 0 rgba(201, 71, 45, 0);
+  animation: wordGlow 3s ease-in-out infinite;
+}
+
+.heroWord:nth-child(1) { animation-delay: 0s, 0s; }
+.heroWord:nth-child(3) { animation-delay: 0.2s, 0.2s; }
+.heroWord:nth-child(5) { animation-delay: 0.4s, 0.4s; }
+
+.heroComma {
+  color: rgba(230, 214, 180, 0.6);
+}
+
+@keyframes wordGlow {
+  0% { transform: translateY(0) scale(0.98); opacity: 0.9; text-shadow: 0 0 0 rgba(201, 71, 45, 0); }
+  50% { transform: translateY(-1px) scale(1.06); opacity: 1; text-shadow: 0 0 18px rgba(201, 71, 45, 0.6), 0 0 8px rgba(201, 71, 45, 0.4); }
+  100% { transform: translateY(0) scale(0.98); opacity: 0.95; text-shadow: 0 0 2px rgba(201, 71, 45, 0.3); }
+}
+
+.inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1.35fr;
+  gap: 32px;
+  align-items: center;
+}
+
+.content {
+  max-width: 700px;
+  color: var(--kendo-color-on-app-surface);
+  grid-column: 1;
+}
+
+.mediaFrame {
+  border-radius: 28px;
+  padding: 28px;
+  background:
+    linear-gradient(var(--kendo-color-app-surface), var(--kendo-color-app-surface)) padding-box,
+    var(--section-horizontal-gradient) border-box;
+  border: 4px solid transparent;
+  grid-column: 2;
+}
+
+.media {
+  position: relative;
+  border-radius: 22px;
+  overflow: hidden;
+  background-color: var(--kendo-color-app-surface);
+  aspect-ratio: 16 / 9;
+  min-height: 420px;
+}
+
+.media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(to left, var(--kendo-color-app-surface) 0%, rgba(14, 27, 36, 0) 60%),
+    linear-gradient(to right, var(--kendo-color-app-surface) 0%, rgba(14, 27, 36, 0) 60%),
+    linear-gradient(to top, var(--kendo-color-app-surface) 0%, rgba(14, 27, 36, 0) 50%),
+    linear-gradient(to bottom, var(--kendo-color-app-surface) 0%, rgba(14, 27, 36, 0) 50%);
+  opacity: 0.98;
+}
+
+.mediaImg {
+  object-fit: cover;
+  object-position: center;
+}
+
+.sectionTitle {
+  font-size: clamp(28px, 4.5vw, 42px);
+  line-height: 1.2;
+  font-weight: 800;
+  margin: 0 0 14px 0;
+  color: var(--kendo-color-on-app-surface);
+  text-shadow: 0 2px 12px rgba(0,0,0,0.35);
+}
+
+.subtitle {
+  font-size: clamp(22px, 3.5vw, 28px);
+  line-height: 1.3;
+  font-weight: 700;
+  margin: 24px 0 12px 0;
+  color: var(--kendo-color-on-app-surface);
+}
+
+.divider {
+  height: 2px;
+  width: 80%;
+  max-width: 360px;
+  background: var(--section-horizontal-gradient);
+  border-radius: 999px;
+  margin: 14px 0 18px 0;
+}
+
+.callout {
+  margin-top: 10px;
+  padding: 14px 16px;
+  border-left: 4px solid var(--kendo-color-primary);
+  background: rgba(201, 71, 45, 0.12);
+  border-radius: 12px;
+  color: var(--kendo-color-on-app-surface);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.title {
+  font-size: var(--kendo-h3-font-size);
+  line-height: var(--kendo-h3-line-height);
+  font-weight: var(--kendo-h3-font-weight);
+  margin: 0 0 16px 0;
+}
+
+.lead {
+  font-size: 18px;
+  line-height: 1.6;
+  margin: 0 0 12px 0;
+}
+
+.paragraph {
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0 0 12px 0;
+}
+
+@media (max-width: 992px) {
+  .section {
+    background-position: right 40px;
+    background-size: 380px auto;
+    padding: 88px 16px 48px;
+  }
+  .hero {
+    margin-bottom: 16px;
+  }
+  .inner {
+    grid-template-columns: 1fr;
+  }
+  .mediaFrame {
+    max-width: 720px;
+    margin: 0 auto;
+    grid-column: 1;
+    display: none;
+  }
+  .content {
+    max-width: 100%;
+    grid-column: 1;
+  }
+}

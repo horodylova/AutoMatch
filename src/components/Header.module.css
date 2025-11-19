@@ -1,0 +1,238 @@
+/* БАЗА ХЕДДЕРА */
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: var(--section-horizontal-gradient);
+  background-color: var(--kendo-color-app-surface);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 70px;
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+.scrolled {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+}
+
+/* ЛОГО */
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+}
+
+.logoContainer {
+  display: inline-flex;
+  align-items: center;
+  line-height: 0;
+}
+
+.logoBox {
+  position: relative;
+  width: 170px;
+  height: 70px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.logoImg {
+  object-fit: contain;
+  object-position: center;
+}
+ 
+
+.desktopNav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.navButton {
+  background: transparent;
+  border-radius: 999px;
+  border: 2px solid transparent;
+  color: var(--kendo-color-on-app-surface);
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.navButton:hover {
+  border-color: #c6492d;
+  background: rgba(198, 73, 45, 0.15);
+  transform: translateY(-1px);
+}
+
+.contactButton {
+  background: #c6492d;
+  color: var(--kendo-color-on-app-surface);
+  border: none;
+  border-radius: 999px;
+  padding: 0.6rem 1.4rem;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.contactButton:hover {
+  background: #b24027;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(198, 73, 45, 0.4);
+}
+
+/* МОБИЛЬНЫЙ ХЕДДЕР */
+
+.mobileMenu {
+  display: none;
+}
+
+/* БУРГЕР */
+
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 26px;
+  height: 20px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.hamburger span {
+  width: 100%;
+  height: 2px;
+  background: #c6492d;
+  border-radius: 2px;
+}
+
+/* БЭКДРОП */
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 999;
+}
+
+/* МОБИЛЬНОЕ МЕНЮ (DRAWER) */
+
+.mobileDrawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 80%;
+  max-width: 320px;
+  height: 100vh;
+  background: #0b161f;
+  z-index: 1000;
+  box-shadow: -6px 0 18px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  animation: slideIn 0.25s ease-out forwards;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* ШАПКА ДРОВЕРА */
+
+.drawerHeader {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 1rem;
+}
+
+.closeButton {
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
+  color: #ffffff;
+  font-size: 24px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.closeButton:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  transform: translateY(-1px);
+}
+
+/* КОНТЕНТ ДРОВЕРА */
+
+.drawerContent {
+  padding: 1rem 1.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.drawerItem,
+.drawerContactButton {
+  width: 100%;
+  background: #c6492d;
+  color: var(--kendo-color-on-app-surface);
+  border: none;
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.drawerItem:hover,
+.drawerContactButton:hover {
+  background: #b24027;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(198, 73, 45, 0.5);
+}
+
+.drawerContactButton {
+  margin-top: 0.5rem;
+  font-weight: 600;
+}
+
+/* АДАПТИВНОСТЬ */
+
+@media (max-width: 992px) {
+  .desktopNav {
+    display: none;
+  }
+
+  .mobileMenu {
+    display: flex;
+  }
+
+  .header {
+    padding: 0.8rem 1.2rem;
+  }
+
+  .logoBox {
+    width: 120px;
+    height: 50px;
+  }
+}
+
