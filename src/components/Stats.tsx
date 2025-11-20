@@ -82,12 +82,12 @@ export default function Stats() {
             <div className={styles.metricLabel}>unique US trims</div>
           </div>
           <div className={styles.metric}>
-            <div className={styles.metricValue}>7%</div>
-            <div className={styles.metricLabel}>electrified trims (EV + hybrid)</div>
+            <div className={styles.metricValue}>1,359</div>
+            <div className={styles.metricLabel}>individual model years covered</div>
           </div>
           <div className={styles.metric}>
-            <div className={styles.metricValue}>100%</div>
-            <div className={styles.metricLabel}>latest generation cars</div>
+            <div className={styles.metricValue}>25%</div>
+            <div className={styles.metricLabel}>electrified trims</div>
           </div>
           <div className={styles.timeline}>
             <div className={styles.line}>
