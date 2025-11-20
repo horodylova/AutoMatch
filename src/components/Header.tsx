@@ -54,6 +54,10 @@ export default function Header() {
               <Link key={item} href="/#how-it-works" className={styles.navButton}>
                 {item}
               </Link>
+            ) : item === "Car Personalities" ? (
+              <Link key={item} href="/#car-personalities" className={styles.navButton}>
+                {item}
+              </Link>
             ) : (
               <button key={item} className={styles.navButton}>
                 {item}
@@ -101,6 +105,15 @@ export default function Header() {
                   <Link
                     key={item}
                     href="/#how-it-works"
+                    className={styles.drawerItem}
+                    onClick={() => setIsDrawerOpen(false)}
+                  >
+                    {item}
+                  </Link>
+                ) : item === "Car Personalities" ? (
+                  <Link
+                    key={item}
+                    href="/#car-personalities"
                     className={styles.drawerItem}
                     onClick={() => setIsDrawerOpen(false)}
                   >
