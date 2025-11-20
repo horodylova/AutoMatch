@@ -22,7 +22,7 @@ const logos = [
   "/porsche-logo_svgstack_com_33531763636485.svg",
   "/rolls-royce-logo_svgstack_com_33551763636471.svg",
   "/subaru-logo_svgstack_com_33581763636490.svg",
-  "/tesla-logo_svgstack_com_33621763636419.svg",
+  "/free-tesla-logo_svgstack_com_33611763636436.svg",
   "/toyota-logo_svgstack_com_33671763636476.svg",
   "/volvo-logo-icon_svgstack_com_33701763636552.svg",
 ];
