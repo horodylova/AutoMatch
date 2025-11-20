@@ -45,7 +45,7 @@ export default function CarPersonalities() {
     <section id="car-personalities" className={styles.section}>
       <div className={styles.inner}>
         <h2 className={styles.title}>Car Personalities</h2>
-        <p className={styles.subtitle}>Trusted by enthusiasts and premium brands</p>
+        <p className={styles.subtitle}>Every car has a personality. We help you find the one that reflects who you are</p>
       </div>
       <div className={styles.tracks}>
         <div className={`${styles.row} ${styles.animateScroll}`}>

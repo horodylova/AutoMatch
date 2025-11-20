@@ -1,0 +1,104 @@
+.section {
+  position: relative;
+  background-color: var(--kendo-color-app-surface);
+  padding: 64px 24px;
+}
+
+.inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.head {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.title {
+  margin: 0 0 8px 0;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  font-size: clamp(28px, 4.5vw, 42px);
+  line-height: 1.1;
+  color: var(--kendo-color-on-app-surface);
+}
+
+.subtitle {
+  margin: 0 0 24px 0;
+  font-size: clamp(16px, 2.6vw, 20px);
+  line-height: 1.6;
+  color: rgba(230, 214, 180, 0.8);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 24px;
+  align-items: center;
+}
+
+.donut {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.legend {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  margin-top: 12px;
+  color: var(--kendo-color-on-app-surface);
+  font-size: 14px;
+}
+
+.legendItem { display: inline-flex; align-items: center; gap: 8px; }
+.legendSwatch { width: 14px; height: 14px; border-radius: 3px; }
+
+.metric {
+  text-align: center;
+}
+.metricValue {
+  font-size: clamp(28px, 4.5vw, 40px);
+  font-weight: 800;
+  color: var(--kendo-color-on-app-surface);
+}
+.metricLabel {
+  margin-top: 6px;
+  font-size: 14px;
+  color: rgba(230, 214, 180, 0.8);
+}
+
+.timeline {
+  grid-column: 1 / -1;
+  margin-top: 24px;
+}
+.line { height: 2px; background: rgba(230, 214, 180, 0.2); position: relative; }
+.highlight { position: absolute; top: 0; height: 4px; background: var(--kendo-color-primary); border-radius: 999px; }
+.ticks { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
+.tick { width: 2px; height: 12px; background: rgba(230, 214, 180, 0.3); }
+.label { font-size: 12px; color: rgba(230, 214, 180, 0.6); }
+.marker { position: absolute; top: -6px; right: 8%; width: 10px; height: 10px; border-radius: 50%; background: var(--kendo-color-primary); }
+.markerBold { position: absolute; top: -5px; width: 12px; height: 12px; border-radius: 50%; background: var(--kendo-color-primary); box-shadow: 0 0 0 3px rgba(201, 71, 45, 0.25); }
+
+@media (max-width: 992px) {
+  .grid { grid-template-columns: 1fr; }
+  .timeline { grid-column: 1; }
+}
+.tooltip {
+  position: absolute;
+  transform: translate(-50%, -120%);
+  background: var(--kendo-color-surface);
+  color: var(--kendo-color-on-app-surface);
+  border: 1px solid var(--kendo-color-border);
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.tooltipTitle { font-weight: 700; margin-right: 6px; }
+.tooltipValue { opacity: 0.9; }

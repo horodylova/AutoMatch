@@ -20,14 +20,14 @@
   margin: 0 0 8px 0;
   font-weight: 800;
   letter-spacing: 0.5px;
-  font-size: clamp(32px, 6vw, 56px);
+  font-size: clamp(28px, 4.5vw, 42px);
   line-height: 1.1;
   color: var(--kendo-color-on-app-surface);
 }
 
 .heroSubtitle {
-  margin: 0 0 8px 0;
-  font-size: clamp(16px, 2.8vw, 22px);
+  margin: 0 0 24px 0;
+  font-size: clamp(16px, 2.6vw, 20px);
   line-height: 1.5;
   color: rgba(230, 214, 180, 0.85);
 }
