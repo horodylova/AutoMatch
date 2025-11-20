@@ -82,6 +82,7 @@
   font-size: 0.95rem;
   cursor: pointer;
   transition: all 0.2s ease;
+  text-decoration: none;
 }
 
 .contactButton:hover {
