@@ -287,53 +287,53 @@ export default function Page() {
   }
 
   return (
-    <div style={{ padding: 16 }}>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <h1>Scores</h1>
+    <div style={{ padding: 40, background: "var(--kendo-color-app-surface)", color: "var(--kendo-color-on-app-surface)" }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
+        <h1 style={{ margin: 0, fontSize: "clamp(22px, 3.2vw, 28px)", fontWeight: 800, letterSpacing: "0.4px" }}>Scores</h1>
         <a href="/sheets">
-          <button style={{ padding: "8px 12px", borderRadius: 8, border: "1px solid #ccc", background: "#fff" }}>Open Dataset</button>
+          <button style={{ padding: "8px 12px", borderRadius: 999, border: "1px solid rgba(230,214,180,0.25)", background: "var(--kendo-color-primary)", color: "var(--kendo-color-on-app-surface)" }}>Open Dataset</button>
         </a>
       </div>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12, marginBottom: 16 }}>
         <div>
-          <div>Family</div>
-          <input type="range" min={0} max={1} step={0.01} value={weights.Family} onChange={e => setW("Family", Number(e.target.value))} />
+          <div style={{ marginBottom: 6, fontSize: 14, color: "rgba(230,214,180,0.8)" }}>Family</div>
+          <input className="scoreRange" type="range" min={0} max={1} step={0.01} value={weights.Family} onChange={e => setW("Family", Number(e.target.value))} />
         </div>
         <div>
-          <div>Sport</div>
-          <input type="range" min={0} max={1} step={0.01} value={weights.Sport} onChange={e => setW("Sport", Number(e.target.value))} />
+          <div style={{ marginBottom: 6, fontSize: 14, color: "rgba(230,214,180,0.8)" }}>Sport</div>
+          <input className="scoreRange" type="range" min={0} max={1} step={0.01} value={weights.Sport} onChange={e => setW("Sport", Number(e.target.value))} />
         </div>
         <div>
-          <div>Economy</div>
-          <input type="range" min={0} max={1} step={0.01} value={weights.Economy} onChange={e => setW("Economy", Number(e.target.value))} />
+          <div style={{ marginBottom: 6, fontSize: 14, color: "rgba(230,214,180,0.8)" }}>Economy</div>
+          <input className="scoreRange" type="range" min={0} max={1} step={0.01} value={weights.Economy} onChange={e => setW("Economy", Number(e.target.value))} />
         </div>
         <div>
-          <div>Premium</div>
-          <input type="range" min={0} max={1} step={0.01} value={weights.Premium} onChange={e => setW("Premium", Number(e.target.value))} />
+          <div style={{ marginBottom: 6, fontSize: 14, color: "rgba(230,214,180,0.8)" }}>Premium</div>
+          <input className="scoreRange" type="range" min={0} max={1} step={0.01} value={weights.Premium} onChange={e => setW("Premium", Number(e.target.value))} />
         </div>
         <div>
-          <div>Utility</div>
-          <input type="range" min={0} max={1} step={0.01} value={weights.Utility} onChange={e => setW("Utility", Number(e.target.value))} />
+          <div style={{ marginBottom: 6, fontSize: 14, color: "rgba(230,214,180,0.8)" }}>Utility</div>
+          <input className="scoreRange" type="range" min={0} max={1} step={0.01} value={weights.Utility} onChange={e => setW("Utility", Number(e.target.value))} />
         </div>
         <div>
-          <div>TechEco</div>
-          <input type="range" min={0} max={1} step={0.01} value={weights.TechEco} onChange={e => setW("TechEco", Number(e.target.value))} />
+          <div style={{ marginBottom: 6, fontSize: 14, color: "rgba(230,214,180,0.8)" }}>TechEco</div>
+          <input className="scoreRange" type="range" min={0} max={1} step={0.01} value={weights.TechEco} onChange={e => setW("TechEco", Number(e.target.value))} />
         </div>
       </div>
       <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 16 }}>
         {compatibility.map((c, i) => (
-          <div key={i} style={{ border: "1px solid #ccc", borderRadius: 10, boxShadow: "0 2px 6px rgba(0,0,0,0.06)", overflow: "hidden" }}>
-            <div style={{ padding: 14, background: "#f7f7f7", borderBottom: "1px solid #e5e5e5", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-              <div style={{ fontSize: 18, fontWeight: 600 }}>{c.title}</div>
-              <div style={{ fontSize: 14, color: "#666" }}>{c.top}</div>
-              <div style={{ fontSize: 14, fontWeight: 600 }}>{Math.round(c.compatibility * 100)}%</div>
+          <div key={i} style={{ border: "1px solid rgba(230,214,180,0.18)", borderRadius: 12, boxShadow: "0 6px 24px rgba(0,0,0,0.35)", overflow: "hidden", background: "var(--kendo-color-surface)" }}>
+            <div style={{ padding: 14, background: "rgba(230,214,180,0.06)", borderBottom: "1px solid rgba(230,214,180,0.15)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <div style={{ fontSize: 18, fontWeight: 700, color: "var(--kendo-color-on-app-surface)" }}>{c.title}</div>
+              <div style={{ fontSize: 14, color: "rgba(230,214,180,0.8)" }}>{c.top}</div>
+              <div style={{ fontSize: 14, fontWeight: 700, color: "var(--kendo-color-on-app-surface)" }}>{Math.round(c.compatibility * 100)}%</div>
             </div>
             <div style={{ padding: 14 }}>
               {Object.entries(c.scores).map(([name, value]) => (
                 <div key={name} style={{ marginBottom: 8 }}>
-                  <div style={{ fontSize: 13, marginBottom: 4 }}>{name}</div>
-                  <div style={{ height: 8, background: "#eee", borderRadius: 6 }}>
-                    <div style={{ width: `${Math.round(value)}%`, height: 8, background: "#4b7bec", borderRadius: 6 }} />
+                  <div style={{ fontSize: 13, marginBottom: 4, color: "rgba(230,214,180,0.8)" }}>{name}</div>
+                  <div style={{ height: 8, background: "rgba(230,214,180,0.15)", borderRadius: 6 }}>
+                    <div style={{ width: `${Math.round(value)}%`, height: 8, background: "var(--kendo-color-primary)", borderRadius: 6 }} />
                   </div>
                 </div>
               ))}

@@ -202,3 +202,60 @@ html, body {
   --section-horizontal-gradient: linear-gradient(90deg, var(--kendo-color-app-surface) 0, var(--kendo-color-app-surface) 25%, var(--kendo-color-surface) 50%, var(--kendo-color-app-surface) 75%, var(--kendo-color-app-surface) 100%);
   --selfdrivingcars-section-gradient: linear-gradient(to bottom, var(--kendo-color-app-surface) 0, var(--kendo-color-surface) 80%, var(--kendo-color-surface) 100%);
 }
+
+.scoreRange {
+  width: 100%;
+  accent-color: var(--kendo-color-primary);
+  background: transparent;
+}
+
+.scoreRange::-webkit-slider-runnable-track {
+  height: 6px;
+  background: rgba(230, 214, 180, 0.18);
+  border-radius: 999px;
+}
+
+.scoreRange::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  background: var(--kendo-color-primary);
+  border: 1px solid rgba(230, 214, 180, 0.28);
+  border-radius: 50%;
+  margin-top: -4px;
+}
+
+.scoreRange::-moz-range-track {
+  height: 6px;
+  background: rgba(230, 214, 180, 0.18);
+  border-radius: 999px;
+}
+
+.scoreRange::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  background: var(--kendo-color-primary);
+  border: 1px solid rgba(230, 214, 180, 0.28);
+  border-radius: 50%;
+}
+
+.scoreRange::-ms-track {
+  height: 6px;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+
+.scoreRange::-ms-fill-lower,
+.scoreRange::-ms-fill-upper {
+  background: rgba(230, 214, 180, 0.18);
+  border-radius: 999px;
+}
+
+.scoreRange::-ms-thumb {
+  width: 14px;
+  height: 14px;
+  background: var(--kendo-color-primary);
+  border: 1px solid rgba(230, 214, 180, 0.28);
+  border-radius: 50%;
+}
