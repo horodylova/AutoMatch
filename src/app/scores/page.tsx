@@ -287,7 +287,7 @@ export default function Page() {
   }
 
   return (
-    <div style={{ padding: 40, background: "var(--kendo-color-app-surface)", color: "var(--kendo-color-on-app-surface)" }}>
+    <div style={{ padding: 160, background: "var(--kendo-color-app-surface)", color: "var(--kendo-color-on-app-surface)" }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
         <h1 style={{ margin: 0, fontSize: "clamp(22px, 3.2vw, 28px)", fontWeight: 800, letterSpacing: "0.4px" }}>Scores</h1>
         <a href="/sheets">

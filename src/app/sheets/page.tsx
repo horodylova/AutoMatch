@@ -63,15 +63,15 @@ export default function Page() {
     });
   }, [rows, mkIdx, mdIdx, yrIdx, targets]);
   return (
-    <div>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
-        <h1>Sheets</h1>
+    <div style={{ padding: 160, background: "var(--kendo-color-app-surface)", color: "var(--kendo-color-on-app-surface)" }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
+        <h1 style={{ margin: 0, fontSize: "clamp(22px, 3.2vw, 28px)", fontWeight: 800, letterSpacing: "0.4px" }}>Dataset</h1>
         <Link href="/">
-          <button style={{ padding: "8px 12px", borderRadius: 8, border: "1px solid #ccc", background: "#fff" }}>Go Home</button>
+          <button style={{ padding: "8px 12px", borderRadius: 999, border: "1px solid rgba(230,214,180,0.25)", background: "var(--kendo-color-primary)", color: "var(--kendo-color-on-app-surface)" }}>Go Home</button>
         </Link>
       </div>
       {filtered.length === 0 ? (
-        <div style={{ border: "1px solid #ddd", padding: 12, borderRadius: 8 }}>No data</div>
+        <div style={{ border: "1px solid rgba(230,214,180,0.18)", padding: 12, borderRadius: 12, background: "var(--kendo-color-surface)" }}>No data</div>
       ) : (
         <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 16 }}>
           {filtered.map((row, i) => {
@@ -80,9 +80,9 @@ export default function Page() {
               .filter(v => v.length > 0)
               .join(" ");
             return (
-              <div key={i} style={{ border: "1px solid #ccc", borderRadius: 10, boxShadow: "0 2px 6px rgba(0,0,0,0.06)", overflow: "hidden" }}>
-                <div style={{ padding: 14, background: "#f7f7f7", borderBottom: "1px solid #e5e5e5", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                  <div style={{ fontSize: 18, fontWeight: 600 }}>{title || "Model"}</div>
+              <div key={i} style={{ border: "1px solid rgba(230,214,180,0.18)", borderRadius: 12, boxShadow: "0 6px 24px rgba(0,0,0,0.35)", overflow: "hidden", background: "var(--kendo-color-surface)" }}>
+                <div style={{ padding: 14, background: "rgba(230,214,180,0.06)", borderBottom: "1px solid rgba(230,214,180,0.15)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  <div style={{ fontSize: 18, fontWeight: 700, color: "var(--kendo-color-on-app-surface)" }}>{title || "Model"}</div>
                 </div>
                 <div style={{ padding: 14 }}>
                   <table style={{ borderCollapse: "collapse", width: "100%" }}>
@@ -93,8 +93,8 @@ export default function Page() {
                         if (!text) return null;
                         return (
                           <tr key={`${h}-${j}`}>
-                            <td style={{ width: 280, borderBottom: "1px solid #eee", padding: 8, color: "#555" }}>{h}</td>
-                            <td style={{ borderBottom: "1px solid #eee", padding: 8 }}>
+                            <td style={{ width: 280, borderBottom: "1px solid rgba(230,214,180,0.15)", padding: 8, color: "rgba(230,214,180,0.8)" }}>{h}</td>
+                            <td style={{ borderBottom: "1px solid rgba(230,214,180,0.15)", padding: 8, color: "var(--kendo-color-on-app-surface)" }}>
                               <div style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}>{text}</div>
                             </td>
                           </tr>
