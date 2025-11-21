@@ -58,6 +58,10 @@ export default function Header() {
               <Link key={item} href="/#car-personalities" className={styles.navButton}>
                 {item}
               </Link>
+            ) : item === "Match Algorithm" ? (
+              <Link key={item} href="/scores" className={styles.navButton}>
+                {item}
+              </Link>
             ) : (
               <button key={item} className={styles.navButton}>
                 {item}
@@ -114,6 +118,15 @@ export default function Header() {
                   <Link
                     key={item}
                     href="/#car-personalities"
+                    className={styles.drawerItem}
+                    onClick={() => setIsDrawerOpen(false)}
+                  >
+                    {item}
+                  </Link>
+                ) : item === "Match Algorithm" ? (
+                  <Link
+                    key={item}
+                    href="/scores"
                     className={styles.drawerItem}
                     onClick={() => setIsDrawerOpen(false)}
                   >
