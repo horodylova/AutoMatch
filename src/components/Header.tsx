@@ -33,7 +33,7 @@ export default function Header() {
         className={`${styles.header} ${scrolled ? styles.scrolled : ""}`}
       >
         <div className={styles.headerLeft}>
-          <a href="#" className={styles.logoContainer}>
+          <Link href="/" className={styles.logoContainer}>
             <div className={styles.logoBox}>
               <Image
                 src="/logo.svg"
@@ -44,7 +44,7 @@ export default function Header() {
                 style={{ objectFit: "contain" }}
               />
             </div>
-          </a>
+          </Link>
         </div>
 
         {/* Desktop navigation */}
