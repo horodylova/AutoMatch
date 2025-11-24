@@ -63,8 +63,8 @@ export default function Page() {
     });
   }, [rows, mkIdx, mdIdx, yrIdx, targets]);
   return (
-    <div style={{ padding: 160, background: "var(--kendo-color-app-surface)", color: "var(--kendo-color-on-app-surface)" }}>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
+    <div style={{ padding: "clamp(88px, 12vw, 160px) clamp(16px, 4vw, 32px)", background: "var(--kendo-color-app-surface)", color: "var(--kendo-color-on-app-surface)" }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 8, marginBottom: 16 }}>
         <h1 style={{ margin: 0, fontSize: "clamp(22px, 3.2vw, 28px)", fontWeight: 800, letterSpacing: "0.4px" }}>Dataset</h1>
         <Link href="/">
           <button style={{ padding: "8px 12px", borderRadius: 999, border: "1px solid rgba(230,214,180,0.25)", background: "var(--kendo-color-primary)", color: "var(--kendo-color-on-app-surface)" }}>Go Home</button>
@@ -85,7 +85,7 @@ export default function Page() {
                   <div style={{ fontSize: 18, fontWeight: 700, color: "var(--kendo-color-on-app-surface)" }}>{title || "Model"}</div>
                 </div>
                 <div style={{ padding: 14 }}>
-                  <table style={{ borderCollapse: "collapse", width: "100%" }}>
+                  <table style={{ borderCollapse: "collapse", width: "100%", tableLayout: "fixed" }}>
                     <tbody>
                       {headers.map((h, j) => {
                         const val = row[j];
@@ -93,9 +93,9 @@ export default function Page() {
                         if (!text) return null;
                         return (
                           <tr key={`${h}-${j}`}>
-                            <td style={{ width: 280, borderBottom: "1px solid rgba(230,214,180,0.15)", padding: 8, color: "rgba(230,214,180,0.8)" }}>{h}</td>
+                            <td style={{ width: "clamp(120px, 40vw, 280px)", borderBottom: "1px solid rgba(230,214,180,0.15)", padding: 8, color: "rgba(230,214,180,0.8)" }}>{h}</td>
                             <td style={{ borderBottom: "1px solid rgba(230,214,180,0.15)", padding: 8, color: "var(--kendo-color-on-app-surface)" }}>
-                              <div style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}>{text}</div>
+                              <div style={{ whiteSpace: "pre-wrap", wordBreak: "break-word", overflowWrap: "anywhere" }}>{text}</div>
                             </td>
                           </tr>
                         );

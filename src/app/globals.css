@@ -7,13 +7,28 @@ html, body {
   color: var(--kendo-color-on-app-surface);
   font-family: var(--kendo-font-family);
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
+body {
+  background-color: var(--kendo-color-app-surface);
+  background-image:
+    linear-gradient(90deg, rgba(230, 214, 180, 0.06) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(230, 214, 180, 0.06) 1px, transparent 1px),
+    radial-gradient(circle at 20% 20%, rgba(20, 82, 113, 0.20), transparent 50%),
+    radial-gradient(circle at 80% 0%, rgba(20, 82, 113, 0.15), transparent 60%);
+  background-size: 120px 120px, 120px 120px, 100% 100%, 100% 100%;
+  background-position: 0 0, 0 0, 0 0, 0 0;
+  animation: grid-scroll-up 20s linear infinite;
+}
+/* 
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 24px;
-}
+} */
+
+/* removed: sectionFrame wrapper */
 
 .k-appbar {
   background: var(--section-horizontal-gradient);
@@ -258,4 +273,10 @@ html, body {
   background: var(--kendo-color-primary);
   border: 1px solid rgba(230, 214, 180, 0.28);
   border-radius: 50%;
+}
+.gridOverlay {}
+
+@keyframes grid-scroll-up {
+  0% { background-position: 0 0, 0 0, 0 0, 0 0; }
+  100% { background-position: 0 -220px, 0 -220px, 0 0, 0 0; }
 }

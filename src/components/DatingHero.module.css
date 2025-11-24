@@ -1,103 +1,46 @@
 .section {
   position: relative;
-  background:
-    radial-gradient(1200px 520px at 50% 10%, rgba(0,0,0,0.85), rgba(0,0,0,0.95)),
-    url('/SelfdrivingCarsImage.png') center / cover no-repeat,
-    var(--kendo-color-app-surface);
-  padding: 64px 24px;
-  min-height: 70vh;
+  background: var(--kendo-color-app-surface);
+  margin-top: 110px;
+  padding: 0 0 60px;
   overflow: hidden;
-  width: 100vw;
-  margin-left: calc((100vw - 100%) / -2);
-  margin-right: calc((100vw - 100%) / -2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 100%;
 }
 
-.section::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: rgba(20, 82, 113, 0.22);
-  pointer-events: none;
+.banner { position: relative; width: 100%; min-height: 56vh; }
+.swiper { width: 100%; height: 100%; padding: 0 12px; }
+.slide { position: relative; width: clamp(240px, 24vw, 420px); height: clamp(320px, 56vh, 520px); border-radius: 18px; overflow: hidden; flex: 0 0 auto; }
+.slideImg { width: 100%; height: 100%; object-fit: cover; display: block; }
+.introBox { position: absolute; z-index: 2; top: 82%; left: 50%; transform: translate(-50%, -50%); max-width: 640px; width: calc(100% - 32px); padding: 28px; border-radius: 18px; text-align: center; background: rgba(14,27,36,0.9); color: var(--kendo-color-on-app-surface); box-shadow: 0 16px 48px rgba(0,0,0,0.6); backdrop-filter: blur(8px); box-sizing: border-box; }
+.introTitle { margin: 0 0 12px 0; font-size: clamp(24px, 4vw, 36px); font-weight: 800; letter-spacing: 0.4px; }
+.introText { margin: 0 0 18px 0; font-size: clamp(14px, 2.6vw, 18px); color: rgba(230,214,180,0.85); line-height: 1.7; }
+.introCta { display: inline-flex; width: 100%; justify-content: center; padding: 16px 24px; border-radius: 12px; background: var(--kendo-color-primary); color: var(--kendo-color-on-app-surface); text-decoration: none; font-weight: 600; box-sizing: border-box; transition: transform 0.15s ease, box-shadow 0.2s ease, filter 0.2s ease; will-change: transform; }
+.introCta:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(201, 71, 45, 0.35); filter: brightness(1.05); }
+.introCta:active { transform: translateY(0) scale(0.98); box-shadow: 0 4px 12px rgba(201, 71, 45, 0.25); }
+
+.introSection { padding: 24px 24px 40px; margin-top: 0; position: relative; z-index: 1; }
+.container { max-width: 1200px; margin: 0 auto; }
+.lead { display: flex; align-items: center; justify-content: center; }
+.leadText { max-width: 840px; text-align: center; font-size: clamp(18px, 3vw, 24px); line-height: 1.6; color: rgba(230,214,180,0.9); }
+.features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 40px; }
+.featureBox { background: rgba(14,27,36,0.7); border: 1px solid rgba(230,214,180,0.15); border-radius: 16px; padding: 20px; position: relative; overflow: hidden; transition: box-shadow 0.2s ease, border-color 0.2s ease, transform 0.15s ease; }
+.featureBox::before { content: ""; position: absolute; inset: 0; background: radial-gradient(closest-side, rgba(230,214,180,0.10), rgba(201,71,45,0.08) 35%, rgba(201,71,45,0) 70%); opacity: 0; transition: opacity 0.25s ease; }
+.featureBox:hover { border-color: rgba(230,214,180,0.35); box-shadow: 0 10px 28px rgba(201,71,45,0.28), inset 0 0 24px rgba(230,214,180,0.18); transform: translateY(-2px); }
+.featureBox:hover::before { opacity: 1; animation: glowPulse 1.4s ease-in-out; }
+.featureIcon { width: 60px; height: 60px; border-radius: 12px; background: var(--kendo-color-primary); margin-bottom: 12px; display: inline-flex; align-items: center; justify-content: center; }
+.featureBox:hover .featureIcon { filter: brightness(1.08); box-shadow: 0 6px 16px rgba(201,71,45,0.35); }
+.featureTitle { margin: 0 0 8px 0; font-size: clamp(18px, 2.6vw, 22px); font-weight: 700; color: var(--kendo-color-on-app-surface); }
+.featureDesc { margin: 0; font-size: clamp(14px, 2.2vw, 16px); color: rgba(230,214,180,0.85); line-height: 1.6; }
+
+.ctaRow { display: none; }
+
+@media (max-width: 992px) {
+  .section { margin-top: 90px; padding: 16px 0 24px; }
+  .banner { min-height: 52vh; }
+  .swiper { padding: 0 8px; }
+  .slide { height: clamp(300px, 52vh, 480px); }
+  .introBox { max-width: 560px; top: 76%; }
+  .features { grid-template-columns: 1fr; }
 }
 
-.inner {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr;
-  place-items: center;
-  gap: 24px;
-  position: relative;
-  z-index: 1;
-}
-
-.cardWrap {
-  position: relative;
-  width: clamp(280px, 60vw, 420px);
-  height: clamp(360px, 62vw, 520px);
-}
-
-.card {
-  position: absolute;
-  inset: 0;
-  border-radius: 24px;
-  overflow: hidden;
-  background: var(--kendo-color-surface);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.45);
-  transform: translate3d(0,0,0);
-  will-change: transform;
-  touch-action: none;
-}
-
-.imgBox { position: relative; width: 100%; height: 100%; }
-.cardImg { object-fit: cover; }
-
-.actions {
-  position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
-  transform: translateY(-50%);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 24px;
-}
-
-.actionBtn {
-  width: 64px;
-  height: 64px;
-  border-radius: 999px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255,255,255,0.06);
-  color: var(--kendo-color-on-app-surface);
-  border: 1px solid rgba(255,255,255,0.12);
-  backdrop-filter: blur(6px);
-}
-
-.heart { color: var(--kendo-color-primary); font-size: 26px; }
-.cross { color: rgba(230, 214, 180, 0.85); font-size: 24px; }
-
-.cta {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 12px 18px;
-  border-radius: 14px;
-  color: var(--kendo-color-on-app-surface);
-  background: var(--kendo-color-primary);
-  border: none;
-}
-
-.ctaRow { display: flex; align-items: center; gap: 12px; }
-
-@media (max-width: 768px) {
-  .section { padding: 64px 16px; }
-  .actionBtn { width: 56px; height: 56px; }
-}
+@keyframes glowPulse { 0% { transform: scale(0.98); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }

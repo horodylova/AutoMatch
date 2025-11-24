@@ -1,12 +1,13 @@
 .section {
   position: relative;
-  background-color: var(--kendo-color-app-surface);
+  background-color: transparent;
   background-image: none;
   background-repeat: no-repeat;
   background-position: right center;
   background-size: 520px auto;
   padding: 96px 24px 56px;
   scroll-margin-top: 80px;
+  margin: 24px 0;
 }
 
 .hero {
@@ -69,6 +70,11 @@
   grid-template-columns: 1fr 1.35fr;
   gap: 32px;
   align-items: center;
+  position: relative;
+  padding: 24px;
+  background: var(--kendo-color-surface);
+  border: 1px solid var(--kendo-color-border);
+  border-radius: 24px;
 }
 
 .content {

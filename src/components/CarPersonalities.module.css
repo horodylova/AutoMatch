@@ -1,7 +1,8 @@
 .section {
   position: relative;
-  background-color: var(--kendo-color-app-surface);
+  background-color: transparent;
   padding: 48px 0 80px;
+  margin: 24px 0;
 }
 
 .inner {
@@ -9,6 +10,7 @@
   margin: 0 auto 0;
   padding: 24px 24px 56px;
   text-align: center;
+  position: relative;
 }
 
 .title {
@@ -18,6 +20,7 @@
   font-size: clamp(28px, 4.5vw, 42px);
   line-height: 1.2;
   color: var(--kendo-color-on-app-surface);
+  text-align: center;
 }
 
 .subtitle {
@@ -25,14 +28,13 @@
   font-size: clamp(16px, 2.6vw, 20px);
   line-height: 1.5;
   color: rgba(230, 214, 180, 0.8);
+  text-align: center;
 }
 
 .tracks {
   position: relative;
   overflow: hidden;
-  width: 100vw;
-  margin-left: calc((100vw - 100%) / -2);
-  margin-right: calc((100vw - 100%) / -2);
+  width: 100%;
   margin-top: 0;
 }
 

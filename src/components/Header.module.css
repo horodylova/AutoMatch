@@ -5,8 +5,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
-  background: var(--section-horizontal-gradient);
-  background-color: var(--kendo-color-app-surface);
+  background-color: rgba(14, 27, 36, 0.65);
   position: fixed;
   top: 0;
   left: 0;
@@ -14,10 +13,12 @@
   height: 70px;
   z-index: 1000;
   transition: all 0.3s ease;
+  backdrop-filter: saturate(160%) blur(8px);
 }
 
 .scrolled {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+  background-color: rgba(14, 27, 36, 0.82);
 }
 
 /* ЛОГО */
@@ -25,6 +26,7 @@
 .headerLeft {
   display: flex;
   align-items: center;
+  gap: 1rem;
 }
 
 .logoContainer {
@@ -84,6 +86,8 @@
   transition: all 0.2s ease;
   text-decoration: none;
 }
+
+.headerRight { display: flex; align-items: center; }
 
 .contactButton:hover {
   background: #b24027;
@@ -237,5 +241,6 @@
     width: 120px;
     height: 50px;
   }
+  .headerRight { display: none; }
 }
 

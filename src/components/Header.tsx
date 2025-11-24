@@ -36,7 +36,7 @@ export default function Header() {
           <Link href="/" className={styles.logoContainer}>
             <div className={styles.logoBox}>
               <Image
-                src="/logo.svg"
+                src="/logos/logo.svg"
                 alt="CarCupid logo"
                 fill
                 priority
@@ -45,31 +45,32 @@ export default function Header() {
               />
             </div>
           </Link>
+          <nav className={styles.desktopNav}>
+            {menuItems.map((item) => (
+              item === "How It Works" ? (
+                <Link key={item} href="/#how-it-works" className={styles.navButton}>
+                  {item}
+                </Link>
+              ) : item === "Car Personalities" ? (
+                <Link key={item} href="/#car-personalities" className={styles.navButton}>
+                  {item}
+                </Link>
+              ) : item === "Match Algorithm" ? (
+                <Link key={item} href="/scores" className={styles.navButton}>
+                  {item}
+                </Link>
+              ) : (
+                <button key={item} className={styles.navButton}>
+                  {item}
+                </button>
+              )
+            ))}
+          </nav>
         </div>
 
-        {/* Desktop navigation */}
-        <nav className={styles.desktopNav}>
-          {menuItems.map((item) => (
-            item === "How It Works" ? (
-              <Link key={item} href="/#how-it-works" className={styles.navButton}>
-                {item}
-              </Link>
-            ) : item === "Car Personalities" ? (
-              <Link key={item} href="/#car-personalities" className={styles.navButton}>
-                {item}
-              </Link>
-            ) : item === "Match Algorithm" ? (
-              <Link key={item} href="/scores" className={styles.navButton}>
-                {item}
-              </Link>
-            ) : (
-              <button key={item} className={styles.navButton}>
-                {item}
-              </button>
-            )
-          ))}
+        <div className={styles.headerRight}>
           <button className={styles.contactButton}>Start Quiz</button>
-        </nav>
+        </div>
 
         {/* Mobile hamburger */}
         <div className={styles.mobileMenu}>
