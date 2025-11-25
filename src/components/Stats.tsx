@@ -26,7 +26,7 @@ export default function Stats() {
             <p className={styles.subtitle}>Our system blends behavioral psychology with real automotive data to pinpoint the cars that feel right — not just look good on paper</p>
           </div>
           <div className={styles.grid}>
-          <div>
+          <div className={styles.chartRow}>
             <div className={styles.donut}
               onMouseMove={(e: MouseEvent<HTMLDivElement>) => {
                 const rect = (e.currentTarget as HTMLDivElement).getBoundingClientRect();
@@ -81,17 +81,19 @@ export default function Stats() {
             </div>
             
           </div>
-          <div className={styles.metric}>
-            <div className={styles.metricValue}>9,633</div>
-            <div className={styles.metricLabel}>unique US trims</div>
-          </div>
-          <div className={styles.metric}>
-            <div className={styles.metricValue}>1,359</div>
-            <div className={styles.metricLabel}>individual model years covered</div>
-          </div>
-          <div className={styles.metric}>
-            <div className={styles.metricValue}>25%</div>
-            <div className={styles.metricLabel}>electrified trims</div>
+          <div className={styles.metricsRow}>
+            <div className={styles.metric}>
+              <div className={styles.metricValue}>9,633</div>
+              <div className={styles.metricLabel}>unique US trims</div>
+            </div>
+            <div className={styles.metric}>
+              <div className={styles.metricValue}>1,359</div>
+              <div className={styles.metricLabel}>individual model years covered</div>
+            </div>
+            <div className={styles.metric}>
+              <div className={styles.metricValue}>25%</div>
+              <div className={styles.metricLabel}>electrified trims</div>
+            </div>
           </div>
           <div className={styles.timeline}>
             <div className={styles.line}>

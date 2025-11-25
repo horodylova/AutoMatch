@@ -18,8 +18,8 @@ export default function Page() {
       paddingLeft: "clamp(16px, 4vw, 32px)",
       paddingRight: "clamp(16px, 4vw, 32px)",
       paddingTop: isMobile ? "calc(clamp(88px, 12vw, 160px) + 24px)" : "clamp(88px, 12vw, 160px)",
-      paddingBottom: "clamp(88px, 12vw, 160px)",
-      minHeight: "100vh",
+      paddingBottom: isMobile ? "clamp(56px, 10vw, 88px)" : "clamp(88px, 12vw, 160px)",
+      minHeight: isMobile ? "auto" : "100vh",
       color: "var(--kendo-color-on-app-surface)"
     }}>
       <div style={{ maxWidth: 1000, margin: "0 auto" }}>

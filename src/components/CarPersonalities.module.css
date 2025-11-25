@@ -30,6 +30,12 @@
   font-size: clamp(16px, 2.6vw, 20px);
   line-height: 1.5;
   color: rgba(230, 214, 180, 0.8);
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 6px 12px;
+  border-radius: 999px;
+  text-wrap: balance;
 }
 
 .tracks {
@@ -86,6 +92,8 @@
 }
 
 @media (max-width: 768px) {
+  .title, .subtitle { text-align: center; }
+  .subtitle { max-width: 88%; }
   .animateScroll { animation: scroll 12s linear infinite; }
   .animateScrollReverse { animation: scrollReverse 12s linear infinite; }
   .row { height: 64px; }

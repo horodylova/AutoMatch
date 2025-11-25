@@ -43,6 +43,9 @@
   align-items: center;
 }
 
+.chartRow { display: block; }
+.metricsRow { display: contents; }
+
 .donut {
   display: flex;
   align-items: center;
@@ -92,6 +95,16 @@
 @media (max-width: 992px) {
   .grid { grid-template-columns: 1fr; }
   .timeline { grid-column: 1; }
+}
+
+@media (max-width: 768px) {
+  .chartRow { display: flex; align-items: center; gap: 12px; }
+  .donut { transform: scale(0.8); transform-origin: left center; }
+  .legend { margin-top: 0; font-size: 12px; gap: 6px; }
+  .legendItem { padding: 4px 0; }
+  .metricsRow { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .metricValue { font-size: clamp(22px, 5.5vw, 28px); }
+  .metricLabel { font-size: 12px; }
 }
 .tooltip {
   position: absolute;
