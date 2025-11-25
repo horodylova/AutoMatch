@@ -1,0 +1,13 @@
+.wrap { width: 100%; }
+.svg { width: 100%; height: 120px; display: block; }
+.road { fill: none; stroke: rgba(230, 214, 180, 0.18); stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.progress { fill: none; stroke: var(--kendo-color-primary); stroke-width: 8; stroke-linecap: butt; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.car { transition: transform 200ms ease; }
+.carImg { width: 120px; height: 90px; }
+
+@media (max-width: 768px) {
+  .svg { height: 100px; }
+  .road { stroke-width: 6; }
+  .progress { stroke-width: 6; }
+  .carImg { width: 80px; height: 60px; }
+}

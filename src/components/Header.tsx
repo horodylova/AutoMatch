@@ -75,7 +75,7 @@ export default function Header() {
         </div>
 
         <div className={styles.headerRight}>
-          <button className={styles.contactButton}>Start Quiz</button>
+          <Link href="/quiz" className={styles.contactButton}>Start Quiz</Link>
         </div>
 
      
@@ -158,12 +158,13 @@ export default function Header() {
                 )
               ))}
 
-              <button
+              <Link
+                href="/quiz"
                 className={styles.drawerContactButton}
                 onClick={() => setIsDrawerOpen(false)}
               >
                 Start Quiz
-              </button>
+              </Link>
             </div>
           </div>
         </>
@@ -171,4 +172,3 @@ export default function Header() {
     </>
   );
 }
-

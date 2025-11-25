@@ -46,7 +46,7 @@ export default function DatingHero() {
           <div className={styles.introBox}>
             <h3 className={styles.introTitle}>CarCupid learns who you are</h3>
             <p className={styles.introText}>This isn’t a quick quiz. It’s a personality match built with depth, intuition, and real automotive intelligence</p>
-            <Button themeColor="primary" fillMode="solid" size="large" className={styles.introCta} onClick={() => router.push('/#how-it-works')}>Start Quiz</Button>
+            <Button themeColor="primary" fillMode="solid" size="large" className={styles.introCta} onClick={() => router.push('/quiz')}>Start Quiz</Button>
           </div>
         </div>
       </section>
