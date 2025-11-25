@@ -77,8 +77,44 @@ export default function QuizProgress({ current, total }: Props) {
   return (
     <div className={styles.wrap}>
       <svg ref={svgRef} className={styles.svg} viewBox="0 0 800 120" preserveAspectRatio="none" style={{ overflow: 'visible' }}>
-        <path ref={pathRef} d={d} className={styles.road} />
-        {progressD && <path d={progressD} className={styles.progress} />}
+        <defs>
+          <filter id="innerGlowRoad" x="-50%" y="-50%" width="200%" height="200%" color-interpolation-filters="sRGB">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur" />
+            <feComposite in="blur" in2="SourceAlpha" operator="in" result="inner" />
+            <feFlood flood-color="rgba(230,214,180,1)" flood-opacity="0.2" result="color">
+              <animate attributeName="flood-opacity" values="0.12;0.28;0.12" dur="2.8s" repeatCount="indefinite" />
+            </feFlood>
+            <feComposite in="color" in2="inner" operator="in" result="glow" />
+            <feComposite in="SourceGraphic" in2="glow" operator="over" />
+          </filter>
+          <filter id="innerGlowProgress" x="-50%" y="-50%" width="200%" height="200%" color-interpolation-filters="sRGB">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur" />
+            <feComposite in="blur" in2="SourceAlpha" operator="in" result="inner" />
+            <feFlood flood-color="rgba(201,71,45,1)" flood-opacity="0.35" result="color">
+              <animate attributeName="flood-opacity" values="0.25;0.55;0.25" dur="2.2s" repeatCount="indefinite" />
+            </feFlood>
+            <feComposite in="color" in2="inner" operator="in" result="glow" />
+            <feComposite in="SourceGraphic" in2="glow" operator="over" />
+          </filter>
+        </defs>
+        <mask id="roadMask">
+          <path d={d} className={styles.maskRoadStroke} />
+        </mask>
+        {progressD && (
+          <mask id="progressMask">
+            <path d={progressD} className={styles.maskProgressStroke} />
+          </mask>
+        )}
+        <path ref={pathRef} d={d} className={styles.road} filter="url(#innerGlowRoad)" />
+        {progressD && <path d={progressD} className={styles.progress} filter="url(#innerGlowProgress)" />}
+        <g mask="url(#roadMask)">
+          <path d={d} className={styles.roadGlow} />
+        </g>
+        {progressD && (
+          <g mask="url(#progressMask)">
+            <path d={progressD} className={styles.progressGlow} />
+          </g>
+        )}
         <g className={styles.car} transform={carTransform}>
           <g transform={`scale(${carScale[0]}, ${carScale[1]})`}>
             <image href="/cupid.png" x={-(isMobile ? 40 : 60)} y={-(isMobile ? 30 : 45)} width={isMobile ? 80 : 120} height={isMobile ? 60 : 90} preserveAspectRatio="xMidYMid meet" />
