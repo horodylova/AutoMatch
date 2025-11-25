@@ -7,7 +7,6 @@ html, body {
   color: var(--kendo-color-on-app-surface);
   font-family: var(--kendo-font-family);
   min-height: 100vh;
-  overflow-x: hidden;
 }
 
 body {
@@ -21,14 +20,22 @@ body {
   background-position: 0 0, 0 0, 0 0, 0 0;
   animation: grid-scroll-up 20s linear infinite;
 }
-/* 
+
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 24px;
-} */
+}
 
-/* removed: sectionFrame wrapper */
+.sectionFrame {
+  max-width: 1200px;
+  margin: 24px auto;
+  padding: 24px;
+  border: 1px solid var(--kendo-color-border);
+  border-radius: 24px;
+  background: transparent;
+  box-shadow: none;
+}
 
 .k-appbar {
   background: var(--section-horizontal-gradient);

@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import "@progress/kendo-theme-default/dist/all.css";
 import "./globals.css";
 import Header from "../components/Header";
-import Footer from "../components/Footer";
 import StyledComponentsRegistry from "@/lib/styled-registry";
 
 export const metadata: Metadata = {
@@ -24,7 +23,6 @@ export default function RootLayout({
         <StyledComponentsRegistry>
           <Header />
           <div >{children}</div>
-          <Footer />
         </StyledComponentsRegistry>
       </body>
     </html>
