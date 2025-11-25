@@ -38,6 +38,8 @@
   text-wrap: balance;
 }
 
+.title, .subtitle { text-align: center; }
+
 .tracks {
   position: relative;
   overflow: hidden;
