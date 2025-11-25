@@ -23,7 +23,9 @@ export default function Header() {
   const menuItems: string[] = [
     "How It Works",
     "Car Personalities",
+    "Before You Buy",
     "Match Algorithm",
+  
     
   ];
 
@@ -55,15 +57,19 @@ export default function Header() {
                 <Link key={item} href="/#car-personalities" className={styles.navButton}>
                   {item}
                 </Link>
-              ) : item === "Match Algorithm" ? (
-                <Link key={item} href="/scores" className={styles.navButton}>
-                  {item}
-                </Link>
-              ) : (
-                <button key={item} className={styles.navButton}>
-                  {item}
-                </button>
-              )
+            ) : item === "Match Algorithm" ? (
+              <Link key={item} href="/scores" className={styles.navButton}>
+                {item}
+              </Link>
+            ) : item === "Before You Buy" ? (
+              <Link key={item} href="/#before-you-buy" className={styles.navButton}>
+                {item}
+              </Link>
+            ) : (
+              <button key={item} className={styles.navButton}>
+                {item}
+              </button>
+            )
             ))}
           </nav>
         </div>
@@ -72,7 +78,7 @@ export default function Header() {
           <button className={styles.contactButton}>Start Quiz</button>
         </div>
 
-        {/* Mobile hamburger */}
+     
         <div className={styles.mobileMenu}>
           <button
             className={styles.hamburger}
@@ -86,7 +92,6 @@ export default function Header() {
         </div>
       </header>
 
-      {/* Mobile drawer + backdrop */}
       {isDrawerOpen && (
         <>
           <div
@@ -133,6 +138,15 @@ export default function Header() {
                   >
                     {item}
                   </Link>
+                ) : item === "Before You Buy" ? (
+                  <Link
+                    key={item}
+                    href="/#before-you-buy"
+                    className={styles.drawerItem}
+                    onClick={() => setIsDrawerOpen(false)}
+                  >
+                    {item}
+                  </Link>
                 ) : (
                   <button
                     key={item}
@@ -157,5 +171,4 @@ export default function Header() {
     </>
   );
 }
-
 
