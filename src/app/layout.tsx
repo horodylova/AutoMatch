@@ -6,11 +6,38 @@ import Footer from "../components/Footer";
 import StyledComponentsRegistry from "@/lib/styled-registry";
 
 export const metadata: Metadata = {
-  title: "AutoMatch",
-  description: "App",
+  title: {
+    default: "CarCupid — Find Your Perfect Car Match",
+    template: "%s | CarCupid",
+  },
+  description: "Personalized car matching powered by real data and behavioral insights.",
+  keywords: [
+    "CarCupid",
+    "car match",
+    "auto",
+    "compatibility",
+    "buying",
+    "vehicle",
+  ],
   icons: {
     icon: "/logos/logo.svg",
   },
+  openGraph: {
+    title: "CarCupid — Find Your Perfect Car Match",
+    description: "Personalized car matching powered by real data and behavioral insights.",
+    siteName: "CarCupid",
+    type: "website",
+    images: [
+      { url: "/logos/logo.svg", width: 128, height: 128, alt: "CarCupid logo" },
+    ],
+  },
+  twitter: {
+    card: "summary",
+    title: "CarCupid — Find Your Perfect Car Match",
+    description: "Personalized car matching powered by real data and behavioral insights.",
+    images: ["/logos/logo.svg"],
+  },
+  themeColor: "#0E1B24",
 };
 
 export default function RootLayout({

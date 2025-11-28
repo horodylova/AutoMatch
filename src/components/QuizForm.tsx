@@ -7,9 +7,10 @@ type Props = {
   answers: string[];
   onSelect?: (index: number) => void;
   onNext?: (selectedIndex: number | null) => void;
+  showActions?: boolean;
 };
 
-export default function QuizForm({ question, answers, onSelect, onNext }: Props) {
+export default function QuizForm({ question, answers, onSelect, onNext, showActions = true }: Props) {
   const [selected, setSelected] = useState<number | null>(null);
 
   const handleSelect = (i: number) => {
@@ -37,9 +38,11 @@ export default function QuizForm({ question, answers, onSelect, onNext }: Props)
             </button>
           ))}
         </div>
-        <div className={styles.actions}>
-          <button className={styles.next} onClick={handleNext}>Next</button>
-        </div>
+        {showActions && (
+          <div className={styles.actions}>
+            <button className={styles.next} onClick={handleNext}>Next</button>
+          </div>
+        )}
       </div>
     </div>
   );

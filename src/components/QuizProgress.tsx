@@ -1,10 +1,12 @@
 'use client';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import Image from 'next/image';
 import styles from './QuizProgress.module.css';
+import formStyles from './QuizForm.module.css';
 
-type Props = { current: number; total: number };
+type Props = { current: number; total: number; showIntro?: boolean; introImageSrc?: string };
 
-export default function QuizProgress({ current, total }: Props) {
+export default function QuizProgress({ current, total, showIntro = false, introImageSrc }: Props) {
   const t = total > 0 ? total : 0;
   const c = Math.max(0, Math.min(current, t));
   const pct = t > 0 ? c / t : 0;
@@ -42,7 +44,7 @@ export default function QuizProgress({ current, total }: Props) {
     const eps = 0.0001;
     const pRel = Math.max(0, Math.min(1, pct));
     const prog = pRel * len;
-    if (pRel <= eps) {
+    if (pRel <= eps || showIntro) {
       setProgressD("");
     } else {
       const N = 120;
@@ -73,7 +75,7 @@ export default function QuizProgress({ current, total }: Props) {
     const py = Math.min(pyRaw, p.y - lift);
     const angle = Math.atan2(ty, tx) * (180 / Math.PI);
     setCarTransform(`translate(${px}, ${py}) rotate(${angle})`);
-  }, [pct, isMobile]);
+  }, [pct, isMobile, showIntro]);
   return (
     <div className={styles.wrap}>
       <svg ref={svgRef} className={styles.svg} viewBox="0 0 800 120" preserveAspectRatio="none" style={{ overflow: 'visible' }}>
@@ -121,6 +123,28 @@ export default function QuizProgress({ current, total }: Props) {
           </g>
         </g>
       </svg>
+      {showIntro && (
+        <div className={styles.introWrap}>
+          <div className={styles.introHead}>
+            <div className={styles.introTitle}>Before We Begin</div>
+            <div className={styles.introSubtitle}>A quick guide to your CarCupid Match Quiz</div>
+          </div>
+          <div className={styles.introContent}>
+            <div className={styles.introMedia}>
+              <Image src={introImageSrc || "/before-you-begin.jpg"} alt="intro" fill sizes="(max-width: 768px) 100vw, 50vw" className={styles.introImg} style={{ objectFit: 'cover' }} />
+            </div>
+            <div className={styles.introList}>
+              <div className={styles.introItem}><span className={styles.introDot} /><span className={styles.introText}>The CarCupid Match Quiz contains 30+ thoughtful questions and usually takes about 10 minutes to complete.</span></div>
+              <div className={styles.introItem}><span className={styles.introDot} /><span className={styles.introText}>This isn’t a test — it’s a game.</span></div>
+              <div className={styles.introItem}><span className={styles.introDot} /><span className={styles.introText}>Follow your first instinct. There are no right or wrong answers; just choose what feels true in the moment.</span></div>
+              <div className={styles.introItem}><span className={styles.introDot} /><span className={styles.introText}>You can pause at any time.</span></div>
+              <div className={styles.introItem}><span className={styles.introDot} /><span className={styles.introText}>Your progress will be saved for 24 hours, so you can return and continue whenever you’re ready.</span></div>
+              <div className={styles.introItem}><span className={styles.introDot} /><span className={styles.introText}>At the end, you’ll receive personalized match results you can share or email.</span></div>
+            </div>
+          </div>
+          
+        </div>
+      )}
     </div>
   );
 }
