@@ -2,10 +2,24 @@
 import { useEffect, useState } from "react";
 import QuizProgress from "../../components/QuizProgress";
 import formStyles from "../../components/QuizForm.module.css";
-import { PhotoQuestion, TagQuestion, ChoiceQuestion, SliderQuestion } from "../../components/quiz";
+import { PhotoQuestion, TagQuestion, ChoiceQuestion, SliderQuestion, SizeScaleQuestion } from "../../components/quiz";
  
 export default function Page() {
-  const [total, setTotal] = useState<number>(10);
+  const stepIds = [
+    "perfect_morning",
+    "daily_values",
+    "purchase_approach",
+    "technology_comfort",
+    "people_descriptors",
+    "energy_vibe",
+    "interior_feel",
+    "emotional_expectation",
+    "patience_level",
+    "ideal_weekend",
+    "ownership_duration",
+    "car_size_scale"
+  ];
+  const total = stepIds.length;
   const [current, setCurrent] = useState<number>(0);
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [showIntro, setShowIntro] = useState<boolean>(true);
@@ -18,6 +32,9 @@ export default function Page() {
   const [energyChoice, setEnergyChoice] = useState<number | null>(null);
   const [interiorChoice, setInteriorChoice] = useState<number | null>(null);
   const [emotionChoice, setEmotionChoice] = useState<number | null>(null);
+  const [patienceLevel, setPatienceLevel] = useState<number | null>(null);
+  const [ownershipDuration, setOwnershipDuration] = useState<number | null>(null);
+  const [sizeScaleIndex, setSizeScaleIndex] = useState<number | null>(null);
   useEffect(() => {
     const update = () => setIsMobile(window.innerWidth <= 768);
     update();
@@ -178,6 +195,23 @@ export default function Page() {
             />
           )}
           {!showIntro && current === 8 && (
+            <SliderQuestion
+              questionId="patience_level"
+              title="How Patient Are You With Everyday Tasks?"
+              tip="Don’t analyze it — slide toward the pace that feels natural to you in your day-to-day life."
+              min={0}
+              max={100}
+              step={1}
+              value={patienceLevel}
+              onChange={setPatienceLevel}
+              labels={[
+                "0: I want everything fast",
+                "50: I keep a balanced pace",
+                "100: I take my time and move steadily",
+              ]}
+            />
+          )}
+          {!showIntro && current === 9 && (
             <PhotoQuestion
               questionId="ideal_weekend"
               title="Your Ideal Weekend"
@@ -192,6 +226,31 @@ export default function Page() {
               ]}
               selectedKey={weekendPhoto}
               onSelect={(k) => setWeekendPhoto(k)}
+            />
+          )}
+          {!showIntro && current === 10 && (
+            <ChoiceQuestion
+              questionId="ownership_duration"
+              title="How Long Do You Usually Keep a Car?"
+              tip="Think about your real habits, not your ideal ones — choose the option that reflects how you’ve actually owned cars in the past."
+              options={[
+                "Until It Truly Reaches the End",
+                "Around 6–8 Years Before Upgrading",
+                "Typically 3–5 Years, Depending on the Model",
+                "Only 1–2 Years — I Like to Switch Often",
+                "I Change Frequently Whenever Something New Excites Me",
+              ]}
+              selectedIndex={ownershipDuration}
+              onSelect={setOwnershipDuration}
+            />
+          )}
+          {!showIntro && current === 11 && (
+            <SizeScaleQuestion
+              questionId="car_size_scale"
+              title="What Size Feels Most Natural for Your Next Car?"
+              tip="Don’t think about what you “should” drive — picture the size that feels effortless for your lifestyle, your roads, and your daily rhythm."
+              value={sizeScaleIndex}
+              onChange={setSizeScaleIndex}
             />
           )}
         </div>
@@ -210,8 +269,9 @@ export default function Page() {
               if (current === 5) { if (energyChoice === null) { return; } setCurrent(6); return; }
               if (current === 6) { if (interiorChoice === null) { return; } setCurrent(7); return; }
               if (current === 7) { if (emotionChoice === null) { return; } setCurrent(8); return; }
-              if (current === 8) { if (!weekendPhoto) { return; } setCurrent(9); return; }
-              setCurrent(v => Math.min(total, v + 1));
+              if (current === 8) { if (patienceLevel === null) { return; } setCurrent(9); return; }
+              if (current >= total - 1) { return; }
+              setCurrent(v => Math.min(total - 1, v + 1));
             }}
             disabled={showIntro ? false : (
               current === 0 ? !morningChoice :
@@ -222,7 +282,10 @@ export default function Page() {
               current === 5 ? energyChoice === null :
               current === 6 ? interiorChoice === null :
               current === 7 ? emotionChoice === null :
-              current === 8 ? !weekendPhoto :
+              current === 8 ? patienceLevel === null :
+              current === 9 ? !weekendPhoto :
+              current === 10 ? ownershipDuration === null :
+              current === 11 ? sizeScaleIndex === null :
               false
             )}
           >

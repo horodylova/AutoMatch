@@ -14,9 +14,10 @@ type Props = {
   step?: number;
   value?: number | null;
   onChange?: (value: number) => void;
+  labels?: [string, string, string];
 };
 
-export default function SliderQuestion({ questionId, title, tip, min = 0, max = 100, step = 1, value = null, onChange }: Props) {
+export default function SliderQuestion({ questionId, title, tip, min = 0, max = 100, step = 1, value = null, onChange, labels }: Props) {
   const [val, setVal] = useState<number | null>(value);
   const handle = (v: number) => {
     setVal(v);
@@ -41,9 +42,19 @@ export default function SliderQuestion({ questionId, title, tip, min = 0, max = 
               style={{ width: '100%' }}
             />
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', marginTop: 8, color: 'rgba(14,27,36,0.85)', fontSize: 14 }}>
-              <span>{min}</span>
-              <span style={{ textAlign: 'center' }}>{Math.round((min + max) / 2)}</span>
-              <span style={{ textAlign: 'right' }}>{max}</span>
+              {labels ? (
+                <>
+                  <span>{labels[0]}</span>
+                  <span style={{ textAlign: 'center' }}>{labels[1]}</span>
+                  <span style={{ textAlign: 'right' }}>{labels[2]}</span>
+                </>
+              ) : (
+                <>
+                  <span>{min}</span>
+                  <span style={{ textAlign: 'center' }}>{Math.round((min + max) / 2)}</span>
+                  <span style={{ textAlign: 'right' }}>{max}</span>
+                </>
+              )}
             </div>
           </div>
         </div>
