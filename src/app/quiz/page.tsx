@@ -57,7 +57,7 @@ export default function Page() {
           {!showIntro && current === 0 && (
             <PhotoQuestion
               questionId="perfect_morning"
-              title="Your Perfect Morning"
+              title="Your perfect morning"
               tip="Tip: Choose what feels closest to your real life"
               options={[
                 { key: "calm_breakfast", title: "Calm breakfast", src: "/perfect morning-quiz/Calm breakfast.jpg" },
@@ -94,8 +94,8 @@ export default function Page() {
           {!showIntro && current === 2 && (
             <ChoiceQuestion
               questionId="purchase_approach"
-              title="How Do You Approach Big Purchases?"
-              tip="Tip: Think of your real habits."
+              title="How do you approach big purchases?"
+              tip="Tip: Think of your real habits"
               options={[
                 "Value & low long-term cost",
                 "Balanced price/features",
@@ -110,8 +110,8 @@ export default function Page() {
           {!showIntro && current === 3 && (
             <SliderQuestion
               questionId="technology_comfort"
-              title="Your Technology Comfort Level (Slider)"
-              tip="Tip: Slide to what matches your natural preference."
+              title="Your Technology Comfort Level"
+              tip="Tip: Slide to what matches your natural preference"
               min={0}
               max={100}
               step={1}
@@ -145,7 +145,7 @@ export default function Page() {
           {!showIntro && current === 5 && (
             <ChoiceQuestion
               questionId="energy_vibe"
-              title="Which Energy Feels Most Like You?"
+              title="Which energy feels most like you?"
               tip="Tip: Choose the emotional vibe that matches you"
               options={[
                 "Calm",
@@ -162,7 +162,7 @@ export default function Page() {
           {!showIntro && current === 6 && (
             <ChoiceQuestion
               questionId="interior_feel"
-              title="How Should Your Car Feel Inside?"
+              title="How should your car feel inside?"
               tip="Tip: Imagine the interior you’d want to spend hours in — not just minutes. Choose the atmosphere that feels like a place you could genuinely live your life in, not just pass through"
               options={[
                 "A clean, calming environment with uncluttered design and soft silence — a space that helps you breathe and think clearly.",
@@ -180,15 +180,15 @@ export default function Page() {
           {!showIntro && current === 7 && (
             <ChoiceQuestion
               questionId="emotional_expectation"
-              title="What Do You Expect Emotionally from a Car?"
+              title="What do you expect emotionally from a car?"
               tip="Think about the feeling you want every time you sit behind the wheel — choose the emotion that truly matters most to you."
               options={[
-                "Stability & Safety You Can Rely On",
-                "Excitement & Thrill That Bring You Alive",
-                "Comfort & Ease in Every Moment",
-                "Confidence & Status You Instantly Feel",
-                "Simplicity & Low-Stress Ownership",
-                "Innovation & Forward-Thinking Design",
+                "Stability & safety you can rely on",
+                "Excitement & thrill that bring you alive",
+                "Comfort & ease in every moment",
+                "Confidence & status you instantly feel",
+                "Simplicity & low-stress ownership",
+                "Innovation & forward-thinking design",
               ]}
               selectedIndex={emotionChoice}
               onSelect={setEmotionChoice}
@@ -197,7 +197,7 @@ export default function Page() {
           {!showIntro && current === 8 && (
             <SliderQuestion
               questionId="patience_level"
-              title="How Patient Are You With Everyday Tasks?"
+              title="How patient are you with everyday tasks?"
               tip="Don’t analyze it — slide toward the pace that feels natural to you in your day-to-day life."
               min={0}
               max={100}
@@ -214,8 +214,8 @@ export default function Page() {
           {!showIntro && current === 9 && (
             <PhotoQuestion
               questionId="ideal_weekend"
-              title="Your Ideal Weekend"
-              tip="Tip: Choose what you really do."
+              title="Your ideal weekend"
+              tip="Tip: Choose what you really do"
               options={[
                 { key: "family_trip", title: "Family trip", src: "/weekend/Family trip.jpg" },
                 { key: "outdoors_hiking", title: "Outdoors / hiking", src: "/weekend/Outdoors _ hiking.jpg" },
@@ -231,14 +231,14 @@ export default function Page() {
           {!showIntro && current === 10 && (
             <ChoiceQuestion
               questionId="ownership_duration"
-              title="How Long Do You Usually Keep a Car?"
-              tip="Think about your real habits, not your ideal ones — choose the option that reflects how you’ve actually owned cars in the past."
+              title="How long do you usually keep a car?"
+              tip="Think about your real habits, not your ideal ones — choose the option that reflects how you’ve actually owned cars in the past"
               options={[
-                "Until It Truly Reaches the End",
-                "Around 6–8 Years Before Upgrading",
-                "Typically 3–5 Years, Depending on the Model",
-                "Only 1–2 Years — I Like to Switch Often",
-                "I Change Frequently Whenever Something New Excites Me",
+                "Until it truly reaches the end",
+                "Around 6–8 years before upgrading",
+                "Typically 3–5 years, depending on the model",
+                "Only 1–2 years — I like to switch often",
+                "I change frequently whenever something new excites me",
               ]}
               selectedIndex={ownershipDuration}
               onSelect={setOwnershipDuration}
@@ -247,7 +247,7 @@ export default function Page() {
           {!showIntro && current === 11 && (
             <SizeScaleQuestion
               questionId="car_size_scale"
-              title="What Size Feels Most Natural for Your Next Car?"
+              title="What size feels most natural for your next car?"
               tip="Don’t think about what you “should” drive — picture the size that feels effortless for your lifestyle, your roads, and your daily rhythm."
               value={sizeScaleIndex}
               onChange={setSizeScaleIndex}
