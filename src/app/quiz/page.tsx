@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import QuizProgress from "../../components/QuizProgress";
 import formStyles from "../../components/QuizForm.module.css";
-import { PhotoQuestion, TagQuestion, ChoiceQuestion } from "../../components/quiz";
+import { PhotoQuestion, TagQuestion, ChoiceQuestion, SliderQuestion } from "../../components/quiz";
  
 export default function Page() {
   const [total, setTotal] = useState<number>(10);
@@ -12,6 +12,12 @@ export default function Page() {
   const [morningChoice, setMorningChoice] = useState<string | null>(null);
   const [dailyTags, setDailyTags] = useState<string[]>([]);
   const [purchaseChoice, setPurchaseChoice] = useState<number | null>(null);
+  const [techComfort, setTechComfort] = useState<number | null>(null);
+  const [weekendPhoto, setWeekendPhoto] = useState<string | null>(null);
+  const [descriptorTags, setDescriptorTags] = useState<string[]>([]);
+  const [energyChoice, setEnergyChoice] = useState<number | null>(null);
+  const [interiorChoice, setInteriorChoice] = useState<number | null>(null);
+  const [emotionChoice, setEmotionChoice] = useState<number | null>(null);
   useEffect(() => {
     const update = () => setIsMobile(window.innerWidth <= 768);
     update();
@@ -72,7 +78,7 @@ export default function Page() {
             <ChoiceQuestion
               questionId="purchase_approach"
               title="How Do You Approach Big Purchases?"
-              tip="Tip: Think of your real habits"
+              tip="Tip: Think of your real habits."
               options={[
                 "Value & low long-term cost",
                 "Balanced price/features",
@@ -82,6 +88,110 @@ export default function Page() {
               ]}
               selectedIndex={purchaseChoice}
               onSelect={setPurchaseChoice}
+            />
+          )}
+          {!showIntro && current === 3 && (
+            <SliderQuestion
+              questionId="technology_comfort"
+              title="Your Technology Comfort Level (Slider)"
+              tip="Tip: Slide to what matches your natural preference."
+              min={0}
+              max={100}
+              step={1}
+              value={techComfort}
+              onChange={setTechComfort}
+            />
+          )}
+          {!showIntro && current === 4 && (
+            <TagQuestion
+              questionId="people_descriptors"
+              title="People close to you would describe you as…"
+              tip="Tip: Select up to 3 that truly reflect how others see you"
+              tags={[
+                "Practical","Grounded","Down-to-earth","Reliable","Stable","Consistent","Organized","Structured","Responsible","Thoughtful",
+                "Ambitious","Driven","Focused","Goal-oriented","Competitive","High-achieving","Confident","Assertive","Determined",
+                "Adventurous","Spontaneous","Curious","Explorer","Bold","Risk-taking","Open-minded","Dynamic",
+                "Creative","Imaginative","Innovative","Unconventional","Expressive","Visionary","Artistic","Inventive",
+                "Minimalistic","Simple","Calm","Low-maintenance","Uncomplicated","Effortless","Streamlined","Pure",
+                "Energetic","Lively","Active","Vibrant","Passionate","High-tempo","Enthusiastic","Motivated",
+                "Detail-oriented","Analytical","Precise","Methodical","Logical","Careful","Accurate",
+                "Warm","Friendly","Empathetic","Supportive","Patient","Family-minded",
+                "Polished","Sophisticated","Refined","Stylish","Professional","Composed",
+                "Hands-on","Capable","Resilient","Resourceful","Pragmatic","Prepared"
+              ]}
+              selected={descriptorTags}
+              onChange={setDescriptorTags}
+              minSelect={1}
+              maxSelect={3}
+            />
+          )}
+          {!showIntro && current === 5 && (
+            <ChoiceQuestion
+              questionId="energy_vibe"
+              title="Which Energy Feels Most Like You?"
+              tip="Tip: Choose the emotional vibe that matches you"
+              options={[
+                "Calm",
+                "Bold",
+                "Playful",
+                "Focused",
+                "Adventurous",
+                "Minimalist",
+              ]}
+              selectedIndex={energyChoice}
+              onSelect={setEnergyChoice}
+            />
+          )}
+          {!showIntro && current === 6 && (
+            <ChoiceQuestion
+              questionId="interior_feel"
+              title="How Should Your Car Feel Inside?"
+              tip="Tip: Imagine the interior you’d want to spend hours in — not just minutes. Choose the atmosphere that feels like a place you could genuinely live your life in, not just pass through"
+              options={[
+                "A clean, calming environment with uncluttered design and soft silence — a space that helps you breathe and think clearly.",
+                "A tight, energetic cabin that sharpens your senses and puts you in command of every moment on the road.",
+                "A smooth, elegant interior with premium textures, warm lighting, and details that feel intentionally crafted.",
+                "A warm, intuitive space designed for comfort, connection, and the realities of everyday life.",
+                "A modern, innovative cockpit filled with smart features, intuitive screens, and a sense of effortless progress.",
+                "A strong, practical environment built to handle gear, weather, and daily tasks without hesitation.",
+               
+              ]}
+              selectedIndex={interiorChoice}
+              onSelect={setInteriorChoice}
+            />
+          )}
+          {!showIntro && current === 7 && (
+            <ChoiceQuestion
+              questionId="emotional_expectation"
+              title="What Do You Expect Emotionally from a Car?"
+              tip="Think about the feeling you want every time you sit behind the wheel — choose the emotion that truly matters most to you."
+              options={[
+                "Stability & Safety You Can Rely On",
+                "Excitement & Thrill That Bring You Alive",
+                "Comfort & Ease in Every Moment",
+                "Confidence & Status You Instantly Feel",
+                "Simplicity & Low-Stress Ownership",
+                "Innovation & Forward-Thinking Design",
+              ]}
+              selectedIndex={emotionChoice}
+              onSelect={setEmotionChoice}
+            />
+          )}
+          {!showIntro && current === 8 && (
+            <PhotoQuestion
+              questionId="ideal_weekend"
+              title="Your Ideal Weekend"
+              tip="Tip: Choose what you really do."
+              options={[
+                { key: "family_trip", title: "Family trip", src: "/weekend/Family trip.jpg" },
+                { key: "outdoors_hiking", title: "Outdoors / hiking", src: "/weekend/Outdoors _ hiking.jpg" },
+                { key: "city_nightlife", title: "City nightlife", src: "/weekend/City nightlife.jpg" },
+                { key: "relaxing_home", title: "Relaxing at home", src: "/weekend/Relaxing at home.jpg" },
+                { key: "road_trip", title: "Road trip", src: "/weekend/Road trip.jpg" },
+                { key: "gym_active_day", title: "Gym / active day", src: "/weekend/Gym _ active day.jpg" },
+              ]}
+              selectedKey={weekendPhoto}
+              onSelect={(k) => setWeekendPhoto(k)}
             />
           )}
         </div>
@@ -95,12 +205,24 @@ export default function Page() {
               if (current === 0) { if (!morningChoice) { return; } setCurrent(1); return; }
               if (current === 1) { if (dailyTags.length < 3 || dailyTags.length > 5) { return; } setCurrent(2); return; }
               if (current === 2) { if (purchaseChoice === null) { return; } setCurrent(3); return; }
+              if (current === 3) { if (techComfort === null) { return; } setCurrent(4); return; }
+              if (current === 4) { if (descriptorTags.length < 1 || descriptorTags.length > 3) { return; } setCurrent(5); return; }
+              if (current === 5) { if (energyChoice === null) { return; } setCurrent(6); return; }
+              if (current === 6) { if (interiorChoice === null) { return; } setCurrent(7); return; }
+              if (current === 7) { if (emotionChoice === null) { return; } setCurrent(8); return; }
+              if (current === 8) { if (!weekendPhoto) { return; } setCurrent(9); return; }
               setCurrent(v => Math.min(total, v + 1));
             }}
             disabled={showIntro ? false : (
               current === 0 ? !morningChoice :
               current === 1 ? (dailyTags.length < 3 || dailyTags.length > 5) :
               current === 2 ? purchaseChoice === null :
+              current === 3 ? techComfort === null :
+              current === 4 ? (descriptorTags.length < 1 || descriptorTags.length > 3) :
+              current === 5 ? energyChoice === null :
+              current === 6 ? interiorChoice === null :
+              current === 7 ? emotionChoice === null :
+              current === 8 ? !weekendPhoto :
               false
             )}
           >
