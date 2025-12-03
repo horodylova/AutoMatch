@@ -9,7 +9,7 @@ import Loader from "@/components/Loader";
 import { fetchDataset, getRowCount, getPriceStats } from "@/lib/dataset";
 
 const sample: ListingItemData = {
-  imageUrl: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=1200&q=80&auto=format&fit=crop",
+  imageUrl: "https://www.edmunds.com/assets/m/cs/blt3beb1190f1d36abe/67cf815bff3f03baede14cdc/2025_acura_adx_front_1280.jpg",
   title: "Acura ADX 2025 Base",
   subtitle: "AWD 1.5L Turbo CVT",
   price: "$34,900",

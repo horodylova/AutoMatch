@@ -1,5 +1,5 @@
 .page {
-  padding: 120 24 24 24px;
+  padding: 24px;
   background: transparent;
   color: var(--kendo-color-on-app-surface);
 }
@@ -65,7 +65,7 @@
   background: var(--kendo-color-surface);
   overflow: hidden;
   display: grid;
-  grid-template-rows: 180px auto;
+  grid-template-rows: 240px auto;
 }
 .imgWrap { background: #111; position: relative; }
 .imgWrap img { width: 100%; height: 100%; object-fit: cover; }
@@ -80,7 +80,7 @@
 .price { font-size: 18px; font-weight: 800; }
 
 .row { display: grid; grid-template-columns: 180px 1fr 180px; gap: 16px; align-items: center; border: 1px solid var(--kendo-color-border); border-radius: 12px; background: var(--kendo-color-surface); padding: 12px; }
-.rowImgWrap { width: 100%; height: 120px; border-radius: 10px; overflow: hidden; background: #111; }
+.rowImgWrap { width: 100%; height: 160px; border-radius: 10px; overflow: hidden; background: #111; }
 .rowImgWrap img { width: 100%; height: 100%; object-fit: cover; }
 .rowBody { display: grid; gap: 8px; }
 .rowTitle { font-size: 16px; font-weight: 700; }
