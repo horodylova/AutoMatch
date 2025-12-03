@@ -4,8 +4,9 @@ import { SvgIcon } from "@progress/kendo-react-common";
 import { gridLayoutIcon, thumbnailsLeftIcon } from "@progress/kendo-svg-icons";
 
 type ViewMode = "grid" | "list";
+type SortMode = "best" | "top" | "new" | "priceAsc" | "priceDesc";
 
-export default function ResultsToolbar({ count = 24241, view, onViewChange }: { count?: number; view: ViewMode; onViewChange: (v: ViewMode) => void }) {
+export default function ResultsToolbar({ count = 0, view, sort, onViewChange, onSortChange }: { count?: number; view: ViewMode; sort: SortMode; onViewChange: (v: ViewMode) => void; onSortChange: (s: SortMode) => void }) {
   return (
     <div className={styles.toolbar}>
       <div className={styles.resultCount}>Showing {count} results</div>
@@ -21,11 +22,11 @@ export default function ResultsToolbar({ count = 24241, view, onViewChange }: { 
         <div className={styles.sortRow}>
           <span className={styles.sortLabel}>Sort by:</span>
           <div className={styles.pills}>
-            <button className={`${styles.pill} ${styles.pillActive}`}>Best match</button>
-            <button className={styles.pill}>Top Selling</button>
-            <button className={styles.pill}>Newest</button>
-            <button className={styles.pill}>Price ↑</button>
-            <button className={styles.pill}>Price ↓</button>
+            <button className={`${styles.pill} ${sort === "best" ? styles.pillActive : ""}`} onClick={() => onSortChange("best")}>Best match</button>
+            <button className={`${styles.pill} ${sort === "top" ? styles.pillActive : ""}`} onClick={() => onSortChange("top")}>Top Selling</button>
+            <button className={`${styles.pill} ${sort === "new" ? styles.pillActive : ""}`} onClick={() => onSortChange("new")}>Newest</button>
+            <button className={`${styles.pill} ${sort === "priceAsc" ? styles.pillActive : ""}`} onClick={() => onSortChange("priceAsc")}>Price ↑</button>
+            <button className={`${styles.pill} ${sort === "priceDesc" ? styles.pillActive : ""}`} onClick={() => onSortChange("priceDesc")}>Price ↓</button>
           </div>
         </div>
       </div>

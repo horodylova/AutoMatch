@@ -1,10 +1,12 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ListingItem, { ListingItemData } from "./ListingItem";
 import ListingRow, { ListingRowData } from "./ListingRow";
 import ResultsToolbar from "./ResultsToolbar";
 import Pagination from "./Pagination";
 import styles from "./cars.module.css";
+import Loader from "@/components/Loader";
+import { fetchDataset, getRowCount, getPriceStats } from "@/lib/dataset";
 
 const sample: ListingItemData = {
   imageUrl: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=1200&q=80&auto=format&fit=crop",
@@ -15,11 +17,10 @@ const sample: ListingItemData = {
   specs: ["1.5L", "190 HP", "AWD", "30 MPG", "5 seats"],
 };
 
-// no dataset yet: render repeated sample item per pageSize
-
 export default function ListingList() {
-  const count = 24241;
-  const pageSize = 9;
+  const [count, setCount] = useState<number>(0);
+  const pageSize = 15;
+  const [stats, setStats] = useState<{ min: number; max: number }>({ min: 0, max: 0 });
   const [view, setView] = useState<"grid" | "list">(() => {
     try {
       if (typeof window !== "undefined") {
@@ -28,6 +29,35 @@ export default function ListingList() {
       }
     } catch {}
     return "grid";
+  });
+  const didCount = useRef(false);
+  useEffect(() => {
+    if (didCount.current) return;
+    didCount.current = true;
+    const run = async () => {
+      const ds = await fetchDataset();
+      setCount(getRowCount(ds));
+      const ps = getPriceStats(ds);
+      setStats({ min: ps.min, max: ps.max });
+    };
+    run();
+  }, []);
+  const parseSort = (s: string | null): "best" | "top" | "new" | "priceAsc" | "priceDesc" => {
+    if (s === "priceAsc") return "priceAsc";
+    if (s === "priceDesc") return "priceDesc";
+    if (s === "best") return "best";
+    if (s === "top") return "top";
+    if (s === "new") return "new";
+    return "best";
+  };
+  const [sort, setSort] = useState<"best" | "top" | "new" | "priceAsc" | "priceDesc">(() => {
+    try {
+      if (typeof window !== "undefined") {
+        const s = window.sessionStorage.getItem("cars:sort");
+        return parseSort(s);
+      }
+    } catch {}
+    return "best";
   });
   const [page, setPage] = useState<number>(() => {
     try {
@@ -42,25 +72,43 @@ export default function ListingList() {
     try { if (typeof window !== "undefined") window.sessionStorage.setItem("cars:view", view); } catch {}
   }, [view]);
   useEffect(() => {
+    try { if (typeof window !== "undefined") window.sessionStorage.setItem("cars:sort", sort); } catch {}
+  }, [sort]);
+  useEffect(() => {
     try { if (typeof window !== "undefined") window.sessionStorage.setItem("cars:page", String(page)); } catch {}
   }, [page]);
   return (
     <div className={styles.panel}>
-      <div className={styles.panelHead}>Results</div>
+  
       <div className={styles.panelBody}>
-        <ResultsToolbar count={count} view={view} onViewChange={setView} />
+        <ResultsToolbar count={count} view={view} sort={sort} onViewChange={setView} onSortChange={setSort} />
+        {count === 0 ? <Loader label="Loading results" /> : null}
+        {(() => {
+          const fmtUSD = (n: number) => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(n);
+          const min = stats.min || 20000;
+          const max = stats.max || 90000;
+          const span = Math.max(0, max - min);
+          const indices = Array.from({ length: pageSize }).map((_, i) => i);
+          const ordered = sort === "priceDesc" ? [...indices].reverse() : indices;
+          const prices = ordered.map((idx) => min + Math.round(span * (idx / Math.max(1, pageSize - 1))));
+          return view === "grid" ? (
+            <div className={styles.listGrid}>
+              {prices.map((p, i) => (
+                <ListingItem key={`g-${i}`} item={{ ...sample, price: fmtUSD(p) }} />
+              ))}
+            </div>
+          ) : (
+            <div style={{ display: "grid", gap: 12 }}>
+              {prices.map((p, i) => (
+                <ListingRow key={`l-${i}`} item={{ ...sample, price: fmtUSD(p) } as ListingRowData} />
+              ))}
+            </div>
+          );
+        })()}
         {view === "grid" ? (
-          <div className={styles.listGrid}>
-            {Array.from({ length: pageSize }).map((_, i) => (
-              <ListingItem key={i} item={sample} />
-            ))}
-          </div>
+          <></>
         ) : (
-          <div style={{ display: "grid", gap: 12 }}>
-            {Array.from({ length: pageSize }).map((_, i) => (
-              <ListingRow key={i} item={sample as ListingRowData} />
-            ))}
-          </div>
+          <></>
         )}
         <Pagination page={page} pageSize={pageSize} total={count} onChange={setPage} />
       </div>
