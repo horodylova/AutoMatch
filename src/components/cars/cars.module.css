@@ -1,8 +1,19 @@
 .page {
-  padding: 24px;
+  padding: 120 24 24 24px;
   background: var(--kendo-color-app-surface);
   color: var(--kendo-color-on-app-surface);
 }
+.toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.resultCount { font-size: 14px; color: rgba(230,214,180,0.85); }
+.toolbarRight { display: flex; align-items: center; gap: 14px; }
+.viewToggle { display: inline-flex; align-items: center; gap: 6px; }
+.iconBtn { width: 36px; height: 36px; border-radius: 10px; border: 1px solid var(--kendo-color-border); background: var(--kendo-color-surface); display: inline-flex; align-items: center; justify-content: center; }
+.iconBtnActive { width: 36px; height: 36px; border-radius: 10px; border: 1px solid var(--kendo-color-primary); background: var(--kendo-color-primary); box-shadow: 0 6px 18px rgba(201,71,45,0.22); display: inline-flex; align-items: center; justify-content: center; }
+.sortRow { display: inline-flex; align-items: center; gap: 8px; }
+.sortLabel { font-size: 13px; color: rgba(230,214,180,0.8); }
+.pills { display: inline-flex; gap: 8px; }
+.pill { padding: 6px 10px; border-radius: 10px; border: 1px solid var(--kendo-color-border); background: var(--kendo-color-surface); font-size: 13px; color: var(--kendo-color-on-app-surface); }
+.pillActive { background: var(--kendo-color-primary); color: var(--kendo-color-on-primary); border-color: var(--kendo-color-primary); }
 .layout {
   display: grid;
   grid-template-columns: 320px 1fr;
@@ -11,6 +22,7 @@
 @media (max-width: 900px) {
   .layout { grid-template-columns: 1fr; }
 }
+.layoutTitle { font-size: 26px; font-weight: 800; }
 .panel {
   border: 1px solid var(--kendo-color-border);
   border-radius: 12px;
@@ -51,3 +63,36 @@
 .spec { padding: 6px 10px; border-radius: 999px; border: 1px solid var(--kendo-color-border); font-size: 12px; color: var(--kendo-color-on-app-surface); }
 .priceRow { display: flex; align-items: center; justify-content: space-between; }
 .price { font-size: 18px; font-weight: 800; }
+
+.row { display: grid; grid-template-columns: 180px 1fr 180px; gap: 16px; align-items: center; border: 1px solid var(--kendo-color-border); border-radius: 12px; background: var(--kendo-color-surface); padding: 12px; }
+.rowImgWrap { width: 100%; height: 120px; border-radius: 10px; overflow: hidden; background: #111; }
+.rowImgWrap img { width: 100%; height: 100%; object-fit: cover; }
+.rowBody { display: grid; gap: 8px; }
+.rowTitle { font-size: 16px; font-weight: 700; }
+.rowSubtitle { font-size: 13px; color: rgba(230,214,180,0.8); }
+.rowSpecs { display: flex; flex-wrap: wrap; gap: 8px; }
+.rowSide { display: grid; gap: 8px; align-items: end; justify-items: end; }
+
+.pager { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 16px; }
+.pagerNums { display: inline-flex; gap: 6px; }
+.pagerBtn { padding: 6px 10px; border-radius: 10px; border: 1px solid var(--kendo-color-border); background: var(--kendo-color-surface); color: var(--kendo-color-on-app-surface); }
+.pagerBtnActive { padding: 6px 10px; border-radius: 10px; border: 1px solid var(--kendo-color-primary); background: var(--kendo-color-primary); color: var(--kendo-color-on-primary); box-shadow: 0 6px 18px rgba(201,71,45,0.22); }
+
+@media (max-width: 700px) {
+  .layout { gap: 16px; }
+  .toolbar { display: grid; grid-template-columns: 1fr; gap: 10px; align-items: start; }
+  .toolbarRight { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: center; }
+  .pills { flex-wrap: wrap; }
+  .panelBody { padding: 12px; }
+  .card { grid-template-rows: 220px auto; }
+  .badge { font-size: 11px; padding: 3px 8px; }
+  .title { font-size: 17px; }
+  .subtitle { font-size: 12.5px; }
+  .spec { font-size: 12px; padding: 5px 9px; }
+  .price { font-size: 20px; }
+  .row { grid-template-columns: 120px 1fr; }
+  .rowSide { grid-column: 1 / -1; justify-items: start; }
+  .pager { flex-wrap: wrap; gap: 8px; }
+  .pagerNums { flex-wrap: wrap; }
+  .pagerBtn, .pagerBtnActive { min-width: 42px; padding: 8px 12px; font-size: 14px; }
+}
