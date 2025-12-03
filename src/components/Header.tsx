@@ -25,7 +25,8 @@ export default function Header() {
     "Car Personalities",
     "Before You Buy",
     "Match Algorithm",
-  
+    "Car Listings",
+    
     
   ];
 
@@ -63,6 +64,10 @@ export default function Header() {
               </Link>
             ) : item === "Before You Buy" ? (
               <Link key={item} href="/#before-you-buy" className={styles.navButton}>
+                {item}
+              </Link>
+            ) : item === "Car Listings" ? (
+              <Link key={item} href="/cars" className={styles.navButton}>
                 {item}
               </Link>
             ) : (
@@ -142,6 +147,15 @@ export default function Header() {
                   <Link
                     key={item}
                     href="/#before-you-buy"
+                    className={styles.drawerItem}
+                    onClick={() => setIsDrawerOpen(false)}
+                  >
+                    {item}
+                  </Link>
+                ) : item === "Car Listings" ? (
+                  <Link
+                    key={item}
+                    href="/cars"
                     className={styles.drawerItem}
                     onClick={() => setIsDrawerOpen(false)}
                   >
