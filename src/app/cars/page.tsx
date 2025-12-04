@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import Filters from "@/components/cars/Filters";
+import Filters, { FiltersData } from "@/components/cars/Filters";
 import ListingList from "@/components/cars/ListingList";
 import styles from "@/components/cars/cars.module.css";
 import Loader from "@/components/Loader";
@@ -8,6 +8,7 @@ import { fetchDataset } from "@/lib/dataset";
 
 export default function Page() {
   const [ready, setReady] = useState(false);
+  const [filters, setFilters] = useState<FiltersData>({ makes: [] });
   useEffect(() => {
     let active = true;
     const run = async () => {
@@ -21,8 +22,8 @@ export default function Page() {
     <div className={styles.page}>
       {ready ? (
         <div className={styles.layout}>
-          <Filters />
-          <ListingList />
+          <Filters onApply={setFilters} />
+          <ListingList filters={filters} />
         </div>
       ) : (
         <Loader />

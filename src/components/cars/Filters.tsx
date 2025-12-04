@@ -6,7 +6,18 @@ import FilterSection from "./FilterSection";
 import styles from "./cars.module.css";
 import { fetchDataset, getMakes, getPriceStats } from "@/lib/dataset";
 
-export default function Filters() {
+export type FiltersData = {
+  makes: string[];
+  priceMin?: number;
+  priceMax?: number;
+  body?: string[];
+  fuel?: string[];
+  newOnly?: boolean;
+};
+
+type Props = { onApply?: (f: FiltersData) => void };
+
+export default function Filters({ onApply }: Props) {
   const [makes, setMakes] = useState<string[]>([]);
   const [priceMin, setPriceMin] = useState<number>(0);
   const [priceMax, setPriceMax] = useState<number>(0);
@@ -15,6 +26,9 @@ export default function Filters() {
   const [selectedMakes, setSelectedMakes] = useState<string[]>([]);
   const [search, setSearch] = useState<string>("");
   const [showSuggest, setShowSuggest] = useState<boolean>(false);
+  const [selectedBody, setSelectedBody] = useState<string[]>([]);
+  const [selectedFuel, setSelectedFuel] = useState<string[]>([]);
+  const [newOnly, setNewOnly] = useState<boolean>(false);
   const didInit = useRef(false);
   useEffect(() => {
     if (didInit.current) return;
@@ -94,23 +108,23 @@ export default function Filters() {
           </div>
         </FilterSection>
         <FilterSection title="Body type">
-          <Checkbox label="Sedan" />
-          <Checkbox label="SUV" />
-          <Checkbox label="Truck" />
-          <Checkbox label="Coupe" />
+          <Checkbox label="Sedan" checked={selectedBody.includes("Sedan")} onChange={(e) => setSelectedBody(prev => e.value ? [...prev, "Sedan"] : prev.filter(x => x !== "Sedan"))} />
+          <Checkbox label="SUV" checked={selectedBody.includes("SUV")} onChange={(e) => setSelectedBody(prev => e.value ? [...prev, "SUV"] : prev.filter(x => x !== "SUV"))} />
+          <Checkbox label="Truck" checked={selectedBody.includes("Truck")} onChange={(e) => setSelectedBody(prev => e.value ? [...prev, "Truck"] : prev.filter(x => x !== "Truck"))} />
+          <Checkbox label="Coupe" checked={selectedBody.includes("Coupe")} onChange={(e) => setSelectedBody(prev => e.value ? [...prev, "Coupe"] : prev.filter(x => x !== "Coupe"))} />
         </FilterSection>
         <FilterSection title="Fuel">
-          <Checkbox label="Gasoline" />
-          <Checkbox label="Diesel" />
-          <Checkbox label="Hybrid" />
-          <Checkbox label="Electric" />
+          <Checkbox label="Gasoline" checked={selectedFuel.includes("Gasoline")} onChange={(e) => setSelectedFuel(prev => e.value ? [...prev, "Gasoline"] : prev.filter(x => x !== "Gasoline"))} />
+          <Checkbox label="Diesel" checked={selectedFuel.includes("Diesel")} onChange={(e) => setSelectedFuel(prev => e.value ? [...prev, "Diesel"] : prev.filter(x => x !== "Diesel"))} />
+          <Checkbox label="Hybrid" checked={selectedFuel.includes("Hybrid")} onChange={(e) => setSelectedFuel(prev => e.value ? [...prev, "Hybrid"] : prev.filter(x => x !== "Hybrid"))} />
+          <Checkbox label="Electric" checked={selectedFuel.includes("Electric")} onChange={(e) => setSelectedFuel(prev => e.value ? [...prev, "Electric"] : prev.filter(x => x !== "Electric"))} />
         </FilterSection>
         <FilterSection title="New only">
-          <Switch />
+          <Switch checked={newOnly} onChange={(e) => setNewOnly(Boolean(e.value))} />
         </FilterSection>
         <div style={{ display: "flex", gap: 8 }}>
-          <Button themeColor="primary">Apply</Button>
-          <Button onClick={() => { setSelectedMakes([]); setSearch(""); setShowSuggest(false); }}>Reset</Button>
+          <Button themeColor="primary" onClick={() => onApply?.({ makes: selectedMakes, priceMin: rangeMin || undefined, priceMax: rangeMax || undefined, body: selectedBody, fuel: selectedFuel, newOnly })}>Apply</Button>
+          <Button onClick={() => { setSelectedMakes([]); setSelectedBody([]); setSelectedFuel([]); setSearch(""); setShowSuggest(false); setRangeMin(priceMin); setRangeMax(priceMax); setNewOnly(false); onApply?.({ makes: [], priceMin: priceMin, priceMax: priceMax, body: [], fuel: [], newOnly: false }); }}>Reset</Button>
         </div>
       </div>
     </div>
