@@ -10,10 +10,13 @@ export async function fetchDataset(): Promise<Dataset> {
   const cacheKey = `dataset:${sheetId}:${range}`;
   try {
     if (typeof window !== "undefined") {
-      const cached = window.sessionStorage.getItem(cacheKey);
-      if (cached) {
-        const parsed = JSON.parse(cached) as Dataset;
-        return parsed;
+      const raw = window.localStorage.getItem(cacheKey);
+      if (raw) {
+        const parsed = JSON.parse(raw) as { data: Dataset; expiresAt: number };
+        if (parsed && typeof parsed.expiresAt === "number" && Date.now() < parsed.expiresAt) {
+          return parsed.data as Dataset;
+        }
+        window.localStorage.removeItem(cacheKey);
       }
     }
   } catch {}
@@ -29,7 +32,9 @@ export async function fetchDataset(): Promise<Dataset> {
     const out: Dataset = { headers, rows, idx };
     try {
       if (typeof window !== "undefined") {
-        window.sessionStorage.setItem(cacheKey, JSON.stringify(out));
+        const ttl = 3 * 60 * 60 * 1000;
+        const payload = { data: out, expiresAt: Date.now() + ttl };
+        window.localStorage.setItem(cacheKey, JSON.stringify(payload));
       }
     } catch {}
     return out;
