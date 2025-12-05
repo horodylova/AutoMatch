@@ -10,6 +10,7 @@ export type FiltersData = {
   makes: string[];
   priceMin?: number;
   priceMax?: number;
+  priceRanges?: { min?: number; max?: number }[];
   body?: string[];
   fuel?: string[];
   query?: string;
@@ -23,7 +24,7 @@ export default function Filters({ onApply }: Props) {
   const [priceMax, setPriceMax] = useState<number>(0);
   const [rangeMin, setRangeMin] = useState<number>(0);
   const [rangeMax, setRangeMax] = useState<number>(0);
-  const [selectedPriceLabel, setSelectedPriceLabel] = useState<string>("");
+  const [selectedPriceLabels, setSelectedPriceLabels] = useState<string[]>([]);
   const [selectedMakes, setSelectedMakes] = useState<string[]>([]);
   const [search, setSearch] = useState<string>("");
   const [showSuggest, setShowSuggest] = useState<boolean>(false);
@@ -70,9 +71,9 @@ export default function Filters({ onApply }: Props) {
   })();
   
   return (
-    <div className={styles.panel}>
+    <div className={`${styles.panel} ${styles.filtersPanel}`}>
 
-      <div className={styles.panelBody}>
+      <div className={`${styles.panelBody} ${styles.filtersBody}`}>
         <FilterSection title="Search" active={Boolean(search)}>
           <div className={styles.searchWrap}>
             <Input
@@ -80,7 +81,7 @@ export default function Filters({ onApply }: Props) {
               value={search}
               onChange={(e) => { setSearch(String(e.value || "")); setShowSuggest(true); }}
               onFocus={() => setShowSuggest(true)}
-              onKeyDown={(e) => { if (e.key === "Enter") { onApply?.({ makes: selectedMakes, priceMin: typeof rangeMin === "number" ? rangeMin : undefined, priceMax: typeof rangeMax === "number" ? rangeMax : undefined, body: selectedBody, fuel: selectedFuel, query: (search || "").trim() || undefined }); setShowSuggest(false); } }}
+              onKeyDown={(e) => { if (e.key === "Enter") { const ranges = selectedPriceLabels.map(lbl => { const g = priceGroups.find(pg => pg.label === lbl); return { min: g?.min, max: g?.max }; }).filter(r => typeof r.min !== "undefined" || typeof r.max !== "undefined"); onApply?.({ makes: selectedMakes, priceMin: typeof rangeMin === "number" ? rangeMin : undefined, priceMax: typeof rangeMax === "number" ? rangeMax : undefined, priceRanges: ranges, body: selectedBody, fuel: selectedFuel, query: (search || "").trim() || undefined }); setShowSuggest(false); } }}
             />
             {showSuggest && search && (
               <div className={styles.suggestList}>
@@ -112,7 +113,7 @@ export default function Filters({ onApply }: Props) {
                     ));
                   }
                   return arr.map(lbl => (
-                    <button key={lbl} className={styles.suggestItem} onClick={() => { setSearch(lbl); setShowSuggest(false); onApply?.({ makes: selectedMakes, priceMin: typeof rangeMin === "number" ? rangeMin : undefined, priceMax: typeof rangeMax === "number" ? rangeMax : undefined, body: selectedBody, fuel: selectedFuel, query: lbl }); }}>
+                    <button key={lbl} className={styles.suggestItem} onClick={() => { const ranges = selectedPriceLabels.map(slbl => { const g = priceGroups.find(pg => pg.label === slbl); return { min: g?.min, max: g?.max }; }).filter(r => typeof r.min !== "undefined" || typeof r.max !== "undefined"); setSearch(lbl); setShowSuggest(false); onApply?.({ makes: selectedMakes, priceMin: typeof rangeMin === "number" ? rangeMin : undefined, priceMax: typeof rangeMax === "number" ? rangeMax : undefined, priceRanges: ranges, body: selectedBody, fuel: selectedFuel, query: lbl }); }}>
                       {lbl}
                     </button>
                   ));
@@ -121,20 +122,14 @@ export default function Filters({ onApply }: Props) {
             )}
           </div>
         </FilterSection>
-        <FilterSection title="Price" active={Boolean(selectedPriceLabel)}>
+        <FilterSection title="Price" active={selectedPriceLabels.length > 0}>
           <div className={styles.tagCloud}>
             {priceGroups.map(p => (
               <button
                 key={p.label}
-                className={`${styles.pill} ${selectedPriceLabel === p.label ? styles.pillActive : ""}`}
+                className={`${styles.pill} ${selectedPriceLabels.includes(p.label) ? styles.pillActive : ""}`}
                 onClick={() => {
-                  setSelectedPriceLabel(prev => prev === p.label ? "" : p.label);
-                  if (selectedPriceLabel === p.label) {
-                    setRangeMin(priceMin); setRangeMax(priceMax);
-                  } else {
-                    setRangeMin(typeof p.min === "number" ? p.min : priceMin);
-                    setRangeMax(typeof p.max === "number" ? p.max : priceMax);
-                  }
+                  setSelectedPriceLabels(prev => prev.includes(p.label) ? prev.filter(x => x !== p.label) : [...prev, p.label]);
                 }}
               >
                 {p.label}
@@ -188,8 +183,14 @@ export default function Filters({ onApply }: Props) {
           </div>
         </FilterSection>
         <div className={styles.actionRow}>
-          <Button className={`${styles.actionBtn} ${styles.actionSecondary}`} fillMode="solid" themeColor="base" onClick={() => { setSelectedMakes([]); setSelectedBody([]); setSelectedFuel([]); setSelectedPriceLabel(""); setSearch(""); setShowSuggest(false); setRangeMin(priceMin); setRangeMax(priceMax); onApply?.({ makes: [], priceMin: priceMin, priceMax: priceMax, body: [], fuel: [], query: undefined }); }}>Reset</Button>
-          <Button className={`${styles.actionBtn} ${styles.actionPrimary}`} fillMode="solid" themeColor="primary" onClick={() => onApply?.({ makes: selectedMakes, priceMin: typeof rangeMin === "number" ? rangeMin : undefined, priceMax: typeof rangeMax === "number" ? rangeMax : undefined, body: selectedBody, fuel: selectedFuel, query: search.trim() || undefined })}>Apply</Button>
+          <Button className={`${styles.actionBtn} ${styles.actionSecondary}`} fillMode="solid" themeColor="base" onClick={() => { setSelectedMakes([]); setSelectedBody([]); setSelectedFuel([]); setSelectedPriceLabels([]); setSearch(""); setShowSuggest(false); setRangeMin(priceMin); setRangeMax(priceMax); onApply?.({ makes: [], priceMin: priceMin, priceMax: priceMax, priceRanges: [], body: [], fuel: [], query: undefined }); }}>Reset</Button>
+          <Button className={`${styles.actionBtn} ${styles.actionPrimary}`} fillMode="solid" themeColor="primary" onClick={() => {
+            const ranges = selectedPriceLabels.map(lbl => {
+              const g = priceGroups.find(pg => pg.label === lbl);
+              return { min: g?.min, max: g?.max };
+            }).filter(r => typeof r.min !== "undefined" || typeof r.max !== "undefined");
+            onApply?.({ makes: selectedMakes, priceMin: typeof rangeMin === "number" ? rangeMin : undefined, priceMax: typeof rangeMax === "number" ? rangeMax : undefined, priceRanges: ranges, body: selectedBody, fuel: selectedFuel, query: search.trim() || undefined });
+          }}>Apply</Button>
         </div>
       </div>
     </div>

@@ -118,7 +118,19 @@ export default function ListingList({ filters }: { filters?: FiltersData }) {
       const ok = filters.makes.some(m => mk === m.toLowerCase());
       if (!ok) return false;
     }
-    if (filters && (typeof filters.priceMin !== "undefined" || typeof filters.priceMax !== "undefined")) {
+    if (filters && Array.isArray(filters.priceRanges) && filters.priceRanges.length > 0) {
+      const msIdx = idx["base msrp"] ?? -1;
+      const val = msIdx >= 0 ? num(r[msIdx]) : 0;
+      const ranges = filters.priceRanges as { min?: number; max?: number }[];
+      const ok = ranges.some(range => {
+        const min = typeof range.min === "number" ? range.min : undefined;
+        const max = typeof range.max === "number" ? range.max : undefined;
+        if (typeof min === "number" && val < min) return false;
+        if (typeof max === "number" && val > max) return false;
+        return true;
+      });
+      if (!ok) return false;
+    } else if (filters && (typeof filters.priceMin !== "undefined" || typeof filters.priceMax !== "undefined")) {
       const msIdx = idx["base msrp"] ?? -1;
       const val = msIdx >= 0 ? num(r[msIdx]) : 0;
       const min = typeof filters.priceMin === "number" ? filters.priceMin : undefined;
