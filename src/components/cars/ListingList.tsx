@@ -103,7 +103,7 @@ export default function ListingList({ filters }: { filters?: FiltersData }) {
     const desc = get("trim (description)");
     const doors = get("doors");
     const imgStr = get("image url");
-    const img = imgStr.split(";").map(s => s.trim()).filter(Boolean)[0] || "";
+    const img = imgStr.split(";").map(s => s.trim()).filter(Boolean)[0] || "/no-image-available.jpg";
     const title = [make, model, trim, year].filter(Boolean).join(" ");
     const specs = [eng ? `${eng}L` : "", hp ? `${hp} HP` : "", doors ? `${doors} seats` : ""].filter(Boolean);
     return { id, imageUrl: img, title, subtitle: desc, price, badges: [], specs };
@@ -132,7 +132,6 @@ export default function ListingList({ filters }: { filters?: FiltersData }) {
     return 0;
   })();
   const matchesFilters = (r: Row): boolean => {
-    if (!hasImage(r)) return false;
     if (filters && filters.makes && filters.makes.length > 0) {
       const mkIdx = idx["make"] ?? -1;
       const mk = mkIdx >= 0 ? String(r[mkIdx] ?? "").trim().toLowerCase() : "";
@@ -195,14 +194,14 @@ export default function ListingList({ filters }: { filters?: FiltersData }) {
         {(() => {
           return view === "grid" ? (
             <div className={styles.listGrid}>
-              {pageRows.map(r => toItem(r)).filter(it => !!it.imageUrl).map((item, i) => {
+              {pageRows.map(r => toItem(r)).map((item, i) => {
                 const key = item.id || `g-${start + i}`;
                 return <ListingItem key={key} item={item} />;
               })}
             </div>
           ) : (
             <div style={{ display: "grid", gap: 12 }}>
-              {pageRows.map(r => toItem(r)).filter(it => !!it.imageUrl).map((item, i) => {
+              {pageRows.map(r => toItem(r)).map((item, i) => {
                 const rowItem: ListingRowData = {
                   imageUrl: item.imageUrl,
                   title: item.title,
