@@ -49,23 +49,7 @@ export default function ListingList({ filters }: { filters?: FiltersData }) {
     };
     run();
   }, []);
-  const parseSort = (s: string | null): "best" | "top" | "new" | "priceAsc" | "priceDesc" => {
-    if (s === "priceAsc") return "priceAsc";
-    if (s === "priceDesc") return "priceDesc";
-    if (s === "best") return "best";
-    if (s === "top") return "top";
-    if (s === "new") return "new";
-    return "best";
-  };
-  const [sort, setSort] = useState<"best" | "top" | "new" | "priceAsc" | "priceDesc">(() => {
-    try {
-      if (typeof window !== "undefined") {
-        const s = window.sessionStorage.getItem("cars:sort");
-        return parseSort(s);
-      }
-    } catch {}
-    return "best";
-  });
+  const [sort, setSort] = useState<"none" | "new" | "priceAsc" | "priceDesc">("none");
   const [page, setPage] = useState<number>(() => {
     try {
       if (typeof window !== "undefined") {
@@ -78,9 +62,7 @@ export default function ListingList({ filters }: { filters?: FiltersData }) {
   useEffect(() => {
     try { if (typeof window !== "undefined") window.sessionStorage.setItem("cars:view", view); } catch {}
   }, [view]);
-  useEffect(() => {
-    try { if (typeof window !== "undefined") window.sessionStorage.setItem("cars:sort", sort); } catch {}
-  }, [sort]);
+  
   useEffect(() => {
     try { if (typeof window !== "undefined") window.sessionStorage.setItem("cars:page", String(page)); } catch {}
   }, [page]);
@@ -112,12 +94,10 @@ export default function ListingList({ filters }: { filters?: FiltersData }) {
   const sortedRows = (() => {
     const msrpIdx = idx["base msrp"] ?? -1;
     const yearIdx = idx["year"] ?? -1;
-    const hpIdx = idx["horsepower (hp)"] ?? -1;
     const arr = [...rows];
     if (sort === "priceAsc" && msrpIdx >= 0) arr.sort((a, b) => num(a[msrpIdx]) - num(b[msrpIdx]));
     else if (sort === "priceDesc" && msrpIdx >= 0) arr.sort((a, b) => num(b[msrpIdx]) - num(a[msrpIdx]));
     else if (sort === "new" && yearIdx >= 0) arr.sort((a, b) => num(b[yearIdx]) - num(a[yearIdx]));
-    else if (sort === "top" && hpIdx >= 0) arr.sort((a, b) => num(b[hpIdx]) - num(a[hpIdx]));
     return arr;
   })();
 
@@ -183,13 +163,41 @@ export default function ListingList({ filters }: { filters?: FiltersData }) {
   };
   const filteredRows = sortedRows.filter(matchesFilters);
   const total = filteredRows.length;
+  const emptyFilters = !filters || (
+    (!filters.makes || filters.makes.length === 0) &&
+    (!filters.body || filters.body.length === 0) &&
+    (!filters.fuel || filters.fuel.length === 0) &&
+    (typeof filters.priceMin === "undefined") &&
+    (typeof filters.priceMax === "undefined") &&
+    (!filters.query)
+  );
+  const countLabel = emptyFilters ? count : total;
+  const firstPageSampleRef = useRef<Row[] | null>(null);
+  useEffect(() => { firstPageSampleRef.current = null; }, [rows]);
+  useEffect(() => { if (sort !== "none" || !emptyFilters || page !== 1) firstPageSampleRef.current = null; }, [sort, emptyFilters, page]);
   const start = Math.max(0, (page - 1) * pageSize);
-  const pageRows = filteredRows.slice(start, start + pageSize);
+  const pageRows = (() => {
+    if (emptyFilters && page === 1 && sort === "none") {
+      if (!firstPageSampleRef.current) {
+        if (filteredRows.length === 0) return [];
+        const pool = [...filteredRows];
+        for (let i = pool.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          const t = pool[i];
+          pool[i] = pool[j];
+          pool[j] = t;
+        }
+        firstPageSampleRef.current = pool.slice(0, Math.min(pageSize, pool.length));
+      }
+      return firstPageSampleRef.current as Row[];
+    }
+    return filteredRows.slice(start, start + pageSize);
+  })();
   return (
     <div className={styles.panel}>
   
       <div className={styles.panelBody}>
-        <ResultsToolbar count={total} view={view} sort={sort} onViewChange={setView} onSortChange={setSort} />
+        <ResultsToolbar count={countLabel} view={view} sort={sort} onViewChange={setView} onSortChange={setSort} />
         {rows.length === 0 ? <Loader label="Loading results" /> : null}
         {(() => {
           return view === "grid" ? (

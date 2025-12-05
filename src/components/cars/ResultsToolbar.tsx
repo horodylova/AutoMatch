@@ -4,7 +4,7 @@ import { SvgIcon } from "@progress/kendo-react-common";
 import { gridLayoutIcon, thumbnailsLeftIcon } from "@progress/kendo-svg-icons";
 
 type ViewMode = "grid" | "list";
-type SortMode = "best" | "top" | "new" | "priceAsc" | "priceDesc";
+type SortMode = "none" | "new" | "priceAsc" | "priceDesc";
 
 export default function ResultsToolbar({ count = 0, view, sort, onViewChange, onSortChange }: { count?: number; view: ViewMode; sort: SortMode; onViewChange: (v: ViewMode) => void; onSortChange: (s: SortMode) => void }) {
   return (
@@ -22,11 +22,9 @@ export default function ResultsToolbar({ count = 0, view, sort, onViewChange, on
         <div className={styles.sortRow}>
           <span className={styles.sortLabel}>Sort by:</span>
           <div className={styles.pills}>
-            <button className={`${styles.pill} ${sort === "best" ? styles.pillActive : ""}`} onClick={() => onSortChange("best")}>Best match</button>
-            <button className={`${styles.pill} ${sort === "top" ? styles.pillActive : ""}`} onClick={() => onSortChange("top")}>Top Selling</button>
-            <button className={`${styles.pill} ${sort === "new" ? styles.pillActive : ""}`} onClick={() => onSortChange("new")}>Newest</button>
-            <button className={`${styles.pill} ${sort === "priceAsc" ? styles.pillActive : ""}`} onClick={() => onSortChange("priceAsc")}>Price ↑</button>
-            <button className={`${styles.pill} ${sort === "priceDesc" ? styles.pillActive : ""}`} onClick={() => onSortChange("priceDesc")}>Price ↓</button>
+            <button className={`${styles.pill} ${sort === "new" ? styles.pillActive : ""}`} onClick={() => onSortChange(sort === "new" ? "none" : "new")}>Newest</button>
+            <button className={`${styles.pill} ${sort === "priceAsc" ? styles.pillActive : ""}`} onClick={() => onSortChange(sort === "priceAsc" ? "none" : "priceAsc")}>Price ↑</button>
+            <button className={`${styles.pill} ${sort === "priceDesc" ? styles.pillActive : ""}`} onClick={() => onSortChange(sort === "priceDesc" ? "none" : "priceDesc")}>Price ↓</button>
           </div>
         </div>
       </div>

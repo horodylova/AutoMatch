@@ -8,7 +8,7 @@ import { fetchDataset } from "@/lib/dataset";
 
 export default function Page() {
   const [ready, setReady] = useState(false);
-  const [filters, setFilters] = useState<FiltersData>({ makes: [], priceMin: 200000, priceMax: 350000 });
+  const [filters, setFilters] = useState<FiltersData>({ makes: [] });
   useEffect(() => {
     let active = true;
     const run = async () => {

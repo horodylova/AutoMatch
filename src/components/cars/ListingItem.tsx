@@ -33,7 +33,7 @@ export default function ListingItem({ item }: { item: ListingItemData }) {
         </div>
         <div className={styles.priceRow}>
           <div className={styles.price}>{item.price}</div>
-          <Button themeColor="primary">Details</Button>
+          <Button themeColor="primary" className={styles.detailsBtn}>Details</Button>
         </div>
       </div>
     </div>
