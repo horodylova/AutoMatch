@@ -74,3 +74,25 @@ export function getPriceStats(ds: Dataset): { min: number; max: number } {
   if (!Number.isFinite(min)) min = 0;
   return { min, max };
 }
+
+export function getBodyTypes(ds: Dataset): string[] {
+  const idxBT = ds.idx["body type"] ?? -1;
+  if (idxBT < 0) return [];
+  const set = new Set<string>();
+  for (const r of ds.rows) {
+    const bt = String(r[idxBT] ?? "").trim();
+    if (bt) set.add(bt);
+  }
+  return Array.from(set.values()).sort((a, b) => a.localeCompare(b));
+}
+
+export function getFuelTypes(ds: Dataset): string[] {
+  const idxFT = ds.idx["fuel type"] ?? -1;
+  if (idxFT < 0) return [];
+  const set = new Set<string>();
+  for (const r of ds.rows) {
+    const ft = String(r[idxFT] ?? "").trim();
+    if (ft) set.add(ft);
+  }
+  return Array.from(set.values()).sort((a, b) => a.localeCompare(b));
+}

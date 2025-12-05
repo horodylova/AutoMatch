@@ -129,14 +129,7 @@ export default function ListingList({ filters }: { filters?: FiltersData }) {
     return !!first;
   };
   const maxYear = (() => {
-    const yIdx = idx["year"] ?? -1;
-    if (yIdx < 0) return 0;
-    let max = 0;
-    for (const r of rows) {
-      const y = num(r[yIdx]);
-      if (y > max) max = y;
-    }
-    return max;
+    return 0;
   })();
   const matchesFilters = (r: Row): boolean => {
     if (!hasImage(r)) return false;
@@ -157,15 +150,7 @@ export default function ListingList({ filters }: { filters?: FiltersData }) {
     if (filters && filters.body && filters.body.length > 0) {
       const bIdx = idx["body type"] ?? -1;
       const body = bIdx >= 0 ? String(r[bIdx] ?? "").trim().toLowerCase() : "";
-      const mapMatch = (label: string): boolean => {
-        const l = label.toLowerCase();
-        if (l === "suv") return body.includes("suv") || body.includes("crossover");
-        if (l === "truck") return body.includes("truck") || body.includes("pickup");
-        if (l === "coupe") return body.includes("coupe") || body.includes("convertible");
-        if (l === "sedan") return body.includes("sedan");
-        return body.includes(l);
-      };
-      const ok = filters.body.some(mapMatch);
+      const ok = filters.body.some(lbl => body === lbl.trim().toLowerCase());
       if (!ok) return false;
     }
     if (filters && filters.fuel && filters.fuel.length > 0) {
@@ -182,10 +167,18 @@ export default function ListingList({ filters }: { filters?: FiltersData }) {
       const ok = filters.fuel.some(matchFuel);
       if (!ok) return false;
     }
-    if (filters && filters.newOnly) {
-      const yIdx = idx["year"] ?? -1;
-      const y = yIdx >= 0 ? num(r[yIdx]) : 0;
-      if (maxYear && y !== maxYear) return false;
+    if (filters && filters.query) {
+      const q = String(filters.query || "").trim().toLowerCase();
+      if (q) {
+        const mk = String(r[idx["make"] ?? -1] ?? "").toLowerCase();
+        const md = String(r[idx["model"] ?? -1] ?? "").toLowerCase();
+        const tr = String(r[idx["trim"] ?? -1] ?? "").toLowerCase();
+        const yr = String(r[idx["year"] ?? -1] ?? "").toLowerCase();
+        const hay = `${mk} ${md} ${tr} ${yr}`.trim();
+        const tokens = q.split(/\s+/).filter(Boolean);
+        const ok = tokens.every(t => hay.includes(t));
+        if (!ok) return false;
+      }
     }
     return true;
   };

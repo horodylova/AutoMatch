@@ -42,8 +42,14 @@
   font-weight: 700;
 }
 .panelBody { padding: 16px; }
-.section { display: grid; gap: 12px; margin-bottom: 16px; }
-.sectionTitle { font-size: 14px; font-weight: 600; color: rgba(230,214,180,0.8); }
+.section { position: relative; display: grid; gap: 12px; margin-bottom: 16px; padding: 12px; border: 1px solid var(--kendo-color-border); border-radius: 14px; background: rgba(230,214,180,0.04); transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease; }
+.section:hover { border-color: rgba(230,214,180,0.35); box-shadow: 0 8px 24px rgba(201,71,45,0.18); }
+.sectionHead { display: grid; grid-template-columns: 8px auto; align-items: center; gap: 10px; }
+.sectionAccent { width: 8px; height: 16px; border-radius: 999px; background: linear-gradient(180deg, rgba(201,71,45,0.9), rgba(201,71,45,0.25)); box-shadow: 0 0 0 2px rgba(201,71,45,0.12); }
+.sectionTitle { font-size: 14px; font-weight: 700; color: rgba(230,214,180,0.9); letter-spacing: 0.2px; }
+.sectionActive { background: rgba(201,71,45,0.06); border-color: var(--kendo-color-primary); box-shadow: 0 10px 28px rgba(201,71,45,0.22); }
+.sectionActive .sectionAccent { background: linear-gradient(180deg, var(--kendo-color-primary), rgba(201,71,45,0.35)); box-shadow: 0 0 0 2px rgba(201,71,45,0.18); }
+.sectionActive .sectionTitle { color: var(--kendo-color-on-app-surface); }
 .inputs { display: grid; gap: 10px; }
 .searchWrap { position: relative; }
 .suggestList { position: absolute; left: 0; right: 0; top: calc(100% + 6px); display: grid; gap: 6px; border: 1px solid var(--kendo-color-border); background: var(--kendo-color-surface); border-radius: 12px; padding: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.32); z-index: 10; }
@@ -59,6 +65,9 @@
 @media (max-width: 1200px) { .listGrid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 700px) { .listGrid { grid-template-columns: 1fr; } }
 .tagCloud { display: flex; flex-wrap: wrap; gap: 8px; max-height: 160px; overflow: auto; padding-right: 8px; }
+.tagCloud::-webkit-scrollbar { width: 8px; height: 8px; }
+.tagCloud::-webkit-scrollbar-thumb { background: rgba(201,71,45,0.18); border-radius: 999px; }
+.tagCloud::-webkit-scrollbar-track { background: rgba(230,214,180,0.06); border-radius: 999px; }
 .card {
   border: 1px solid var(--kendo-color-border);
   border-radius: 12px;
@@ -93,6 +102,14 @@
 .pagerBtn { padding: 6px 10px; border-radius: 10px; border: 1px solid var(--kendo-color-border); background: var(--kendo-color-surface); color: var(--kendo-color-on-app-surface); }
 .pagerBtnActive { padding: 6px 10px; border-radius: 10px; border: 1px solid var(--kendo-color-primary); background: var(--kendo-color-primary); color: var(--kendo-color-on-primary); box-shadow: 0 6px 18px rgba(201,71,45,0.22); }
 
+.actionRow { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-items: center; justify-content: center; margin-top: 12px; }
+.actionBtn { width: 100%; padding: 12px 16px; border-radius: 12px; font-weight: 700; transition: transform 0.12s ease, box-shadow 0.18s ease, filter 0.12s ease; }
+.actionBtn:active { transform: translateY(0) scale(0.98); box-shadow: 0 4px 12px rgba(201,71,45,0.25); }
+.actionPrimary { background: var(--kendo-color-primary); color: var(--kendo-color-on-app-surface) !important; border: 1px solid var(--kendo-color-border-alt); box-shadow: 0 8px 22px rgba(201,71,45,0.24); }
+.actionPrimary:hover { filter: brightness(1.06); box-shadow: 0 10px 28px rgba(201,71,45,0.28); }
+.actionSecondary { background: var(--kendo-color-on-app-surface) !important; color: var(--kendo-color-on-tertiary) !important; border: 1px solid var(--kendo-color-border-alt); box-shadow: 0 6px 18px rgba(0,0,0,0.25); }
+.actionSecondary:hover { filter: brightness(1.04); box-shadow: 0 8px 22px rgba(0,0,0,0.3); }
+
 @media (max-width: 700px) {
   .layout { gap: 16px; }
   .toolbar { display: grid; grid-template-columns: 1fr; gap: 10px; align-items: start; }
@@ -112,4 +129,5 @@
   .pagerBtn, .pagerBtnActive { min-width: 42px; padding: 8px 12px; font-size: 14px; }
   .priceBadges { gap: 6px; }
   .priceInputs { grid-template-columns: 1fr; }
+  .actionRow { grid-template-columns: 1fr; }
 }

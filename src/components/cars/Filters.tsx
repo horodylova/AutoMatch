@@ -1,10 +1,10 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { Input, Checkbox, Switch, NumericTextBox } from "@progress/kendo-react-inputs";
-import { ButtonGroup, Button } from "@progress/kendo-react-buttons";
+import { Input } from "@progress/kendo-react-inputs";
+import { Button } from "@progress/kendo-react-buttons";
 import FilterSection from "./FilterSection";
 import styles from "./cars.module.css";
-import { fetchDataset, getMakes, getPriceStats } from "@/lib/dataset";
+import { fetchDataset, getMakes, getPriceStats, getBodyTypes, getFuelTypes, Row } from "@/lib/dataset";
 
 export type FiltersData = {
   makes: string[];
@@ -12,7 +12,7 @@ export type FiltersData = {
   priceMax?: number;
   body?: string[];
   fuel?: string[];
-  newOnly?: boolean;
+  query?: string;
 };
 
 type Props = { onApply?: (f: FiltersData) => void };
@@ -23,12 +23,16 @@ export default function Filters({ onApply }: Props) {
   const [priceMax, setPriceMax] = useState<number>(0);
   const [rangeMin, setRangeMin] = useState<number>(0);
   const [rangeMax, setRangeMax] = useState<number>(0);
+  const [selectedPriceLabel, setSelectedPriceLabel] = useState<string>("");
   const [selectedMakes, setSelectedMakes] = useState<string[]>([]);
   const [search, setSearch] = useState<string>("");
   const [showSuggest, setShowSuggest] = useState<boolean>(false);
   const [selectedBody, setSelectedBody] = useState<string[]>([]);
+  const [bodyTypes, setBodyTypes] = useState<string[]>([]);
   const [selectedFuel, setSelectedFuel] = useState<string[]>([]);
-  const [newOnly, setNewOnly] = useState<boolean>(false);
+  const [fuelTypes, setFuelTypes] = useState<string[]>([]);
+  const [rows, setRows] = useState<Row[]>([]);
+  const [idx, setIdx] = useState<Record<string, number>>({});
   const didInit = useRef(false);
   useEffect(() => {
     if (didInit.current) return;
@@ -36,63 +40,109 @@ export default function Filters({ onApply }: Props) {
     const run = async () => {
       const ds = await fetchDataset();
       setMakes(getMakes(ds));
+      setBodyTypes(getBodyTypes(ds));
+      setFuelTypes(getFuelTypes(ds));
       const stats = getPriceStats(ds);
       setPriceMin(stats.min);
       setPriceMax(stats.max);
       setRangeMin(stats.min);
       setRangeMax(stats.max);
+      setRows(ds.rows);
+      setIdx(ds.idx);
     };
     run();
   }, []);
+
+  const priceGroups = (() => {
+    const clamp = (x: number) => Math.max(0, Math.min(x, priceMax || x));
+    const g = [
+      { label: "Under $20,000", min: 0, max: 20000 },
+      { label: "$20k–$35k", min: 20000, max: 35000 },
+      { label: "$35k–$50k", min: 35000, max: 50000 },
+      { label: "$50k–$75k", min: 50000, max: 75000 },
+      { label: "$75k–$120k", min: 75000, max: 120000 },
+      { label: "$120k–$200k", min: 120000, max: 200000 },
+      { label: "$200k–$350k", min: 200000, max: 350000 },
+      { label: "$350k–$500k", min: 350000, max: 500000 },
+      { label: "$500k+", min: 500000, max: undefined },
+    ];
+    return g.map(p => ({ label: p.label, min: typeof p.min === "number" ? clamp(p.min) : undefined, max: typeof p.max === "number" ? clamp(p.max) : undefined }));
+  })();
   
   return (
     <div className={styles.panel}>
 
       <div className={styles.panelBody}>
-        <FilterSection title="Search">
+        <FilterSection title="Search" active={Boolean(search)}>
           <div className={styles.searchWrap}>
             <Input
               placeholder="Search make, model, trim"
               value={search}
               onChange={(e) => { setSearch(String(e.value || "")); setShowSuggest(true); }}
               onFocus={() => setShowSuggest(true)}
+              onKeyDown={(e) => { if (e.key === "Enter") { onApply?.({ makes: selectedMakes, priceMin: typeof rangeMin === "number" ? rangeMin : undefined, priceMax: typeof rangeMax === "number" ? rangeMax : undefined, body: selectedBody, fuel: selectedFuel, query: (search || "").trim() || undefined }); setShowSuggest(false); } }}
             />
             {showSuggest && search && (
               <div className={styles.suggestList}>
-                {makes.filter(m => m.toLowerCase().includes(search.toLowerCase())).slice(0, 8).map(m => (
-                  <button
-                    key={m}
-                    className={styles.suggestItem}
-                    onClick={() => { setSelectedMakes(prev => prev.includes(m) ? prev : [...prev, m]); setSearch(""); setShowSuggest(false); }}
-                  >
-                    {m}
-                  </button>
-                ))}
+                {(() => {
+                  const tokens = String(search || "").toLowerCase().split(/\s+/).filter(Boolean);
+                  const mkIdx = idx["make"] ?? -1;
+                  const mdIdx = idx["model"] ?? -1;
+                  const yrIdx = idx["year"] ?? -1;
+                  const trIdx = idx["trim"] ?? -1;
+                  const set = new Set<string>();
+                  for (const r of rows) {
+                    const mk = mkIdx >= 0 ? String(r[mkIdx] ?? "").trim() : "";
+                    const md = mdIdx >= 0 ? String(r[mdIdx] ?? "").trim() : "";
+                    const tr = trIdx >= 0 ? String(r[trIdx] ?? "").trim() : "";
+                    const yr = yrIdx >= 0 ? String(r[yrIdx] ?? "").trim() : "";
+                    const hay = `${mk} ${md} ${tr} ${yr}`.toLowerCase();
+                    const ok = tokens.every(t => hay.includes(t));
+                    if (!ok) continue;
+                    const label = [mk, md, tr, yr].filter(Boolean).join(" ");
+                    if (label) set.add(label);
+                    if (set.size >= 8) break;
+                  }
+                  const arr = Array.from(set.values());
+                  if (arr.length === 0) {
+                    return makes.filter(m => m.toLowerCase().includes(search.toLowerCase())).slice(0, 8).map(m => (
+                      <button key={m} className={styles.suggestItem} onClick={() => { setSelectedMakes(prev => prev.includes(m) ? prev : [...prev, m]); setSearch(""); setShowSuggest(false); }}>
+                        {m}
+                      </button>
+                    ));
+                  }
+                  return arr.map(lbl => (
+                    <button key={lbl} className={styles.suggestItem} onClick={() => { setSearch(lbl); setShowSuggest(false); onApply?.({ makes: selectedMakes, priceMin: typeof rangeMin === "number" ? rangeMin : undefined, priceMax: typeof rangeMax === "number" ? rangeMax : undefined, body: selectedBody, fuel: selectedFuel, query: lbl }); }}>
+                      {lbl}
+                    </button>
+                  ));
+                })()}
               </div>
             )}
           </div>
         </FilterSection>
-        <FilterSection title="Price">
-          <div className={styles.priceRowUI}>
-            <div className={styles.priceBadges}>
-              <span className={styles.priceBadge}>{new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(priceMin || 0)}</span>
-              <span className={styles.priceBadge}>{new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(priceMax || 0)}</span>
-              <div className={styles.priceGroup}>
-                <ButtonGroup>
-                  <Button onClick={() => { setRangeMin(priceMin); setRangeMax(priceMax); }}>All</Button>
-                  <Button onClick={() => { setRangeMin(priceMin); setRangeMax(priceMin); }}>Cheapest</Button>
-                  <Button onClick={() => { setRangeMin(priceMax); setRangeMax(priceMax); }}>Most expensive</Button>
-                </ButtonGroup>
-              </div>
-            </div>
-            <div className={styles.priceInputs}>
-              <NumericTextBox value={rangeMin} onChange={(e) => setRangeMin(Number(e.value))} format="c0" placeholder="Min" />
-              <NumericTextBox value={rangeMax} onChange={(e) => setRangeMax(Number(e.value))} format="c0" placeholder="Max" />
-            </div>
-            <div className={styles.priceNote}>Based on Base MSRP</div>
+        <FilterSection title="Price" active={Boolean(selectedPriceLabel)}>
+          <div className={styles.tagCloud}>
+            {priceGroups.map(p => (
+              <button
+                key={p.label}
+                className={`${styles.pill} ${selectedPriceLabel === p.label ? styles.pillActive : ""}`}
+                onClick={() => {
+                  setSelectedPriceLabel(prev => prev === p.label ? "" : p.label);
+                  if (selectedPriceLabel === p.label) {
+                    setRangeMin(priceMin); setRangeMax(priceMax);
+                  } else {
+                    setRangeMin(typeof p.min === "number" ? p.min : priceMin);
+                    setRangeMax(typeof p.max === "number" ? p.max : priceMax);
+                  }
+                }}
+              >
+                {p.label}
+              </button>
+            ))}
           </div>
         </FilterSection>
-        <FilterSection title="Make">
+        <FilterSection title="Make" active={selectedMakes.length > 0}>
           <div className={styles.tagCloud}>
             {makes.map(m => (
               <button
@@ -107,24 +157,39 @@ export default function Filters({ onApply }: Props) {
             ))}
           </div>
         </FilterSection>
-        <FilterSection title="Body type">
-          <Checkbox label="Sedan" checked={selectedBody.includes("Sedan")} onChange={(e) => setSelectedBody(prev => e.value ? [...prev, "Sedan"] : prev.filter(x => x !== "Sedan"))} />
-          <Checkbox label="SUV" checked={selectedBody.includes("SUV")} onChange={(e) => setSelectedBody(prev => e.value ? [...prev, "SUV"] : prev.filter(x => x !== "SUV"))} />
-          <Checkbox label="Truck" checked={selectedBody.includes("Truck")} onChange={(e) => setSelectedBody(prev => e.value ? [...prev, "Truck"] : prev.filter(x => x !== "Truck"))} />
-          <Checkbox label="Coupe" checked={selectedBody.includes("Coupe")} onChange={(e) => setSelectedBody(prev => e.value ? [...prev, "Coupe"] : prev.filter(x => x !== "Coupe"))} />
+        <FilterSection title="Body type" active={selectedBody.length > 0}>
+          <div className={styles.tagCloud}>
+            {bodyTypes.map(bt => (
+              <button
+                key={bt}
+                className={`${styles.pill} ${selectedBody.includes(bt) ? styles.pillActive : ""}`}
+                onClick={() => {
+                  setSelectedBody(prev => prev.includes(bt) ? prev.filter(x => x !== bt) : [...prev, bt]);
+                }}
+              >
+                {bt}
+              </button>
+            ))}
+          </div>
         </FilterSection>
-        <FilterSection title="Fuel">
-          <Checkbox label="Gasoline" checked={selectedFuel.includes("Gasoline")} onChange={(e) => setSelectedFuel(prev => e.value ? [...prev, "Gasoline"] : prev.filter(x => x !== "Gasoline"))} />
-          <Checkbox label="Diesel" checked={selectedFuel.includes("Diesel")} onChange={(e) => setSelectedFuel(prev => e.value ? [...prev, "Diesel"] : prev.filter(x => x !== "Diesel"))} />
-          <Checkbox label="Hybrid" checked={selectedFuel.includes("Hybrid")} onChange={(e) => setSelectedFuel(prev => e.value ? [...prev, "Hybrid"] : prev.filter(x => x !== "Hybrid"))} />
-          <Checkbox label="Electric" checked={selectedFuel.includes("Electric")} onChange={(e) => setSelectedFuel(prev => e.value ? [...prev, "Electric"] : prev.filter(x => x !== "Electric"))} />
+        <FilterSection title="Fuel" active={selectedFuel.length > 0}>
+          <div className={styles.tagCloud}>
+            {fuelTypes.map(ft => (
+              <button
+                key={ft}
+                className={`${styles.pill} ${selectedFuel.includes(ft) ? styles.pillActive : ""}`}
+                onClick={() => {
+                  setSelectedFuel(prev => prev.includes(ft) ? prev.filter(x => x !== ft) : [...prev, ft]);
+                }}
+              >
+                {ft}
+              </button>
+            ))}
+          </div>
         </FilterSection>
-        <FilterSection title="New only">
-          <Switch checked={newOnly} onChange={(e) => setNewOnly(Boolean(e.value))} />
-        </FilterSection>
-        <div style={{ display: "flex", gap: 8 }}>
-          <Button themeColor="primary" onClick={() => onApply?.({ makes: selectedMakes, priceMin: rangeMin || undefined, priceMax: rangeMax || undefined, body: selectedBody, fuel: selectedFuel, newOnly })}>Apply</Button>
-          <Button onClick={() => { setSelectedMakes([]); setSelectedBody([]); setSelectedFuel([]); setSearch(""); setShowSuggest(false); setRangeMin(priceMin); setRangeMax(priceMax); setNewOnly(false); onApply?.({ makes: [], priceMin: priceMin, priceMax: priceMax, body: [], fuel: [], newOnly: false }); }}>Reset</Button>
+        <div className={styles.actionRow}>
+          <Button className={`${styles.actionBtn} ${styles.actionSecondary}`} fillMode="solid" themeColor="base" onClick={() => { setSelectedMakes([]); setSelectedBody([]); setSelectedFuel([]); setSelectedPriceLabel(""); setSearch(""); setShowSuggest(false); setRangeMin(priceMin); setRangeMax(priceMax); onApply?.({ makes: [], priceMin: priceMin, priceMax: priceMax, body: [], fuel: [], query: undefined }); }}>Reset</Button>
+          <Button className={`${styles.actionBtn} ${styles.actionPrimary}`} fillMode="solid" themeColor="primary" onClick={() => onApply?.({ makes: selectedMakes, priceMin: typeof rangeMin === "number" ? rangeMin : undefined, priceMax: typeof rangeMax === "number" ? rangeMax : undefined, body: selectedBody, fuel: selectedFuel, query: search.trim() || undefined })}>Apply</Button>
         </div>
       </div>
     </div>
