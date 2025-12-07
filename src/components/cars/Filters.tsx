@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { Button } from "@progress/kendo-react-buttons";
 import FilterSection from "./FilterSection";
 import styles from "./cars.module.css";
-import { fetchDataset, getMakes, getPriceStats, getBodyTypes, getFuelTypes, getDriveTypes, getTransmissionTypes, getCylinderCounts, Row } from "@/lib/dataset";
+import { fetchDataset, getMakes, getPriceStats, getBodyTypes, getFuelTypes, getDriveTypes, getTransmissionTypes, getCylinderCounts, getEfficiencyStats, Row } from "@/lib/dataset";
 
 export type FiltersData = {
   makes: string[];
@@ -15,6 +15,8 @@ export type FiltersData = {
   drive?: string[];
   transmission?: string[];
   cylinders?: string[];
+  efficiencyUnit?: "mpg" | "mpge";
+  efficiencyRanges?: { min?: number; max?: number }[];
   query?: string;
 };
 
@@ -40,6 +42,8 @@ export default function Filters({ onApply }: Props) {
   const [transmissionTypes, setTransmissionTypes] = useState<string[]>([]);
   const [selectedCylinders, setSelectedCylinders] = useState<string[]>([]);
   const [cylinderCounts, setCylinderCounts] = useState<string[]>([]);
+  const [effStats, setEffStats] = useState<{ mpg: { min: number; max: number }; mpge: { min: number; max: number } }>({ mpg: { min: 0, max: 0 }, mpge: { min: 0, max: 0 } });
+  const [selectedEffLabels, setSelectedEffLabels] = useState<string[]>([]);
   const [rows, setRows] = useState<Row[]>([]);
   const [idx, setIdx] = useState<Record<string, number>>({});
   const didInit = useRef(false);
@@ -61,6 +65,7 @@ export default function Filters({ onApply }: Props) {
       setRangeMax(stats.max);
       setRows(ds.rows);
       setIdx(ds.idx);
+      setEffStats(getEfficiencyStats(ds));
     };
     run();
   }, []);
@@ -79,6 +84,34 @@ export default function Filters({ onApply }: Props) {
       { label: "$500k+", min: 500000, max: undefined },
     ];
     return g.map(p => ({ label: p.label, min: typeof p.min === "number" ? clamp(p.min) : undefined, max: typeof p.max === "number" ? clamp(p.max) : undefined }));
+  })();
+  const effUnit = (() => {
+    if (selectedFuel.length === 0) return undefined;
+    const labels = selectedFuel.map(s => s.toLowerCase());
+    const mpg = labels.some(l => l === "gasoline" || l === "diesel" || l === "flex-fuel");
+    const mpge = labels.some(l => l === "electric" || l === "hydrogen");
+    if (mpg && mpge) return undefined;
+    if (mpg) return "mpg" as const;
+    if (mpge) return "mpge" as const;
+    return undefined;
+  })();
+  const effGroups = (() => {
+    const unit = effUnit;
+    if (!unit) return [] as { label: string; min?: number; max?: number }[];
+    const s = unit === "mpg" ? effStats.mpg : effStats.mpge;
+    const min = s.min;
+    const max = s.max;
+    if (!(max > min)) return [] as { label: string; min?: number; max?: number }[];
+    const step = (max - min) / 5;
+    const g: { label: string; min?: number; max?: number }[] = [];
+    for (let i = 0; i < 5; i++) {
+      const a = Math.round(min + i * step);
+      const b = Math.round(min + (i + 1) * step);
+      if (i === 0) g.push({ label: `${a}–${b} ${unit.toUpperCase()}`, min: a, max: b });
+      else if (i < 4) g.push({ label: `${a}–${b} ${unit.toUpperCase()}`, min: a, max: b });
+      else g.push({ label: `${a}+ ${unit.toUpperCase()}`, min: a, max: undefined });
+    }
+    return g;
   })();
   
   return (
@@ -192,6 +225,7 @@ export default function Filters({ onApply }: Props) {
                 className={`${styles.pill} ${selectedFuel.includes(ft) ? styles.pillActive : ""}`}
                 onClick={() => {
                   setSelectedFuel(prev => prev.includes(ft) ? prev.filter(x => x !== ft) : [...prev, ft]);
+                  setSelectedEffLabels([]);
                 }}
               >
                 {ft}
@@ -199,6 +233,23 @@ export default function Filters({ onApply }: Props) {
             ))}
           </div>
         </FilterSection>
+        {effUnit ? (
+          <FilterSection title="Fuel Efficiency (MPG / MPGe)" active={selectedEffLabels.length > 0}>
+            <div className={styles.tagCloud}>
+              {effGroups.map(g => (
+                <button
+                  key={g.label}
+                  className={`${styles.pill} ${selectedEffLabels.includes(g.label) ? styles.pillActive : ""}`}
+                  onClick={() => {
+                    setSelectedEffLabels(prev => prev.includes(g.label) ? prev.filter(x => x !== g.label) : [...prev, g.label]);
+                  }}
+                >
+                  {g.label}
+                </button>
+              ))}
+            </div>
+          </FilterSection>
+        ) : null}
         <FilterSection title="Drive type" active={selectedDrive.length > 0}>
           <div className={styles.tagCloud}>
             {driveTypes.map(dt => (
@@ -251,7 +302,11 @@ export default function Filters({ onApply }: Props) {
               const g = priceGroups.find(pg => pg.label === lbl);
               return { min: g?.min, max: g?.max };
             }).filter(r => typeof r.min !== "undefined" || typeof r.max !== "undefined");
-            onApply?.({ makes: selectedMakes, priceMin: typeof rangeMin === "number" ? rangeMin : undefined, priceMax: typeof rangeMax === "number" ? rangeMax : undefined, priceRanges: ranges, body: selectedBody, fuel: selectedFuel, drive: selectedDrive, transmission: selectedTransmission, cylinders: selectedCylinders, query: search.trim() || undefined });
+            const effSelected = selectedEffLabels.map(lbl => {
+              const g = effGroups.find(x => x.label === lbl);
+              return { min: g?.min, max: g?.max };
+            }).filter(r => typeof r.min !== "undefined" || typeof r.max !== "undefined");
+            onApply?.({ makes: selectedMakes, priceMin: typeof rangeMin === "number" ? rangeMin : undefined, priceMax: typeof rangeMax === "number" ? rangeMax : undefined, priceRanges: ranges, body: selectedBody, fuel: selectedFuel, drive: selectedDrive, transmission: selectedTransmission, cylinders: selectedCylinders, efficiencyUnit: effUnit, efficiencyRanges: effSelected, query: search.trim() || undefined });
           }}>Apply</Button>
         </div>
       </div>

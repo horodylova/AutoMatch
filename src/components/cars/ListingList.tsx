@@ -194,6 +194,22 @@ export default function ListingList({ filters }: { filters?: FiltersData }) {
       const ok = filters.transmission.some(x => x.trim().toLowerCase() === label.toLowerCase());
       if (!ok) return false;
     }
+    if (filters && filters.efficiencyRanges && filters.efficiencyRanges.length > 0) {
+      const unit = filters.efficiencyUnit;
+      const mpgIdx = idx["epa combined mpg"] ?? -1;
+      const mpgeIdx = idx["epa combined mpge"] ?? -1;
+      const i = unit === "mpg" ? mpgIdx : unit === "mpge" ? mpgeIdx : -1;
+      if (i < 0) return false;
+      const val = num(r[i]);
+      const ok = (filters.efficiencyRanges as { min?: number; max?: number }[]).some(range => {
+        const min = typeof range.min === "number" ? range.min : undefined;
+        const max = typeof range.max === "number" ? range.max : undefined;
+        if (typeof min === "number" && val < min) return false;
+        if (typeof max === "number" && val > max) return false;
+        return true;
+      });
+      if (!ok) return false;
+    }
     if (filters && filters.cylinders && filters.cylinders.length > 0) {
       const allSelected = allCylSet.size > 0 && filters.cylinders.length >= allCylSet.size;
       if (!allSelected) {

@@ -177,3 +177,35 @@ export function getCylinderCounts(ds: Dataset): string[] {
   }
   return Array.from(set.values()).sort((a, b) => a.localeCompare(b));
 }
+
+export function getEfficiencyStats(ds: Dataset): { mpg: { min: number; max: number }; mpge: { min: number; max: number } } {
+  const mpgIdx = ds.idx["epa combined mpg"] ?? -1;
+  const mpgeIdx = ds.idx["epa combined mpge"] ?? -1;
+  let mpgMin = Number.POSITIVE_INFINITY;
+  let mpgMax = 0;
+  let mpgeMin = Number.POSITIVE_INFINITY;
+  let mpgeMax = 0;
+  for (const r of ds.rows) {
+    if (mpgIdx >= 0) {
+      const raw = String(r[mpgIdx] ?? "").trim();
+      const cleaned = raw.replace(/[^0-9.]/g, "");
+      const num = Number(cleaned);
+      if (Number.isFinite(num) && num > 0) {
+        if (num < mpgMin) mpgMin = num;
+        if (num > mpgMax) mpgMax = num;
+      }
+    }
+    if (mpgeIdx >= 0) {
+      const rawE = String(r[mpgeIdx] ?? "").trim();
+      const cleanedE = rawE.replace(/[^0-9.]/g, "");
+      const numE = Number(cleanedE);
+      if (Number.isFinite(numE) && numE > 0) {
+        if (numE < mpgeMin) mpgeMin = numE;
+        if (numE > mpgeMax) mpgeMax = numE;
+      }
+    }
+  }
+  if (!Number.isFinite(mpgMin)) mpgMin = 0;
+  if (!Number.isFinite(mpgeMin)) mpgeMin = 0;
+  return { mpg: { min: mpgMin, max: mpgMax }, mpge: { min: mpgeMin, max: mpgeMax } };
+}
