@@ -98,6 +98,12 @@ export default function Filters({ onApply }: Props) {
   const effGroups = (() => {
     const unit = effUnit;
     if (!unit) return [] as { label: string; min?: number; max?: number }[];
+    const labels = selectedFuel.map(s => s.toLowerCase());
+    const isHydrogen = labels.includes("hydrogen");
+    const isElectric = labels.includes("electric");
+    if (unit === "mpge" && isHydrogen && !isElectric) {
+      return [{ label: "52–75 MPGE", min: 52, max: 75 }];
+    }
     const s = unit === "mpg" ? effStats.mpg : effStats.mpge;
     const min = s.min;
     const max = s.max;
