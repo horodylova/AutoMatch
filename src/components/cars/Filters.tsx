@@ -1,10 +1,9 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { Input } from "@progress/kendo-react-inputs";
 import { Button } from "@progress/kendo-react-buttons";
 import FilterSection from "./FilterSection";
 import styles from "./cars.module.css";
-import { fetchDataset, getMakes, getPriceStats, getBodyTypes, getFuelTypes, Row } from "@/lib/dataset";
+import { fetchDataset, getMakes, getPriceStats, getBodyTypes, getFuelTypes, getDriveTypes, getTransmissionTypes, getCylinderCounts, Row } from "@/lib/dataset";
 
 export type FiltersData = {
   makes: string[];
@@ -13,6 +12,9 @@ export type FiltersData = {
   priceRanges?: { min?: number; max?: number }[];
   body?: string[];
   fuel?: string[];
+  drive?: string[];
+  transmission?: string[];
+  cylinders?: string[];
   query?: string;
 };
 
@@ -32,6 +34,12 @@ export default function Filters({ onApply }: Props) {
   const [bodyTypes, setBodyTypes] = useState<string[]>([]);
   const [selectedFuel, setSelectedFuel] = useState<string[]>([]);
   const [fuelTypes, setFuelTypes] = useState<string[]>([]);
+  const [selectedDrive, setSelectedDrive] = useState<string[]>([]);
+  const [driveTypes, setDriveTypes] = useState<string[]>([]);
+  const [selectedTransmission, setSelectedTransmission] = useState<string[]>([]);
+  const [transmissionTypes, setTransmissionTypes] = useState<string[]>([]);
+  const [selectedCylinders, setSelectedCylinders] = useState<string[]>([]);
+  const [cylinderCounts, setCylinderCounts] = useState<string[]>([]);
   const [rows, setRows] = useState<Row[]>([]);
   const [idx, setIdx] = useState<Record<string, number>>({});
   const didInit = useRef(false);
@@ -43,6 +51,9 @@ export default function Filters({ onApply }: Props) {
       setMakes(getMakes(ds));
       setBodyTypes(getBodyTypes(ds));
       setFuelTypes(getFuelTypes(ds));
+      setDriveTypes(getDriveTypes(ds));
+      setTransmissionTypes(getTransmissionTypes(ds));
+      setCylinderCounts(getCylinderCounts(ds));
       const stats = getPriceStats(ds);
       setPriceMin(stats.min);
       setPriceMax(stats.max);
@@ -76,13 +87,19 @@ export default function Filters({ onApply }: Props) {
       <div className={`${styles.panelBody} ${styles.filtersBody}`}>
         <FilterSection title="Search" active={Boolean(search)}>
           <div className={styles.searchWrap}>
-            <Input
-              placeholder="Search make, model, trim"
-              value={search}
-              onChange={(e) => { setSearch(String(e.value || "")); setShowSuggest(true); }}
-              onFocus={() => setShowSuggest(true)}
-              onKeyDown={(e) => { if (e.key === "Enter") { const ranges = selectedPriceLabels.map(lbl => { const g = priceGroups.find(pg => pg.label === lbl); return { min: g?.min, max: g?.max }; }).filter(r => typeof r.min !== "undefined" || typeof r.max !== "undefined"); onApply?.({ makes: selectedMakes, priceMin: typeof rangeMin === "number" ? rangeMin : undefined, priceMax: typeof rangeMax === "number" ? rangeMax : undefined, priceRanges: ranges, body: selectedBody, fuel: selectedFuel, query: (search || "").trim() || undefined }); setShowSuggest(false); } }}
-            />
+            <div className={styles.searchBar}>
+              <svg className={styles.searchIcon} viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                <path d="M15.5 14h-.79l-.28-.27a6.471 6.471 0 0 0 1.57-4.23C15.99 6.01 13.98 4 11.5 4S7.01 6.01 7.01 9.5 9.02 15 11.5 15c1.61 0 3.06-.59 4.23-1.57l.27.28v.79l4.25 4.25 1.49-1.49L15.5 14zm-4 0C9.01 14 7 11.99 7 9.5S9.01 5 11.5 5 16 7.01 16 9.5 13.99 14 11.5 14z" fill="currentColor"/>
+              </svg>
+              <input
+                className={styles.searchField}
+                placeholder="Search make, model, trim"
+                value={search}
+                onChange={(e) => { const v = (e.target as HTMLInputElement).value; setSearch(String(v || "")); setShowSuggest(true); }}
+                onFocus={() => setShowSuggest(true)}
+                onKeyDown={(e) => { if (e.key === "Enter") { const ranges = selectedPriceLabels.map(lbl => { const g = priceGroups.find(pg => pg.label === lbl); return { min: g?.min, max: g?.max }; }).filter(r => typeof r.min !== "undefined" || typeof r.max !== "undefined"); onApply?.({ makes: selectedMakes, priceMin: typeof rangeMin === "number" ? rangeMin : undefined, priceMax: typeof rangeMax === "number" ? rangeMax : undefined, priceRanges: ranges, body: selectedBody, fuel: selectedFuel, drive: selectedDrive, transmission: selectedTransmission, query: (search || "").trim() || undefined }); setShowSuggest(false); } }}
+              />
+            </div>
             {showSuggest && search && (
               <div className={styles.suggestList}>
                 {(() => {
@@ -113,7 +130,7 @@ export default function Filters({ onApply }: Props) {
                     ));
                   }
                   return arr.map(lbl => (
-                    <button key={lbl} className={styles.suggestItem} onClick={() => { const ranges = selectedPriceLabels.map(slbl => { const g = priceGroups.find(pg => pg.label === slbl); return { min: g?.min, max: g?.max }; }).filter(r => typeof r.min !== "undefined" || typeof r.max !== "undefined"); setSearch(lbl); setShowSuggest(false); onApply?.({ makes: selectedMakes, priceMin: typeof rangeMin === "number" ? rangeMin : undefined, priceMax: typeof rangeMax === "number" ? rangeMax : undefined, priceRanges: ranges, body: selectedBody, fuel: selectedFuel, query: lbl }); }}>
+                    <button key={lbl} className={styles.suggestItem} onClick={() => { const ranges = selectedPriceLabels.map(slbl => { const g = priceGroups.find(pg => pg.label === slbl); return { min: g?.min, max: g?.max }; }).filter(r => typeof r.min !== "undefined" || typeof r.max !== "undefined"); setSearch(lbl); setShowSuggest(false); onApply?.({ makes: selectedMakes, priceMin: typeof rangeMin === "number" ? rangeMin : undefined, priceMax: typeof rangeMax === "number" ? rangeMax : undefined, priceRanges: ranges, body: selectedBody, fuel: selectedFuel, drive: selectedDrive, transmission: selectedTransmission, query: lbl }); }}>
                       {lbl}
                     </button>
                   ));
@@ -182,14 +199,59 @@ export default function Filters({ onApply }: Props) {
             ))}
           </div>
         </FilterSection>
+        <FilterSection title="Drive type" active={selectedDrive.length > 0}>
+          <div className={styles.tagCloud}>
+            {driveTypes.map(dt => (
+              <button
+                key={dt}
+                className={`${styles.pill} ${selectedDrive.includes(dt) ? styles.pillActive : ""}`}
+                onClick={() => {
+                  setSelectedDrive(prev => prev.includes(dt) ? prev.filter(x => x !== dt) : [...prev, dt]);
+                }}
+              >
+                {dt}
+              </button>
+            ))}
+          </div>
+        </FilterSection>
+        <FilterSection title="Transmission" active={selectedTransmission.length > 0}>
+          <div className={styles.tagCloud}>
+            {transmissionTypes.map(tt => (
+              <button
+                key={tt}
+                className={`${styles.pill} ${selectedTransmission.includes(tt) ? styles.pillActive : ""}`}
+                onClick={() => {
+                  setSelectedTransmission(prev => prev.includes(tt) ? prev.filter(x => x !== tt) : [...prev, tt]);
+                }}
+              >
+                {tt}
+              </button>
+            ))}
+          </div>
+        </FilterSection>
+        <FilterSection title="Cylinders" active={selectedCylinders.length > 0}>
+          <div className={styles.tagCloud}>
+            {cylinderCounts.map(cc => (
+              <button
+                key={cc}
+                className={`${styles.pill} ${selectedCylinders.includes(cc) ? styles.pillActive : ""}`}
+                onClick={() => {
+                  setSelectedCylinders(prev => prev.includes(cc) ? prev.filter(x => x !== cc) : [...prev, cc]);
+                }}
+              >
+                {cc}
+              </button>
+            ))}
+          </div>
+        </FilterSection>
         <div className={styles.actionRow}>
-          <Button className={`${styles.actionBtn} ${styles.actionSecondary}`} fillMode="solid" themeColor="base" onClick={() => { setSelectedMakes([]); setSelectedBody([]); setSelectedFuel([]); setSelectedPriceLabels([]); setSearch(""); setShowSuggest(false); setRangeMin(priceMin); setRangeMax(priceMax); onApply?.({ makes: [], priceMin: priceMin, priceMax: priceMax, priceRanges: [], body: [], fuel: [], query: undefined }); }}>Reset</Button>
+          <Button className={`${styles.actionBtn} ${styles.actionSecondary}`} fillMode="solid" themeColor="base" onClick={() => { setSelectedMakes([]); setSelectedBody([]); setSelectedFuel([]); setSelectedDrive([]); setSelectedTransmission([]); setSelectedCylinders([]); setSelectedPriceLabels([]); setSearch(""); setShowSuggest(false); setRangeMin(priceMin); setRangeMax(priceMax); onApply?.({ makes: [], priceMin: priceMin, priceMax: priceMax, priceRanges: [], body: [], fuel: [], drive: [], transmission: [], cylinders: [], query: undefined }); }}>Reset</Button>
           <Button className={`${styles.actionBtn} ${styles.actionPrimary}`} fillMode="solid" themeColor="primary" onClick={() => {
             const ranges = selectedPriceLabels.map(lbl => {
               const g = priceGroups.find(pg => pg.label === lbl);
               return { min: g?.min, max: g?.max };
             }).filter(r => typeof r.min !== "undefined" || typeof r.max !== "undefined");
-            onApply?.({ makes: selectedMakes, priceMin: typeof rangeMin === "number" ? rangeMin : undefined, priceMax: typeof rangeMax === "number" ? rangeMax : undefined, priceRanges: ranges, body: selectedBody, fuel: selectedFuel, query: search.trim() || undefined });
+            onApply?.({ makes: selectedMakes, priceMin: typeof rangeMin === "number" ? rangeMin : undefined, priceMax: typeof rangeMax === "number" ? rangeMax : undefined, priceRanges: ranges, body: selectedBody, fuel: selectedFuel, drive: selectedDrive, transmission: selectedTransmission, cylinders: selectedCylinders, query: search.trim() || undefined });
           }}>Apply</Button>
         </div>
       </div>

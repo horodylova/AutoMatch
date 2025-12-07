@@ -91,8 +91,89 @@ export function getFuelTypes(ds: Dataset): string[] {
   if (idxFT < 0) return [];
   const set = new Set<string>();
   for (const r of ds.rows) {
-    const ft = String(r[idxFT] ?? "").trim();
-    if (ft) set.add(ft);
+    const raw = String(r[idxFT] ?? "").trim().toLowerCase();
+    if (!raw) continue;
+    const isElectric = raw.includes("electric") || raw.includes("bev");
+    const isHydrogen = raw.includes("hydrogen");
+    const isDiesel = raw.includes("diesel");
+    const isHybrid = raw.includes("hybrid") || raw.includes("plug-in") || raw.includes("phev");
+    const isFlex = raw.includes("flex") || raw.includes("e85");
+    const isGasoline = raw.includes("gasoline") || raw.includes("petrol") || raw.includes("unleaded");
+    if (isElectric) set.add("Electric");
+    if (isHydrogen) set.add("Hydrogen");
+    if (isDiesel) set.add("Diesel");
+    if (isHybrid) set.add("Hybrid");
+    if (isFlex) set.add("Flex-fuel");
+    if (isGasoline && !isHybrid && !isFlex) set.add("Gasoline");
+  }
+  return Array.from(set.values()).sort((a, b) => a.localeCompare(b));
+}
+
+export function getDriveTypes(ds: Dataset): string[] {
+  const idxDT = ds.idx["drive type"] ?? -1;
+  if (idxDT < 0) return [];
+  const set = new Set<string>();
+  for (const r of ds.rows) {
+    const dt = String(r[idxDT] ?? "").trim();
+    if (dt) set.add(dt);
+  }
+  return Array.from(set.values()).sort((a, b) => a.localeCompare(b));
+}
+
+export function getTransmissionTypes(ds: Dataset): string[] {
+  const idxT = ds.idx["transmission"] ?? -1;
+  if (idxT < 0) return [];
+  const set = new Set<string>();
+  for (const r of ds.rows) {
+    const raw = String(r[idxT] ?? "").trim().toLowerCase();
+    if (!raw) continue;
+    const cleaned = raw.replace(/\b\d+\s*-?\s*speed\s*/g, "").trim();
+    const a = cleaned.includes("automatic") || cleaned.includes("direct drive") || cleaned.includes("cvt");
+    const m = cleaned.includes("manual");
+    const mix = cleaned.includes("automated") || cleaned.includes("dual") || cleaned.includes("semi") || cleaned.includes("sequential") || (a && m);
+    let label = "Automatic";
+    if (mix) label = "Mixed";
+    else if (m && !mix && !a) label = "Manual";
+    set.add(label);
+  }
+  return Array.from(set.values()).sort((a, b) => a.localeCompare(b));
+}
+
+export function parseCylinderCount(raw: string): number | null {
+  const s = String(raw || "").trim().toLowerCase();
+  if (!s) return null;
+  let m: RegExpMatchArray | null = null;
+  m = s.match(/\b(\d{1,2})\s*(?:cyl(?:inder)?s?)\b/);
+  if (m) {
+    const n = Number(m[1]);
+    return Number.isFinite(n) && n > 0 ? n : null;
+  }
+  m = s.match(/\b(?:v|w|i|inline|flat|boxer)\s*-?\s*(\d{1,2})\b/);
+  if (m) {
+    const n = Number(m[1]);
+    return Number.isFinite(n) && n > 0 ? n : null;
+  }
+  m = s.match(/\b(\d{1,2})\s*-\s*cyl/);
+  if (m) {
+    const n = Number(m[1]);
+    return Number.isFinite(n) && n > 0 ? n : null;
+  }
+  m = s.match(/\b(\d{1,2})\b/);
+  if (m) {
+    const n = Number(m[1]);
+    return Number.isFinite(n) && n > 0 ? n : null;
+  }
+  return null;
+}
+
+export function getCylinderCounts(ds: Dataset): string[] {
+  const cIdx = ds.idx["cylinders"] ?? -1;
+  if (cIdx < 0) return [];
+  const set = new Set<string>();
+  for (const r of ds.rows) {
+    const raw = String(r[cIdx] ?? "").trim();
+    if (!raw) continue;
+    set.add(raw);
   }
   return Array.from(set.values()).sort((a, b) => a.localeCompare(b));
 }

@@ -111,6 +111,16 @@ export default function ListingList({ filters }: { filters?: FiltersData }) {
   const maxYear = (() => {
     return 0;
   })();
+  const cIdx = idx["cylinders"] ?? -1;
+  const allCylSet = (() => {
+    const s = new Set<string>();
+    if (cIdx < 0) return s;
+    for (const rr of rows) {
+      const raw = String(rr[cIdx] ?? "").trim().toLowerCase();
+      if (raw) s.add(raw);
+    }
+    return s;
+  })();
   const matchesFilters = (r: Row): boolean => {
     if (filters && filters.makes && filters.makes.length > 0) {
       const mkIdx = idx["make"] ?? -1;
@@ -149,14 +159,48 @@ export default function ListingList({ filters }: { filters?: FiltersData }) {
       const fuel = fIdx >= 0 ? String(r[fIdx] ?? "").trim().toLowerCase() : "";
       const matchFuel = (label: string): boolean => {
         const l = label.toLowerCase();
-        if (l === "electric") return fuel.includes("electric");
-        if (l === "hybrid") return fuel.includes("hybrid") || fuel.includes("plug-in");
+        if (l === "electric") return fuel.includes("electric") || fuel.includes("bev");
+        if (l === "hydrogen") return fuel.includes("hydrogen");
         if (l === "diesel") return fuel.includes("diesel");
-        if (l === "gasoline") return fuel.includes("gasoline") || fuel.includes("petrol") || (!fuel.includes("electric") && !fuel.includes("hybrid") && !fuel.includes("diesel"));
+        if (l === "hybrid") return fuel.includes("hybrid") || fuel.includes("plug-in") || fuel.includes("phev");
+        if (l === "flex-fuel") return fuel.includes("flex") || fuel.includes("e85");
+        if (l === "gasoline") {
+          const isGas = fuel.includes("gasoline") || fuel.includes("petrol") || fuel.includes("unleaded");
+          const isHybrid = fuel.includes("hybrid") || fuel.includes("plug-in") || fuel.includes("phev");
+          const isFlex = fuel.includes("flex") || fuel.includes("e85");
+          return isGas && !isHybrid && !isFlex;
+        }
         return fuel.includes(l);
       };
       const ok = filters.fuel.some(matchFuel);
       if (!ok) return false;
+    }
+    if (filters && filters.drive && filters.drive.length > 0) {
+      const dIdx = idx["drive type"] ?? -1;
+      const drive = dIdx >= 0 ? String(r[dIdx] ?? "").trim().toLowerCase() : "";
+      const ok = filters.drive.some(lbl => drive === lbl.trim().toLowerCase());
+      if (!ok) return false;
+    }
+    if (filters && filters.transmission && filters.transmission.length > 0) {
+      const tIdx = idx["transmission"] ?? -1;
+      const raw = tIdx >= 0 ? String(r[tIdx] ?? "").trim().toLowerCase() : "";
+      const cleaned = raw.replace(/\b\d+\s*-?\s*speed\s*/g, "").trim();
+      const a = cleaned.includes("automatic") || cleaned.includes("direct drive") || cleaned.includes("cvt");
+      const m = cleaned.includes("manual");
+      const mix = cleaned.includes("automated") || cleaned.includes("dual") || cleaned.includes("semi") || cleaned.includes("sequential") || (a && m);
+      let label = "Automatic";
+      if (mix) label = "Mixed";
+      else if (m && !mix && !a) label = "Manual";
+      const ok = filters.transmission.some(x => x.trim().toLowerCase() === label.toLowerCase());
+      if (!ok) return false;
+    }
+    if (filters && filters.cylinders && filters.cylinders.length > 0) {
+      const allSelected = allCylSet.size > 0 && filters.cylinders.length >= allCylSet.size;
+      if (!allSelected) {
+        const lbl = cIdx >= 0 ? String(r[cIdx] ?? "").trim().toLowerCase() : "";
+        const ok = lbl ? filters.cylinders.some(x => x.trim().toLowerCase() === lbl) : false;
+        if (!ok) return false;
+      }
     }
     if (filters && filters.query) {
       const q = String(filters.query || "").trim().toLowerCase();
@@ -179,6 +223,9 @@ export default function ListingList({ filters }: { filters?: FiltersData }) {
     (!filters.makes || filters.makes.length === 0) &&
     (!filters.body || filters.body.length === 0) &&
     (!filters.fuel || filters.fuel.length === 0) &&
+    (!filters.drive || filters.drive.length === 0) &&
+    (!filters.transmission || filters.transmission.length === 0) &&
+    (!filters.cylinders || filters.cylinders.length === 0) &&
     (typeof filters.priceMin === "undefined") &&
     (typeof filters.priceMax === "undefined") &&
     (!filters.query)
