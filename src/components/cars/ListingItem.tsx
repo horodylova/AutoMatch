@@ -1,5 +1,6 @@
 "use client";
 import { Button } from "@progress/kendo-react-buttons";
+import Link from "next/link";
 import styles from "./cars.module.css";
 
 export type ListingItemData = {
@@ -33,7 +34,9 @@ export default function ListingItem({ item }: { item: ListingItemData }) {
         </div>
         <div className={styles.priceRow}>
           <div className={styles.price}>{item.price}</div>
-          <Button themeColor="primary" className={styles.detailsBtn}>Details</Button>
+          <Link href={`/cars/${encodeURIComponent(item.id)}`}>
+            <Button themeColor="primary" className={styles.detailsBtn}>Details</Button>
+          </Link>
         </div>
       </div>
     </div>

@@ -5,7 +5,6 @@ import ListingRow, { ListingRowData } from "./ListingRow";
 import ResultsToolbar from "./ResultsToolbar";
 import Pagination from "./Pagination";
 import styles from "./cars.module.css";
-import Loader from "@/components/Loader";
 import { fetchDataset, getRowCount, getPriceStats, Row } from "@/lib/dataset";
 import { FiltersData } from "./Filters";
 
@@ -273,7 +272,6 @@ export default function ListingList({ filters }: { filters?: FiltersData }) {
   
       <div className={styles.panelBody}>
         <ResultsToolbar count={countLabel} view={view} sort={sort} onViewChange={setView} onSortChange={setSort} />
-        {rows.length === 0 ? <Loader label="Loading results" /> : null}
         {(() => {
           return view === "grid" ? (
             <div className={styles.listGrid}>
@@ -286,6 +284,7 @@ export default function ListingList({ filters }: { filters?: FiltersData }) {
             <div style={{ display: "grid", gap: 12 }}>
               {pageRows.map(r => toItem(r)).map((item, i) => {
                 const rowItem: ListingRowData = {
+                  id: item.id,
                   imageUrl: item.imageUrl,
                   title: item.title,
                   subtitle: item.subtitle,
