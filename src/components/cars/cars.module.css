@@ -84,7 +84,7 @@
 .detailsColLeft { display: grid; gap: 16px; align-items: start; }
 .detailsColRight { display: grid; gap: 16px; align-items: start; }
 @media (max-width: 900px) { .detailsLayout { grid-template-columns: 1fr; } }
-.detailsGallery { width: 100%; margin: 0; }
+.detailsGallery { width: 100%; max-width: 900px; margin: 0 auto; }
 .gallerySlide { position: relative; width: 100%; aspect-ratio: 16 / 9; border: 1px solid var(--kendo-color-border); border-radius: 14px; overflow: hidden; background: transparent; }
 .galleryImg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; image-rendering: auto; }
 .detailsSection { display: grid; gap: 8px; border: 1px solid var(--kendo-color-border); border-radius: 12px; padding: 12px; background: transparent; }
