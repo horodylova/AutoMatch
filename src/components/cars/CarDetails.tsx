@@ -115,6 +115,8 @@ export default function CarDetails({ id }: Props) {
     { k: "Front track (in)", v: get("front track (in)") },
     { k: "Rear track (in)", v: get("rear track (in)") },
     { k: "Ground clearance (in)", v: get("ground clearance (in)") },
+    { k: "Angle of approach (degrees)", v: get("angle of approach (degrees)") },
+    { k: "Angle of departure (degrees)", v: get("angle of departure (degrees)") },
     { k: "Turning circle (ft)", v: get("turning circle (ft)") },
     { k: "Drag coefficient (Cd)", v: get("drag coefficient (cd)") },
   ];

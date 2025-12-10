@@ -98,26 +98,60 @@ export default function Filters({ onApply }: Props) {
   const effGroups = (() => {
     const unit = effUnit;
     if (!unit) return [] as { label: string; min?: number; max?: number }[];
+    const fIdx = idx["fuel type"] ?? -1;
+    const vIdx = unit === "mpg" ? (idx["epa combined mpg"] ?? -1) : (idx["epa combined mpge"] ?? -1);
+    if (fIdx < 0 || vIdx < 0) return [] as { label: string; min?: number; max?: number }[];
     const labels = selectedFuel.map(s => s.toLowerCase());
-    const isHydrogen = labels.includes("hydrogen");
-    const isElectric = labels.includes("electric");
-    if (unit === "mpge" && isHydrogen && !isElectric) {
-      return [{ label: "52–75 MPGE", min: 52, max: 75 }];
+    const matchFuelRow = (fuelRaw: string): boolean => {
+      if (labels.length === 0) return true;
+      const fuel = fuelRaw.toLowerCase();
+      return labels.some(l => {
+        if (l === "electric") return fuel.includes("electric") || fuel.includes("bev");
+        if (l === "hydrogen") return fuel.includes("hydrogen");
+        if (l === "diesel") return fuel.includes("diesel");
+        if (l === "hybrid") return fuel.includes("hybrid") || fuel.includes("plug-in") || fuel.includes("phev");
+        if (l === "flex-fuel") return fuel.includes("flex") || fuel.includes("e85");
+        if (l === "gasoline") {
+          const isGas = fuel.includes("gasoline") || fuel.includes("petrol") || fuel.includes("unleaded");
+          const isHybrid = fuel.includes("hybrid") || fuel.includes("plug-in") || fuel.includes("phev");
+          const isFlex = fuel.includes("flex") || fuel.includes("e85");
+          return isGas && !isHybrid && !isFlex;
+        }
+        return fuel.includes(l);
+      });
+    };
+    const vals: number[] = [];
+    for (const r of rows) {
+      const fuelRaw = String(r[fIdx] ?? "").trim();
+      if (!matchFuelRow(fuelRaw)) continue;
+      const raw = String(r[vIdx] ?? "").trim();
+      const n = Number(raw.replace(/[^0-9.]/g, ""));
+      if (Number.isFinite(n) && n > 0) vals.push(n);
     }
-    const s = unit === "mpg" ? effStats.mpg : effStats.mpge;
-    const min = s.min;
-    const max = s.max;
-    if (!(max > min)) return [] as { label: string; min?: number; max?: number }[];
-    const step = (max - min) / 5;
+    vals.sort((a, b) => a - b);
+    if (vals.length === 0) return [] as { label: string; min?: number; max?: number }[];
+    const buckets = Math.min(5, Math.max(1, Math.floor(Math.sqrt(vals.length))));
+    const edges: number[] = [];
+    for (let i = 0; i < buckets; i++) {
+      const idxQ = Math.min(vals.length - 1, Math.round((i / buckets) * (vals.length - 1)));
+      edges.push(vals[idxQ]);
+    }
+    edges.push(vals[vals.length - 1]);
     const g: { label: string; min?: number; max?: number }[] = [];
-    for (let i = 0; i < 5; i++) {
-      const a = Math.round(min + i * step);
-      const b = Math.round(min + (i + 1) * step);
-      if (i === 0) g.push({ label: `${a}–${b} ${unit.toUpperCase()}`, min: a, max: b });
-      else if (i < 4) g.push({ label: `${a}–${b} ${unit.toUpperCase()}`, min: a, max: b });
+    for (let i = 0; i < buckets; i++) {
+      const a = Math.round(edges[i]);
+      const b = Math.round(i < buckets - 1 ? edges[i + 1] : edges[edges.length - 1]);
+      if (i < buckets - 1) g.push({ label: `${a}–${b} ${unit.toUpperCase()}`, min: a, max: b });
       else g.push({ label: `${a}+ ${unit.toUpperCase()}`, min: a, max: undefined });
     }
-    return g;
+    const uniq: { label: string; min?: number; max?: number }[] = [];
+    const seen = new Set<string>();
+    for (const it of g) {
+      if (seen.has(it.label)) continue;
+      seen.add(it.label);
+      uniq.push(it);
+    }
+    return uniq;
   })();
   
   return (
@@ -302,7 +336,7 @@ export default function Filters({ onApply }: Props) {
           </div>
         </FilterSection>
         <div className={styles.actionRow}>
-          <Button className={`${styles.actionBtn} ${styles.actionSecondary}`} fillMode="solid" themeColor="base" onClick={() => { setSelectedMakes([]); setSelectedBody([]); setSelectedFuel([]); setSelectedDrive([]); setSelectedTransmission([]); setSelectedCylinders([]); setSelectedPriceLabels([]); setSearch(""); setShowSuggest(false); setRangeMin(priceMin); setRangeMax(priceMax); onApply?.({ makes: [], priceMin: priceMin, priceMax: priceMax, priceRanges: [], body: [], fuel: [], drive: [], transmission: [], cylinders: [], query: undefined }); }}>Reset</Button>
+          <Button className={`${styles.actionBtn} ${styles.actionSecondary}`} fillMode="solid" themeColor="base" onClick={() => { setSelectedMakes([]); setSelectedBody([]); setSelectedFuel([]); setSelectedDrive([]); setSelectedTransmission([]); setSelectedCylinders([]); setSelectedPriceLabels([]); setSelectedEffLabels([]); setSearch(""); setShowSuggest(false); setRangeMin(priceMin); setRangeMax(priceMax); onApply?.({ makes: [], priceMin: priceMin, priceMax: priceMax, priceRanges: [], body: [], fuel: [], drive: [], transmission: [], cylinders: [], query: undefined }); }}>Reset</Button>
           <Button className={`${styles.actionBtn} ${styles.actionPrimary}`} fillMode="solid" themeColor="primary" onClick={() => {
             const ranges = selectedPriceLabels.map(lbl => {
               const g = priceGroups.find(pg => pg.label === lbl);
@@ -312,7 +346,8 @@ export default function Filters({ onApply }: Props) {
               const g = effGroups.find(x => x.label === lbl);
               return { min: g?.min, max: g?.max };
             }).filter(r => typeof r.min !== "undefined" || typeof r.max !== "undefined");
-            onApply?.({ makes: selectedMakes, priceMin: typeof rangeMin === "number" ? rangeMin : undefined, priceMax: typeof rangeMax === "number" ? rangeMax : undefined, priceRanges: ranges, body: selectedBody, fuel: selectedFuel, drive: selectedDrive, transmission: selectedTransmission, cylinders: selectedCylinders, efficiencyUnit: effUnit, efficiencyRanges: effSelected, query: search.trim() || undefined });
+            const effRanges = (effGroups.length > 0 && selectedEffLabels.length >= effGroups.length) ? [] : effSelected;
+            onApply?.({ makes: selectedMakes, priceMin: typeof rangeMin === "number" ? rangeMin : undefined, priceMax: typeof rangeMax === "number" ? rangeMax : undefined, priceRanges: ranges, body: selectedBody, fuel: selectedFuel, drive: selectedDrive, transmission: selectedTransmission, cylinders: selectedCylinders, efficiencyUnit: effUnit, efficiencyRanges: effRanges, query: search.trim() || undefined });
           }}>Apply</Button>
         </div>
       </div>
