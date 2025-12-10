@@ -2,12 +2,10 @@
 import { useEffect, useMemo, useState, useCallback } from "react";
 import { fetchDataset, Row } from "@/lib/dataset";
 import styles from "./cars.module.css";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import Image from "next/image";
+import DetailsGallery from "./DetailsGallery";
+import DetailsKVSection from "./DetailsKVSection";
+import DetailsReview from "./DetailsReview";
+import DetailsProsCons from "./DetailsProsCons";
 
 type Props = { id: string };
 
@@ -18,7 +16,6 @@ function splitList(s: string): string[] {
 export default function CarDetails({ id }: Props) {
   const [row, setRow] = useState<Row | null>(null);
   const [idx, setIdx] = useState<Record<string, number>>({});
-  const [filteredImages, setFilteredImages] = useState<string[]>([]);
   useEffect(() => {
     let active = true;
     const run = async () => {
@@ -62,30 +59,6 @@ export default function CarDetails({ id }: Props) {
     return out.length > 0 ? out : ["/no-image-available.jpg"];
   }, [get]);
 
-  useEffect(() => {
-    let active = true;
-    const run = async () => {
-      const list = images.slice(0, 8);
-      if (list.length === 0) {
-        if (active) setFilteredImages([]);
-        return;
-      }
-      const tasks = list.map(url => new Promise<string | null>((resolve) => {
-        if (typeof window === "undefined") return resolve(url);
-        const img = new window.Image();
-        img.crossOrigin = "anonymous";
-        img.src = url;
-        const timer = setTimeout(() => resolve(null), 2500);
-        img.onload = () => { clearTimeout(timer); resolve((img.naturalWidth >= 800 && img.naturalHeight >= 450) ? url : null); };
-        img.onerror = () => { clearTimeout(timer); resolve(null); };
-      }));
-      const results = await Promise.all(tasks);
-      const ok = results.filter((x): x is string => !!x);
-      if (active) setFilteredImages(ok);
-    };
-    run();
-    return () => { active = false; };
-  }, [images]);
 
   const make = get("make");
   const model = get("model");
@@ -95,9 +68,15 @@ export default function CarDetails({ id }: Props) {
   const subtitle = get("trim (description)");
   const origin = get("country of origin");
   const review = get("review");
+  const reviewParas = useMemo(() => {
+    const text = (review || "").trim();
+    if (!text) return [];
+    const parts = text.split(/\s*;\s*/).map(s => s.trim()).filter(Boolean);
+    return parts.length > 0 ? parts : [text];
+  }, [review]);
   const pros = splitList(get("pros"));
   const cons = splitList(get("cons"));
-  const whatsNew = splitList(get("what's new -"));
+  const whatsNew = [] as string[];
 
   const tagItems = useMemo(() => {
     const out: string[] = [];
@@ -155,9 +134,9 @@ export default function CarDetails({ id }: Props) {
     { k: "Cylinders", v: get("cylinders") },
     { k: "Engine size (l)", v: get("engine size (l)") },
     { k: "Horsepower (HP)", v: get("horsepower (hp)") },
-    { k: "Horsepower (rpm)", v: get("horsepower (rpm)") },
+    { k: "Horsepower at rpm", v: get("horsepower (rpm)") },
     { k: "Torque (ft-lbs)", v: get("torque (ft-lbs)") },
-    { k: "Torque (rpm)", v: get("torque (rpm)") },
+    { k: "Torque at rpm", v: get("torque (rpm)") },
     { k: "Valves", v: get("valves") },
     { k: "Valve timing", v: get("valve timing") },
     { k: "Cam type", v: get("cam type") },
@@ -178,6 +157,25 @@ export default function CarDetails({ id }: Props) {
     { k: "EPA time to charge battery (at 240V) (hr)", v: get("epa time to charge battery (at 240v) (hr)") },
     { k: "Battery capacity (kWh)", v: get("battery capacity (kwh)") },
   ];
+
+  const kvFuelFiltered = useMemo(() => {
+    const fuelRaw = (get("fuel type") || "").toLowerCase();
+    const isElectric = fuelRaw.includes("electric") || fuelRaw.includes("bev");
+    const isHybrid = fuelRaw.includes("hybrid") || fuelRaw.includes("plug-in") || fuelRaw.includes("phev");
+    return kvFuel.filter(({ k }) => {
+      const label = k.toLowerCase();
+      const isElectricMetric = label.includes("mpge") || label.includes("electricity range") || label.includes("kwh/100") || label.includes("time to charge") || label.includes("battery capacity");
+      const isMpgMetric = label.includes("mpg") || label.includes("range in miles (city/hwy)");
+      const isTank = label.includes("fuel tank capacity");
+      if (isElectric && !isHybrid) {
+        return isElectricMetric || label === "fuel type";
+      }
+      if (!isElectric && !isHybrid) {
+        return !isElectricMetric;
+      }
+      return true;
+    });
+  }, [get]);
 
   const kvFront = [
     { k: "Front head room (in)", v: get("front head room (in)") },
@@ -207,123 +205,21 @@ export default function CarDetails({ id }: Props) {
       </div>
 
       <div className={styles.detailsLayout}>
-        <div className={styles.detailsGallery}>
-          <Swiper slidesPerView={1} spaceBetween={12} modules={[Navigation, Pagination]} navigation pagination={{ clickable: true }}>
-            {(filteredImages.length > 0 ? filteredImages : images.slice(0, 1)).map((src, i) => (
-              <SwiperSlide key={`${src}-${i}`}>
-                <div className={styles.gallerySlide}>
-                  <Image 
-                    src={src} 
-                    alt={title || "car"} 
-                    fill 
-                    className={styles.galleryImg} 
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 820px" 
-                    quality={95}
-                    priority={i === 0}
-                    unoptimized
-                    style={{ objectFit: "contain" }} 
-                  />
-                </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
+        <div className={styles.detailsColLeft}>
+          <DetailsGallery images={images} title={title} />
+          <DetailsReview paragraphs={reviewParas} />
+          <DetailsProsCons pros={pros} cons={cons} />
         </div>
 
-        <div className={styles.detailsSection}>
-          <div className={styles.sectionTitle}>Overview</div>
-          <div className={styles.kvGrid}>
-            {kvMain.filter(x => x.v).map(({ k, v }) => (
-              <div key={k} className={styles.kvItem}><span className={styles.kvKey}>{k}</span><span className={styles.kvVal}>{v}</span></div>
-            ))}
-          </div>
+        <div className={styles.detailsColRight}>
+          <DetailsKVSection title="Overview" items={kvMain} />
+          <DetailsKVSection title="Dimensions" items={kvDims} />
+          <DetailsKVSection title="Engine" items={kvEngine} />
+          <DetailsKVSection title="Capacity" items={kvCapacity} />
+          <DetailsKVSection title="Fuel & Efficiency" items={kvFuelFiltered} />
+          <DetailsKVSection title="Front Seats" items={kvFront} />
+          <DetailsKVSection title="Rear Seats" items={kvRear} />
         </div>
-
-        <div className={styles.detailsSection}>
-          <div className={styles.sectionTitle}>Dimensions</div>
-          <div className={styles.kvGrid}>
-            {kvDims.filter(x => x.v).map(({ k, v }) => (
-              <div key={k} className={styles.kvItem}><span className={styles.kvKey}>{k}</span><span className={styles.kvVal}>{v}</span></div>
-            ))}
-          </div>
-        </div>
-
-        <div className={styles.detailsSection}>
-          <div className={styles.sectionTitle}>Capacity</div>
-          <div className={styles.kvGrid}>
-            {kvCapacity.filter(x => x.v).map(({ k, v }) => (
-              <div key={k} className={styles.kvItem}><span className={styles.kvKey}>{k}</span><span className={styles.kvVal}>{v}</span></div>
-            ))}
-          </div>
-        </div>
-
-        <div className={styles.detailsSection}>
-          <div className={styles.sectionTitle}>Engine</div>
-          <div className={styles.kvGrid}>
-            {kvEngine.filter(x => x.v).map(({ k, v }) => (
-              <div key={k} className={styles.kvItem}><span className={styles.kvKey}>{k}</span><span className={styles.kvVal}>{v}</span></div>
-            ))}
-          </div>
-        </div>
-
-        <div className={styles.detailsSection}>
-          <div className={styles.sectionTitle}>Fuel & Efficiency</div>
-          <div className={styles.kvGrid}>
-            {kvFuel.filter(x => x.v).map(({ k, v }) => (
-              <div key={k} className={styles.kvItem}><span className={styles.kvKey}>{k}</span><span className={styles.kvVal}>{v}</span></div>
-            ))}
-          </div>
-        </div>
-
-        <div className={styles.detailsSection}>
-          <div className={styles.sectionTitle}>Front Seats</div>
-          <div className={styles.kvGrid}>
-            {kvFront.filter(x => x.v).map(({ k, v }) => (
-              <div key={k} className={styles.kvItem}><span className={styles.kvKey}>{k}</span><span className={styles.kvVal}>{v}</span></div>
-            ))}
-          </div>
-        </div>
-
-        <div className={styles.detailsSection}>
-          <div className={styles.sectionTitle}>Rear Seats</div>
-          <div className={styles.kvGrid}>
-            {kvRear.filter(x => x.v).map(({ k, v }) => (
-              <div key={k} className={styles.kvItem}><span className={styles.kvKey}>{k}</span><span className={styles.kvVal}>{v}</span></div>
-            ))}
-          </div>
-        </div>
-
-        <div className={styles.detailsSection}>
-          <div className={styles.sectionTitle}>Review</div>
-          <div className={styles.reviewText}>{review || "No review available"}</div>
-        </div>
-
-        <div className={styles.detailsSection}>
-          <div className={styles.sectionTitle}>Pros</div>
-          <div className={styles.tagCloud}>
-            {(pros.length > 0 ? pros : ["None"]).map(p => (
-              <span key={p} className={styles.badge}>{p}</span>
-            ))}
-          </div>
-        </div>
-
-        <div className={styles.detailsSection}>
-          <div className={styles.sectionTitle}>Cons</div>
-          <div className={styles.tagCloud}>
-            {(cons.length > 0 ? cons : ["None"]).map(c => (
-              <span key={c} className={styles.badge}>{c}</span>
-            ))}
-          </div>
-        </div>
-
-        <div className={styles.detailsSection}>
-          <div className={styles.sectionTitle}>What&apos;s new</div>
-          <div className={styles.tagCloud}>
-            {(whatsNew.length > 0 ? whatsNew : ["None"]).map(w => (
-              <span key={w} className={styles.badge}>{w}</span>
-            ))}
-          </div>
-        </div>
-
       </div>
     </div>
   );

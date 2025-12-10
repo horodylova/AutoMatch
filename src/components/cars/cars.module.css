@@ -80,9 +80,11 @@
 .detailsHeader { display: grid; gap: 6px; }
 .detailsTitle { font-size: 28px; font-weight: 700; }
 .detailsSubtitle { font-size: 16px; opacity: 0.8; }
-.detailsLayout { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
+.detailsLayout { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 16px; align-items: start; }
+.detailsColLeft { display: grid; gap: 16px; align-items: start; }
+.detailsColRight { display: grid; gap: 16px; align-items: start; }
 @media (max-width: 900px) { .detailsLayout { grid-template-columns: 1fr; } }
-.detailsGallery { width: 100%; max-width: 820px; margin: 0 auto; }
+.detailsGallery { width: 100%; margin: 0; }
 .gallerySlide { position: relative; width: 100%; aspect-ratio: 16 / 9; border: 1px solid var(--kendo-color-border); border-radius: 14px; overflow: hidden; background: transparent; }
 .galleryImg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; image-rendering: auto; }
 .detailsSection { display: grid; gap: 8px; border: 1px solid var(--kendo-color-border); border-radius: 12px; padding: 12px; background: transparent; }
