@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 import { fetchDataset, Row } from "@/lib/dataset";
 import styles from "./cars.module.css";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -18,6 +18,7 @@ function splitList(s: string): string[] {
 export default function CarDetails({ id }: Props) {
   const [row, setRow] = useState<Row | null>(null);
   const [idx, setIdx] = useState<Record<string, number>>({});
+  const [filteredImages, setFilteredImages] = useState<string[]>([]);
   useEffect(() => {
     let active = true;
     const run = async () => {
@@ -42,11 +43,11 @@ export default function CarDetails({ id }: Props) {
     return () => { active = false; };
   }, [id]);
 
-  const get = (key: string): string => {
+  const get = useCallback((key: string): string => {
     const i = idx[key.toLowerCase()] ?? -1;
     if (i < 0 || !row) return "";
     return String(row[i] ?? "").trim();
-  };
+  }, [row, idx]);
 
   const images = useMemo(() => {
     const raw = get("image url");
@@ -59,7 +60,32 @@ export default function CarDetails({ id }: Props) {
     };
     const out = arr.map(sanitize).filter(Boolean);
     return out.length > 0 ? out : ["/no-image-available.jpg"];
-  }, [row, idx]);
+  }, [get]);
+
+  useEffect(() => {
+    let active = true;
+    const run = async () => {
+      const list = images.slice(0, 8);
+      if (list.length === 0) {
+        if (active) setFilteredImages([]);
+        return;
+      }
+      const tasks = list.map(url => new Promise<string | null>((resolve) => {
+        if (typeof window === "undefined") return resolve(url);
+        const img = new window.Image();
+        img.crossOrigin = "anonymous";
+        img.src = url;
+        const timer = setTimeout(() => resolve(null), 2500);
+        img.onload = () => { clearTimeout(timer); resolve((img.naturalWidth >= 800 && img.naturalHeight >= 450) ? url : null); };
+        img.onerror = () => { clearTimeout(timer); resolve(null); };
+      }));
+      const results = await Promise.all(tasks);
+      const ok = results.filter((x): x is string => !!x);
+      if (active) setFilteredImages(ok);
+    };
+    run();
+    return () => { active = false; };
+  }, [images]);
 
   const make = get("make");
   const model = get("model");
@@ -88,7 +114,7 @@ export default function CarDetails({ id }: Props) {
     if (engineType) out.push(engineType);
     if (seats) out.push(`${seats} seats`);
     return out;
-  }, [row, idx]);
+  }, [get]);
 
   const kvMain = [
     { k: "Make", v: make },
@@ -183,7 +209,7 @@ export default function CarDetails({ id }: Props) {
       <div className={styles.detailsLayout}>
         <div className={styles.detailsGallery}>
           <Swiper slidesPerView={1} spaceBetween={12} modules={[Navigation, Pagination]} navigation pagination={{ clickable: true }}>
-            {images.map((src, i) => (
+            {(filteredImages.length > 0 ? filteredImages : images.slice(0, 1)).map((src, i) => (
               <SwiperSlide key={`${src}-${i}`}>
                 <div className={styles.gallerySlide}>
                   <Image 
@@ -191,11 +217,11 @@ export default function CarDetails({ id }: Props) {
                     alt={title || "car"} 
                     fill 
                     className={styles.galleryImg} 
-                    sizes="100vw" 
-                    quality={100}
-                    priority
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 820px" 
+                    quality={95}
+                    priority={i === 0}
                     unoptimized
-                    style={{ objectFit: "cover" }} 
+                    style={{ objectFit: "contain" }} 
                   />
                 </div>
               </SwiperSlide>
@@ -297,6 +323,7 @@ export default function CarDetails({ id }: Props) {
             ))}
           </div>
         </div>
+
       </div>
     </div>
   );

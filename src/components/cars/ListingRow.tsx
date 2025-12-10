@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import styles from "./cars.module.css";
 
 export type ListingRowData = {
@@ -15,7 +16,7 @@ export default function ListingRow({ item }: { item: ListingRowData }) {
   return (
     <div className={styles.row}>
       <div className={styles.rowImgWrap}>
-        <img src={item.imageUrl} alt={item.title} />
+        <Image src={item.imageUrl || "/no-image-available.jpg"} alt={item.title} fill sizes="(max-width: 900px) 100vw, 300px" priority unoptimized className={styles.galleryImg} />
       </div>
       <div className={styles.rowBody}>
         <div className={styles.rowTitle}>{item.title}</div>
