@@ -59,6 +59,10 @@ export default function CarDetails({ id }: Props) {
     return out.length > 0 ? out : ["/no-image-available.jpg"];
   }, [get]);
 
+  const hasRealImage = useMemo(() => {
+    return images.some(src => !src.includes("no-image-available"));
+  }, [images]);
+
 
   const make = get("make");
   const model = get("model");
@@ -74,6 +78,7 @@ export default function CarDetails({ id }: Props) {
     const parts = text.split(/\s*;\s*/).map(s => s.trim()).filter(Boolean);
     return parts.length > 0 ? parts : [text];
   }, [review]);
+  const showLeftInfo = !hasRealImage && reviewParas.length === 0;
   const pros = splitList(get("pros"));
   const cons = splitList(get("cons"));
   const whatsNew = [] as string[];
@@ -206,17 +211,23 @@ export default function CarDetails({ id }: Props) {
         </div>
       </div>
 
-      <div className={styles.detailsLayout}>
+      <div className={`${styles.detailsLayout} ${!hasRealImage ? styles.detailsLayoutNoImage : ""}`}>
         <div className={styles.detailsColLeft}>
-          <DetailsGallery images={images} title={title} />
+          <DetailsGallery images={images} title={title} compact={!hasRealImage} />
           <DetailsReview paragraphs={reviewParas} />
           <DetailsProsCons pros={pros} cons={cons} />
+          {showLeftInfo ? (
+            <>
+              <DetailsKVSection title="Overview" items={kvMain} />
+              <DetailsKVSection title="Engine" items={kvEngine} />
+            </>
+          ) : null}
         </div>
 
-        <div className={styles.detailsColRight}>
-          <DetailsKVSection title="Overview" items={kvMain} />
+        <div className={`${styles.detailsColRight}`}>
+          {showLeftInfo ? null : <DetailsKVSection title="Overview" items={kvMain} />}
           <DetailsKVSection title="Dimensions" items={kvDims} />
-          <DetailsKVSection title="Engine" items={kvEngine} />
+          {showLeftInfo ? null : <DetailsKVSection title="Engine" items={kvEngine} />}
           <DetailsKVSection title="Capacity" items={kvCapacity} />
           <DetailsKVSection title="Fuel & Efficiency" items={kvFuelFiltered} />
           <DetailsKVSection title="Front Seats" items={kvFront} />

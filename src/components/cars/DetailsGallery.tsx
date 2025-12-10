@@ -8,7 +8,7 @@ import "swiper/css/pagination";
 import Image from "next/image";
 import styles from "./cars.module.css";
 
-export default function DetailsGallery({ images, title }: { images: string[]; title: string }) {
+export default function DetailsGallery({ images, title, compact = false }: { images: string[]; title: string; compact?: boolean }) {
   const [readyImages, setReadyImages] = useState<string[]>([]);
   useEffect(() => {
     let active = true;
@@ -35,7 +35,7 @@ export default function DetailsGallery({ images, title }: { images: string[]; ti
   const show = readyImages.length > 0 ? readyImages : images.slice(0, 1);
 
   return (
-    <div className={styles.detailsGallery}>
+    <div className={`${styles.detailsGallery} ${compact ? styles.detailsGalleryCompact : ""}`}>
       <Swiper slidesPerView={1} spaceBetween={12} modules={[Navigation, Pagination]} navigation pagination={{ clickable: true }}>
         {show.map((src, i) => (
           <SwiperSlide key={`${src}-${i}`}>
@@ -48,4 +48,3 @@ export default function DetailsGallery({ images, title }: { images: string[]; ti
     </div>
   );
 }
-
