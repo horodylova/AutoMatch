@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { Button } from "@progress/kendo-react-buttons";
 import FilterSection from "./FilterSection";
 import styles from "./cars.module.css";
-import { fetchDataset, getMakes, getPriceStats, getBodyTypes, getFuelTypes, getDriveTypes, getTransmissionTypes, getCylinderCounts, getEfficiencyStats, Row } from "@/lib/dataset";
+import { fetchDataset, getMakes, getPriceStats, getBodyTypes, getFuelTypes, getDriveTypes, getTransmissionTypes, getCylinderCounts, Row } from "@/lib/dataset";
 
 export type FiltersData = {
   makes: string[];
@@ -42,7 +42,6 @@ export default function Filters({ onApply }: Props) {
   const [transmissionTypes, setTransmissionTypes] = useState<string[]>([]);
   const [selectedCylinders, setSelectedCylinders] = useState<string[]>([]);
   const [cylinderCounts, setCylinderCounts] = useState<string[]>([]);
-  const [effStats, setEffStats] = useState<{ mpg: { min: number; max: number }; mpge: { min: number; max: number } }>({ mpg: { min: 0, max: 0 }, mpge: { min: 0, max: 0 } });
   const [selectedEffLabels, setSelectedEffLabels] = useState<string[]>([]);
   const [rows, setRows] = useState<Row[]>([]);
   const [idx, setIdx] = useState<Record<string, number>>({});
@@ -67,7 +66,6 @@ export default function Filters({ onApply }: Props) {
       setRangeMax(stats.max);
       setRows(ds.rows);
       setIdx(ds.idx);
-      setEffStats(getEfficiencyStats(ds));
     };
     run();
   }, []);
@@ -81,7 +79,7 @@ export default function Filters({ onApply }: Props) {
     };
     check();
     if (typeof window !== "undefined") {
-      window.addEventListener("resize", check, { passive: true } as any);
+      window.addEventListener("resize", check, { passive: true } as AddEventListenerOptions);
       return () => window.removeEventListener("resize", check);
     }
   }, []);

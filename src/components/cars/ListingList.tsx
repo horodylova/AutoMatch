@@ -5,7 +5,7 @@ import ListingRow, { ListingRowData } from "./ListingRow";
 import ResultsToolbar from "./ResultsToolbar";
 import Pagination from "./Pagination";
 import styles from "./cars.module.css";
-import { fetchDataset, getRowCount, getPriceStats, Row } from "@/lib/dataset";
+import { fetchDataset, getRowCount, Row } from "@/lib/dataset";
 import { FiltersData } from "./Filters";
 
 function num(v: unknown): number {
@@ -22,7 +22,6 @@ function fmtUSD(n: number): string {
 export default function ListingList({ filters }: { filters?: FiltersData }) {
   const [count, setCount] = useState<number>(0);
   const pageSize = 15;
-  const [stats, setStats] = useState<{ min: number; max: number }>({ min: 0, max: 0 });
   const [rows, setRows] = useState<Row[]>([]);
   const [idx, setIdx] = useState<Record<string, number>>({});
   const [view, setView] = useState<"grid" | "list">(() => {
@@ -41,8 +40,6 @@ export default function ListingList({ filters }: { filters?: FiltersData }) {
     const run = async () => {
       const ds = await fetchDataset();
       setCount(getRowCount(ds));
-      const ps = getPriceStats(ds);
-      setStats({ min: ps.min, max: ps.max });
       setRows(ds.rows);
       setIdx(ds.idx);
     };
@@ -120,16 +117,7 @@ export default function ListingList({ filters }: { filters?: FiltersData }) {
     return arr;
   })();
 
-  const hasImage = (r: Row): boolean => {
-    const i = idx["image url"] ?? -1;
-    if (i < 0) return false;
-    const s = String(r[i] ?? "").trim();
-    const first = s.split(";").map(x => x.trim()).filter(Boolean)[0] || "";
-    return !!first;
-  };
-  const maxYear = (() => {
-    return 0;
-  })();
+  
   const cIdx = idx["cylinders"] ?? -1;
   const allCylSet = (() => {
     const s = new Set<string>();
@@ -270,7 +258,7 @@ export default function ListingList({ filters }: { filters?: FiltersData }) {
   useEffect(() => { firstPageSampleRef.current = null; }, [rows]);
   useEffect(() => { if (sort !== "none" || !emptyFilters || page !== 1) firstPageSampleRef.current = null; }, [sort, emptyFilters, page]);
   useEffect(() => { setPage(1); }, [filters, sort]);
-  useEffect(() => { const maxPage = Math.max(1, Math.ceil(total / pageSize)); if (page > maxPage) setPage(1); }, [total]);
+  useEffect(() => { const maxPage = Math.max(1, Math.ceil(total / pageSize)); if (page > maxPage) setPage(1); }, [total, page]);
   const start = Math.max(0, (page - 1) * pageSize);
   const pageRows = (() => {
     if (emptyFilters && page === 1 && sort === "none") {
