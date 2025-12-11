@@ -2,12 +2,14 @@
 import { useEffect, useState } from "react";
 import QuizProgress from "../../components/QuizProgress";
 import formStyles from "../../components/QuizForm.module.css";
-import { PhotoQuestion, TagQuestion, ChoiceQuestion, SliderQuestion, SizeScaleQuestion } from "../../components/quiz";
+import { PhotoQuestion, TagQuestion, ChoiceQuestion, SliderQuestion, SizeScaleQuestion, MultiChoiceQuestion } from "../../components/quiz";
  
 export default function Page() {
   const stepIds = [
     "perfect_morning",
+    "unexpected_changes",
     "daily_values",
+    "freedom_feel",
     "purchase_approach",
     "technology_comfort",
     "people_descriptors",
@@ -25,6 +27,8 @@ export default function Page() {
   const [showIntro, setShowIntro] = useState<boolean>(true);
   const [morningChoice, setMorningChoice] = useState<string | null>(null);
   const [dailyTags, setDailyTags] = useState<string[]>([]);
+  const [unexpectedSel, setUnexpectedSel] = useState<number[]>([]);
+  const [freedomPhoto, setFreedomPhoto] = useState<string | null>(null);
   const [purchaseChoice, setPurchaseChoice] = useState<number | null>(null);
   const [techComfort, setTechComfort] = useState<number | null>(null);
   const [weekendPhoto, setWeekendPhoto] = useState<string | null>(null);
@@ -72,6 +76,23 @@ export default function Page() {
             />
           )}
           {!showIntro && current === 1 && (
+            <MultiChoiceQuestion
+              questionId="unexpected_changes"
+              title="How do you handle unexpected changes?"
+              tip="Tip: Choose what feels automatic — you can select one or more options"
+              options={[
+                "Adapt quickly and take charge",
+                "Pause, analyze, create structure",
+                "Stay calm and keep things steady",
+                "Ask for support and coordinate together",
+                "Feel energized by unpredictability",
+              ]}
+              selected={unexpectedSel}
+              onChange={setUnexpectedSel}
+              minSelect={1}
+            />
+          )}
+          {!showIntro && current === 2 && (
             <TagQuestion
               questionId="daily_values"
               title="What matters most in your daily life?"
@@ -91,7 +112,24 @@ export default function Page() {
               maxSelect={5}
             />
           )}
-          {!showIntro && current === 2 && (
+          {!showIntro && current === 3 && (
+            <PhotoQuestion
+              questionId="freedom_feel"
+              title="What Does “Freedom” Feel Like to You?"
+              tip="Tip: Pick the image that gives you the strongest internal “yes.”"
+              options={[
+                { key: "open_highway", title: "Open highway", src: "/freedom/Open highway.jpg" },
+                { key: "minimal_quiet_space", title: "Minimal, quiet space", src: "/freedom/Minimal, quiet space.jpg" },
+                { key: "wild_nature_forest_trails", title: "Wild nature / forest trails", src: "/freedom/forest trails.jpg" },
+                { key: "futuristic_environments_clean_tech_architecture", title: "Futuristic environments / clean tech architecture", src: "/freedom/ tech architecture.jpg" },
+                { key: "dense_energetic_city_at_night", title: "Dense energetic city at night", src: "/freedom/energetic city at night.jpg" },
+                { key: "wide_open_desert_endless_horizon", title: "Wide open desert / endless horizon", src: "/freedom/open desert.jpg" },
+              ]}
+              selectedKey={freedomPhoto}
+              onSelect={(k) => setFreedomPhoto(k)}
+            />
+          )}
+          {!showIntro && current === 4 && (
             <ChoiceQuestion
               questionId="purchase_approach"
               title="How do you approach big purchases?"
@@ -107,7 +145,7 @@ export default function Page() {
               onSelect={setPurchaseChoice}
             />
           )}
-          {!showIntro && current === 3 && (
+          {!showIntro && current === 5 && (
             <SliderQuestion
               questionId="technology_comfort"
               title="Your Technology Comfort Level"
@@ -119,7 +157,7 @@ export default function Page() {
               onChange={setTechComfort}
             />
           )}
-          {!showIntro && current === 4 && (
+          {!showIntro && current === 6 && (
             <TagQuestion
               questionId="people_descriptors"
               title="People close to you would describe you as…"
@@ -142,7 +180,7 @@ export default function Page() {
               maxSelect={3}
             />
           )}
-          {!showIntro && current === 5 && (
+          {!showIntro && current === 7 && (
             <ChoiceQuestion
               questionId="energy_vibe"
               title="Which energy feels most like you?"
@@ -159,7 +197,7 @@ export default function Page() {
               onSelect={setEnergyChoice}
             />
           )}
-          {!showIntro && current === 6 && (
+          {!showIntro && current === 8 && (
             <ChoiceQuestion
               questionId="interior_feel"
               title="How should your car feel inside?"
@@ -171,13 +209,13 @@ export default function Page() {
                 "A warm, intuitive space designed for comfort, connection, and the realities of everyday life.",
                 "A modern, innovative cockpit filled with smart features, intuitive screens, and a sense of effortless progress.",
                 "A strong, practical environment built to handle gear, weather, and daily tasks without hesitation.",
-               
+                
               ]}
               selectedIndex={interiorChoice}
               onSelect={setInteriorChoice}
             />
           )}
-          {!showIntro && current === 7 && (
+          {!showIntro && current === 9 && (
             <ChoiceQuestion
               questionId="emotional_expectation"
               title="What do you expect emotionally from a car?"
@@ -194,7 +232,7 @@ export default function Page() {
               onSelect={setEmotionChoice}
             />
           )}
-          {!showIntro && current === 8 && (
+          {!showIntro && current === 10 && (
             <SliderQuestion
               questionId="patience_level"
               title="How patient are you with everyday tasks?"
@@ -211,7 +249,7 @@ export default function Page() {
               ]}
             />
           )}
-          {!showIntro && current === 9 && (
+          {!showIntro && current === 11 && (
             <PhotoQuestion
               questionId="ideal_weekend"
               title="Your ideal weekend"
@@ -228,7 +266,7 @@ export default function Page() {
               onSelect={(k) => setWeekendPhoto(k)}
             />
           )}
-          {!showIntro && current === 10 && (
+          {!showIntro && current === 12 && (
             <ChoiceQuestion
               questionId="ownership_duration"
               title="How long do you usually keep a car?"
@@ -244,7 +282,7 @@ export default function Page() {
               onSelect={setOwnershipDuration}
             />
           )}
-          {!showIntro && current === 11 && (
+          {!showIntro && current === 13 && (
             <SizeScaleQuestion
               questionId="car_size_scale"
               title="What size feels most natural for your next car?"
@@ -262,30 +300,34 @@ export default function Page() {
             onClick={() => {
               if (showIntro) { setShowIntro(false); return; }
               if (current === 0) { if (!morningChoice) { return; } setCurrent(1); return; }
-              if (current === 1) { if (dailyTags.length < 3 || dailyTags.length > 5) { return; } setCurrent(2); return; }
-              if (current === 2) { if (purchaseChoice === null) { return; } setCurrent(3); return; }
-              if (current === 3) { if (techComfort === null) { return; } setCurrent(4); return; }
-              if (current === 4) { if (descriptorTags.length < 1 || descriptorTags.length > 3) { return; } setCurrent(5); return; }
-              if (current === 5) { if (energyChoice === null) { return; } setCurrent(6); return; }
-              if (current === 6) { if (interiorChoice === null) { return; } setCurrent(7); return; }
-              if (current === 7) { if (emotionChoice === null) { return; } setCurrent(8); return; }
-              if (current === 8) { if (patienceLevel === null) { return; } setCurrent(9); return; }
+              if (current === 1) { if (unexpectedSel.length < 1) { return; } setCurrent(2); return; }
+              if (current === 2) { if (dailyTags.length < 3 || dailyTags.length > 5) { return; } setCurrent(3); return; }
+              if (current === 3) { if (!freedomPhoto) { return; } setCurrent(4); return; }
+              if (current === 4) { if (purchaseChoice === null) { return; } setCurrent(5); return; }
+              if (current === 5) { if (techComfort === null) { return; } setCurrent(6); return; }
+              if (current === 6) { if (descriptorTags.length < 1 || descriptorTags.length > 3) { return; } setCurrent(7); return; }
+              if (current === 7) { if (energyChoice === null) { return; } setCurrent(8); return; }
+              if (current === 8) { if (interiorChoice === null) { return; } setCurrent(9); return; }
+              if (current === 9) { if (emotionChoice === null) { return; } setCurrent(10); return; }
+              if (current === 10) { if (patienceLevel === null) { return; } setCurrent(11); return; }
               if (current >= total - 1) { return; }
               setCurrent(v => Math.min(total - 1, v + 1));
             }}
             disabled={showIntro ? false : (
               current === 0 ? !morningChoice :
-              current === 1 ? (dailyTags.length < 3 || dailyTags.length > 5) :
-              current === 2 ? purchaseChoice === null :
-              current === 3 ? techComfort === null :
-              current === 4 ? (descriptorTags.length < 1 || descriptorTags.length > 3) :
-              current === 5 ? energyChoice === null :
-              current === 6 ? interiorChoice === null :
-              current === 7 ? emotionChoice === null :
-              current === 8 ? patienceLevel === null :
-              current === 9 ? !weekendPhoto :
-              current === 10 ? ownershipDuration === null :
-              current === 11 ? sizeScaleIndex === null :
+              current === 1 ? unexpectedSel.length < 1 :
+              current === 2 ? (dailyTags.length < 3 || dailyTags.length > 5) :
+              current === 3 ? !freedomPhoto :
+              current === 4 ? purchaseChoice === null :
+              current === 5 ? techComfort === null :
+              current === 6 ? (descriptorTags.length < 1 || descriptorTags.length > 3) :
+              current === 7 ? energyChoice === null :
+              current === 8 ? interiorChoice === null :
+              current === 9 ? emotionChoice === null :
+              current === 10 ? patienceLevel === null :
+              current === 11 ? !weekendPhoto :
+              current === 12 ? ownershipDuration === null :
+              current === 13 ? sizeScaleIndex === null :
               false
             )}
           >

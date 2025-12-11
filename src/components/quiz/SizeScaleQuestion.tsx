@@ -43,7 +43,12 @@ import { setQuestionAnswer } from '../../utils/storage';
        <div className={formStyles.card}>
         <div className={headStyles.head}>
           <div className={headStyles.title}>{title}</div>
-          {tip && <div className={headStyles.subtitle}>{tip}</div>}
+          {tip && (
+            <div className={headStyles.tipBar}>
+              <span className={headStyles.tipDot} />
+              <span className={headStyles.tipText}>{tip}</span>
+            </div>
+          )}
         </div>
          <div className={styles.scaleBox}>
            <div

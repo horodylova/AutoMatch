@@ -28,7 +28,12 @@ export default function TagQuestion({ questionId, title, tip, tags, minSelect = 
       <div className={formStyles.card}>
         <div className={styles.head}>
           <div className={styles.title}>{title}</div>
-          {tip && <div className={styles.subtitle}>{tip}</div>}
+          {tip && (
+            <div className={styles.tipBar}>
+              <span className={styles.tipDot} />
+              <span className={styles.tipText}>{tip}</span>
+            </div>
+          )}
         </div>
         <div className={styles.cloud}>
           {tags.map(t => (

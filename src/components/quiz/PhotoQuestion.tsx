@@ -3,6 +3,7 @@ import Image from 'next/image';
 import styles from './PhotoQuestion.module.css';
 import formStyles from '../QuizForm.module.css';
 import introStyles from './QuizIntro.module.css';
+import tipStyles from './PhotoQuestion.module.css';
 import { setQuestionAnswer } from '../../utils/storage';
 
 type Option = { key: string; title: string; src: string };
@@ -21,7 +22,12 @@ export default function PhotoQuestion({ questionId, title, tip, options, selecte
       <div className={formStyles.card}>
         <div className={`${introStyles.head} ${styles.headSpacing}`}>
           <div className={styles.titleFix}>{title}</div>
-          {tip && <div className={styles.subtitleFix}>{tip}</div>}
+          {tip && (
+            <div className={tipStyles.tipBar}>
+              <span className={tipStyles.tipDot} />
+              <span className={tipStyles.tipText}>{tip}</span>
+            </div>
+          )}
         </div>
         <div className={styles.grid}>
           {options.map(opt => {

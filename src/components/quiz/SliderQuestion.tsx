@@ -29,7 +29,12 @@ export default function SliderQuestion({ questionId, title, tip, min = 0, max = 
       <div className={formStyles.card}>
         <div className={styles.head}>
           <div className={styles.title}>{title}</div>
-          {tip && <div className={styles.subtitle}>{tip}</div>}
+          {tip && (
+            <div className={styles.tipBar}>
+              <span className={styles.tipDot} />
+              <span className={styles.tipText}>{tip}</span>
+            </div>
+          )}
         </div>
         <div style={{ padding: '12px 8px', display: 'grid', justifyItems: 'center' }}>
           <div style={{ width: 'min(100%, 600px)' }}>
