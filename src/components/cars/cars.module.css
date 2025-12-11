@@ -44,6 +44,8 @@
 .panelBody { padding: 16px; }
 .filtersPanel { position: sticky; top: 88px; max-height: calc(100vh - 100px); display: flex; flex-direction: column; }
 .filtersBody { flex: 1; overflow: auto; padding-bottom: 8px; }
+.filtersToggleBar { display: none; }
+.filtersToggleBtn { display: none; }
 .section { position: relative; display: grid; gap: 12px; margin-bottom: 16px; padding: 12px; border: 1px solid var(--kendo-color-border); border-radius: 14px; background: rgba(230,214,180,0.04); transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease; }
 .section:hover { border-color: rgba(230,214,180,0.35); box-shadow: 0 8px 24px rgba(201,71,45,0.18); }
 .sectionHead { display: grid; grid-template-columns: 8px auto; align-items: center; gap: 10px; }
@@ -182,6 +184,8 @@
   .panelBody { padding: 12px; }
   .filtersPanel { position: static; top: auto; max-height: none; }
   .filtersBody { overflow: visible; }
+  .filtersToggleBar { display: flex; align-items: center; justify-content: center; padding: 8px; }
+  .filtersToggleBtn { display: inline-block; padding: 10px 14px; border-radius: 12px; border: 1px solid var(--kendo-color-border); background: var(--kendo-color-surface); color: var(--kendo-color-on-app-surface); font-weight: 700; }
   .card { grid-template-rows: 220px auto; }
   .badge { font-size: 11px; padding: 3px 8px; }
   .title { font-size: 17px; }

@@ -94,9 +94,29 @@ export default function ListingList({ filters }: { filters?: FiltersData }) {
     const msrpIdx = idx["base msrp"] ?? -1;
     const yearIdx = idx["year"] ?? -1;
     const arr = [...rows];
-    if (sort === "priceAsc" && msrpIdx >= 0) arr.sort((a, b) => num(a[msrpIdx]) - num(b[msrpIdx]));
-    else if (sort === "priceDesc" && msrpIdx >= 0) arr.sort((a, b) => num(b[msrpIdx]) - num(a[msrpIdx]));
-    else if (sort === "new" && yearIdx >= 0) arr.sort((a, b) => num(b[yearIdx]) - num(a[yearIdx]));
+    const priceOf = (r: Row) => {
+      const v = msrpIdx >= 0 ? num(r[msrpIdx]) : 0;
+      return v > 0 ? v : undefined;
+    };
+    if (sort === "priceAsc" && msrpIdx >= 0) {
+      arr.sort((a, b) => {
+        const pa = priceOf(a);
+        const pb = priceOf(b);
+        const va = typeof pa === "number" ? pa : Number.POSITIVE_INFINITY;
+        const vb = typeof pb === "number" ? pb : Number.POSITIVE_INFINITY;
+        return va - vb;
+      });
+    } else if (sort === "priceDesc" && msrpIdx >= 0) {
+      arr.sort((a, b) => {
+        const pa = priceOf(a);
+        const pb = priceOf(b);
+        const va = typeof pa === "number" ? pa : Number.NEGATIVE_INFINITY;
+        const vb = typeof pb === "number" ? pb : Number.NEGATIVE_INFINITY;
+        return vb - va;
+      });
+    } else if (sort === "new" && yearIdx >= 0) {
+      arr.sort((a, b) => num(b[yearIdx]) - num(a[yearIdx]));
+    }
     return arr;
   })();
 
@@ -249,6 +269,8 @@ export default function ListingList({ filters }: { filters?: FiltersData }) {
   const firstPageSampleRef = useRef<Row[] | null>(null);
   useEffect(() => { firstPageSampleRef.current = null; }, [rows]);
   useEffect(() => { if (sort !== "none" || !emptyFilters || page !== 1) firstPageSampleRef.current = null; }, [sort, emptyFilters, page]);
+  useEffect(() => { setPage(1); }, [filters, sort]);
+  useEffect(() => { const maxPage = Math.max(1, Math.ceil(total / pageSize)); if (page > maxPage) setPage(1); }, [total]);
   const start = Math.max(0, (page - 1) * pageSize);
   const pageRows = (() => {
     if (emptyFilters && page === 1 && sort === "none") {

@@ -46,6 +46,8 @@ export default function Filters({ onApply }: Props) {
   const [selectedEffLabels, setSelectedEffLabels] = useState<string[]>([]);
   const [rows, setRows] = useState<Row[]>([]);
   const [idx, setIdx] = useState<Record<string, number>>({});
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [showFilters, setShowFilters] = useState<boolean>(true);
   const didInit = useRef(false);
   useEffect(() => {
     if (didInit.current) return;
@@ -68,6 +70,20 @@ export default function Filters({ onApply }: Props) {
       setEffStats(getEfficiencyStats(ds));
     };
     run();
+  }, []);
+
+  useEffect(() => {
+    const check = () => {
+      if (typeof window === "undefined") return;
+      const mobile = window.innerWidth <= 700;
+      setIsMobile(mobile);
+      setShowFilters(mobile ? false : true);
+    };
+    check();
+    if (typeof window !== "undefined") {
+      window.addEventListener("resize", check, { passive: true } as any);
+      return () => window.removeEventListener("resize", check);
+    }
   }, []);
 
   const priceGroups = (() => {
@@ -156,7 +172,15 @@ export default function Filters({ onApply }: Props) {
   
   return (
     <div className={`${styles.panel} ${styles.filtersPanel}`}>
+      {isMobile && (
+        <div className={styles.filtersToggleBar}>
+          <button className={styles.filtersToggleBtn} onClick={() => setShowFilters(s => !s)}>
+            {showFilters ? "Hide Filters" : "Show Filters"}
+          </button>
+        </div>
+      )}
 
+      {(!isMobile || showFilters) && (
       <div className={`${styles.panelBody} ${styles.filtersBody}`}>
         <FilterSection title="Search" active={Boolean(search)}>
           <div className={styles.searchWrap}>
@@ -351,6 +375,7 @@ export default function Filters({ onApply }: Props) {
           }}>Apply</Button>
         </div>
       </div>
+      )}
     </div>
   );
 }
