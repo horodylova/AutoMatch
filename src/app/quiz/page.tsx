@@ -28,7 +28,8 @@ export default function Page() {
     "ideal_weekend",
     "home_feel",
     "ownership_duration",
-    "car_size_scale"
+    "car_size_scale",
+    "driving_height_preference"
   ];
   const total = stepIds.length;
   const [current, setCurrent] = useState<number>(0);
@@ -54,6 +55,7 @@ export default function Page() {
   const [patienceLevel, setPatienceLevel] = useState<number | null>(null);
   const [ownershipDuration, setOwnershipDuration] = useState<number | null>(null);
   const [sizeScaleIndex, setSizeScaleIndex] = useState<number | null>(null);
+  const [drivingHeightChoice, setDrivingHeightChoice] = useState<number | null>(null);
   const [noiseLevelChoice, setNoiseLevelChoice] = useState<number | null>(null);
   const [riskChoice, setRiskChoice] = useState<number | null>(null);
   const [decisionStyleSel, setDecisionStyleSel] = useState<number[]>([]);
@@ -327,6 +329,7 @@ export default function Page() {
               ]}
               selectedIndex={spaceRelationChoice}
               onSelect={setSpaceRelationChoice}
+              imageBasePath="/croped pictures"
             />
           )}
           {!showIntro && current === 15 && (
@@ -483,6 +486,22 @@ export default function Page() {
               onSelect={setSizeScaleIndex}
             />
           )}
+          {!showIntro && current === 23 && (
+            <PhotoQuadQuestion
+              questionId="driving_height_preference"
+              title="When You’re Driving, How High Do You Like to Sit?"
+              tip="Think about what makes you feel confident behind the wheel."
+              options={[
+                "High view",
+                "Nice to have",
+                "Low position",
+                "Depends",
+              ]}
+              selectedIndex={drivingHeightChoice}
+              onSelect={setDrivingHeightChoice}
+              imageBasePath="/croped pictures 2"
+            />
+          )}
         </div>
       </div>
       <div className={formStyles.floatingBar}>
@@ -537,6 +556,7 @@ export default function Page() {
               current === 20 ? !homePhoto :
               current === 21 ? ownershipDuration === null :
               current === 22 ? sizeScaleIndex === null :
+              current === 23 ? drivingHeightChoice === null :
               false
             )}
           >
