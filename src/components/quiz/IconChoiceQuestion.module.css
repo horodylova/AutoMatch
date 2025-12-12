@@ -1,0 +1,16 @@
+ .wrap { margin-top: 18px; }
+.grid4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; max-width: 1000px; margin: 0 auto; align-items: start; justify-items: center; justify-content: center; }
+.grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; max-width: 760px; margin: 0 auto; align-items: start; justify-items: center; justify-content: center; }
+.card, .cardActive { position: relative; display: grid; grid-template-rows: auto auto 1fr; align-items: center; justify-items: center; gap: 8px; padding: 12px; width: 100%; max-width: 220px; border-radius: 14px; border: 1px solid var(--kendo-color-border); background: var(--kendo-color-surface); box-shadow: 0 8px 22px rgba(0,0,0,0.18); cursor: pointer; aspect-ratio: 1 / 1; transition: transform 0.12s ease, box-shadow 0.2s ease, border-color 0.2s ease; color: var(--kendo-color-on-app-surface); }
+.card:hover { box-shadow: 0 12px 28px rgba(0,0,0,0.24); border-color: var(--kendo-color-border-alt); transform: translateY(-3px); }
+.cardActive:hover { transform: translateY(-3px); }
+.card:active, .cardActive:active { transform: translateY(-1px); }
+.cardActive { background: var(--kendo-color-surface); border-color: var(--kendo-color-primary); box-shadow: 0 10px 26px rgba(0,0,0,0.24), 0 0 0 2px rgba(201,71,45,0.35); }
+.icon { width: 58px; height: 58px; filter: invert(83%) sepia(16%) saturate(406%) hue-rotate(350deg) brightness(95%) contrast(88%); }
+.title { font-size: clamp(16px, 2.4vw, 18px); font-weight: 800; text-align: center; margin-top: 6px; }
+.desc { font-size: 13px; line-height: 1.5; text-align: center; color: rgba(230,214,180,0.85); max-width: 92%; }
+ .check { position: absolute; top: 10px; right: 10px; width: 26px; height: 26px; border-radius: 999px; background: rgba(230,214,180,0.92); display: grid; place-items: center; opacity: 0; }
+ .checkOn { opacity: 1; }
+ .check::after { content: ""; width: 10px; height: 6px; border-left: 2px solid #0E1B24; border-bottom: 2px solid #0E1B24; transform: rotate(-45deg); }
+@media (max-width: 768px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; max-width: 560px; justify-items: center; } .card, .cardActive { width: 100%; max-width: 180px; aspect-ratio: 1 / 1.05; padding: 10px; } .icon { width: 54px; height: 54px; } .title { margin-top: 8px; } .check { width: 24px; height: 24px; } }
+@media (max-width: 480px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; max-width: 420px; justify-items: center; } .card, .cardActive { width: 100%; max-width: none; padding: 12px; } .icon { width: 56px; height: 56px; } }

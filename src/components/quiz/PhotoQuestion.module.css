@@ -1,11 +1,11 @@
 .wrap { margin-top: 18px; }
 .head { display: grid; gap: 6px; margin-bottom: 12px; text-align: left; }
-.title { font-size: clamp(28px, 5vw, 40px); line-height: 1.2; font-weight: 800; color: var(--kendo-color-on-app-surface); }
+.title { font-size: clamp(22px, 4.2vw, 30px); line-height: 1.25; font-weight: 800; color: var(--kendo-color-on-app-surface); }
 .tip { font-size: clamp(16px, 3vw, 18px); line-height: 1.6; color: rgba(230,214,180,0.85); }
-.titleFix { font-size: clamp(28px, 5vw, 40px); line-height: 1.2; font-weight: 800; color: #0E1B24; text-align: center; }
+.titleFix { font-size: clamp(22px, 4.2vw, 30px); line-height: 1.25; font-weight: 800; color: #0E1B24; text-align: center; }
 .subtitleFix { font-size: clamp(16px, 3vw, 18px); line-height: 1.6; color: rgba(14,27,36,0.85); text-align: center; }
-.tipBar { display: grid; grid-template-columns: 16px 1fr; align-items: start; gap: 10px; margin-top: 8px; margin-bottom: 18px; padding: 10px 12px; border-radius: 12px; background: rgba(14,27,36,0.06); color: rgba(14,27,36,0.80); border: 1px solid var(--kendo-color-border); }
-.tipDot { width: 10px; height: 10px; border-radius: 999px; background: var(--kendo-color-primary); box-shadow: 0 0 0 4px rgba(201,71,45,0.18); justify-self: center; }
+.tipBar { display: grid; grid-template-columns: 4px 1fr; align-items: stretch; gap: 12px; margin-top: 8px; margin-bottom: 16px; padding: 8px 12px; border-radius: 8px; background: transparent; color: rgba(14,27,36,0.80); border: none; }
+.tipDot { width: 4px; height: 100%; border-radius: 999px; background: var(--kendo-color-primary); box-shadow: none; justify-self: center; }
 .tipText { font-size: 14px; line-height: 1.6; text-align: left; }
 .headSpacing { margin-bottom: 18px; }
 .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; max-width: 760px; margin: 0 auto; align-items: start; }
