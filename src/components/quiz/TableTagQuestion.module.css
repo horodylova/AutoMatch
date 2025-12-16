@@ -1,0 +1,75 @@
+.wrap { margin-top: 18px; width: 100%; }
+.card { background: #FFFFFF; border: 1px solid var(--kendo-color-border); border-radius: 20px; box-shadow: 0 10px 28px rgba(0,0,0,0.28); padding: clamp(18px, 3.5vw, 28px); color: #0E1B24; }
+.head { display: grid; gap: 6px; text-align: center; margin-bottom: 14px; }
+.title { font-size: clamp(22px, 4.2vw, 30px); line-height: 1.25; font-weight: 800; color: #0E1B24; }
+.tipBar { display: grid; grid-template-columns: 4px 1fr; align-items: stretch; gap: 12px; margin-top: 8px; margin-bottom: 16px; padding: 8px 12px; border-radius: 8px; background: transparent; color: rgba(14,27,36,0.80); border: none; }
+.tipDot { width: 4px; height: 100%; border-radius: 999px; background: var(--kendo-color-primary); box-shadow: none; }
+.tipText { font-size: 14px; line-height: 1.6; text-align: left; }
+
+.tableGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  width: 100%;
+}
+
+.cell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 8px 6px;
+  background: #F4F6F8;
+  border: 1px solid rgba(14, 27, 36, 0.1);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+  min-height: 48px;
+  color: #0E1B24;
+  font-weight: 500;
+}
+
+.cell:hover {
+  background: #FFFFFF;
+  border-color: var(--kendo-color-primary);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  z-index: 1;
+}
+
+.cellActive {
+  background: var(--kendo-color-tertiary-subtle);
+  border-color: var(--kendo-color-primary);
+  color: var(--kendo-color-on-tertiary);
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(201,71,45,0.15);
+  transform: translateY(-1px);
+  z-index: 2;
+}
+
+.cellActive:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 6px 16px rgba(201,71,45,0.2);
+}
+
+.cellText {
+  font-size: 13px;
+  line-height: 1.25;
+}
+
+.counter { margin-top: 12px; text-align: center; font-size: 14px; color: rgba(14,27,36,0.85); }
+
+@media (max-width: 768px) {
+  .tableGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+  }
+  .cell {
+    padding: 8px 4px;
+    min-height: 44px;
+  }
+  .cellText {
+    font-size: 12px;
+  }
+}

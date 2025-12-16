@@ -4,9 +4,9 @@ import Image from 'next/image';
 import styles from './QuizProgress.module.css';
 import formStyles from './QuizForm.module.css';
 
-type Props = { current: number; total: number; showIntro?: boolean; introImageSrc?: string };
+type Props = { current: number; total: number; showIntro?: boolean; showHalfway?: boolean; showFinal?: boolean; introImageSrc?: string };
 
-export default function QuizProgress({ current, total, showIntro = false, introImageSrc }: Props) {
+export default function QuizProgress({ current, total, showIntro = false, showHalfway = false, showFinal = false, introImageSrc }: Props) {
   const t = total > 0 ? total : 0;
   const c = Math.max(0, Math.min(current, t));
   const pct = t > 0 ? c / t : 0;
@@ -76,6 +76,34 @@ export default function QuizProgress({ current, total, showIntro = false, introI
     const angle = Math.atan2(ty, tx) * (180 / Math.PI);
     setCarTransform(`translate(${px}, ${py}) rotate(${angle})`);
   }, [pct, isMobile, showIntro]);
+
+  if (showFinal) {
+    return (
+      <div className={styles.wrap}>
+        <div className={styles.introWrap}>
+          <div className={styles.introHead}>
+            <div className={styles.introTitle}>Your Matches Are Ready</div>
+          </div>
+          <div className={styles.introContent} style={{ alignItems: 'start' }}>
+            <div className={styles.introMedia} style={{ aspectRatio: '1/1' }}>
+              <Image src="/final.jpg" alt="Final Results" fill sizes="(max-width: 768px) 100vw, 50vw" className={styles.introImg} style={{ objectFit: 'cover' }} />
+            </div>
+            <div className={styles.introList}>
+              <div className={styles.introItem} style={{ marginBottom: 32 }}>
+                <span className={styles.introText} style={{ fontSize: 18, lineHeight: 1.5 }}>
+                  We&apos;ve analyzed your answers and found the cars that fit your vision. Some might surprise you. Some will feel exactly right.
+                </span>
+              </div>
+              <button className={styles.introNext} onClick={() => console.log('See results clicked')}>
+                See My Results
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.wrap}>
       <svg ref={svgRef} className={styles.svg} viewBox="0 0 800 120" preserveAspectRatio="none" style={{ overflow: 'visible' }}>
@@ -129,7 +157,7 @@ export default function QuizProgress({ current, total, showIntro = false, introI
             <div className={styles.introTitle}>Before We Begin</div>
             <div className={styles.introSubtitle}>A quick guide to your CarCupid Match Quiz</div>
           </div>
-          <div className={styles.introContent}>
+          <div className={styles.introContent} style={{ alignItems: 'start' }}>
             <div className={styles.introMedia}>
               <Image src={introImageSrc || "/before-you-begin.jpg"} alt="intro" fill sizes="(max-width: 768px) 100vw, 50vw" className={styles.introImg} style={{ objectFit: 'cover' }} />
             </div>
@@ -143,6 +171,28 @@ export default function QuizProgress({ current, total, showIntro = false, introI
             </div>
           </div>
           
+        </div>
+      )}
+      {showHalfway && (
+        <div className={styles.introWrap}>
+          <div className={styles.introHead}>
+            <div className={styles.introTitle}>You&apos;re Halfway There!</div>
+          </div>
+          <div className={styles.introContent} style={{ alignItems: 'start' }}>
+            <div className={styles.introMedia}>
+              <Image src="/middle.jpg" alt="halfway" fill sizes="(max-width: 768px) 100vw, 50vw" className={styles.introImg} style={{ objectFit: 'cover' }} />
+            </div>
+            <div className={styles.introList}>
+              <div className={styles.introItem}>
+                <span className={styles.introDot} />
+                <span className={styles.introText}>Every answer you give helps us understand what truly matters to you. We&apos;re not just matching you with a car — we&apos;re finding the one that fits your rhythm, your roads, and your vision of the perfect drive.</span>
+              </div>
+              <div className={styles.introItem}>
+                <span className={styles.introDot} />
+                <span className={styles.introText}>The details matter. Keep going — your ideal match is taking shape.</span>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>
