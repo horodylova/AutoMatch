@@ -3,22 +3,26 @@ import { useEffect, useState } from "react";
 import QuizProgress from "../../components/QuizProgress";
 import formStyles from "../../components/QuizForm.module.css";
 import { PhotoQuestion, TagQuestion, ChoiceQuestion, SliderQuestion, MultiChoiceQuestion, IconChoiceQuestion, PhotoQuadQuestion } from "../../components/quiz";
- 
+
 export default function Page() {
   const stepIds = [
     "perfect_morning",
-    "new_project_reaction",
+    "bad_weather_focus",
     "unexpected_changes",
     "noise_level",
     "freedom_feel",
+    "parking_location",
+    "home_feel",
     "manage_risks",
     "purchase_approach",
-    "ideal_pace_of_life",
+    "car_cargo_preference",
+    "maintenance_involvement",
     "people_descriptors",
-    "decision_style",
-    "drains_energy",
     "hard_week_treat",
-    "energy_vibe",
+    "decision_style",
+    "driving_position_preference",
+    "car_expenses_preference",
+    "drains_energy",
     "interior_feel",
     "interior_space_relation",
     "technology_relationship",
@@ -26,10 +30,8 @@ export default function Page() {
     "emotional_expectation",
     "patience_level",
     "ideal_weekend",
-    "home_feel",
     "ownership_duration",
-    "car_size_scale",
-    "driving_height_preference"
+    "car_size_scale"
   ];
   const total = stepIds.length;
   const [current, setCurrent] = useState<number>(0);
@@ -40,13 +42,13 @@ export default function Page() {
   const [unexpectedSel, setUnexpectedSel] = useState<number[]>([]);
   const [freedomPhoto, setFreedomPhoto] = useState<string | null>(null);
   const [purchaseChoice, setPurchaseChoice] = useState<number | null>(null);
-  const [idealPace, setIdealPace] = useState<number | null>(null);
+  const [maintenanceInvolvement, setMaintenanceInvolvement] = useState<number | null>(null);
   const [weekendPhoto, setWeekendPhoto] = useState<string | null>(null);
   const [homePhoto, setHomePhoto] = useState<string | null>(null);
   const [descriptorTags, setDescriptorTags] = useState<string[]>([]);
   const [drainsSel, setDrainsSel] = useState<number[]>([]);
   const [hardWeekSel, setHardWeekSel] = useState<number[]>([]);
-  const [energyChoice, setEnergyChoice] = useState<number | null>(null);
+  const [expensesPref, setExpensesPref] = useState<number | null>(null);
   const [interiorChoice, setInteriorChoice] = useState<number | null>(null);
   const [spaceRelationChoice, setSpaceRelationChoice] = useState<number | null>(null);
   const [techTags, setTechTags] = useState<string[]>([]);
@@ -55,11 +57,14 @@ export default function Page() {
   const [patienceLevel, setPatienceLevel] = useState<number | null>(null);
   const [ownershipDuration, setOwnershipDuration] = useState<number | null>(null);
   const [sizeScaleIndex, setSizeScaleIndex] = useState<number | null>(null);
-  const [drivingHeightChoice, setDrivingHeightChoice] = useState<number | null>(null);
+  const [drivingPositionChoice, setDrivingPositionChoice] = useState<number | null>(null);
   const [noiseLevelChoice, setNoiseLevelChoice] = useState<number | null>(null);
   const [riskChoice, setRiskChoice] = useState<number | null>(null);
   const [decisionStyleSel, setDecisionStyleSel] = useState<number[]>([]);
-  const [newProjectReaction, setNewProjectReaction] = useState<number | null>(null);
+  const [badWeatherFocus, setBadWeatherFocus] = useState<number | null>(null);
+  const [cargoChoice, setCargoChoice] = useState<string | null>(null);
+  const [parkingChoice, setParkingChoice] = useState<number | null>(null);
+
   useEffect(() => {
     const update = () => setIsMobile(window.innerWidth <= 768);
     update();
@@ -83,8 +88,8 @@ export default function Page() {
           {!showIntro && current === 0 && (
             <PhotoQuestion
               questionId="perfect_morning"
-              title="Your perfect morning"
-              tip="Choose what feels closest to your real life"
+              title="Which morning feels most like your real life?"
+              tip="Which morning do you usually wake up to — pick what feels real"
               options={[
                 { key: "calm_breakfast", title: "Calm breakfast", src: "/perfect morning-quiz/Calm breakfast.jpg" },
                 { key: "fast_commute", title: "Fast-paced commute", src: "/perfect morning-quiz/Fast-paced commute.jpg" },
@@ -99,15 +104,15 @@ export default function Page() {
           )}
           {!showIntro && current === 1 && (
             <ChoiceQuestion
-              questionId="new_project_reaction"
-              title="Imagine you join a new project at work. There are many tools, workflows, rules, and decisions to make from day one. What is your natural reaction?"
+              questionId="bad_weather_focus"
+              title="Imagine the weather suddenly turns bad while you need to drive. What do you focus on first?"
               options={[
-                "I strip things down and focus only on what’s strictly necessary",
-                "I learn the key processes that help me work smoothly and reliably",
-                "I dive deep into the system and enjoy mastering its full complexity",
+                "I choose the simplest, safest way to get where I need to go",
+                "I rely on the car to stay stable and predictable in all conditions",
+                "I enjoy having full control and adapting my driving to the situation",
               ]}
-              selectedIndex={newProjectReaction}
-              onSelect={setNewProjectReaction}
+              selectedIndex={badWeatherFocus}
+              onSelect={setBadWeatherFocus}
             />
           )}
           {!showIntro && current === 2 && (
@@ -121,6 +126,7 @@ export default function Page() {
                 "Stay calm and keep things steady",
                 "Ask for support and coordinate together",
                 "Feel energized by unpredictability",
+                "Keep going without pausing",
               ]}
               selected={unexpectedSel}
               onChange={setUnexpectedSel}
@@ -144,21 +150,55 @@ export default function Page() {
           {!showIntro && current === 4 && (
             <PhotoQuestion
               questionId="freedom_feel"
-              title="What Does “Freedom” Feel Like to You?"
-              tip="Pick the image that gives you the strongest internal “yes.”"
+              title="Who Will Regularly Ride in This Car With You?"
+              tip="Think about who is actually in the car most weeks — not occasionally."
               options={[
-                { key: "open_highway", title: "Open highway", src: "/freedom/Open highway.jpg" },
-                { key: "minimal_quiet_space", title: "Quiet space", src: "/freedom/Minimal, quiet space.jpg" },
-                { key: "wild_nature_forest_trails", title: "Wild nature", src: "/freedom/forest trails.jpg" },
-                { key: "futuristic_environments_clean_tech_architecture", title: "Futuristic environments", src: "/freedom/ tech architecture.jpg" },
-                { key: "dense_energetic_city_at_night", title: "City at night", src: "/freedom/energetic city at night.jpg" },
-                { key: "wide_open_desert_endless_horizon", title: "Endless horizon", src: "/freedom/open desert.jpg" },
+                { key: "mostly_me", title: "Mostly just me", src: "/passengers/Mostly just me.jpg" },
+                { key: "one_partner", title: "One partner", src: "/passengers/_One partner.jpg" },
+                { key: "children_car_seats_school_runs", title: "Children", src: "/passengers/car seats.jpg" },
+                { key: "dog_or_pets", title: "Pets", src: "/passengers/dog.jpg" },
+                { key: "friends_passengers_often", title: "Friends", src: "/passengers/passengers.jpg" },
+                { key: "work_crew_clients", title: "Work crew", src: "/passengers/client.jpg" },
               ]}
               selectedKey={freedomPhoto}
               onSelect={(k) => setFreedomPhoto(k)}
             />
           )}
           {!showIntro && current === 5 && (
+            <PhotoQuadQuestion
+              questionId="parking_location"
+              title="Where Do You Usually Park Your Car?"
+              tip="Think about your most common parking situation."
+              options={[
+                "Street parking",
+                "Garage at home",
+                "Shared parking",
+                "Various locations",
+              ]}
+              selectedIndex={parkingChoice}
+              onSelect={setParkingChoice}
+              imageBasePath="/croped pictures"
+              isMobile={isMobile}
+            />
+          )}
+          {!showIntro && current === 6 && (
+            <PhotoQuestion
+              questionId="home_feel"
+              title="What Does Your Ideal Home Feel Like?"
+              tip="Your car often reflects the same values as your home."
+              options={[
+                { key: "modern_minimalist", title: "Modern & Minimalist", src: "/home/Minimalist.jpg" },
+                { key: "cozy_traditional", title: "Cozy & Traditional", src: "/home/cozy family home.jpg" },
+                { key: "industrial_open", title: "Industrial & Open", src: "/home/_Urban apartment.jpg" },
+                { key: "luxurious_detailed", title: "Luxurious & Detailed", src: "/home/Modern designer house.jpg" },
+                { key: "eco_friendly_natural", title: "Eco-friendly & Natural", src: "/home/house near nature.jpg" },
+                { key: "smart_tech_filled", title: "Smart & Tech-filled", src: "/home/Suburban house with driveway, garage, and practical layout .jpg" },
+              ]}
+              selectedKey={homePhoto}
+              onSelect={(k) => setHomePhoto(k)}
+            />
+          )}
+          {!showIntro && current === 7 && (
             <ChoiceQuestion
               questionId="manage_risks"
               title="How Do You Manage Risks?"
@@ -174,7 +214,7 @@ export default function Page() {
               onSelect={setRiskChoice}
             />
           )}
-          {!showIntro && current === 6 && (
+          {!showIntro && current === 8 && (
             <ChoiceQuestion
               questionId="purchase_approach"
               title="How do you approach big purchases?"
@@ -190,39 +230,52 @@ export default function Page() {
               onSelect={setPurchaseChoice}
             />
           )}
-          {!showIntro && current === 7 && (
+          {!showIntro && current === 9 && (
+            <PhotoQuestion
+              questionId="car_cargo_preference"
+              title="What Will This Car Most Often Carry?"
+              tip="Choose what realistically ends up inside the car, week after week."
+              options={[
+                { key: "groceries", title: "Groceries", src: "/stuff/car daily errands.jpg" },
+                { key: "sports_gear", title: "Sports gear", src: "/stuff/bike.jpg" },
+                { key: "large_items", title: "Oversized items", src: "/stuff/Things that don’t fit in most cars.jpg" },
+                { key: "luggage", title: "Luggage for trips", src: "/stuff/_Luggage.jpg" },
+                { key: "kids_stuff", title: "Kids’ stuff", src: "/stuff/Stroller.jpg" },
+                { key: "work_equipment", title: "Work equipment", src: "/stuff/tools.jpg" },
+              ]}
+              selectedKey={cargoChoice}
+              onSelect={(k) => setCargoChoice(k)}
+            />
+          )}
+          {!showIntro && current === 10 && (
             <SliderQuestion
-              questionId="ideal_pace_of_life"
-              title="Imagine a Typical Day in Your Life. How Does It Usually Feel?"
-              tip="Slide to how your life feels most of the time, not occasionally."
+              questionId="maintenance_involvement"
+              title="How Involved Do You Want to Be in Car Maintenance?"
+              tip="Think about servicing, repairs, and ongoing care."
               min={0}
               max={100}
               step={1}
-              value={idealPace}
-              onChange={setIdealPace}
+              value={maintenanceInvolvement}
+              onChange={setMaintenanceInvolvement}
               labels={[
-                "0: fast, decisive",
-                "50: steady, intentional",
-                "100: slow, spacious",
+                "I want minimal involvement",
+                "I’m okay with routine care",
+                "I like to stay fully involved",
               ]}
             />
           )}
-          {!showIntro && current === 8 && (
+          {!showIntro && current === 11 && (
             <TagQuestion
               questionId="people_descriptors"
               title="People close to you would describe you as…"
               tip="Select up to 3 that truly reflect how others see you"
               tags={[
-                "Practical","Grounded","Down-to-earth","Reliable","Stable","Consistent", "Structured","Responsible","Thoughtful",
-                "Ambitious", "Focused","Goal-oriented","Competitive","High-achieving","Confident","Assertive","Determined",
-                "Adventurous","Spontaneous","Curious","Explorer","Bold","Risk-taking","Open-minded","Dynamic",
-                "Creative","Imaginative", "Unconventional","Expressive","Visionary","Artistic","Inventive",
-                "Minimalistic","Simple","Calm", "Uncomplicated","Effortless","Streamlined","Pure",
-                "Energetic","Lively","Active","Vibrant","Passionate","High-tempo","Enthusiastic","Motivated",
-                "Analytical","Precise","Methodical","Logical","Careful","Accurate",
-                "Friendly","Empathetic","Supportive","Patient","Family-minded",
-                "Polished","Sophisticated","Refined","Stylish","Professional","Composed",
-                "Hands-on","Capable","Resilient","Resourceful","Pragmatic",
+                "Responsive", "Urban-minded", "Risk-averse", "Taste-driven", "Efficient",
+                "Adaptable", "Comfort-seeking", "Future-focused", "Self-sufficient", "Time-sensitive",
+                "Attentive", "Load-capable", "Driven", "Routine-loving", "Cost-aware",
+                "Outdoorsy", "System-oriented", "Status-conscious", "Resilient", "Cautious",
+                "Image-aware", "Low-maintenance", "Space-aware", "Decisive", "Curious",
+                "Travel-oriented", "Endurance-focused", "Long-term thinker", "Relaxed", "Organized",
               ]}
               selected={descriptorTags}
               onChange={setDescriptorTags}
@@ -230,7 +283,7 @@ export default function Page() {
               maxSelect={3}
             />
           )}
-          {!showIntro && current === 9 && (
+          {!showIntro && current === 12 && (
             <MultiChoiceQuestion
               questionId="hard_week_treat"
               title="How Do You Treat Yourself After a Hard Week?"
@@ -247,7 +300,7 @@ export default function Page() {
               minSelect={1}
             />
           )}
-          {!showIntro && current === 10 && (
+          {!showIntro && current === 13 && (
             <MultiChoiceQuestion
               questionId="decision_style"
               title="How Do You Usually Make Important Decisions?"
@@ -264,24 +317,39 @@ export default function Page() {
               minSelect={1}
             />
           )}
-          {!showIntro && current === 11 && (
-            <ChoiceQuestion
-              questionId="energy_vibe"
-              title="Which energy feels most like you?"
-              tip="Choose the emotional vibe that matches you"
+          {!showIntro && current === 14 && (
+            <IconChoiceQuestion
+              questionId="driving_position_preference"
+              title="What Driving Position Feels Right to You?"
+              tip="Choose the position that makes you feel most at ease and in control."
               options={[
-                "Calm",
-                "Bold",
-                "Playful",
-                "Focused",
-                "Adventurous",
-                "Minimalist",
+                { key: "high_commanding", title: "High & commanding", desc: "I like seeing over traffic and feeling in control", icon: "/commanding view icons/important.svg" },
+                { key: "balanced_flexible", title: "Balanced & flexible", desc: "I’m comfortable either way, depending on the situation", icon: "/commanding view icons/helpful.svg" },
+                { key: "low_connected", title: "Low & connected", desc: "I prefer feeling close to the road and the car", icon: "/commanding view icons/not-important.svg" },
+                { key: "context_driven", title: "Context-driven", desc: "It depends on the drive, mood, and surroundings", icon: "/commanding view icons/depends.svg" },
               ]}
-              selectedIndex={energyChoice}
-              onSelect={setEnergyChoice}
+              selectedIndex={drivingPositionChoice}
+              onSelect={setDrivingPositionChoice}
             />
           )}
-          {!showIntro && current === 12 && (
+          {!showIntro && current === 15 && (
+            <ChoiceQuestion
+              questionId="car_expenses_preference"
+              title="How Do You Prefer to Handle Car Expenses?"
+              tip="Think about fuel, maintenance, insurance, and unexpected costs."
+              options={[
+                "Keep costs as low as possible",
+                "Balanced spending for comfort and reliability",
+                "Pay more if it improves quality and experience",
+                "Costs don’t worry me if the car fits my needs",
+                "I plan expenses carefully long-term",
+                "I’m fine with higher costs for performance or tech",
+              ]}
+              selectedIndex={expensesPref}
+              onSelect={setExpensesPref}
+            />
+          )}
+          {!showIntro && current === 16 && (
             <MultiChoiceQuestion
               questionId="drains_energy"
               title="What Drains Your Energy Most?"
@@ -298,7 +366,7 @@ export default function Page() {
               minSelect={1}
             />
           )}
-          {!showIntro && current === 13 && (
+          {!showIntro && current === 17 && (
             <ChoiceQuestion
               questionId="interior_feel"
               title="How should your car feel inside?"
@@ -316,7 +384,7 @@ export default function Page() {
               onSelect={setInteriorChoice}
             />
           )}
-          {!showIntro && current === 14 && (
+          {!showIntro && current === 18 && (
             <PhotoQuadQuestion
               questionId="interior_space_relation"
               title="Your Preferred Relationship With Space Inside a Car"
@@ -332,7 +400,7 @@ export default function Page() {
               imageBasePath="/croped pictures"
             />
           )}
-          {!showIntro && current === 15 && (
+          {!showIntro && current === 19 && (
             <TagQuestion
               questionId="technology_relationship"
               title="You Wake Up and Technology Is Everywhere Around You — How Do You React?"
@@ -366,6 +434,7 @@ export default function Page() {
                 "Think long-term value",
                 "Like personalization",
                 "Enjoy customization",
+                "Enjoy privacy",
               ]}
               selected={techTags}
               onChange={setTechTags}
@@ -373,105 +442,84 @@ export default function Page() {
               maxSelect={5}
             />
           )}
-          {!showIntro && current === 16 && (
+          {!showIntro && current === 20 && (
             <IconChoiceQuestion
               questionId="control_preference"
               title="How Much Control Do You Want While Driving?"
               tip="Imagine the car reacting under your hands — what level feels right?"
               options={[
                 { key: "prefer_automation", title: "Prefer Automation", desc: "Let the car handle the driving while you focus on other things", icon: "/control icons/radar.svg" },
-                { key: "shared_responsibility", title: "Shared Responsibility", desc: "Balance between driver input and automated assistance", icon: "/control icons/shared-responsibility.svg" },
-                { key: "full_mechanical_feedback", title: "Full Mechanical Feedback", desc: "Direct connection and complete control over every aspect", icon: "/control icons/full-mechanical-feedback.svg" },
+                { key: "balanced_assist", title: "Balanced Assist", desc: "I want safety features but I still want to drive", icon: "/control icons/shared-responsibility.svg" },
+                { key: "full_control", title: "Full Driver Control", desc: "I want to feel everything the car is doing without interference", icon: "/control icons/full-mechanical-feedback.svg" },
               ]}
               selectedIndex={controlPrefChoice}
               onSelect={setControlPrefChoice}
             />
           )}
-          {!showIntro && current === 17 && (
-            <ChoiceQuestion
+          {!showIntro && current === 21 && (
+            <IconChoiceQuestion
               questionId="emotional_expectation"
-              title="What do you expect emotionally from a car?"
-              tip="Think about the feeling you want every time you sit behind the wheel — choose the emotion that truly matters most to you."
+              title="What One Feeling Do You Want Your Car to Give You?"
+              tip="When you walk up to it and get in — what’s the dominant emotion?"
               options={[
-                "Stability & safety you can rely on",
-                "Excitement & thrill that bring you alive",
-                "Comfort & ease in every moment",
-                "Confidence & status you instantly feel",
-                "Simplicity & low-stress ownership",
-                "Innovation & forward-thinking design",
+                { key: "security_safety", title: "Security & Safety", desc: "I want to feel protected and shielded from the world", icon: "/commanding view icons/important.svg" },
+                { key: "freedom_possibility", title: "Freedom & Possibility", desc: "I want to feel like I can go anywhere at any time", icon: "/commanding view icons/helpful.svg" },
+                { key: "status_achievement", title: "Status & Achievement", desc: "I want to feel proud of what I’ve earned and show it", icon: "/commanding view icons/not-important.svg" },
+                { key: "joy_excitement", title: "Joy & Excitement", desc: "I want to smile every time I start the engine", icon: "/commanding view icons/depends.svg" },
               ]}
               selectedIndex={emotionChoice}
               onSelect={setEmotionChoice}
             />
           )}
-          {!showIntro && current === 18 && (
-            <SliderQuestion
+          {!showIntro && current === 22 && (
+            <ChoiceQuestion
               questionId="patience_level"
-              title="How patient are you with everyday tasks?"
-              tip="Don’t analyze it — slide toward the pace that feels natural to you in your day-to-day life."
-              min={0}
-              max={100}
-              step={1}
-              value={patienceLevel}
-              onChange={setPatienceLevel}
-              labels={[
-                "0: I want everything fast",
-                "50: I keep a balanced pace",
-                "100: I take my time and move steadily",
+              title="How Patient Are You in Traffic?"
+              tip="Be honest — how do you really react when things slow down?"
+              options={[
+                "I get frustrated easily and want to move",
+                "I stay calm and listen to music or podcasts",
+                "I use the time to think or make calls",
+                "I find alternate routes immediately",
               ]}
+              selectedIndex={patienceLevel}
+              onSelect={setPatienceLevel}
             />
           )}
-          {!showIntro && current === 19 && (
+          {!showIntro && current === 23 && (
             <PhotoQuestion
               questionId="ideal_weekend"
-              title="Your Weekend Is Finally Yours — What Do You Do First?"
-              tip="Choose what you really do"
+              title="It’s a Free Weekend — Where Are You Headed?"
+              tip="Pick the scene that makes you feel most like yourself."
               options={[
-                { key: "family_trip", title: "Family trip", src: "/weekend/Family trip.jpg" },
-                { key: "outdoors_hiking", title: "Outdoors / hiking", src: "/weekend/Outdoors _ hiking.jpg" },
-                { key: "city_nightlife", title: "City nightlife", src: "/weekend/City nightlife.jpg" },
-                { key: "relaxing_home", title: "Relaxing at home", src: "/weekend/Relaxing at home.jpg" },
-                { key: "road_trip", title: "Road trip", src: "/weekend/Road trip.jpg" },
-                { key: "gym_active_day", title: "Gym / active day", src: "/weekend/Gym _ active day.jpg" },
+                { key: "city_nightlife", title: "City Nightlife", src: "/weekend/City nightlife.jpg" },
+                { key: "road_trip", title: "Road Trip", src: "/weekend/Road trip.jpg" },
+                { key: "outdoors_hiking", title: "Outdoors / Hiking", src: "/weekend/Outdoors _ hiking.jpg" },
+                { key: "relaxing_home", title: "Relaxing at Home", src: "/weekend/Relaxing at home.jpg" },
+                { key: "family_trip", title: "Family Trip", src: "/weekend/Family trip.jpg" },
+                { key: "active_gym", title: "Gym / Active Day", src: "/weekend/Gym _ active day.jpg" },
               ]}
               selectedKey={weekendPhoto}
               onSelect={(k) => setWeekendPhoto(k)}
             />
           )}
-          {!showIntro && current === 20 && (
-            <PhotoQuestion
-              questionId="home_feel"
-              title="What Kind of Home Feels Most Like You?"
-              tip="Choose the home you instinctively imagine yourself living in — not the one you think you should choose."
-              options={[
-                { key: "modern_designer_house", title: "Modern designer house", src: "/home/Modern designer house.jpg" },
-                { key: "near_nature_cabin_house", title: "House near nature", src: "/home/house near nature.jpg" },
-                { key: "urban_apartment_lively_city", title: "City apartment", src: "/home/_Urban apartment.jpg" },
-                { key: "cozy_family_home_warm_lighting", title: "Cozy family home", src: "/home/cozy family home.jpg" },
-                { key: "minimal_uncluttered_home", title: "Uncluttered home", src: "/home/Minimalist.jpg" },
-                { key: "suburban_house_practical_layout", title: "Practical living", src: "/home/Suburban house with driveway, garage, and practical layout .jpg" },
-              ]}
-              selectedKey={homePhoto}
-              onSelect={(k) => setHomePhoto(k)}
-            />
-          )}
-          {!showIntro && current === 21 && (
+          {!showIntro && current === 24 && (
             <ChoiceQuestion
               questionId="ownership_duration"
-              title="How long do you usually keep a car?"
-              tip="Think about your real habits, not your ideal ones — choose the option that reflects how you’ve actually owned cars in the past"
+              title="How Long Do You Usually Keep a Car?"
+              tip="Think about your past history, not your intentions."
               options={[
-                "Until it truly reaches the end",
-                "Around 6–8 years before upgrading",
-                "Typically 3–5 years, depending on the model",
-                "Only 1–2 years — I like to switch often",
+                "I drive them until they stop running (10+ years)",
+                "I keep them for a good run (5-7 years)",
+                "I switch every few years (3-4 years)",
+                "I lease or change often (1-2 years)",
                 "I change frequently whenever something new excites me",
               ]}
               selectedIndex={ownershipDuration}
               onSelect={setOwnershipDuration}
             />
           )}
-          {!showIntro && current === 22 && (
+          {!showIntro && current === 25 && (
             <IconChoiceQuestion
               questionId="car_size_scale"
               title="What size feels most natural for your next car?"
@@ -486,22 +534,6 @@ export default function Page() {
               onSelect={setSizeScaleIndex}
             />
           )}
-          {!showIntro && current === 23 && (
-            <PhotoQuadQuestion
-              questionId="driving_height_preference"
-              title="When You’re Driving, How High Do You Like to Sit?"
-              tip="Think about what makes you feel confident behind the wheel."
-              options={[
-                "High view",
-                "Nice to have",
-                "Low position",
-                "Depends",
-              ]}
-              selectedIndex={drivingHeightChoice}
-              onSelect={setDrivingHeightChoice}
-              imageBasePath="/croped pictures 2"
-            />
-          )}
         </div>
       </div>
       <div className={formStyles.floatingBar}>
@@ -511,52 +543,61 @@ export default function Page() {
             onClick={() => {
               if (showIntro) { setShowIntro(false); return; }
               if (current === 0) { if (!morningChoice) { return; } setCurrent(1); return; }
-              if (current === 1) { if (newProjectReaction === null) { return; } setCurrent(2); return; }
+              if (current === 1) { if (badWeatherFocus === null) { return; } setCurrent(2); return; }
               if (current === 2) { if (unexpectedSel.length < 1) { return; } setCurrent(3); return; }
               if (current === 3) { if (noiseLevelChoice === null) { return; } setCurrent(4); return; }
               if (current === 4) { if (!freedomPhoto) { return; } setCurrent(5); return; }
-              if (current === 5) { if (riskChoice === null) { return; } setCurrent(6); return; }
-              if (current === 6) { if (purchaseChoice === null) { return; } setCurrent(7); return; }
-              if (current === 7) { if (idealPace === null) { return; } setCurrent(8); return; }
-              if (current === 8) { if (descriptorTags.length < 1 || descriptorTags.length > 3) { return; } setCurrent(9); return; }
-              if (current === 9) { if (hardWeekSel.length < 1) { return; } setCurrent(10); return; }
-              if (current === 10) { if (decisionStyleSel.length < 1) { return; } setCurrent(11); return; }
-              if (current === 11) { if (energyChoice === null) { return; } setCurrent(12); return; }
-              if (current === 12) { if (drainsSel.length < 1) { return; } setCurrent(13); return; }
-              if (current === 13) { if (interiorChoice === null) { return; } setCurrent(14); return; }
-              if (current === 14) { if (spaceRelationChoice === null) { return; } setCurrent(15); return; }
-              if (current === 15) { if (techTags.length < 2 || techTags.length > 5) { return; } setCurrent(16); return; }
-              if (current === 16) { if (controlPrefChoice === null) { return; } setCurrent(17); return; }
-              if (current === 17) { if (emotionChoice === null) { return; } setCurrent(18); return; }
-              if (current === 18) { if (patienceLevel === null) { return; } setCurrent(19); return; }
+              if (current === 5) { if (parkingChoice === null) { return; } setCurrent(6); return; }
+              if (current === 6) { if (!homePhoto) { return; } setCurrent(7); return; }
+              if (current === 7) { if (riskChoice === null) { return; } setCurrent(8); return; }
+              if (current === 8) { if (purchaseChoice === null) { return; } setCurrent(9); return; }
+              if (current === 9) { if (!cargoChoice) { return; } setCurrent(10); return; }
+              if (current === 10) { if (maintenanceInvolvement === null) { return; } setCurrent(11); return; }
+              if (current === 11) { if (descriptorTags.length < 1 || descriptorTags.length > 3) { return; } setCurrent(12); return; }
+              if (current === 12) { if (hardWeekSel.length < 1) { return; } setCurrent(13); return; }
+              if (current === 13) { if (decisionStyleSel.length < 1) { return; } setCurrent(14); return; }
+              if (current === 14) { if (drivingPositionChoice === null) { return; } setCurrent(15); return; }
+              if (current === 15) { if (expensesPref === null) { return; } setCurrent(16); return; }
+              if (current === 16) { if (drainsSel.length < 1) { return; } setCurrent(17); return; }
+              if (current === 17) { if (interiorChoice === null) { return; } setCurrent(18); return; }
+              if (current === 18) { if (spaceRelationChoice === null) { return; } setCurrent(19); return; }
+              if (current === 19) { if (techTags.length < 2 || techTags.length > 5) { return; } setCurrent(20); return; }
+              if (current === 20) { if (controlPrefChoice === null) { return; } setCurrent(21); return; }
+              if (current === 21) { if (emotionChoice === null) { return; } setCurrent(22); return; }
+              if (current === 22) { if (patienceLevel === null) { return; } setCurrent(23); return; }
+              if (current === 23) { if (!weekendPhoto) { return; } setCurrent(24); return; }
+              if (current === 24) { if (ownershipDuration === null) { return; } setCurrent(25); return; }
+              if (current === 25) { if (sizeScaleIndex === null) { return; } return; } // Last step
               if (current >= total - 1) { return; }
               setCurrent(v => Math.min(total - 1, v + 1));
             }}
             disabled={showIntro ? false : (
               current === 0 ? !morningChoice :
-              current === 1 ? newProjectReaction === null :
+              current === 1 ? badWeatherFocus === null :
               current === 2 ? unexpectedSel.length < 1 :
               current === 3 ? noiseLevelChoice === null :
               current === 4 ? !freedomPhoto :
-              current === 5 ? riskChoice === null :
-              current === 6 ? purchaseChoice === null :
-              current === 7 ? idealPace === null :
-              current === 8 ? (descriptorTags.length < 1 || descriptorTags.length > 3) :
-              current === 9 ? hardWeekSel.length < 1 :
-              current === 10 ? decisionStyleSel.length < 1 :
-              current === 11 ? energyChoice === null :
-              current === 12 ? drainsSel.length < 1 :
-              current === 13 ? interiorChoice === null :
-              current === 14 ? spaceRelationChoice === null :
-              current === 15 ? (techTags.length < 2 || techTags.length > 5) :
-              current === 16 ? controlPrefChoice === null :
-              current === 17 ? emotionChoice === null :
-              current === 18 ? patienceLevel === null :
-              current === 19 ? !weekendPhoto :
-              current === 20 ? !homePhoto :
-              current === 21 ? ownershipDuration === null :
-              current === 22 ? sizeScaleIndex === null :
-              current === 23 ? drivingHeightChoice === null :
+              current === 5 ? parkingChoice === null :
+              current === 6 ? !homePhoto :
+              current === 7 ? riskChoice === null :
+              current === 8 ? purchaseChoice === null :
+              current === 9 ? !cargoChoice :
+              current === 10 ? maintenanceInvolvement === null :
+              current === 11 ? (descriptorTags.length < 1 || descriptorTags.length > 3) :
+              current === 12 ? hardWeekSel.length < 1 :
+              current === 13 ? decisionStyleSel.length < 1 :
+              current === 14 ? drivingPositionChoice === null :
+              current === 15 ? expensesPref === null :
+              current === 16 ? drainsSel.length < 1 :
+              current === 17 ? interiorChoice === null :
+              current === 18 ? spaceRelationChoice === null :
+              current === 19 ? (techTags.length < 2 || techTags.length > 5) :
+              current === 20 ? controlPrefChoice === null :
+              current === 21 ? emotionChoice === null :
+              current === 22 ? patienceLevel === null :
+              current === 23 ? !weekendPhoto :
+              current === 24 ? ownershipDuration === null :
+              current === 25 ? sizeScaleIndex === null :
               false
             )}
           >

@@ -80,19 +80,19 @@ export default function QuizProgress({ current, total, showIntro = false, introI
     <div className={styles.wrap}>
       <svg ref={svgRef} className={styles.svg} viewBox="0 0 800 120" preserveAspectRatio="none" style={{ overflow: 'visible' }}>
         <defs>
-          <filter id="innerGlowRoad" x="-50%" y="-50%" width="200%" height="200%" color-interpolation-filters="sRGB">
+          <filter id="innerGlowRoad" x="-50%" y="-50%" width="200%" height="200%" colorInterpolationFilters="sRGB">
             <feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur" />
             <feComposite in="blur" in2="SourceAlpha" operator="in" result="inner" />
-            <feFlood flood-color="rgba(230,214,180,1)" flood-opacity="0.2" result="color">
+            <feFlood floodColor="rgba(230,214,180,1)" floodOpacity="0.2" result="color">
               <animate attributeName="flood-opacity" values="0.12;0.28;0.12" dur="2.8s" repeatCount="indefinite" />
             </feFlood>
             <feComposite in="color" in2="inner" operator="in" result="glow" />
             <feComposite in="SourceGraphic" in2="glow" operator="over" />
           </filter>
-          <filter id="innerGlowProgress" x="-50%" y="-50%" width="200%" height="200%" color-interpolation-filters="sRGB">
+          <filter id="innerGlowProgress" x="-50%" y="-50%" width="200%" height="200%" colorInterpolationFilters="sRGB">
             <feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur" />
             <feComposite in="blur" in2="SourceAlpha" operator="in" result="inner" />
-            <feFlood flood-color="rgba(201,71,45,1)" flood-opacity="0.35" result="color">
+            <feFlood floodColor="rgba(201,71,45,1)" floodOpacity="0.35" result="color">
               <animate attributeName="flood-opacity" values="0.25;0.55;0.25" dur="2.2s" repeatCount="indefinite" />
             </feFlood>
             <feComposite in="color" in2="inner" operator="in" result="glow" />
