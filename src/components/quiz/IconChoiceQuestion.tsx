@@ -11,9 +11,9 @@
    tip?: string;
    options: Option[];
    selectedIndex?: number | null;
-   onSelect?: (index: number) => void;
- };
- 
+  onSelect?: (index: number) => void;
+};
+
 export default function IconChoiceQuestion({ questionId, title, tip, options, selectedIndex = null, onSelect }: Props) {
   const handleSelect = (i: number) => {
     onSelect?.(i);
