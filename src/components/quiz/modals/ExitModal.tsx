@@ -43,16 +43,15 @@ export default function ExitModal({ onCancel }: ExitModalProps) {
         <p style={{
           fontSize: "16px",
           lineHeight: 1.6,
-          color: "rgba(14,27,36,0.85)",
+          color: "var(--kendo-color-on-surface)",
           marginBottom: "28px"
         }}>
-          Life moves fast. We can park your progress here for 24 hours so you don&apos;t lose your spot.
+          Life moves fast. We can park your progress here for 24 hours so you don&apos;t lose your spot
         </p>
         <div style={{ display: "grid", gap: "12px" }}>
           <button
             onClick={() => {
-              // Progress is auto-saved in localStorage via setQuestionAnswer
-              // We just need to redirect to home
+             
               router.push("/");
             }}
             style={{
