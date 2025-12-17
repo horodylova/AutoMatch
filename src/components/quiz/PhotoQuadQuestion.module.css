@@ -16,4 +16,4 @@
 .check { position: absolute; top: 10px; left: 10px; width: 26px; height: 26px; border-radius: 999px; background: rgba(230,214,180,0.92); display: grid; place-items: center; opacity: 0; }
 .checkOn { opacity: 1; }
 .check::after { content: ""; width: 10px; height: 6px; border-left: 2px solid #0E1B24; border-bottom: 2px solid #0E1B24; transform: rotate(-45deg); }
-@media (max-width: 900px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 560px; } }
+@media (max-width: 900px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; max-width: 560px; } }

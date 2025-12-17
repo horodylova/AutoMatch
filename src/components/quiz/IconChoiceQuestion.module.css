@@ -12,5 +12,55 @@
  .check { position: absolute; top: 10px; right: 10px; width: 26px; height: 26px; border-radius: 999px; background: rgba(230,214,180,0.92); display: grid; place-items: center; opacity: 0; }
  .checkOn { opacity: 1; }
  .check::after { content: ""; width: 10px; height: 6px; border-left: 2px solid #0E1B24; border-bottom: 2px solid #0E1B24; transform: rotate(-45deg); }
-@media (max-width: 768px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; max-width: 560px; justify-items: center; } .card, .cardActive { width: 100%; max-width: 180px; aspect-ratio: 1 / 1.05; padding: 10px; } .icon { width: 54px; height: 54px; } .title { margin-top: 8px; } .check { width: 24px; height: 24px; } }
-@media (max-width: 480px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; max-width: 420px; justify-items: center; } .card, .cardActive { width: 100%; max-width: none; padding: 12px; } .icon { width: 56px; height: 56px; } }
+@media (max-width: 900px) {
+  .grid4, .grid3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    max-width: 560px;
+    justify-items: center;
+  }
+  .card, .cardActive {
+    width: 100%;
+    max-width: 180px;
+    aspect-ratio: 1 / 1.15;
+    padding: 14px 10px;
+    grid-template-rows: auto auto 1fr;
+    gap: 4px;
+  }
+  .icon {
+    width: 48px;
+    height: 48px;
+  }
+  .title {
+    margin-top: 4px;
+    font-size: 16px;
+  }
+  .desc {
+    font-size: 12px;
+    line-height: 1.4;
+    max-width: 100%;
+  }
+  .check {
+    width: 24px;
+    height: 24px;
+    top: 8px;
+    right: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .grid4, .grid3 {
+    gap: 10px;
+    max-width: 100%;
+    padding: 0 4px;
+  }
+  .card, .cardActive {
+    max-width: none;
+    padding: 12px 8px;
+    aspect-ratio: 1 / 1.2;
+  }
+  .icon {
+    width: 42px;
+    height: 42px;
+  }
+}

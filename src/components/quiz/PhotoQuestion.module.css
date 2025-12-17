@@ -25,6 +25,6 @@
 .tag { display: inline-block; margin-top: 6px; padding: 4px 8px; border-radius: 999px; font-size: 12px; background: rgba(201,71,45,0.25); color: var(--kendo-color-on-app-surface); }
 .titleFix, .subtitleFix { word-wrap: break-word; overflow-wrap: anywhere; white-space: normal; }
 
-@media (max-width: 768px) { .grid { grid-template-columns: repeat(2, 1fr); gap: 6px; max-width: 520px; } .card, .cardActive { aspect-ratio: 3 / 2; } }
+@media (max-width: 768px) { .grid { grid-template-columns: repeat(2, 1fr); gap: 12px; max-width: 520px; } .card, .cardActive { aspect-ratio: 3 / 2; } }
 
 @media (max-height: 700px) { .card, .cardActive { aspect-ratio: 3 / 2; } }

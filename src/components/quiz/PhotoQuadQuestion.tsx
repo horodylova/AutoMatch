@@ -13,9 +13,10 @@ type Props = {
   onSelect?: (index: number) => void;
   imageBasePath?: string;
   isMobile?: boolean;
+  mobileSuffix?: string;
 };
 
-export default function PhotoQuadQuestion({ questionId, title, tip, options, selectedIndex = null, onSelect, imageBasePath, isMobile = false }: Props) {
+export default function PhotoQuadQuestion({ questionId, title, tip, options, selectedIndex = null, onSelect, imageBasePath, isMobile = false, mobileSuffix = 'm' }: Props) {
   return (
     <div className={styles.wrap}>
       <div className={styles.card}>
@@ -34,7 +35,7 @@ export default function PhotoQuadQuestion({ questionId, title, tip, options, sel
             return (
               <button key={t} className={active ? styles.itemActive : styles.item} onClick={() => { onSelect?.(i); setQuestionAnswer(questionId, { index: i, title: t }); }}>
                 <span className={`${styles.check} ${active ? styles.checkOn : ''}`} />
-                <Image src={imageBasePath ? `${imageBasePath}/${i + 1}${isMobile ? 'm' : ''}.jpeg` : `/CardImage3.png`} alt={t} fill className={styles.img} sizes="(max-width: 900px) 50vw, 220px" />
+                <Image src={imageBasePath ? `${imageBasePath}/${i + 1}${isMobile ? mobileSuffix : ''}.jpeg` : `/CardImage3.png`} alt={t} fill className={styles.img} sizes="(max-width: 900px) 50vw, 220px" />
                 <div className={styles.labelPill}>{t}</div>
               </button>
             );

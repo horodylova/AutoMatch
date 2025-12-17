@@ -62,14 +62,16 @@
 
 @media (max-width: 768px) {
   .tableGrid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 6px;
   }
   .cell {
-    padding: 8px 4px;
-    min-height: 44px;
+    padding: 6px 4px;
+    min-height: 40px;
   }
   .cellText {
-    font-size: 12px;
+    font-size: 13px;
+    line-height: 1.2;
+    font-weight: 600;
   }
 }

@@ -153,6 +153,7 @@ export default function Page() {
               onSelect={quiz.setParkingChoice}
               imageBasePath="/croped pictures"
               isMobile={quiz.isMobile}
+              mobileSuffix="mob"
             />
           )}
           {!quiz.showIntro && !quiz.showHalfway && !quiz.showFinal && quiz.current === 7 && (
@@ -384,6 +385,8 @@ export default function Page() {
               selectedIndex={quiz.spaceRelationChoice}
               onSelect={quiz.setSpaceRelationChoice}
               imageBasePath="/croped pictures 2"
+              isMobile={quiz.isMobile}
+              mobileSuffix="mob"
             />
           )}
           {!quiz.showIntro && !quiz.showHalfway && !quiz.showFinal && quiz.current === 20 && (
