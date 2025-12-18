@@ -19,35 +19,35 @@ interface ResultsGalleryProps {
 const MOCK_RESULTS: CarResult[] = [
   {
     id: '1',
-    image: '/photos-cars/amir-riazipour-TeYK3zOIkUk-unsplash.jpg',
+    image: '/photos-cars/mateusz-suski-D4UZJJbRjP4-unsplash.jpg',
     make: 'Porsche',
     model: '911 Carrera',
     year: '2024'
   },
   {
     id: '2',
-    image: '/photos-cars/amir-riazipour-TeYK3zOIkUk-unsplash.jpg',
+    image: '/photos-cars/mateusz-suski-D4UZJJbRjP4-unsplash.jpg',
     make: 'Tesla',
     model: 'Model S Plaid',
     year: '2024'
   },
   {
     id: '3',
-    image: '/photos-cars/amir-riazipour-TeYK3zOIkUk-unsplash.jpg',
+    image: '/photos-cars/mateusz-suski-D4UZJJbRjP4-unsplash.jpg',
     make: 'Mercedes-Benz',
     model: 'S-Class',
     year: '2023'
   },
   {
     id: '4',
-    image: '/photos-cars/amir-riazipour-TeYK3zOIkUk-unsplash.jpg',
+    image: '/photos-cars/mateusz-suski-D4UZJJbRjP4-unsplash.jpg',
     make: 'BMW',
     model: 'M4 Competition',
     year: '2024'
   },
   {
     id: '5',
-    image: '/photos-cars/amir-riazipour-TeYK3zOIkUk-unsplash.jpg',
+    image: '/photos-cars/mateusz-suski-D4UZJJbRjP4-unsplash.jpg',
     make: 'Audi',
     model: 'RS e-tron GT',
     year: '2024'
