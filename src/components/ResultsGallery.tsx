@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import styles from './ResultsGallery.module.css';
 
 export interface CarResult {
@@ -68,13 +69,16 @@ export default function ResultsGallery({ results = MOCK_RESULTS }: ResultsGaller
 
           <div className={styles.coverFlow}>
             <div className={styles.track}>
-              {results.map((car) => (
+              {results.map((car, index) => (
                 <div key={car.id} className={styles.space}>
                   <div className={styles.card}>
-                    <img 
+                    <Image 
                       src={car.image} 
                       alt={`${car.make} ${car.model}`} 
+                      fill
+                      sizes="(max-width: 768px) 90vw, 600px"
                       className={styles.image}
+                      priority={index < 2}
                     />
                     <div className={styles.overlay}>
                       <div className={styles.carName}>{car.make}</div>
