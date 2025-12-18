@@ -1,12 +1,18 @@
 .section {
-  margin-block: 10rem;
-  /* Defining vars here or globally, but since module, just use values or :global(:root) if needed. 
+  margin-block: 4rem;
+}
+
+.sectionFirst {
+  margin-top: 0;
+  margin-bottom: 2rem;
+}
+
+/* Defining vars here or globally, but since module, just use values or :global(:root) if needed. 
      User provided vars:
      --section-spacing-block: 10rem;
      --container-slim-max-wdith: 50rem;
      --container-max-wdith: 100rem;
   */
-}
 
 .wrapping {
   padding-inline: 2rem; /* var(--wrapper-spacing) assumed 2rem based on previous context or standard */
@@ -70,7 +76,7 @@
 .coverFlow {
   perspective: 100rem;
   /* overflow: clip; - commented out in template */
-  padding: 4rem 0 50vh;
+  padding: 4rem 0 4rem;
   width: 100%;
   display: flex;
   justify-content: center;

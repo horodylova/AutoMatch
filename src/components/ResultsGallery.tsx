@@ -58,7 +58,7 @@ const MOCK_RESULTS: CarResult[] = [
 export default function ResultsGallery({ results = MOCK_RESULTS, onSaveProgress }: ResultsGalleryProps) {
   return (
     <>
-      <div className={styles.section}>
+      <div className={styles.sectionFirst}>
         <div className={styles.wrapping}>
           <div className={`${styles.container} ${styles.containerSlim}`}>
             <div>
