@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import QuizProgress from "../../components/QuizProgress";
 import { PhotoQuestion, ChoiceQuestion, SliderQuestion, MultiChoiceQuestion, IconChoiceQuestion, PhotoQuadQuestion, TableTagQuestion, MultiPhotoQuestion } from "../../components/quiz";
 import ResultsGallery from "../../components/ResultsGallery";
@@ -10,6 +11,7 @@ import QuizHeader from "../../components/quiz/QuizHeader";
 
 export default function Page() {
   const quiz = useQuiz();
+  const [exitDestination, setExitDestination] = useState("/");
 
   return (
     <div style={{
@@ -21,10 +23,10 @@ export default function Page() {
       overflow: quiz.showGallery ? "auto" : "hidden",
     }}>
 
-      <QuizHeader onExit={() => quiz.setShowExitModal(true)} />
+      <QuizHeader onExit={() => { setExitDestination("/"); quiz.setShowExitModal(true); }} />
 
       {quiz.showExitModal && (
-        <ExitModal onCancel={() => quiz.setShowExitModal(false)} />
+        <ExitModal onCancel={() => quiz.setShowExitModal(false)} destination={exitDestination} />
       )}
 
       {quiz.showResumeModal && (
@@ -35,7 +37,7 @@ export default function Page() {
       )}
 
       {quiz.showGallery ? (
-        <ResultsGallery />
+        <ResultsGallery onSaveProgress={() => { setExitDestination("/cars"); quiz.setShowExitModal(true); }} />
       ) : (
         <>
           <div style={{ maxWidth: 1000, margin: "0 auto" }}>

@@ -4,9 +4,10 @@ import { clearQuizAnswers } from "../../../utils/storage";
 
 interface ExitModalProps {
   onCancel: () => void;
+  destination?: string;
 }
 
-export default function ExitModal({ onCancel }: ExitModalProps) {
+export default function ExitModal({ onCancel, destination = "/" }: ExitModalProps) {
   const router = useRouter();
 
   return (
@@ -52,7 +53,7 @@ export default function ExitModal({ onCancel }: ExitModalProps) {
           <button
             onClick={() => {
              
-              router.push("/");
+              router.push(destination);
             }}
             style={{
               padding: "16px 32px",
@@ -75,7 +76,7 @@ export default function ExitModal({ onCancel }: ExitModalProps) {
           <button
             onClick={() => {
               clearQuizAnswers();
-              router.push("/");
+              router.push(destination);
             }}
             style={{
               padding: "16px",

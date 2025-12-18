@@ -1,29 +1,32 @@
 .section {
-  position: relative;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  padding: 4rem 0;
+  margin-block: 10rem;
+  /* Defining vars here or globally, but since module, just use values or :global(:root) if needed. 
+     User provided vars:
+     --section-spacing-block: 10rem;
+     --container-slim-max-wdith: 50rem;
+     --container-max-wdith: 100rem;
+  */
 }
 
 .wrapping {
-  width: 100%;
-  padding-inline: 2rem;
+  padding-inline: 2rem; /* var(--wrapper-spacing) assumed 2rem based on previous context or standard */
   display: flex;
   justify-content: center;
 }
 
 .container {
-  width: 100%;
-  max-width: 100rem;
   margin-inline: auto;
+  max-width: 100rem; /* var(--container-max-wdith) */
+  width: 100%;
 }
 
 .containerSlim {
-  max-width: 50rem;
-  text-align: center;
+  max-width: 50rem; /* var(--container-slim-max-wdith) */
+  margin-inline: auto; /* implied by behavior */
+  text-align: center; /* kept from previous to center text */
 }
 
+/* Typography from previous context to keep "мой текст" styling */
 .title {
   font-size: clamp(2rem, 5vw, 3rem);
   font-weight: 800;
@@ -35,12 +38,39 @@
   font-size: 1.1rem;
   line-height: 1.6;
   color: rgba(230, 214, 180, 0.8);
-  margin-bottom: 2rem;
+  margin: 2em 0;
 }
 
+.button {
+  display: inline-block;
+  margin-top: 2rem;
+  padding: 1.2rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--kendo-color-on-primary, white);
+  background-color: var(--kendo-color-primary, #c9472d);
+  border: none;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(201, 71, 45, 0.3);
+}
+
+.button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(201, 71, 45, 0.4);
+  background-color: #d1492d;
+}
+
+.button:active {
+  transform: translateY(0);
+}
+
+/* Cover Flow styles from template */
 .coverFlow {
   perspective: 100rem;
-  padding: 2rem 0;
+  /* overflow: clip; - commented out in template */
+  padding: 4rem 0 50vh;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -49,53 +79,52 @@
 .track {
   transform-style: preserve-3d;
   display: grid;
-  grid-auto-flow: row;
   width: 100%;
   justify-items: center;
-  gap: 6rem; /* Increased gap for better scroll effect */
+  /* Template didn't specify grid rows/columns, but grid implies stacking if no rows defined or auto placement. 
+     In previous working version we used grid-template-rows. 
+     Template has `display: grid` only.
+     If I use `display: grid` with multiple children, they stack in rows.
+  */
 }
 
 .space {
   transform-style: preserve-3d;
+  view-timeline-name: --name-space;
+  view-timeline-axis: block;
   width: 100%;
   display: flex;
   justify-content: center;
-  perspective: 1000px; /* Add perspective to wrapper */
+  /* Template doesn't have padding here, relying on default or spacing? 
+     Template snippet: &__space { ... } no margins/padding.
+  */
 }
 
-.card {
-  position: relative;
+.cover {
   margin: 0 auto;
   display: block;
   width: 31.25rem;
-  max-width: 80vw;
-  aspect-ratio: 3/2;
+  max-width: 80vw; /* Fixed typo 80wv -> 80vw */
+  aspect-ratio: 3/2; /* Added to maintain shape for images */
+  object-fit: cover;
   
-  /* Scroll-driven animation */
+  /* Animation */
   animation: cover linear both;
-  animation-timeline: view();
-  animation-range: entry 25% exit 75%; /* Focus effect in middle */
+  animation-timeline: --name-space; /* Preferring the last one defined in snippet */
+  /* animation-range: contain 0% contain 100%; - commented out in template */
   
   transform-style: preserve-3d;
-  will-change: transform, opacity;
-  border-radius: 0.5rem;
-  overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  will-change: transform;
+  position: relative;
+  user-select: none;
+  border-radius: .5rem;
+  
+  /* Additional styles for card appearance */
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5); /* Kept for depth */
   cursor: pointer;
-  transition: transform 0.3s ease; /* For hover/active effects */
 }
 
-.card:active {
-  transform: scale(0.98);
-}
-
-.image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
+/* Overlay for text on card - kept from previous */
 .overlay {
   position: absolute;
   bottom: 0;
@@ -104,7 +133,7 @@
   background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
   padding: 20px;
   color: white;
-  transform: translateZ(1px);
+  transform: translateZ(1px); /* Fix for text z-fighting */
 }
 
 .carName {
@@ -120,19 +149,20 @@
 
 @keyframes cover {
   0% {
-    transform: perspective(1000px) rotateX(20deg) scale(0.85);
-    opacity: 0.6;
-    filter: brightness(0.7);
+    transform: translateY(-100%) rotateX(45deg);
+  }
+  35% {
+    transform: translateY(0) rotateX(45deg);
   }
   50% {
-    transform: perspective(1000px) rotateX(0deg) scale(1.1);
-    opacity: 1;
-    filter: brightness(1.1);
-    z-index: 10;
+    box-shadow: 0 0 1rem .5rem rgba(0,0,0,0.5); /* #00000080 */
+    transform: rotateX(0deg) translateZ(14em) scale(1.2);
+    z-index: 10; /* Added z-index to ensure active card is on top */
+  }
+  65% {
+    transform: translateY(0) rotateX(-45deg);
   }
   100% {
-    transform: perspective(1000px) rotateX(-20deg) scale(0.85);
-    opacity: 0.6;
-    filter: brightness(0.7);
+    transform: translateY(100%) rotateX(-45deg);
   }
 }
