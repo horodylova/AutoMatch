@@ -4,9 +4,9 @@ import Image from 'next/image';
 import styles from './QuizProgress.module.css';
 import formStyles from './QuizForm.module.css';
 
-type Props = { current: number; total: number; showIntro?: boolean; showHalfway?: boolean; showFinal?: boolean; introImageSrc?: string };
+type Props = { current: number; total: number; showIntro?: boolean; showHalfway?: boolean; showFinal?: boolean; introImageSrc?: string; onShowResults?: () => void };
 
-export default function QuizProgress({ current, total, showIntro = false, showHalfway = false, showFinal = false, introImageSrc }: Props) {
+export default function QuizProgress({ current, total, showIntro = false, showHalfway = false, showFinal = false, introImageSrc, onShowResults }: Props) {
   const t = total > 0 ? total : 0;
   const c = Math.max(0, Math.min(current, t));
   const pct = t > 0 ? c / t : 0;
@@ -99,7 +99,9 @@ export default function QuizProgress({ current, total, showIntro = false, showHa
                   We&apos;re connecting the dots between your answers — balancing what excites you, what you need daily, and what feels right. Your results aren&apos;t generic matches; they&apos;re vehicles chosen specifically for you, ranked by how well they fit your unique profile.
                 </span>
               </div>
-              <button className={styles.introNext} onClick={() => console.log('See results clicked')}>
+              <button className={styles.introNext} onClick={() => {
+                if (onShowResults) onShowResults();
+              }}>
                 See My Results
               </button>
             </div>

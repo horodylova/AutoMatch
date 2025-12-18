@@ -37,6 +37,7 @@ export function useQuiz() {
   const [showIntro, setShowIntro] = useState<boolean>(true);
   const [showHalfway, setShowHalfway] = useState<boolean>(false);
   const [showFinal, setShowFinal] = useState<boolean>(false);
+  const [showGallery, setShowGallery] = useState<boolean>(false);
   const [showExitModal, setShowExitModal] = useState<boolean>(false);
   const [showResumeModal, setShowResumeModal] = useState<boolean>(false);
 
@@ -293,6 +294,8 @@ export function useQuiz() {
     setShowHalfway,
     showFinal,
     setShowFinal,
+    showGallery,
+    setShowGallery,
     showExitModal,
     setShowExitModal,
     showResumeModal,

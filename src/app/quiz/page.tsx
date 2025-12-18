@@ -1,6 +1,7 @@
 "use client";
 import QuizProgress from "../../components/QuizProgress";
 import { PhotoQuestion, ChoiceQuestion, SliderQuestion, MultiChoiceQuestion, IconChoiceQuestion, PhotoQuadQuestion, TableTagQuestion, MultiPhotoQuestion } from "../../components/quiz";
+import ResultsGallery from "../../components/ResultsGallery";
 import { useQuiz } from "../../hooks/useQuiz";
 import ExitModal from "../../components/quiz/modals/ExitModal";
 import ResumeModal from "../../components/quiz/modals/ResumeModal";
@@ -16,8 +17,8 @@ export default function Page() {
       paddingRight: "clamp(16px, 4vw, 32px)",
       paddingTop: quiz.isMobile ? "calc(clamp(72px, 12vw, 140px) + 16px)" : "clamp(72px, 12vw, 140px)",
       paddingBottom: "calc(100px + env(safe-area-inset-bottom, 0px))",
-      minHeight: "100vh",
-      overflow: "hidden",
+      height: "100vh",
+      overflow: quiz.showGallery ? "auto" : "hidden",
     }}>
 
       <QuizHeader onExit={() => quiz.setShowExitModal(true)} />
@@ -33,18 +34,23 @@ export default function Page() {
         />
       )}
 
-      <div style={{ maxWidth: 1000, margin: "0 auto" }}>
-        <QuizProgress 
-            current={quiz.current} 
-            total={quiz.total} 
-            showIntro={quiz.showIntro} 
-            showHalfway={quiz.showHalfway} 
-            showFinal={quiz.showFinal} 
-            introImageSrc="/before-you-begin.jpg" 
-        />
-        
-        <div style={{ maxHeight: "min(70vh, 680px)", overflow: "auto", paddingRight: 4 }}>
-          {!quiz.showIntro && !quiz.showHalfway && !quiz.showFinal && quiz.current === 0 && (
+      {quiz.showGallery ? (
+        <ResultsGallery />
+      ) : (
+        <>
+          <div style={{ maxWidth: 1000, margin: "0 auto" }}>
+            <QuizProgress 
+                current={quiz.current} 
+                total={quiz.total} 
+                showIntro={quiz.showIntro} 
+                showHalfway={quiz.showHalfway} 
+                showFinal={quiz.showFinal} 
+                introImageSrc="/before-you-begin.jpg" 
+                onShowResults={() => quiz.setShowGallery(true)}
+            />
+            
+            <div style={{ maxHeight: "min(70vh, 680px)", overflow: "auto", paddingRight: 4 }}>
+              {!quiz.showIntro && !quiz.showHalfway && !quiz.showFinal && quiz.current === 0 && (
             <IconChoiceQuestion
               questionId="emotional_expectation"
               title="What One Feeling Do You Want Your Car to Give You?"
@@ -513,6 +519,8 @@ export default function Page() {
         handleNext={quiz.handleNext}
         isNextDisabled={quiz.isNextDisabled}
       />
+      </>
+      )}
         
     </div>
   );

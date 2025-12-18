@@ -1,0 +1,138 @@
+.section {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 4rem 0;
+}
+
+.wrapping {
+  width: 100%;
+  padding-inline: 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+.container {
+  width: 100%;
+  max-width: 100rem;
+  margin-inline: auto;
+}
+
+.containerSlim {
+  max-width: 50rem;
+  text-align: center;
+}
+
+.title {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  margin-bottom: 1rem;
+  color: rgb(230, 214, 180);
+}
+
+.description {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: rgba(230, 214, 180, 0.8);
+  margin-bottom: 2rem;
+}
+
+.coverFlow {
+  perspective: 100rem;
+  padding: 2rem 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.track {
+  transform-style: preserve-3d;
+  display: grid;
+  grid-auto-flow: row;
+  width: 100%;
+  justify-items: center;
+  gap: 6rem; /* Increased gap for better scroll effect */
+}
+
+.space {
+  transform-style: preserve-3d;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  perspective: 1000px; /* Add perspective to wrapper */
+}
+
+.card {
+  position: relative;
+  margin: 0 auto;
+  display: block;
+  width: 31.25rem;
+  max-width: 80vw;
+  aspect-ratio: 3/2;
+  
+  /* Scroll-driven animation */
+  animation: cover linear both;
+  animation-timeline: view();
+  animation-range: entry 25% exit 75%; /* Focus effect in middle */
+  
+  transform-style: preserve-3d;
+  will-change: transform, opacity;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  cursor: pointer;
+  transition: transform 0.3s ease; /* For hover/active effects */
+}
+
+.card:active {
+  transform: scale(0.98);
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+  padding: 20px;
+  color: white;
+  transform: translateZ(1px);
+}
+
+.carName {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.carDetails {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+@keyframes cover {
+  0% {
+    transform: perspective(1000px) rotateX(20deg) scale(0.85);
+    opacity: 0.6;
+    filter: brightness(0.7);
+  }
+  50% {
+    transform: perspective(1000px) rotateX(0deg) scale(1.1);
+    opacity: 1;
+    filter: brightness(1.1);
+    z-index: 10;
+  }
+  100% {
+    transform: perspective(1000px) rotateX(-20deg) scale(0.85);
+    opacity: 0.6;
+    filter: brightness(0.7);
+  }
+}
