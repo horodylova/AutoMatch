@@ -91,12 +91,18 @@ export default function QuizProgress({ current, total, showIntro = false, showHa
             <div className={styles.introList}>
               <div className={styles.introItem}>
                 <span className={styles.introText} style={{ fontSize: 18, lineHeight: 1.5 }}>
-                  We&apos;ve analyzed your answers and found the cars that fit your vision. Some might surprise you. Some will feel exactly right.
+                  {isMobile 
+                    ? "We've analyzed your answers and found the cars that fit your vision."
+                    : "We've analyzed your answers and found the cars that fit your vision. Some might surprise you. Some will feel exactly right."
+                  }
                 </span>
               </div>
               <div className={styles.introItem} style={{ marginBottom: 32 }}>
                 <span className={styles.introText} style={{ fontSize: 18, lineHeight: 1.5 }}>
-                  We&apos;re connecting the dots between your answers — balancing what excites you, what you need daily, and what feels right. Your results aren&apos;t generic matches; they&apos;re vehicles chosen specifically for you, ranked by how well they fit your unique profile.
+                  {isMobile
+                    ? "Your results aren't generic matches; they're vehicles chosen specifically for you."
+                    : "We're connecting the dots between your answers — balancing what excites you, what you need daily, and what feels right. Your results aren't generic matches; they're vehicles chosen specifically for you, ranked by how well they fit your unique profile."
+                  }
                 </span>
               </div>
               <button className={styles.introNext} onClick={() => {

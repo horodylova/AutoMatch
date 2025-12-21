@@ -12,11 +12,11 @@
 .answerActive .dot { border-color: var(--kendo-color-primary); background: radial-gradient(closest-side, var(--kendo-color-primary) 0%, rgba(201,71,45,0.15) 60%, rgba(201,71,45,0) 100%); }
 .answerText { font-size: clamp(16px, 2.6vw, 18px); line-height: 1.55; }
 .actions { display: flex; justify-content: flex-end; margin-top: 16px; }
-.next { padding: 18px 42px; border-radius: 999px; border: 1px solid var(--kendo-color-border-alt); background: var(--kendo-color-primary); color: var(--kendo-color-on-app-surface); cursor: pointer; box-shadow: 0 10px 28px rgba(201,71,45,0.28); transition: transform 0.15s ease, box-shadow 0.2s ease; font-size: 1.15rem; font-weight: 800; animation: btnPulse 3s infinite ease-in-out; }
+.next { padding: 18px 42px; border-radius: 999px; border: 1px solid var(--kendo-color-border-alt); background: var(--kendo-color-primary); color: var(--kendo-color-on-app-surface); cursor: pointer; box-shadow: 0 10px 28px rgba(201,71,45,0.28); transition: transform 0.15s ease, box-shadow 0.2s ease; font-size: 1.15rem; font-weight: 800; animation: btnPulse 3s infinite ease-in-out; pointer-events: auto; }
 .next:hover { animation: none; transform: translateY(-1px) scale(1.02); box-shadow: 0 14px 34px rgba(201,71,45,0.34); }
 .next:active { animation: none; transform: translateY(0) scale(0.98); box-shadow: 0 8px 22px rgba(201,71,45,0.26); }
 
-.floatingBar { position: fixed; left: 0; right: 0; bottom: calc(8px + env(safe-area-inset-bottom, 0px)); z-index: 20; backdrop-filter: blur(6px); background: linear-gradient(180deg, rgba(14,27,36,0.00) 0%, rgba(14,27,36,0.20) 35%, rgba(14,27,36,0.45) 100%); border-top: 1px solid var(--kendo-color-border-alt); }
+.floatingBar { position: fixed; left: 0; right: 0; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); z-index: 20; background: none; border: none; pointer-events: none; }
 .barInner { max-width: 1000px; margin: 0 auto; padding: calc(12px + env(safe-area-inset-bottom, 0px)) 16px; display: flex; justify-content: flex-end; }
 
 @media (max-width: 768px) {

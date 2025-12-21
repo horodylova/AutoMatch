@@ -23,13 +23,34 @@ export default function ResultsGallery({ results = [], onSaveProgress }: Results
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollContainerRef.current) {
-      const { current } = scrollContainerRef;
-      // Scroll by roughly one card width + gap
-      const scrollAmount = Math.min(window.innerWidth * 0.8, 600) + 32;
-      current.scrollBy({
-        left: direction === 'left' ? -scrollAmount : scrollAmount,
-        behavior: 'smooth'
+      const container = scrollContainerRef.current;
+      const cards = Array.from(container.children) as HTMLElement[];
+      if (cards.length === 0) return;
+
+      const containerRect = container.getBoundingClientRect();
+      const containerCenter = containerRect.left + containerRect.width / 2;
+      
+      let closestCard = cards[0];
+      let minDiff = Infinity;
+
+      cards.forEach(card => {
+        const cardRect = card.getBoundingClientRect();
+        const cardCenter = cardRect.left + cardRect.width / 2;
+        const diff = Math.abs(containerCenter - cardCenter);
+        if (diff < minDiff) {
+          minDiff = diff;
+          closestCard = card;
+        }
       });
+
+      const currentIndex = cards.indexOf(closestCard);
+      let targetIndex = direction === 'left' ? currentIndex - 1 : currentIndex + 1;
+
+      if (targetIndex < 0) targetIndex = 0;
+      if (targetIndex >= cards.length) targetIndex = cards.length - 1;
+
+      const targetCard = cards[targetIndex];
+      targetCard.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
     }
   };
 

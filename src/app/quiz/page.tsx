@@ -386,7 +386,7 @@ export default function Page() {
         ? "calc(40px + env(safe-area-inset-bottom, 0px))" 
         : (quiz.isMobile ? "calc(160px + env(safe-area-inset-bottom, 0px))" : "60px"),
       height: "100dvh",
-      overflowY: (quiz.showGallery || quiz.showFinal) ? "auto" : "hidden",
+      overflowY: "auto",
     }}>
 
       <QuizHeader onExit={() => { setExitDestination("/"); quiz.setShowExitModal(true); }} />
@@ -427,7 +427,7 @@ export default function Page() {
                 onShowResults={() => quiz.setShowGallery(true)}
             />
             
-            <div style={{ maxHeight: "min(70vh, 680px)", overflow: "auto", paddingRight: 4 }}>
+            <div style={{ paddingRight: 4 }}>
               {renderQuestion()}
             </div>
 
