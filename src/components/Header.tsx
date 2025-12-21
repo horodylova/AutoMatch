@@ -21,13 +21,8 @@ export default function Header() {
   }, []);
 
   const menuItems: string[] = [
-    "How It Works",
-    "Car Personalities",
-    "Before You Buy",
     "Match Algorithm",
     "Car Listings",
-    
-    
   ];
 
   return (
@@ -50,31 +45,19 @@ export default function Header() {
           </Link>
           <nav className={styles.desktopNav}>
             {menuItems.map((item) => (
-              item === "How It Works" ? (
-                <Link key={item} href="/#how-it-works" className={styles.navButton}>
+              item === "Match Algorithm" ? (
+                <Link key={item} href="/scores" className={styles.navButton}>
                   {item}
                 </Link>
-              ) : item === "Car Personalities" ? (
-                <Link key={item} href="/#car-personalities" className={styles.navButton}>
+              ) : item === "Car Listings" ? (
+                <Link key={item} href="/cars" className={styles.navButton}>
                   {item}
                 </Link>
-            ) : item === "Match Algorithm" ? (
-              <Link key={item} href="/scores" className={styles.navButton}>
-                {item}
-              </Link>
-            ) : item === "Before You Buy" ? (
-              <Link key={item} href="/#before-you-buy" className={styles.navButton}>
-                {item}
-              </Link>
-            ) : item === "Car Listings" ? (
-              <Link key={item} href="/cars" className={styles.navButton}>
-                {item}
-              </Link>
-            ) : (
-              <button key={item} className={styles.navButton}>
-                {item}
-              </button>
-            )
+              ) : (
+                <button key={item} className={styles.navButton}>
+                  {item}
+                </button>
+              )
             ))}
           </nav>
         </div>
@@ -116,37 +99,10 @@ export default function Header() {
 
             <div className={styles.drawerContent}>
               {menuItems.map((item) => (
-                item === "How It Works" ? (
-                  <Link
-                    key={item}
-                    href="/#how-it-works"
-                    className={styles.drawerItem}
-                    onClick={() => setIsDrawerOpen(false)}
-                  >
-                    {item}
-                  </Link>
-                ) : item === "Car Personalities" ? (
-                  <Link
-                    key={item}
-                    href="/#car-personalities"
-                    className={styles.drawerItem}
-                    onClick={() => setIsDrawerOpen(false)}
-                  >
-                    {item}
-                  </Link>
-                ) : item === "Match Algorithm" ? (
+                item === "Match Algorithm" ? (
                   <Link
                     key={item}
                     href="/scores"
-                    className={styles.drawerItem}
-                    onClick={() => setIsDrawerOpen(false)}
-                  >
-                    {item}
-                  </Link>
-                ) : item === "Before You Buy" ? (
-                  <Link
-                    key={item}
-                    href="/#before-you-buy"
                     className={styles.drawerItem}
                     onClick={() => setIsDrawerOpen(false)}
                   >

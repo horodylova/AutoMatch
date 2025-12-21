@@ -30,19 +30,16 @@ export default function Page() {
   const [idx, setIdx] = useState<Record<string, number>>({});
   const [topMatches, setTopMatches] = useState<ScoredCar[]>([]);
 
-  // Load data
   useEffect(() => {
     async function load() {
       const ds = await fetchDataset();
       setIdx(ds.idx);
-      // Dataset rows start at index 4 (row 5). Quiz originally sliced at 13 (row 14).
-      // So we skip 9 more rows (4 + 9 = 13).
+  
       setRows(ds.rows.slice(9));
     }
     load();
   }, []);
 
-  // Calculate matches when final screen is shown
   useEffect(() => {
     if (quiz.showFinal && rows.length > 0 && Object.keys(idx).length > 0) {
       const prefs = Object.values(Categories).reduce((acc, cat) => {
@@ -109,40 +106,35 @@ export default function Page() {
         }
       });
 
-      // Parse all cars
+     
       const cars = rows.map((r) => parseCarData(r, idx));
 
-      // Filter out cars without images (quiz only)
       const validCars = cars.filter(c => c.image && c.image !== "/placeholder-car.jpg");
-      
-      // Extract Filters
+     
       const filters: QuizFilters = {};
       
-      // Size
+    
       const sizeVal = quiz.answers["car_size_scale"] as string;
       if (sizeVal === "small_agile") filters.sizePreference = "small";
       else if (sizeVal === "mid_size_balanced") filters.sizePreference = "mid";
       else if (sizeVal === "large_comfortable") filters.sizePreference = "large";
       else if (sizeVal === "oversized_powerful") filters.sizePreference = "oversized";
 
-      // Fuel
-      const fuelVal = quiz.answers["fuel_importance"] as number; // Index
+    
+      const fuelVal = quiz.answers["fuel_importance"] as number;
       if (fuelVal === 3) filters.fuelPriority = "critical";
       else if (fuelVal === 2) filters.fuelPriority = "high";
       else if (fuelVal === 1) filters.fuelPriority = "medium";
       else filters.fuelPriority = "low";
 
-      // Expenses
-      const expenseVal = quiz.answers["car_expenses_preference"] as number; // Index
-      // 0: Low, 1: Balanced, 2: High, 3: Unlimited, 4: Balanced, 5: High
+      const expenseVal = quiz.answers["car_expenses_preference"] as number; 
+   
       if (expenseVal === 0) filters.expensePreference = "low";
       else if (expenseVal === 1 || expenseVal === 4) filters.expensePreference = "balanced";
       else if (expenseVal === 2 || expenseVal === 5) filters.expensePreference = "high";
       else if (expenseVal === 3) filters.expensePreference = "unlimited";
 
-      // Common Sense Filters
-      
-      // 1. Seats (freedom_feel)
+     
       const passengers = quiz.answers["freedom_feel"] as string[];
       if (passengers) {
         const needsMoreSeats = passengers.some(p => 
@@ -153,7 +145,6 @@ export default function Page() {
         filters.minSeats = needsMoreSeats ? 4 : 2;
       }
 
-      // 2. Cargo (car_cargo_preference)
       const cargo = quiz.answers["car_cargo_preference"] as string;
       if (cargo === "large_items" || cargo === "work_equipment") {
         filters.cargoNeeds = "high";
@@ -163,47 +154,42 @@ export default function Page() {
         filters.cargoNeeds = "low";
       }
 
-      // 3. AWD & Transmission (bad_weather_focus)
       const weekend = quiz.answers["ideal_weekend"] as string;
-      const weather = quiz.answers["bad_weather_focus"] as number; // Index
-      // Weather: 0 (Simple/Safe), 1 (Stable/Reliable), 2 (Control)
+      const weather = quiz.answers["bad_weather_focus"] as number; 
+  
       
       if (weekend === "outdoors_hiking" || weekend === "road_trip" || weather === 1) {
         filters.awdPreferred = true;
       }
 
-      // Transmission Control
-      const controlPref = quiz.answers["control_preference"] as number; // Index
-      // 0: Automation, 1: Balanced, 2: Full Control
+      const controlPref = quiz.answers["control_preference"] as number; 
       if (controlPref === 2) {
-         filters.transmissionPreference = "manual"; // Wants full control
+         filters.transmissionPreference = "manual"; 
       } else if (controlPref === 0) {
-         filters.transmissionPreference = "automatic"; // Wants simple/safe
+         filters.transmissionPreference = "automatic";
       }
 
-      // 4. Sport Mode (Check for consistent sportiness)
+  
       let sportCount = 0;
       
-      // Explicit sport choices
       const sportKeys = [
-        "joy_excitement", // emotional_expectation
-        "engine_sound", // noise_level
-        "low_connected", // driving_position_preference
-        "full_control", // control_preference
-        "active_gym", // ideal_weekend
-        "Cockpit-like", // interior_space_relation (Label check if label is stored, or we need to check how it's stored. PhotoQuadQuestion usually stores index. Wait. 
-        // Let's check typical usage. In `PhotoQuadQuestion`, we pass `onSelect(i)`. So it stores NUMBER index.)
+        "joy_excitement", 
+        "engine_sound", 
+        "low_connected", 
+        "full_control", 
+        "active_gym", 
+        "Cockpit-like", 
       ];
 
-      // Fix: Check index-based answers first
-      if (quiz.answers["interior_space_relation"] === 3) sportCount++; // Cockpit-like
-      if (quiz.answers["fuel_importance"] === 0) sportCount++; // Performance priority
-      if (quiz.answers["interior_feel"] === 1) sportCount++; // Tight energetic cabin
-      if (quiz.answers["bad_weather_focus"] === 2) sportCount++; // Enjoy control
-      if (quiz.answers["control_preference"] === 2) sportCount++; // Full Control
-      if (quiz.answers["driving_position_preference"] === 2) sportCount++; // Low & connected
+     
+      if (quiz.answers["interior_space_relation"] === 3) sportCount++; 
+      if (quiz.answers["fuel_importance"] === 0) sportCount++; 
+      if (quiz.answers["interior_feel"] === 1) sportCount++;
+      if (quiz.answers["bad_weather_focus"] === 2) sportCount++; 
+      if (quiz.answers["control_preference"] === 2) sportCount++; 
+      if (quiz.answers["driving_position_preference"] === 2) sportCount++; 
       
-      // Check string-based answers
+ 
       for (const val of Object.values(quiz.answers)) {
          if (typeof val === 'string' && sportKeys.includes(val)) sportCount++;
          if (Array.isArray(val) && val.some(v => sportKeys.includes(v))) sportCount++;
@@ -213,53 +199,48 @@ export default function Page() {
          filters.forceSport = true;
       }
 
-      // 5. Utility Mode (Work / Cargo focus)
       let utilityCount = 0;
       const utilityKeys = [
-        "work_equipment", // car_cargo_preference
-        "large_items", // car_cargo_preference
-        "work_crew_clients", // freedom_feel
-        "tow_hitch", // (hypothetical, checking tags)
-        "Self-sufficient", // people_descriptors
-        "Outdoorsy", // people_descriptors
-        "Strong, practical environment", // interior_feel (label text part)
-        "A strong, practical environment built to handle gear, weather, and daily tasks without hesitation." // full label
+        "work_equipment", 
+        "large_items",
+        "work_crew_clients", 
+        "tow_hitch",
+        "Self-sufficient", 
+        "Outdoorsy", 
+        "Strong, practical environment", 
+        "A strong, practical environment built to handle gear, weather, and daily tasks without hesitation." 
       ];
 
-      if (quiz.answers["interior_feel"] === 5) utilityCount++; // Strong practical env
-      
-      // Check string-based answers
+      if (quiz.answers["interior_feel"] === 5) utilityCount++; 
+   
       for (const val of Object.values(quiz.answers)) {
          if (typeof val === 'string' && utilityKeys.includes(val)) utilityCount++;
          if (Array.isArray(val) && val.some(v => utilityKeys.includes(v))) utilityCount++;
       }
 
-      // If user explicitly chose Work Equipment or Large Items, that counts double
       if (cargo === "work_equipment" || cargo === "large_items") utilityCount += 2;
 
       if (utilityCount >= 3) {
          filters.forceUtility = true;
       }
 
-      // 6. Luxury Mode (Status / Comfort focus)
       let luxuryCount = 0;
       const luxuryKeys = [
-        "status_achievement", // emotional_expectation
-        "luxurious_detailed", // home_feel
-        "Status-conscious", // people_descriptors
-        "Luxury meal or indulgence", // hard_week_treat
-        "Pay more for quality", // purchase_approach
-        "Pay more if it improves quality and experience", // car_expenses_preference
-        "A smooth, elegant interior with premium textures, warm lighting, and details that feel intentionally crafted.", // interior_feel
+        "status_achievement",
+        "luxurious_detailed",
+        "Status-conscious",
+        "Luxury meal or indulgence", 
+        "Pay more for quality", 
+        "Pay more if it improves quality and experience", 
+        "A smooth, elegant interior with premium textures, warm lighting, and details that feel intentionally crafted.", 
         "Near-Silence", // noise_level
         "near_silence"
       ];
 
-      if (quiz.answers["interior_feel"] === 2) luxuryCount++; // Smooth elegant
-      if (quiz.answers["car_expenses_preference"] === 2) luxuryCount++; // Pay more
+      if (quiz.answers["interior_feel"] === 2) luxuryCount++; 
+      if (quiz.answers["car_expenses_preference"] === 2) luxuryCount++; 
       if (quiz.answers["emotional_expectation"] === "status_achievement") luxuryCount++;
 
-      // Check string-based answers
       for (const val of Object.values(quiz.answers)) {
          if (typeof val === 'string' && luxuryKeys.includes(val)) luxuryCount++;
          if (Array.isArray(val) && val.some(v => luxuryKeys.includes(v))) luxuryCount++;
@@ -269,10 +250,9 @@ export default function Page() {
          filters.forceLuxury = true;
       }
 
-      // Match
       const matches = matchCars(validCars, prefs, filters);
 
-      // Deduplicate matches by Make to ensure variety (one car per brand)
+
       const uniqueMatches: ScoredCar[] = [];
       const seenMakes = new Set<string>();
 
@@ -402,7 +382,9 @@ export default function Page() {
       paddingTop: quiz.showGallery 
         ? (quiz.isMobile ? "30px" : "50px") 
         : (quiz.isMobile ? "calc(clamp(72px, 12vw, 140px) + 16px)" : "clamp(72px, 12vw, 140px)"),
-      paddingBottom: quiz.showGallery ? "calc(40px + env(safe-area-inset-bottom, 0px))" : "calc(100px + env(safe-area-inset-bottom, 0px))",
+      paddingBottom: quiz.showGallery 
+        ? "calc(40px + env(safe-area-inset-bottom, 0px))" 
+        : (quiz.isMobile ? "calc(160px + env(safe-area-inset-bottom, 0px))" : "60px"),
       height: "100dvh",
       overflowY: quiz.showGallery ? "auto" : "hidden",
     }}>
@@ -448,15 +430,15 @@ export default function Page() {
             <div style={{ maxHeight: "min(70vh, 680px)", overflow: "auto", paddingRight: 4 }}>
               {renderQuestion()}
             </div>
+
+            <QuizControls 
+              showFinal={quiz.showFinal}
+              showIntro={quiz.showIntro}
+              showHalfway={quiz.showHalfway}
+              handleNext={quiz.handleNext}
+              isNextDisabled={quiz.isNextDisabled}
+            />
           </div>
-          
-          <QuizControls 
-            showFinal={quiz.showFinal}
-            showIntro={quiz.showIntro}
-            showHalfway={quiz.showHalfway}
-            handleNext={quiz.handleNext}
-            isNextDisabled={quiz.isNextDisabled}
-          />
         </>
       )}
         
