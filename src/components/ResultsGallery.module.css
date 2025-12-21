@@ -1,60 +1,61 @@
 .section {
-  margin-block: 4rem;
+  margin-block: 1.5rem;
+  overflow: hidden;
+  max-width: 100vw; /* Prevent horizontal overflow */
 }
 
 .sectionFirst {
   margin-top: 0;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
+  overflow: hidden;
+  max-width: 100vw;
 }
 
-/* Defining vars here or globally, but since module, just use values or :global(:root) if needed. 
-     User provided vars:
-     --section-spacing-block: 10rem;
-     --container-slim-max-wdith: 50rem;
-     --container-max-wdith: 100rem;
-  */
-
 .wrapping {
-  padding-inline: 2rem; /* var(--wrapper-spacing) assumed 2rem based on previous context or standard */
+  padding-inline: 2rem;
   display: flex;
   justify-content: center;
+  width: 100%;
+  max-width: 100vw; /* Critical fix */
+  box-sizing: border-box;
+  overflow: hidden; /* Prevent overflow */
 }
 
 .container {
   margin-inline: auto;
-  max-width: 100rem; /* var(--container-max-wdith) */
+  max-width: 100rem;
   width: 100%;
+  box-sizing: border-box;
 }
 
 .containerSlim {
-  max-width: 50rem; /* var(--container-slim-max-wdith) */
-  margin-inline: auto; /* implied by behavior */
-  text-align: center; /* kept from previous to center text */
+  max-width: 50rem;
+  margin-inline: auto;
+  text-align: center;
 }
 
-/* Typography from previous context to keep "мой текст" styling */
 .title {
-  font-size: clamp(2rem, 5vw, 3rem);
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
   font-weight: 800;
-  margin-bottom: 1rem;
+  margin-bottom: 0.2rem;
   color: rgb(230, 214, 180);
 }
 
 .description {
-  font-size: 1.1rem;
-  line-height: 1.6;
+  font-size: 1rem;
+  line-height: 1.3;
   color: rgba(230, 214, 180, 0.8);
-  margin: 2em 0;
+  margin: 1em 0;
 }
 
 .button {
   display: inline-block;
   margin-top: 2rem;
-  padding: 1.2rem 2.5rem;
-  font-size: 1.1rem;
+  padding: 0.8rem 1.6rem;
+  font-size: 1rem;
   font-weight: 700;
-  color: var(--kendo-color-on-primary, white);
-  background-color: var(--kendo-color-primary, #c9472d);
+  color: white;
+  background-color: #c9472d;
   border: none;
   border-radius: 9999px;
   cursor: pointer;
@@ -68,107 +69,211 @@
   background-color: #d1492d;
 }
 
-.button:active {
-  transform: translateY(0);
-}
-
-/* Cover Flow styles from template */
-.coverFlow {
-  perspective: 100rem;
-  /* overflow: clip; - commented out in template */
-  padding: 4rem 0 4rem;
-  width: 100%;
+/* Gallery Styles */
+.galleryWrapper {
   display: flex;
-  justify-content: center;
-}
-
-.track {
-  transform-style: preserve-3d;
-  display: grid;
+  align-items: center;
+  gap: 1rem;
   width: 100%;
-  justify-items: center;
-  /* Template didn't specify grid rows/columns, but grid implies stacking if no rows defined or auto placement. 
-     In previous working version we used grid-template-rows. 
-     Template has `display: grid` only.
-     If I use `display: grid` with multiple children, they stack in rows.
-  */
-}
-
-.space {
-  transform-style: preserve-3d;
-  view-timeline-name: --name-space;
-  view-timeline-axis: block;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  /* Template doesn't have padding here, relying on default or spacing? 
-     Template snippet: &__space { ... } no margins/padding.
-  */
-}
-
-.cover {
-  margin: 0 auto;
-  display: block;
-  width: 31.25rem;
-  max-width: 80vw; /* Fixed typo 80wv -> 80vw */
-  aspect-ratio: 3/2; /* Added to maintain shape for images */
-  object-fit: cover;
-  
-  /* Animation */
-  animation: cover linear both;
-  animation-timeline: --name-space; /* Preferring the last one defined in snippet */
-  /* animation-range: contain 0% contain 100%; - commented out in template */
-  
-  transform-style: preserve-3d;
-  will-change: transform;
+  max-width: 100%;
   position: relative;
-  user-select: none;
-  border-radius: .5rem;
-  
-  /* Additional styles for card appearance */
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5); /* Kept for depth */
-  cursor: pointer;
+  box-sizing: border-box;
+  overflow: visible; /* Allow buttons to be visible */
 }
 
-/* Overlay for text on card - kept from previous */
+.galleryContainer {
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  display: flex;
+  gap: 1.5rem;
+  padding: 1rem; /* Increased padding to prevent cutoff */
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  /* Remove any margins that could cause overflow */
+  margin: 0;
+}
+
+.galleryContainer::-webkit-scrollbar {
+  display: none;
+}
+
+.navButton {
+  background: transparent;
+  border: 1px solid rgba(230, 214, 180, 0.2);
+  color: rgb(230, 214, 180);
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+.navButton:hover {
+  background: rgba(230, 214, 180, 0.1);
+  border-color: rgba(230, 214, 180, 0.6);
+  transform: scale(1.05);
+}
+
+.navButton:active {
+  transform: scale(0.95);
+}
+
+.navButton svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  stroke-width: 2;
+}
+
+.cardWrapper {
+  flex: 0 0 auto;
+  scroll-snap-align: center;
+  width: min(80vw, 600px); /* Better responsive sizing */
+  position: relative;
+  transition: transform 0.3s ease;
+  will-change: transform; /* Optimize animations */
+}
+
+.cardWrapper:hover {
+  transform: scale(1.02);
+}
+
+.cardLink {
+  display: block;
+  text-decoration: none;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  position: relative;
+  aspect-ratio: 16/10;
+  width: 100%;
+}
+
+.image {
+  transition: transform 0.5s ease;
+  will-change: transform;
+}
+
+.cardLink:hover .image {
+  transform: scale(1.05);
+}
+
 .overlay {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
   background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
-  padding: 20px;
+  padding: 2rem;
   color: white;
-  transform: translateZ(1px); /* Fix for text z-fighting */
+  z-index: 2;
 }
 
 .carName {
-  font-size: 1.25rem;
+  font-size: 1.75rem;
   font-weight: 700;
-  margin-bottom: 4px;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
 }
 
 .carDetails {
-  font-size: 0.9rem;
-  opacity: 0.8;
+  font-size: 1.1rem;
+  opacity: 0.9;
+  font-weight: 400;
 }
 
-@keyframes cover {
-  0% {
-    transform: translateY(-100%) rotateX(45deg);
+/* Empty State */
+.emptyState {
+  text-align: center;
+  padding: 3rem 0;
+  color: rgba(230, 214, 180, 0.7);
+  font-size: 1.1rem;
+  width: 100%;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .wrapping {
+    padding-inline: 1rem;
   }
-  35% {
-    transform: translateY(0) rotateX(45deg);
+  
+  .section {
+    margin-block: 1rem;
   }
-  50% {
-    box-shadow: 0 0 1rem .5rem rgba(0,0,0,0.5); /* #00000080 */
-    transform: rotateX(0deg) translateZ(14em) scale(1.2);
-    z-index: 10; /* Added z-index to ensure active card is on top */
+  
+  .galleryWrapper {
+    gap: 0;
+    overflow: visible; /* Ensure buttons are visible */
   }
-  65% {
-    transform: translateY(0) rotateX(-45deg);
+  
+  .navButton {
+    display: flex;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 20;
+    background: rgba(0, 0, 0, 0.6);
+    border-color: rgba(255, 255, 255, 0.9);
+    color: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    width: 3rem;
+    height: 3rem;
   }
-  100% {
-    transform: translateY(100%) rotateX(-45deg);
+
+  .navButton:first-of-type {
+    left: 0.5rem;
+  }
+  
+  .navButton:last-of-type {
+    right: 0.5rem;
+  }
+  
+  .galleryContainer {
+    padding: 0.25rem 0;
+    gap: 1rem;
+  }
+  
+  .cardWrapper {
+    width: min(85vw, 500px);
+  }
+  
+  .overlay {
+    padding: 1.25rem;
+  }
+  
+  .carName {
+    font-size: 1.4rem;
+  }
+  
+  .carDetails {
+    font-size: 0.95rem;
+  }
+}
+
+/* Extra small screens */
+@media (max-width: 480px) {
+  .wrapping {
+    padding-inline: 0.5rem;
+  }
+  
+  .cardWrapper {
+    width: 90vw;
+  }
+  
+  .navButton {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+  
+  .navButton svg {
+    width: 1.25rem;
+    height: 1.25rem;
   }
 }

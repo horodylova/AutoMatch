@@ -5,6 +5,15 @@ import formStyles from '../QuizForm.module.css';
 import styles from './TagQuestion.module.css';
 import { setQuestionAnswer } from '../../utils/storage';
 
+type CategoryRange = {
+  min: number;
+  max: number;
+  categories: {
+    primary: string;
+    secondary: string;
+  };
+};
+
 type Props = {
   questionId: string;
   title: string;
@@ -15,14 +24,26 @@ type Props = {
   value?: number | null;
   onChange?: (value: number) => void;
   labels?: [string, string, string];
+  categoryRanges?: CategoryRange[];
 };
 
-export default function SliderQuestion({ questionId, title, tip, min = 0, max = 100, step = 1, value = null, onChange, labels }: Props) {
+export default function SliderQuestion({ questionId, title, tip, min = 0, max = 100, step = 1, value = null, onChange, labels, categoryRanges }: Props) {
   const [val, setVal] = useState<number | null>(value);
   const handle = (v: number) => {
     setVal(v);
     onChange?.(v);
-    setQuestionAnswer(questionId, { value: v, min, max });
+    
+    const answerData: { value: number; min: number; max: number; categories?: { primary: string; secondary: string } } = { value: v, min, max };
+    
+    if (categoryRanges) {
+      const selectedRange = categoryRanges.find(r => v >= r.min && v <= r.max);
+      
+      if (selectedRange) {
+        answerData.categories = selectedRange.categories;
+      }
+    }
+    
+    setQuestionAnswer(questionId, answerData);
   };
   return (
     <div className={formStyles.frame}>

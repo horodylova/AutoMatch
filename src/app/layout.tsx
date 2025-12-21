@@ -47,11 +47,32 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body style={{ backgroundColor: "var(--kendo-color-app-surface)", color: "var(--kendo-color-on-app-surface)", fontFamily: "var(--kendo-font-family)", display: "flex", flexDirection: "column", minHeight: "100vh" }}>
+      <body style={{ 
+        backgroundColor: "var(--kendo-color-app-surface)", 
+        color: "var(--kendo-color-on-app-surface)", 
+        fontFamily: "var(--kendo-font-family)", 
+        position: "fixed",
+        inset: 0,
+        width: "100%",
+        height: "100%",
+        overflow: "hidden",
+        display: "flex", 
+        flexDirection: "column" 
+      }}>
         <StyledComponentsRegistry>
-          <HeaderVisibility />
-          <main style={{ flex: 1 }}>{children}</main>
-          <Footer />
+          <div style={{ 
+            flex: 1, 
+            display: "flex", 
+            flexDirection: "column", 
+            overflowY: "auto", 
+            overflowX: "hidden",
+            WebkitOverflowScrolling: "touch",
+            height: "100%"
+          }}>
+            <HeaderVisibility />
+            <main style={{ flex: "1 0 auto" }}>{children}</main>
+            <Footer />
+          </div>
         </StyledComponentsRegistry>
       </body>
     </html>

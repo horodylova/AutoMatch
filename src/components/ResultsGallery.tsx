@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import styles from './ResultsGallery.module.css';
 
 export interface CarResult {
@@ -17,45 +18,21 @@ interface ResultsGalleryProps {
   onSaveProgress?: () => void;
 }
 
-const MOCK_RESULTS: CarResult[] = [
-  {
-    id: '1',
-    image: '/photos-cars/mateusz-suski-D4UZJJbRjP4-unsplash.jpg',
-    make: 'Porsche',
-    model: '911 Carrera',
-    year: '2024'
-  },
-  {
-    id: '2',
-    image: '/photos-cars/mateusz-suski-D4UZJJbRjP4-unsplash.jpg',
-    make: 'Tesla',
-    model: 'Model S Plaid',
-    year: '2024'
-  },
-  {
-    id: '3',
-    image: '/photos-cars/mateusz-suski-D4UZJJbRjP4-unsplash.jpg',
-    make: 'Mercedes-Benz',
-    model: 'S-Class',
-    year: '2023'
-  },
-  {
-    id: '4',
-    image: '/photos-cars/mateusz-suski-D4UZJJbRjP4-unsplash.jpg',
-    make: 'BMW',
-    model: 'M4 Competition',
-    year: '2024'
-  },
-  {
-    id: '5',
-    image: '/photos-cars/mateusz-suski-D4UZJJbRjP4-unsplash.jpg',
-    make: 'Audi',
-    model: 'RS e-tron GT',
-    year: '2024'
-  }
-];
+export default function ResultsGallery({ results = [], onSaveProgress }: ResultsGalleryProps) {
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-export default function ResultsGallery({ results = MOCK_RESULTS, onSaveProgress }: ResultsGalleryProps) {
+  const scroll = (direction: 'left' | 'right') => {
+    if (scrollContainerRef.current) {
+      const { current } = scrollContainerRef;
+      // Scroll by roughly one card width + gap
+      const scrollAmount = Math.min(window.innerWidth * 0.8, 600) + 32;
+      current.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth'
+      });
+    }
+  };
+
   return (
     <>
       <div className={styles.sectionFirst}>
@@ -64,7 +41,7 @@ export default function ResultsGallery({ results = MOCK_RESULTS, onSaveProgress 
             <div>
               <h1 className={styles.title}>Your Matches Are Ready</h1>
               <p className={styles.description}>
-                We found cars that match your lifestyle. Scroll to explore your matches and tap for details.
+                We found cars that match your lifestyle. Browse your matches and tap for details.
               </p>
             </div>
           </div>
@@ -73,18 +50,32 @@ export default function ResultsGallery({ results = MOCK_RESULTS, onSaveProgress 
 
       <div className={styles.section}>
         <div className={styles.wrapping}>
-          <div className={`${styles.container} ${styles.containerSlim}`}>
-            <div className={styles.coverFlow}>
-              <div className={styles.track}>
+          {results.length === 0 ? (
+            <div className={styles.emptyState}>
+              <p>No cars found with images. Please check your data source.</p>
+            </div>
+          ) : (
+            <div className={styles.galleryWrapper}>
+              <button 
+                className={styles.navButton} 
+                onClick={() => scroll('left')}
+                aria-label="Scroll left"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                </svg>
+              </button>
+
+              <div className={styles.galleryContainer} ref={scrollContainerRef}>
                 {results.map((car, index) => (
-                  <div key={car.id} className={styles.space}>
-                    <div className={styles.cover}>
+                  <div key={car.id} className={styles.cardWrapper}>
+                    <Link href={`/cars/${car.id}`} target="_blank" rel="noopener noreferrer" className={styles.cardLink}>
                       <Image 
                         src={car.image} 
                         alt={`${car.make} ${car.model}`} 
                         fill
-                        sizes="(max-width: 768px) 90vw, 600px"
-                        className={styles.image} // We need to ensure image styling is correct within .cover
+                        sizes="(max-width: 768px) 80vw, 600px"
+                        className={styles.image}
                         style={{ objectFit: 'cover' }}
                         priority={index < 2}
                       />
@@ -92,12 +83,22 @@ export default function ResultsGallery({ results = MOCK_RESULTS, onSaveProgress 
                         <div className={styles.carName}>{car.make}</div>
                         <div className={styles.carDetails}>{car.model} • {car.year}</div>
                       </div>
-                    </div>
+                    </Link>
                   </div>
                 ))}
               </div>
+
+              <button 
+                className={styles.navButton} 
+                onClick={() => scroll('right')}
+                aria-label="Scroll right"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                </svg>
+              </button>
             </div>
-          </div>
+          )}
         </div>
       </div>
 

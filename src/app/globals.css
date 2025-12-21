@@ -6,7 +6,9 @@ html, body {
   background-color: var(--kendo-color-app-surface);
   color: var(--kendo-color-on-app-surface);
   font-family: var(--kendo-font-family);
-  min-height: 100vh;
+  height: 100%;
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: touch;
 }
 
 body {

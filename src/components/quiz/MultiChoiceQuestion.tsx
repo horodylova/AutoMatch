@@ -4,11 +4,19 @@ import formStyles from '../QuizForm.module.css';
 import headStyles from './TagQuestion.module.css';
 import { setQuestionAnswer } from '../../utils/storage';
 
+type OptionObj = {
+  label: string;
+  categories?: {
+    primary: string;
+    secondary: string;
+  };
+};
+
 type Props = {
   questionId: string;
   title: string;
   tip?: string;
-  options: string[];
+  options: (string | OptionObj)[];
   selected?: number[];
   minSelect?: number;
   maxSelect?: number;
@@ -21,8 +29,29 @@ export default function MultiChoiceQuestion({ questionId, title, tip, options, s
   const setAnswer = (arr: number[]) => {
     setSel(arr);
     onChange?.(arr);
-    const titles = arr.map(i => options[i]);
-    setQuestionAnswer(questionId, { indexes: arr, titles, min: minSelect, max: maxSelect });
+    
+    const titles: string[] = [];
+    const categories: Record<number, { primary: string; secondary: string }> = {};
+
+    arr.forEach(i => {
+      const opt = options[i];
+      if (typeof opt === 'string') {
+        titles.push(opt);
+      } else {
+        titles.push(opt.label);
+        if (opt.categories) {
+          categories[i] = opt.categories;
+        }
+      }
+    });
+
+    setQuestionAnswer(questionId, { 
+      indexes: arr, 
+      titles, 
+      categories,
+      min: minSelect, 
+      max: maxSelect 
+    });
   };
   const toggle = (i: number) => {
     const has = sel.includes(i);
@@ -51,10 +80,11 @@ export default function MultiChoiceQuestion({ questionId, title, tip, options, s
         <div className={formStyles.answers}>
           {options.map((a, i) => {
             const active = sel.includes(i);
+            const label = typeof a === 'string' ? a : a.label;
             return (
               <button key={i} className={active ? formStyles.answerActive : formStyles.answer} onClick={() => toggle(i)}>
                 <span className={formStyles.dot} />
-                <span className={formStyles.answerText}>{a}</span>
+                <span className={formStyles.answerText}>{label}</span>
               </button>
             );
           })}

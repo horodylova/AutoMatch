@@ -6,7 +6,16 @@ import introStyles from './QuizIntro.module.css';
 import tipStyles from './PhotoQuestion.module.css';
 import { setQuestionAnswer } from '../../utils/storage';
 
-type Option = { key: string; title: string; src: string };
+type Option = { 
+  key: string; 
+  title: string; 
+  src: string;
+  categories?: {
+    primary: string;
+    secondary: string;
+  };
+};
+
 type Props = {
   questionId: string;
   title: string;
@@ -33,7 +42,14 @@ export default function PhotoQuestion({ questionId, title, tip, options, selecte
           {options.map(opt => {
             const active = selectedKey === opt.key;
             return (
-            <button key={opt.key} className={active ? styles.cardActive : styles.card} onClick={() => { onSelect?.(opt.key); setQuestionAnswer(questionId, { key: opt.key, title: opt.title }); }}>
+            <button key={opt.key} className={active ? styles.cardActive : styles.card} onClick={() => { 
+              onSelect?.(opt.key); 
+              setQuestionAnswer(questionId, { 
+                key: opt.key, 
+                title: opt.title,
+                categories: opt.categories
+              }); 
+            }}>
               <Image src={opt.src} alt={opt.title} fill sizes="(max-width: 768px) 50vw, 33vw" className={styles.img} style={{ objectFit: 'cover' }} />
               <div className={styles.labelBar}>
                 <div className={styles.labelTitle}>{opt.title}</div>

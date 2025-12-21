@@ -1,16 +1,27 @@
  'use client';
- import formStyles from '../QuizForm.module.css';
+import Image from 'next/image';
+import formStyles from '../QuizForm.module.css';
  import headStyles from './TagQuestion.module.css';
  import styles from './IconChoiceQuestion.module.css';
  import { setQuestionAnswer } from '../../utils/storage';
  
- type Option = { key: string; title: string; desc: string; icon: string };
- type Props = {
-   questionId: string;
-   title: string;
-   tip?: string;
-   options: Option[];
-   selectedIndex?: number | null;
+ type Option = { 
+  key: string; 
+  title: string; 
+  desc: string; 
+  icon: string;
+  categories?: {
+    primary: string;
+    secondary: string;
+  };
+};
+
+type Props = {
+  questionId: string;
+  title: string;
+  tip?: string;
+  options: Option[];
+  selectedIndex?: number | null;
   onSelect?: (index: number) => void;
 };
 
@@ -18,7 +29,12 @@ export default function IconChoiceQuestion({ questionId, title, tip, options, se
   const handleSelect = (i: number) => {
     onSelect?.(i);
     const opt = options[i];
-    setQuestionAnswer(questionId, { index: i, key: opt.key, title: opt.title });
+    setQuestionAnswer(questionId, { 
+      index: i, 
+      key: opt.key, 
+      title: opt.title,
+      categories: opt.categories 
+    });
   };
   return (
     <div className={formStyles.frame}>
@@ -38,8 +54,14 @@ export default function IconChoiceQuestion({ questionId, title, tip, options, se
           return (
              <button key={opt.key} className={active ? styles.cardActive : styles.card} onClick={() => handleSelect(i)}>
                <div className={`${styles.check} ${active ? styles.checkOn : ''}`} />
-               <img src={opt.icon} alt={opt.title} className={styles.icon} />
-               <div className={styles.title}>{opt.title}</div>
+              <Image 
+                src={opt.icon} 
+                alt={opt.title} 
+                className={styles.icon} 
+                width={58} 
+                height={58} 
+              />
+              <div className={styles.title}>{opt.title}</div>
                <div className={styles.desc}>{opt.desc}</div>
              </button>
            );

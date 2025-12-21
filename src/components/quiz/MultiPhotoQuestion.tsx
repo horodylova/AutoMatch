@@ -6,7 +6,16 @@ import introStyles from './QuizIntro.module.css';
 import tipStyles from './PhotoQuestion.module.css';
 import { setQuestionAnswer } from '../../utils/storage';
 
-type Option = { key: string; title: string; src: string };
+type Option = { 
+  key: string; 
+  title: string; 
+  src: string;
+  categories?: {
+    primary: string;
+    secondary: string;
+  };
+};
+
 type Props = {
   questionId: string;
   title: string;
@@ -27,8 +36,14 @@ export default function MultiPhotoQuestion({ questionId, title, tip, options, se
     }
     onChange(newKeys);
     
-    // Store full objects for the selected keys
-    const selectedOptions = options.filter(o => newKeys.includes(o.key)).map(o => ({ key: o.key, title: o.title }));
+    // Store full objects for the selected keys with categories
+    const selectedOptions = options
+      .filter(o => newKeys.includes(o.key))
+      .map(o => ({ 
+        key: o.key, 
+        title: o.title,
+        categories: o.categories 
+      }));
     setQuestionAnswer(questionId, selectedOptions);
   };
 

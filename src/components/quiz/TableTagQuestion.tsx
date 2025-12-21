@@ -2,11 +2,21 @@
 import styles from './TableTagQuestion.module.css';
 import { setQuestionAnswer } from '../../utils/storage';
 
+type TagOptionObj = {
+  label: string;
+  categories?: {
+    primary: string;
+    secondary: string;
+  };
+};
+
+type TagOption = string | TagOptionObj;
+
 type Props = {
   questionId: string;
   title: string;
   tip?: string;
-  tags: string[];
+  tags: TagOption[];
   minSelect?: number;
   maxSelect?: number;
   selected?: string[];
@@ -16,18 +26,31 @@ type Props = {
 export default function TableTagQuestion({ questionId, title, tip, tags, minSelect = 2, maxSelect = 5, selected = [], onChange }: Props) {
   const sel = new Set(selected);
   
-  function toggle(tag: string) {
+  function toggle(tagLabel: string) {
     const next = new Set(sel);
-    if (next.has(tag)) {
-      next.delete(tag);
+    if (next.has(tagLabel)) {
+      next.delete(tagLabel);
     } else {
       if (next.size < maxSelect) {
-        next.add(tag);
+        next.add(tagLabel);
       }
     }
     const arr = Array.from(next);
     onChange?.(arr);
-    setQuestionAnswer(questionId, { tags: arr, min: minSelect, max: maxSelect });
+    
+    // Save full details including categories
+    const selectedTagsDetails = arr.map(label => {
+      const tagObj = tags.find(t => (typeof t === 'string' ? t : t.label) === label);
+      if (typeof tagObj === 'string') return { label: tagObj };
+      return tagObj; // This includes categories if present
+    });
+
+    setQuestionAnswer(questionId, { 
+      tags: arr, 
+      details: selectedTagsDetails,
+      min: minSelect, 
+      max: maxSelect 
+    });
   }
 
   return (
@@ -44,15 +67,18 @@ export default function TableTagQuestion({ questionId, title, tip, tags, minSele
         </div>
         
         <div className={styles.tableGrid}>
-          {tags.map(t => (
-            <div 
-              key={t} 
-              className={`${styles.cell} ${sel.has(t) ? styles.cellActive : ''}`}
-              onClick={() => toggle(t)}
-            >
-              <span className={styles.cellText}>{t}</span>
-            </div>
-          ))}
+          {tags.map(t => {
+            const label = typeof t === 'string' ? t : t.label;
+            return (
+              <div 
+                key={label} 
+                className={`${styles.cell} ${sel.has(label) ? styles.cellActive : ''}`}
+                onClick={() => toggle(label)}
+              >
+                <span className={styles.cellText}>{label}</span>
+              </div>
+            );
+          })}
         </div>
 
         <div className={styles.counter}>
