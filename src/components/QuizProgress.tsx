@@ -84,28 +84,27 @@ export default function QuizProgress({ current, total, showIntro = false, showHa
           <div className={styles.introHead}>
             <div className={styles.introTitle}>Your Matches Are Ready</div>
           </div>
-          <div className={styles.introContent} style={{ alignItems: 'start' }}>
-            <div className={styles.introMedia} style={{ aspectRatio: '1/1' }}>
+          <div className={styles.introContent} style={{ alignItems: 'start', gap: isMobile ? 16 : 18 }}>
+            <div className={styles.introMedia} style={{ aspectRatio: isMobile ? '16/9' : '1/1', maxHeight: isMobile ? '200px' : 'none' }}>
               <Image src="/final.jpg" alt="Final Results" fill sizes="(max-width: 768px) 100vw, 50vw" className={styles.introImg} style={{ objectFit: 'cover' }} />
             </div>
             <div className={styles.introList}>
-              <div className={styles.introItem}>
-                <span className={styles.introText} style={{ fontSize: 18, lineHeight: 1.5 }}>
+              <div className={styles.introItem} style={{ marginBottom: isMobile ? 16 : 32, padding: isMobile ? '12px 16px' : undefined }}>
+                <span className={styles.introText} style={{ fontSize: isMobile ? 15 : 18, lineHeight: 1.5 }}>
                   {isMobile 
-                    ? "We've analyzed your answers and found the cars that fit your vision."
+                    ? "We found cars that fit your vision. Chosen specifically for you."
                     : "We've analyzed your answers and found the cars that fit your vision. Some might surprise you. Some will feel exactly right."
                   }
                 </span>
               </div>
-              <div className={styles.introItem} style={{ marginBottom: 32 }}>
-                <span className={styles.introText} style={{ fontSize: 18, lineHeight: 1.5 }}>
-                  {isMobile
-                    ? "Your results aren't generic matches; they're vehicles chosen specifically for you."
-                    : "We're connecting the dots between your answers — balancing what excites you, what you need daily, and what feels right. Your results aren't generic matches; they're vehicles chosen specifically for you, ranked by how well they fit your unique profile."
-                  }
-                </span>
-              </div>
-              <button className={styles.introNext} onClick={() => {
+              {!isMobile && (
+                <div className={styles.introItem} style={{ marginBottom: 32 }}>
+                  <span className={styles.introText} style={{ fontSize: 18, lineHeight: 1.5 }}>
+                    We&apos;re connecting the dots between your answers — balancing what excites you, what you need daily, and what feels right. Your results aren&apos;t generic matches; they&apos;re vehicles chosen specifically for you, ranked by how well they fit your unique profile.
+                  </span>
+                </div>
+              )}
+              <button className={styles.introNext} style={{ width: '100%', marginTop: isMobile ? 0 : undefined }} onClick={() => {
                 if (onShowResults) onShowResults();
               }}>
                 See My Results
@@ -175,12 +174,22 @@ export default function QuizProgress({ current, total, showIntro = false, showHa
               <Image src={introImageSrc || "/before-you-begin.jpg"} alt="intro" fill sizes="(max-width: 768px) 100vw, 50vw" className={styles.introImg} style={{ objectFit: 'cover' }} />
             </div>
             <div className={styles.introList}>
-              <div className={styles.introItem}><span className={styles.introDot} /><span className={styles.introText}>The CarCupid Match Quiz contains 25+ thoughtful questions and usually takes about 8 minutes to complete.</span></div>
-              <div className={styles.introItem}><span className={styles.introDot} /><span className={styles.introText}>This isn’t a test — it’s a game.</span></div>
-              <div className={styles.introItem}><span className={styles.introDot} /><span className={styles.introText}>Follow your first instinct. There are no right or wrong answers; just choose what feels true in the moment.</span></div>
-              <div className={styles.introItem}><span className={styles.introDot} /><span className={styles.introText}>You can pause at any time.</span></div>
-              <div className={styles.introItem}><span className={styles.introDot} /><span className={styles.introText}>Your progress will be saved for 24 hours, so you can return and continue whenever you’re ready.</span></div>
-              <div className={styles.introItem}><span className={styles.introDot} /><span className={styles.introText}>At the end, you’ll receive personalized match results you can share or email.</span></div>
+              {isMobile ? (
+                <>
+                  <div className={styles.introItem}><span className={styles.introDot} /><span className={styles.introText}>25+ questions. Takes about 8 minutes.</span></div>
+                  <div className={styles.introItem}><span className={styles.introDot} /><span className={styles.introText}>Follow your first instinct. No wrong answers.</span></div>
+                  <div className={styles.introItem}><span className={styles.introDot} /><span className={styles.introText}>Pause anytime. Progress is saved.</span></div>
+                </>
+              ) : (
+                <>
+                  <div className={styles.introItem}><span className={styles.introDot} /><span className={styles.introText}>The CarCupid Match Quiz contains 25+ thoughtful questions and usually takes about 8 minutes to complete.</span></div>
+                  <div className={styles.introItem}><span className={styles.introDot} /><span className={styles.introText}>This isn’t a test — it’s a game.</span></div>
+                  <div className={styles.introItem}><span className={styles.introDot} /><span className={styles.introText}>Follow your first instinct. There are no right or wrong answers; just choose what feels true in the moment.</span></div>
+                  <div className={styles.introItem}><span className={styles.introDot} /><span className={styles.introText}>You can pause at any time.</span></div>
+                  <div className={styles.introItem}><span className={styles.introDot} /><span className={styles.introText}>Your progress will be saved for 24 hours, so you can return and continue whenever you’re ready.</span></div>
+                  <div className={styles.introItem}><span className={styles.introDot} /><span className={styles.introText}>At the end, you’ll receive personalized match results you can share or email.</span></div>
+                </>
+              )}
             </div>
           </div>
           

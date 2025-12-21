@@ -7,13 +7,14 @@ interface QuizControlsProps {
   showHalfway: boolean;
   handleNext: () => void;
   isNextDisabled: () => boolean;
+  forceStatic?: boolean;
 }
 
-export default function QuizControls({ showFinal, showIntro, showHalfway, handleNext, isNextDisabled }: QuizControlsProps) {
+export default function QuizControls({ showFinal, showIntro, showHalfway, handleNext, isNextDisabled, forceStatic }: QuizControlsProps) {
   if (showFinal) return null;
 
   return (
-    <div className={formStyles.floatingBar}>
+    <div className={`${formStyles.floatingBar} ${(showIntro || forceStatic) ? formStyles.introBar : ''}`}>
       <div className={formStyles.barInner}>
         <button
           className={formStyles.next}

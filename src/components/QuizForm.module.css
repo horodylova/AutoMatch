@@ -22,7 +22,28 @@
 @media (max-width: 768px) {
   .card { padding: 16px; }
   .question { font-size: clamp(22px, 6vw, 30px); }
+  .answerText { font-size: 14px; }
   .answer, .answerActive { padding: 10px 14px; }
+
+  .introBar {
+    position: static;
+    margin-top: 24px;
+    padding: 0;
+    pointer-events: auto;
+    background: none;
+    border: none;
+    width: 100%;
+  }
+  .introBar .barInner {
+    padding: 0;
+    justify-content: center;
+    max-width: none;
+  }
+  .introBar .next {
+    width: 100%;
+    max-width: 400px;
+    justify-content: center;
+  }
 }
 
 @media (min-width: 769px) {

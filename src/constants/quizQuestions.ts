@@ -52,6 +52,7 @@ export interface PhotoQuestionData extends BaseQuestion {
 
 export interface ChoiceOptionObj {
   label: string;
+  mobileLabel?: string;
   categories?: {
     primary: CategoryValue;
     secondary: CategoryValue;
@@ -1151,6 +1152,7 @@ export const QUIZ_QUESTIONS: QuizQuestionData[] = [
     options: [
       {
         label: "A clean, calming environment with uncluttered design and soft silence — a space that helps you breathe and think clearly.",
+        mobileLabel: "Clean, calming, uncluttered design, soft silence.",
         categories: {
           primary: Categories.COMFORT,
           secondary: Categories.RELIABILITY,
@@ -1158,6 +1160,7 @@ export const QUIZ_QUESTIONS: QuizQuestionData[] = [
       },
       {
         label: "A tight, energetic cabin that sharpens your senses and puts you in command of every moment on the road.",
+        mobileLabel: "Tight, energetic cabin, puts you in command.",
         categories: {
           primary: Categories.PERFORMANCE,
           secondary: Categories.COMFORT,
@@ -1165,6 +1168,7 @@ export const QUIZ_QUESTIONS: QuizQuestionData[] = [
       },
       {
         label: "A smooth, elegant interior with premium textures, warm lighting, and details that feel intentionally crafted.",
+        mobileLabel: "Smooth, elegant, premium textures, warm lighting.",
         categories: {
           primary: Categories.LUXURY,
           secondary: Categories.COMFORT,
@@ -1172,6 +1176,7 @@ export const QUIZ_QUESTIONS: QuizQuestionData[] = [
       },
       {
         label: "A warm, intuitive space designed for comfort, connection, and the realities of everyday life.",
+        mobileLabel: "Warm, intuitive, comfortable, everyday practical.",
         categories: {
           primary: Categories.COMFORT,
           secondary: Categories.PRACTICALITY,
@@ -1179,6 +1184,7 @@ export const QUIZ_QUESTIONS: QuizQuestionData[] = [
       },
       {
         label: "A modern, innovative cockpit filled with smart features, intuitive screens, and a sense of effortless progress.",
+        mobileLabel: "Modern, innovative cockpit, smart features.",
         categories: {
           primary: Categories.TECHNOLOGY,
           secondary: Categories.LUXURY,
@@ -1186,6 +1192,7 @@ export const QUIZ_QUESTIONS: QuizQuestionData[] = [
       },
       {
         label: "A strong, practical environment built to handle gear, weather, and daily tasks without hesitation.",
+        mobileLabel: "Strong, practical, built for gear and daily tasks.",
         categories: {
           primary: Categories.PRACTICALITY,
           secondary: Categories.ADVENTURE,

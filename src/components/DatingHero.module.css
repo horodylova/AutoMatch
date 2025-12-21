@@ -32,6 +32,8 @@
 .featureTitle { margin: 0 0 8px 0; font-size: clamp(18px, 2.6vw, 22px); font-weight: 700; color: var(--kendo-color-on-app-surface); }
 .featureDesc { margin: 0; font-size: clamp(14px, 2.2vw, 16px); color: rgba(230,214,180,0.85); line-height: 1.6; }
 
+.featureHeader { display: block; }
+
 .ctaRow { display: none; }
 
 @media (max-width: 992px) {
@@ -41,6 +43,20 @@
   .slide { height: clamp(300px, 52vh, 480px); }
   .introBox { max-width: 560px; top: 76%; }
   .features { grid-template-columns: 1fr; }
+  
+  .featureHeader {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 12px;
+  }
+  .featureIcon {
+    margin-bottom: 0;
+    flex-shrink: 0;
+  }
+  .featureTitle {
+    margin-bottom: 0;
+  }
 }
 
 @keyframes glowPulse { 0% { transform: scale(0.98); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }

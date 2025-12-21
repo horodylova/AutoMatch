@@ -310,7 +310,8 @@ export default function Page() {
             {...question}
             questionId={question.id}
             selectedIndex={value as number} 
-            onSelect={(val) => quiz.setAnswer(question.id, val)} 
+            onSelect={(val) => quiz.setAnswer(question.id, val)}
+            isMobile={quiz.isMobile}
           />
         );
 

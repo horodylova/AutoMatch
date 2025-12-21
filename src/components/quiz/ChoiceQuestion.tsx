@@ -6,6 +6,7 @@ import { setQuestionAnswer } from '../../utils/storage';
 
 type OptionObj = {
   label: string;
+  mobileLabel?: string;
   categories?: {
     primary: string;
     secondary: string;
@@ -20,9 +21,10 @@ type Props = {
   selectedIndex?: number | null;
   onSelect?: (index: number) => void;
   showActions?: boolean;
+  isMobile?: boolean;
 };
 
-export default function ChoiceQuestion({ questionId, title, tip, options, selectedIndex = null, onSelect, showActions = false }: Props) {
+export default function ChoiceQuestion({ questionId, title, tip, options, selectedIndex = null, onSelect, showActions = false, isMobile = false }: Props) {
   const [selected, setSelected] = useState<number | null>(selectedIndex);
   const handleSelect = (i: number) => {
     setSelected(i);
@@ -53,7 +55,7 @@ export default function ChoiceQuestion({ questionId, title, tip, options, select
         </div>
         <div className={formStyles.answers}>
           {options.map((a, i) => {
-            const label = typeof a === 'string' ? a : a.label;
+            const label = typeof a === 'string' ? a : ((isMobile && a.mobileLabel) ? a.mobileLabel : a.label);
             return (
               <button key={i} className={selected === i ? formStyles.answerActive : formStyles.answer} onClick={() => handleSelect(i)}>
                 <span className={formStyles.dot} />
