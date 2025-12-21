@@ -15,6 +15,7 @@ import ResultsGallery from "../../components/ResultsGallery";
 import { useQuiz } from "../../hooks/useQuiz";
 import ExitModal from "../../components/quiz/modals/ExitModal";
 import ResumeModal from "../../components/quiz/modals/ResumeModal";
+import FeedbackModal from "../../components/quiz/modals/FeedbackModal";
 import QuizControls from "../../components/quiz/QuizControls";
 import QuizHeader from "../../components/quiz/QuizHeader";
 import { QUIZ_QUESTIONS } from "../../constants/quizQuestions";
@@ -25,6 +26,7 @@ import { fetchDataset } from "../../lib/dataset";
 export default function Page() {
   const quiz = useQuiz();
   const [exitDestination, setExitDestination] = useState("/");
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   
   const [rows, setRows] = useState<Row[]>([]);
   const [idx, setIdx] = useState<Record<string, number>>({});
@@ -393,7 +395,21 @@ export default function Page() {
       <QuizHeader onExit={() => { setExitDestination("/"); quiz.setShowExitModal(true); }} />
 
       {quiz.showExitModal && (
-        <ExitModal onCancel={() => quiz.setShowExitModal(false)} destination={exitDestination} />
+        <ExitModal 
+          onCancel={() => quiz.setShowExitModal(false)} 
+          destination={exitDestination} 
+          onConfirm={quiz.showGallery ? () => {
+            quiz.setShowExitModal(false);
+            setShowFeedbackModal(true);
+          } : undefined}
+        />
+      )}
+
+      {showFeedbackModal && (
+        <FeedbackModal 
+          onClose={() => setShowFeedbackModal(false)} 
+          destination={exitDestination} 
+        />
       )}
 
       {quiz.showResumeModal && (
