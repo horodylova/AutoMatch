@@ -1,0 +1,222 @@
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 80px 24px;
+  font-family: var(--kendo-font-family, sans-serif);
+  color: var(--kendo-color-on-app-surface);
+}
+
+.articleHeader {
+  text-align: center;
+  margin-bottom: 4rem;
+  border-bottom: 1px solid var(--kendo-color-border);
+  padding-bottom: 2rem;
+}
+
+.title {
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  line-height: 1.1;
+  background: linear-gradient(135deg, var(--kendo-color-on-app-surface) 0%, #fff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+  font-size: 1.5rem;
+  color: var(--kendo-color-subtle);
+  font-weight: 300;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.intro {
+  font-size: 1.25rem;
+  line-height: 1.8;
+  margin-bottom: 4rem;
+  font-weight: 300;
+}
+
+.highlightBox {
+  background: rgba(230, 214, 180, 0.05);
+  border-left: 4px solid var(--kendo-color-primary);
+  padding: 2rem;
+  margin: 2rem 0;
+  border-radius: 0 12px 12px 0;
+}
+
+.quote {
+  font-size: 1.2rem;
+  font-style: italic;
+  margin-bottom: 1rem;
+  color: var(--kendo-color-on-app-surface);
+  opacity: 0.9;
+}
+
+.quote:last-child {
+  margin-bottom: 0;
+}
+
+.section {
+  margin-bottom: 5rem;
+}
+
+.sectionTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: var(--kendo-color-on-app-surface);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.stepNumber {
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--kendo-color-primary);
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.text {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+  color: rgba(230, 214, 180, 0.9);
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.listItem {
+  background: rgba(255, 255, 255, 0.03);
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--kendo-color-border);
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  transition: transform 0.2s ease;
+}
+
+.listItem:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.bulletList {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+}
+
+.bulletItem {
+  margin-bottom: 0.75rem;
+  padding-left: 1.5rem;
+  position: relative;
+  font-size: 1.1rem;
+  color: rgba(230, 214, 180, 0.9);
+}
+
+.bulletItem::before {
+  content: "→";
+  color: var(--kendo-color-primary);
+  position: absolute;
+  left: 0;
+  font-weight: bold;
+}
+
+.imagePlaceholder {
+  width: 100%;
+  height: 300px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
+  border: 1px dashed var(--kendo-color-border);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--kendo-color-subtle);
+  margin: 2.5rem 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.placeholderText {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.modesContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.modeCard {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--kendo-color-border);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.modeTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--kendo-color-primary);
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--kendo-color-border);
+  padding-bottom: 0.5rem;
+}
+
+.modeSub {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  color: var(--kendo-color-subtle);
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.conclusion {
+  background: linear-gradient(135deg, rgba(201, 71, 45, 0.1) 0%, transparent 100%);
+  border: 1px solid var(--kendo-color-primary);
+  border-radius: 16px;
+  padding: 3rem;
+  text-align: center;
+  margin-top: 6rem;
+}
+
+.conclusionTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: #fff;
+}
+
+.conclusionText {
+  font-size: 1.2rem;
+  max-width: 600px;
+  margin: 0 auto 2rem;
+  color: rgba(230, 214, 180, 0.9);
+}
+
+.finalNote {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--kendo-color-primary);
+  font-style: italic;
+}

@@ -2,7 +2,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Image from 'next/image';
 import styles from './QuizProgress.module.css';
-import formStyles from './QuizForm.module.css';
+
 
 type Props = { current: number; total: number; showIntro?: boolean; showHalfway?: boolean; showFinal?: boolean; introImageSrc?: string; onShowResults?: () => void };
 
@@ -169,7 +169,7 @@ export default function QuizProgress({ current, total, showIntro = false, showHa
               <Image src={introImageSrc || "/before-you-begin.jpg"} alt="intro" fill sizes="(max-width: 768px) 100vw, 50vw" className={styles.introImg} style={{ objectFit: 'cover' }} />
             </div>
             <div className={styles.introList}>
-              <div className={styles.introItem}><span className={styles.introDot} /><span className={styles.introText}>The CarCupid Match Quiz contains 30+ thoughtful questions and usually takes about 10 minutes to complete.</span></div>
+              <div className={styles.introItem}><span className={styles.introDot} /><span className={styles.introText}>The CarCupid Match Quiz contains 25+ thoughtful questions and usually takes about 8 minutes to complete.</span></div>
               <div className={styles.introItem}><span className={styles.introDot} /><span className={styles.introText}>This isn’t a test — it’s a game.</span></div>
               <div className={styles.introItem}><span className={styles.introDot} /><span className={styles.introText}>Follow your first instinct. There are no right or wrong answers; just choose what feels true in the moment.</span></div>
               <div className={styles.introItem}><span className={styles.introDot} /><span className={styles.introText}>You can pause at any time.</span></div>

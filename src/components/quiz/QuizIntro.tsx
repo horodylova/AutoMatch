@@ -16,7 +16,7 @@ export default function QuizIntro({ onNext, imageSrc }: Props) {
           <Image src={imageSrc || '/images/quiz-intro.jpg'} alt="intro" fill sizes="(max-width: 768px) 100vw, 50vw" className={styles.mediaImg} style={{ objectFit: 'cover' }} />
         </div>
         <div className={styles.list}>
-          <div className={styles.item}><span className={styles.dot} /><span className={styles.itemText}>CarCupid contains 30+ thoughtful questions and usually takes about 10 minutes to complete.</span></div>
+          <div className={styles.item}><span className={styles.dot} /><span className={styles.itemText}>CarCupid contains 25+ thoughtful questions and usually takes about 8 minutes to complete.</span></div>
           <div className={styles.item}><span className={styles.dot} /><span className={styles.itemText}>This isn’t a test — it’s a game.</span></div>
           <div className={styles.item}><span className={styles.dot} /><span className={styles.itemText}>Follow your first instinct. There are no right or wrong answers; just choose what feels true in the moment.</span></div>
           <div className={styles.item}><span className={styles.dot} /><span className={styles.itemText}>You can pause at any time.</span></div>

@@ -81,7 +81,6 @@ export default function CarDetails({ id }: Props) {
   const showLeftInfo = !hasRealImage && reviewParas.length === 0;
   const pros = splitList(get("pros"));
   const cons = splitList(get("cons"));
-  const whatsNew = [] as string[];
 
   const tagItems = useMemo(() => {
     const out: string[] = [];
@@ -151,29 +150,29 @@ export default function CarDetails({ id }: Props) {
     { k: "Transmission", v: get("transmission") },
   ];
 
-  const kvFuel = [
-    { k: "Fuel type", v: get("fuel type") },
-    { k: "Fuel tank capacity (gal)", v: get("fuel tank capacity (gal)") },
-    { k: "EPA combined MPG", v: get("epa combined mpg") },
-    { k: "EPA city/highway MPG", v: get("epa city/highway mpg") },
-    { k: "Range in miles (city/hwy)", v: get("range in miles (city/hwy)") },
-    { k: "EPA combined MPGe", v: get("epa combined mpge") },
-    { k: "EPA city/highway MPGe", v: get("epa city/highway mpge") },
-    { k: "EPA electricity range (mi)", v: get("epa electricity range (mi)") },
-    { k: "EPA kWh/100 mi", v: get("epa kwh/100 mi") },
-    { k: "EPA time to charge battery (at 240V) (hr)", v: get("epa time to charge battery (at 240v) (hr)") },
-    { k: "Battery capacity (kWh)", v: get("battery capacity (kwh)") },
-  ];
-
   const kvFuelFiltered = useMemo(() => {
+    const kvFuel = [
+      { k: "Fuel type", v: get("fuel type") },
+      { k: "Fuel tank capacity (gal)", v: get("fuel tank capacity (gal)") },
+      { k: "EPA combined MPG", v: get("epa combined mpg") },
+      { k: "EPA city/highway MPG", v: get("epa city/highway mpg") },
+      { k: "Range in miles (city/hwy)", v: get("range in miles (city/hwy)") },
+      { k: "EPA combined MPGe", v: get("epa combined mpge") },
+      { k: "EPA city/highway MPGe", v: get("epa city/highway mpge") },
+      { k: "EPA electricity range (mi)", v: get("epa electricity range (mi)") },
+      { k: "EPA kWh/100 mi", v: get("epa kwh/100 mi") },
+      { k: "EPA time to charge battery (at 240V) (hr)", v: get("epa time to charge battery (at 240v) (hr)") },
+      { k: "Battery capacity (kWh)", v: get("battery capacity (kwh)") },
+    ];
+
     const fuelRaw = (get("fuel type") || "").toLowerCase();
     const isElectric = fuelRaw.includes("electric") || fuelRaw.includes("bev");
     const isHybrid = fuelRaw.includes("hybrid") || fuelRaw.includes("plug-in") || fuelRaw.includes("phev");
+    
     return kvFuel.filter(({ k }) => {
       const label = k.toLowerCase();
       const isElectricMetric = label.includes("mpge") || label.includes("electricity range") || label.includes("kwh/100") || label.includes("time to charge") || label.includes("battery capacity");
-      const isMpgMetric = label.includes("mpg") || label.includes("range in miles (city/hwy)");
-      const isTank = label.includes("fuel tank capacity");
+      
       if (isElectric && !isHybrid) {
         return isElectricMetric || label === "fuel type";
       }

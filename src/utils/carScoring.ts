@@ -324,9 +324,7 @@ export function calculateCarScores(
   return scores;
 }
 
-/* =========================
-   MATCHING
-========================= */
+
 
 export interface ScoredCar {
   car: CarSpecs;
@@ -377,154 +375,143 @@ export function matchCars(
   const scored = validCars.map(car => {
     const scores = calculateCarScores(car, stats);
     
-    // Base score calculation
+   
     const baseScore = Object.entries(prefs).reduce(
       (sum, [cat, w]) => sum + w * (scores[cat as CategoryValue] || 0),
       0
     );
     let matchScore = baseScore;
 
-    // Apply hard filters / strong boosts based on QuizFilters
 
-    // --- SIZE FILTER ---
     if (filters?.sizePreference) {
       const length = car.length || 0;
-      // Classifications often contain "Compact", "Mid-size", "Full-size"
+    
       const cls = (car.classification || "").toLowerCase();
       const body = (car.bodyType || "").toLowerCase();
 
       if (filters.sizePreference === "small") {
-        // Penalty for large vehicles - SOFTENED from 0.1 to 0.4
+      
         if (length > 190 || cls.includes("large") || cls.includes("full-size") || body.includes("truck") || body.includes("van")) {
            matchScore *= 0.4; 
         } else if (length < 180 || cls.includes("compact") || cls.includes("mini") || cls.includes("small")) {
-           matchScore *= 1.3; // Boost reduced slightly
+           matchScore *= 1.3; 
         }
       } else if (filters.sizePreference === "oversized") {
-        // Don't penalize Trucks or Vans for length if the user wants "Oversized"
+      
         if (length < 195 && !body.includes("truck") && !body.includes("van") && !cls.includes("large")) {
-           matchScore *= 0.4; // Softened from 0.2
+           matchScore *= 0.4; 
         }
       }
     }
 
-    // --- FUEL FILTER ---
+  
     if (filters?.fuelPriority === "critical") {
-      // Must be efficient
+     
       const mpg = car.epaCombinedMpg || 0;
       const isEV = car.fuelType?.toLowerCase().includes("electric") || car.mpge > 0;
       if (!isEV && mpg < 30) {
-        matchScore *= 0.1; // Keep strict for "Critical"
+        matchScore *= 0.1; 
       }
     } else if (filters?.fuelPriority === "high") {
       const mpg = car.epaCombinedMpg || 0;
       const isEV = car.fuelType?.toLowerCase().includes("electric") || car.mpge > 0;
       if (!isEV && mpg < 25) {
-        matchScore *= 0.6; // Softened from 0.5
+        matchScore *= 0.6;
       }
     }
 
-    // --- EXPENSE FILTER (Price) ---
-    // RECALIBRATED for 2023-2025 market realities (Inflation adjustment)
     if (filters?.expensePreference) {
       const price = car.baseMsrp || 0;
       if (filters.expensePreference === "low") {
-         // Low: <$35k is ideal, but up to $50k is tolerable.
-         if (price > 65000) matchScore *= 0.2; // Hard ceiling (was 40k)
-         else if (price > 50000) matchScore *= 0.6; // Soft ceiling (was 30k)
+        
+         if (price > 65000) matchScore *= 0.2; 
+         else if (price > 50000) matchScore *= 0.6; 
       } else if (filters.expensePreference === "balanced") {
-         // Balanced: Average is now $50k-$80k.
-         // Don't punish until we hit real "expensive" territory (>100k).
-         if (price > 120000) matchScore *= 0.4; // (was 60k)
+      
+         if (price > 120000) matchScore *= 0.4; 
          else if (price > 95000) matchScore *= 0.7;
       }
     }
 
-    // --- SEATS FILTER ---
     if (filters?.minSeats) {
        const seats = car.totalSeating || 0;
        if (seats < filters.minSeats) {
-          // Hard failure for passenger needs - KEEP STRICT
+        
           matchScore *= 0.0; 
        }
     }
 
-    // --- CARGO FILTER ---
+   
     if (filters?.cargoNeeds) {
        const cargo = Math.max(car.cargoCapacity || 0, car.maxCargoCapacity || 0);
        const body = (car.bodyType || "").toLowerCase();
        
        if (filters.cargoNeeds === "high") {
-          // Needs big space (Truck, Minivan, Large SUV)
+       
           if (body.includes("truck") || body.includes("van") || body.includes("minivan")) {
-             matchScore *= 1.2; // Boost ideal matches
+             matchScore *= 1.2; 
           } else if (cargo < 50) {
-             matchScore *= 0.4; // Softened from 0.2
+             matchScore *= 0.4; 
           }
        } else if (filters.cargoNeeds === "medium") {
-          // Allow Wagons, SUVs, Hatchbacks to pass "Medium" needs even if raw cu-ft data is weirdly low
           if (cargo < 15 && !body.includes("hatchback") && !body.includes("suv") && !body.includes("crossover") && !body.includes("wagon")) {
-             // Small trunk penalty
-             matchScore *= 0.7; // Softened from 0.6
+            
+             matchScore *= 0.7; 
           }
        }
     }
 
-    // --- AWD FILTER ---
+    
     if (filters?.awdPreferred) {
        const drive = (car.driveType || "").toLowerCase();
        const isAWD = drive.includes("awd") || drive.includes("4wd") || drive.includes("four");
        if (!isAWD) {
-          matchScore *= 0.7; // Softened from 0.6
+          matchScore *= 0.7; 
        } else {
-          matchScore *= 1.1; // Boost
+          matchScore *= 1.1; 
        }
     }
 
-    // --- TRANSMISSION FILTER (Control vs Ease) ---
     if (filters?.transmissionPreference) {
        const trans = (car.transmission || "").toLowerCase();
        const isManual = trans.includes("manual") || trans.includes("stick");
-       // Some manuals might be "6-speed" without "automatic" keyword, but usually data has "manual"
        
        if (filters.transmissionPreference === "manual") {
           if (isManual) {
-             matchScore *= 1.5; // Huge boost for the dying breed of manuals
+             matchScore *= 1.5; 
           } else {
-             matchScore *= 0.6; // Penalty for automatics if user wants control
+             matchScore *= 0.6; 
           }
        } else if (filters.transmissionPreference === "automatic") {
           if (isManual) {
-             matchScore *= 0.5; // Most people who want "simple/safe" can't/won't drive manual
+             matchScore *= 0.5; 
           }
        }
     }
 
-    // --- SPORT MODE (Force Sport) ---
     if (filters?.forceSport) {
        const hp = car.horsepower || 0;
        const body = (car.bodyType || "").toLowerCase();
        const isSportyBody = body.includes("coupe") || body.includes("convertible") || body.includes("sport");
-       // CONFLICT ARBITRATION: If Utility is also forced, don't penalize Trucks/SUVs for being "boring"
+
        const isUtilityMode = filters.forceUtility || false;
        const isBoring = !isUtilityMode && (body.includes("minivan") || body.includes("van") || (body.includes("suv") && hp < 250));
 
-       // 1. Boost high HP
-       if (hp > 400) matchScore *= 1.4; // Slightly reduced boost
+       if (hp > 400) matchScore *= 1.4; 
        else if (hp > 300) matchScore *= 1.2;
        
-       // 2. Boost sporty body types
+    
        if (isSportyBody) matchScore *= 1.3;
 
-       // 3. Penalize boring or low HP (Softened)
-       if (hp < 200 && !isSportyBody) matchScore *= 0.6; // Softened from 0.4
-       if (isBoring) matchScore *= 0.4; // Softened from 0.2
+     
+       if (hp < 200 && !isSportyBody) matchScore *= 0.6; 
+       if (isBoring) matchScore *= 0.4; 
        
-       // 4. Boost Performance score contribution
+      
        if (scores[Categories.PERFORMANCE] > 80) matchScore *= 1.2;
     }
 
-    // --- UTILITY MODE (Work / Cargo) ---
+    
     if (filters?.forceUtility) {
        const body = (car.bodyType || "").toLowerCase();
        const cargo = Math.max(car.cargoCapacity || 0, car.maxCargoCapacity || 0);
@@ -532,22 +519,19 @@ export function matchCars(
 
        const isUtility = body.includes("truck") || body.includes("van") || body.includes("minivan");
        
-       // 1. Boost for trucks/vans (Reduced slightly to avoid dominating)
-       if (isUtility) matchScore *= 1.6; // Reduced from 2.0
+     
+       if (isUtility) matchScore *= 1.6; 
 
-       // 2. Boost high towing or cargo
        if (tow > 5000) matchScore *= 1.4;
        if (cargo > 60) matchScore *= 1.2;
 
-       // 3. Penalize low utility (Softened)
-       if (cargo < 30 && tow < 2000) matchScore *= 0.4; // Softened from 0.1
+       if (cargo < 30 && tow < 2000) matchScore *= 0.4; 
     }
 
-    // --- LUXURY MODE (Prestige / Comfort) ---
     if (filters?.forceLuxury) {
        const price = car.baseMsrp || 0;
        const brand = (car.make || "").toLowerCase();
-       // Updated based on user's full inventory list
+      
        const luxuryBrands = [
          "acura", "alfa romeo", "aston martin", "audi", "bentley", "bmw", 
          "cadillac", "fisker", "genesis", "ineos", "infiniti", "jaguar", 
@@ -558,24 +542,19 @@ export function matchCars(
        
        const isLuxBrand = luxuryBrands.some(b => brand.includes(b));
 
-       // 1. Boost luxury brands
-       if (isLuxBrand) matchScore *= 1.3; // Reduced from 1.5
+      
+       if (isLuxBrand) matchScore *= 1.3; 
 
-       // 2. Penalize mass-market cars (Adjusted for inflation)
-       if (price < 55000) matchScore *= 0.7; // Was 35k
+       if (price < 55000) matchScore *= 0.7; 
 
-       // 3. Boost high price (True luxury starts higher now)
-       if (price > 90000) matchScore *= 1.2; // Was 60k
-       if (price > 150000) matchScore *= 1.15; // Ultra-luxury boost
+    
+       if (price > 90000) matchScore *= 1.2; 
+       if (price > 150000) matchScore *= 1.15;
 
-       // 4. Boost Comfort/Luxury scores
        if (scores[Categories.LUXURY] > 70) matchScore *= 1.2;
        if (scores[Categories.COMFORT] > 70) matchScore *= 1.1;
     }
 
-    // --- SAFETY FLOOR ---
-    // Prevent cumulative soft penalties from completely eliminating a viable car.
-    // If the car wasn't hard-filtered (score > 0), ensure it keeps at least 10% of its base relevance.
     if (matchScore > 0.01) {
        matchScore = Math.max(matchScore, baseScore * 0.1);
     }
