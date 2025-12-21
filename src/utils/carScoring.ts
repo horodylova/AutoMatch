@@ -6,6 +6,11 @@ import { Categories, CategoryValue } from "../constants/categories";
 
 export type Row = (string | number | boolean | null)[];
 
+export interface AnswerSignal {
+  primary: CategoryValue;
+  secondary?: CategoryValue;
+}
+
 export interface CarSpecs {
   id: string;
   make: string;
@@ -105,6 +110,39 @@ function hasRealNumbers(car: CarSpecs) {
   );
 }
 
+function parseWarrantyYears(w: string): number {
+  if (!w) return 0;
+  const m = w.match(/(\d+)\s*yr/i);
+  return m ? Number(m[1]) : 0;
+}
+
+/* =========================
+   USER PREFS (PRIMARY / SECONDARY)
+========================= */
+
+export function buildUserPreferences(
+  answers: AnswerSignal[],
+  secondaryFactor = 0.5
+): Record<CategoryValue, number> {
+  const prefs = Object.fromEntries(
+    Object.values(Categories).map(c => [c, 0])
+  ) as Record<CategoryValue, number>;
+
+  for (const a of answers) {
+    prefs[a.primary] += 1;
+    if (a.secondary) prefs[a.secondary] += secondaryFactor;
+  }
+
+  return prefs;
+}
+
+function normalizePrefs(prefs: Record<CategoryValue, number>) {
+  const sum = Object.values(prefs).reduce((a, b) => a + b, 0) || 1;
+  return Object.fromEntries(
+    Object.entries(prefs).map(([k, v]) => [k, v / sum])
+  ) as Record<CategoryValue, number>;
+}
+
 /* =========================
    PARSING
 ========================= */
@@ -124,14 +162,15 @@ export function parseCarData(
     str("picture") ||
     str("calculated_image_url");
 
-  // Robust image parsing: handle lists, quotes, and non-http prefixes
   let image = "/placeholder-car.jpg";
   if (rawImage) {
-    const parts = rawImage.split(/[;,]/).map(s => s.trim().replace(/^['"]|['"]$/g, ""));
-    const valid = parts.find(p => p.startsWith("http") || p.startsWith("/") || p.startsWith("www."));
-    if (valid) {
-      image = valid.startsWith("www.") ? `https://${valid}` : valid;
-    }
+    const parts = rawImage
+      .split(/[;,]/)
+      .map(s => s.trim().replace(/^['"]|['"]$/g, ""));
+    const valid = parts.find(p =>
+      p.startsWith("http") || p.startsWith("/") || p.startsWith("www.")
+    );
+    if (valid) image = valid.startsWith("www.") ? `https://${valid}` : valid;
   }
 
   return {
@@ -202,31 +241,22 @@ export function parseCarData(
 ========================= */
 
 export function calculateGlobalStats(cars: CarSpecs[]) {
-  const vals = {
-    hp: cars.map(c => c.horsepower).filter(Boolean),
-    price: cars.map(c => c.baseMsrp).filter(Boolean),
-    cargo: cars.map(c => c.cargoCapacity).filter(Boolean),
-    tow: cars.map(c => c.maxTowingCapacity).filter(Boolean),
-    len: cars.map(c => c.length).filter(Boolean),
-    wb: cars.map(c => c.wheelbase).filter(Boolean),
-    mpg: cars.map(c => c.mpge || c.epaCombinedMpg).filter(Boolean),
-  };
-
+  const pick = (arr: number[]) => arr.length ? arr : [0];
   return {
-    hpMin: Math.min(...vals.hp),
-    hpMax: Math.max(...vals.hp),
-    msrpMin: Math.min(...vals.price),
-    msrpMax: Math.max(...vals.price),
-    cargoMin: Math.min(...vals.cargo),
-    cargoMax: Math.max(...vals.cargo),
-    towMin: Math.min(...vals.tow),
-    towMax: Math.max(...vals.tow),
-    lenMin: Math.min(...vals.len),
-    lenMax: Math.max(...vals.len),
-    wbMin: Math.min(...vals.wb),
-    wbMax: Math.max(...vals.wb),
-    mpgMin: Math.min(...vals.mpg),
-    mpgMax: Math.max(...vals.mpg),
+    hpMin: Math.min(...pick(cars.map(c => c.horsepower).filter(Boolean))),
+    hpMax: Math.max(...pick(cars.map(c => c.horsepower).filter(Boolean))),
+    msrpMin: Math.min(...pick(cars.map(c => c.baseMsrp).filter(Boolean))),
+    msrpMax: Math.max(...pick(cars.map(c => c.baseMsrp).filter(Boolean))),
+    cargoMin: Math.min(...pick(cars.map(c => c.cargoCapacity).filter(Boolean))),
+    cargoMax: Math.max(...pick(cars.map(c => c.cargoCapacity).filter(Boolean))),
+    towMin: Math.min(...pick(cars.map(c => c.maxTowingCapacity).filter(Boolean))),
+    towMax: Math.max(...pick(cars.map(c => c.maxTowingCapacity).filter(Boolean))),
+    lenMin: Math.min(...pick(cars.map(c => c.length).filter(Boolean))),
+    lenMax: Math.max(...pick(cars.map(c => c.length).filter(Boolean))),
+    wbMin: Math.min(...pick(cars.map(c => c.wheelbase).filter(Boolean))),
+    wbMax: Math.max(...pick(cars.map(c => c.wheelbase).filter(Boolean))),
+    mpgMin: Math.min(...pick(cars.map(c => c.mpge || c.epaCombinedMpg).filter(Boolean))),
+    mpgMax: Math.max(...pick(cars.map(c => c.mpge || c.epaCombinedMpg).filter(Boolean))),
   };
 }
 
@@ -264,13 +294,32 @@ export function calculateCarScores(
   scores[Categories.ADVENTURE] =
     norm(car.maxTowingCapacity, stats.towMin, stats.towMax) * 100;
 
-  scores[Categories.COMFORT] = scores[Categories.ROAD_TRIP] * 0.7;
+  scores[Categories.COMFORT] =
+    scores[Categories.ROAD_TRIP] * 0.7;
 
   scores[Categories.TECHNOLOGY] =
     car.fuelType.toLowerCase().includes("electric") ? 80 : 40;
 
-  scores[Categories.RELIABILITY] =
-    car.basicWarranty ? 60 : 40;
+  // RELIABILITY — fixed to real data
+  let rel = 0;
+  const basicY = parseWarrantyYears(car.basicWarranty);
+  const driveY = parseWarrantyYears(car.drivetrainWarranty);
+
+  if (basicY >= 5) rel += 20;
+  else if (basicY === 4) rel += 15;
+  else if (basicY === 3) rel += 10;
+  else rel += 8;
+
+  if (driveY >= 10) rel += 15;
+  else if (driveY >= 6) rel += 10;
+
+  if (car.roadsideAssistance) rel += 5;
+  if (car.rustWarranty) rel += 5;
+
+  if (car.make.match(/Toyota|Lexus|Honda|Mazda|Subaru|Porsche/i)) rel += 25;
+  else if (car.make.match(/Ford|Chevrolet|Nissan|BMW|Mercedes/i)) rel += 15;
+
+  scores[Categories.RELIABILITY] = Math.min(100, rel);
 
   return scores;
 }
@@ -279,11 +328,10 @@ export function calculateCarScores(
    MATCHING
 ========================= */
 
-function normalizePrefs(prefs: Record<CategoryValue, number>) {
-  const sum = Object.values(prefs).reduce((a, b) => a + b, 0) || 1;
-  return Object.fromEntries(
-    Object.entries(prefs).map(([k, v]) => [k, v / sum])
-  ) as Record<CategoryValue, number>;
+export interface ScoredCar {
+  car: CarSpecs;
+  scores: Record<CategoryValue, number>;
+  matchScore: number;
 }
 
 function diversifyByMake(results: ScoredCar[], maxPerMake = 2) {
@@ -296,15 +344,23 @@ function diversifyByMake(results: ScoredCar[], maxPerMake = 2) {
   });
 }
 
-export interface ScoredCar {
-  car: CarSpecs;
-  scores: Record<CategoryValue, number>;
-  matchScore: number;
+export interface QuizFilters {
+  sizePreference?: "small" | "mid" | "large" | "oversized";
+  fuelPriority?: "low" | "medium" | "high" | "critical";
+  expensePreference?: "low" | "balanced" | "high" | "unlimited";
+  minSeats?: number;
+  cargoNeeds?: "low" | "medium" | "high";
+  awdPreferred?: boolean;
+  transmissionPreference?: "manual" | "automatic";
+  forceSport?: boolean;
+  forceUtility?: boolean;
+  forceLuxury?: boolean;
 }
 
 export function matchCars(
   cars: CarSpecs[],
-  userPreferences: Record<CategoryValue, number>
+  userPreferences: Record<CategoryValue, number>,
+  filters?: QuizFilters
 ): ScoredCar[] {
 
   const prefs = normalizePrefs(userPreferences);
@@ -320,10 +376,210 @@ export function matchCars(
 
   const scored = validCars.map(car => {
     const scores = calculateCarScores(car, stats);
-    const matchScore = Object.entries(prefs).reduce(
+    
+    // Base score calculation
+    const baseScore = Object.entries(prefs).reduce(
       (sum, [cat, w]) => sum + w * (scores[cat as CategoryValue] || 0),
       0
     );
+    let matchScore = baseScore;
+
+    // Apply hard filters / strong boosts based on QuizFilters
+
+    // --- SIZE FILTER ---
+    if (filters?.sizePreference) {
+      const length = car.length || 0;
+      // Classifications often contain "Compact", "Mid-size", "Full-size"
+      const cls = (car.classification || "").toLowerCase();
+      const body = (car.bodyType || "").toLowerCase();
+
+      if (filters.sizePreference === "small") {
+        // Penalty for large vehicles - SOFTENED from 0.1 to 0.4
+        if (length > 190 || cls.includes("large") || cls.includes("full-size") || body.includes("truck") || body.includes("van")) {
+           matchScore *= 0.4; 
+        } else if (length < 180 || cls.includes("compact") || cls.includes("mini") || cls.includes("small")) {
+           matchScore *= 1.3; // Boost reduced slightly
+        }
+      } else if (filters.sizePreference === "oversized") {
+        // Don't penalize Trucks or Vans for length if the user wants "Oversized"
+        if (length < 195 && !body.includes("truck") && !body.includes("van") && !cls.includes("large")) {
+           matchScore *= 0.4; // Softened from 0.2
+        }
+      }
+    }
+
+    // --- FUEL FILTER ---
+    if (filters?.fuelPriority === "critical") {
+      // Must be efficient
+      const mpg = car.epaCombinedMpg || 0;
+      const isEV = car.fuelType?.toLowerCase().includes("electric") || car.mpge > 0;
+      if (!isEV && mpg < 30) {
+        matchScore *= 0.1; // Keep strict for "Critical"
+      }
+    } else if (filters?.fuelPriority === "high") {
+      const mpg = car.epaCombinedMpg || 0;
+      const isEV = car.fuelType?.toLowerCase().includes("electric") || car.mpge > 0;
+      if (!isEV && mpg < 25) {
+        matchScore *= 0.6; // Softened from 0.5
+      }
+    }
+
+    // --- EXPENSE FILTER (Price) ---
+    // RECALIBRATED for 2023-2025 market realities (Inflation adjustment)
+    if (filters?.expensePreference) {
+      const price = car.baseMsrp || 0;
+      if (filters.expensePreference === "low") {
+         // Low: <$35k is ideal, but up to $50k is tolerable.
+         if (price > 65000) matchScore *= 0.2; // Hard ceiling (was 40k)
+         else if (price > 50000) matchScore *= 0.6; // Soft ceiling (was 30k)
+      } else if (filters.expensePreference === "balanced") {
+         // Balanced: Average is now $50k-$80k.
+         // Don't punish until we hit real "expensive" territory (>100k).
+         if (price > 120000) matchScore *= 0.4; // (was 60k)
+         else if (price > 95000) matchScore *= 0.7;
+      }
+    }
+
+    // --- SEATS FILTER ---
+    if (filters?.minSeats) {
+       const seats = car.totalSeating || 0;
+       if (seats < filters.minSeats) {
+          // Hard failure for passenger needs - KEEP STRICT
+          matchScore *= 0.0; 
+       }
+    }
+
+    // --- CARGO FILTER ---
+    if (filters?.cargoNeeds) {
+       const cargo = Math.max(car.cargoCapacity || 0, car.maxCargoCapacity || 0);
+       const body = (car.bodyType || "").toLowerCase();
+       
+       if (filters.cargoNeeds === "high") {
+          // Needs big space (Truck, Minivan, Large SUV)
+          if (body.includes("truck") || body.includes("van") || body.includes("minivan")) {
+             matchScore *= 1.2; // Boost ideal matches
+          } else if (cargo < 50) {
+             matchScore *= 0.4; // Softened from 0.2
+          }
+       } else if (filters.cargoNeeds === "medium") {
+          // Allow Wagons, SUVs, Hatchbacks to pass "Medium" needs even if raw cu-ft data is weirdly low
+          if (cargo < 15 && !body.includes("hatchback") && !body.includes("suv") && !body.includes("crossover") && !body.includes("wagon")) {
+             // Small trunk penalty
+             matchScore *= 0.7; // Softened from 0.6
+          }
+       }
+    }
+
+    // --- AWD FILTER ---
+    if (filters?.awdPreferred) {
+       const drive = (car.driveType || "").toLowerCase();
+       const isAWD = drive.includes("awd") || drive.includes("4wd") || drive.includes("four");
+       if (!isAWD) {
+          matchScore *= 0.7; // Softened from 0.6
+       } else {
+          matchScore *= 1.1; // Boost
+       }
+    }
+
+    // --- TRANSMISSION FILTER (Control vs Ease) ---
+    if (filters?.transmissionPreference) {
+       const trans = (car.transmission || "").toLowerCase();
+       const isManual = trans.includes("manual") || trans.includes("stick");
+       // Some manuals might be "6-speed" without "automatic" keyword, but usually data has "manual"
+       
+       if (filters.transmissionPreference === "manual") {
+          if (isManual) {
+             matchScore *= 1.5; // Huge boost for the dying breed of manuals
+          } else {
+             matchScore *= 0.6; // Penalty for automatics if user wants control
+          }
+       } else if (filters.transmissionPreference === "automatic") {
+          if (isManual) {
+             matchScore *= 0.5; // Most people who want "simple/safe" can't/won't drive manual
+          }
+       }
+    }
+
+    // --- SPORT MODE (Force Sport) ---
+    if (filters?.forceSport) {
+       const hp = car.horsepower || 0;
+       const body = (car.bodyType || "").toLowerCase();
+       const isSportyBody = body.includes("coupe") || body.includes("convertible") || body.includes("sport");
+       // CONFLICT ARBITRATION: If Utility is also forced, don't penalize Trucks/SUVs for being "boring"
+       const isUtilityMode = filters.forceUtility || false;
+       const isBoring = !isUtilityMode && (body.includes("minivan") || body.includes("van") || (body.includes("suv") && hp < 250));
+
+       // 1. Boost high HP
+       if (hp > 400) matchScore *= 1.4; // Slightly reduced boost
+       else if (hp > 300) matchScore *= 1.2;
+       
+       // 2. Boost sporty body types
+       if (isSportyBody) matchScore *= 1.3;
+
+       // 3. Penalize boring or low HP (Softened)
+       if (hp < 200 && !isSportyBody) matchScore *= 0.6; // Softened from 0.4
+       if (isBoring) matchScore *= 0.4; // Softened from 0.2
+       
+       // 4. Boost Performance score contribution
+       if (scores[Categories.PERFORMANCE] > 80) matchScore *= 1.2;
+    }
+
+    // --- UTILITY MODE (Work / Cargo) ---
+    if (filters?.forceUtility) {
+       const body = (car.bodyType || "").toLowerCase();
+       const cargo = Math.max(car.cargoCapacity || 0, car.maxCargoCapacity || 0);
+       const tow = car.maxTowingCapacity || 0;
+
+       const isUtility = body.includes("truck") || body.includes("van") || body.includes("minivan");
+       
+       // 1. Boost for trucks/vans (Reduced slightly to avoid dominating)
+       if (isUtility) matchScore *= 1.6; // Reduced from 2.0
+
+       // 2. Boost high towing or cargo
+       if (tow > 5000) matchScore *= 1.4;
+       if (cargo > 60) matchScore *= 1.2;
+
+       // 3. Penalize low utility (Softened)
+       if (cargo < 30 && tow < 2000) matchScore *= 0.4; // Softened from 0.1
+    }
+
+    // --- LUXURY MODE (Prestige / Comfort) ---
+    if (filters?.forceLuxury) {
+       const price = car.baseMsrp || 0;
+       const brand = (car.make || "").toLowerCase();
+       // Updated based on user's full inventory list
+       const luxuryBrands = [
+         "acura", "alfa romeo", "aston martin", "audi", "bentley", "bmw", 
+         "cadillac", "fisker", "genesis", "ineos", "infiniti", "jaguar", 
+         "lamborghini", "land rover", "lexus", "lincoln", "lucid", "maserati", 
+         "mclaren", "mercedes-benz", "polestar", "porsche", "rivian", 
+         "rolls-royce", "tesla", "volvo"
+       ];
+       
+       const isLuxBrand = luxuryBrands.some(b => brand.includes(b));
+
+       // 1. Boost luxury brands
+       if (isLuxBrand) matchScore *= 1.3; // Reduced from 1.5
+
+       // 2. Penalize mass-market cars (Adjusted for inflation)
+       if (price < 55000) matchScore *= 0.7; // Was 35k
+
+       // 3. Boost high price (True luxury starts higher now)
+       if (price > 90000) matchScore *= 1.2; // Was 60k
+       if (price > 150000) matchScore *= 1.15; // Ultra-luxury boost
+
+       // 4. Boost Comfort/Luxury scores
+       if (scores[Categories.LUXURY] > 70) matchScore *= 1.2;
+       if (scores[Categories.COMFORT] > 70) matchScore *= 1.1;
+    }
+
+    // --- SAFETY FLOOR ---
+    // Prevent cumulative soft penalties from completely eliminating a viable car.
+    // If the car wasn't hard-filtered (score > 0), ensure it keeps at least 10% of its base relevance.
+    if (matchScore > 0.01) {
+       matchScore = Math.max(matchScore, baseScore * 0.1);
+    }
+
     return { car, scores, matchScore };
   });
 
@@ -332,4 +588,5 @@ export function matchCars(
     2
   );
 }
+
 

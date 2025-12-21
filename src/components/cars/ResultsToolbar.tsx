@@ -6,10 +6,11 @@ import { gridLayoutIcon, thumbnailsLeftIcon } from "@progress/kendo-svg-icons";
 type ViewMode = "grid" | "list";
 type SortMode = "none" | "new" | "priceAsc" | "priceDesc";
 
-export default function ResultsToolbar({ count = 0, view, sort, onViewChange, onSortChange }: { count?: number; view: ViewMode; sort: SortMode; onViewChange: (v: ViewMode) => void; onSortChange: (s: SortMode) => void }) {
+export default function ResultsToolbar({ count = 0, view, sort, onViewChange, onSortChange, centerContent }: { count?: number; view: ViewMode; sort: SortMode; onViewChange: (v: ViewMode) => void; onSortChange: (s: SortMode) => void; centerContent?: React.ReactNode }) {
   return (
     <div className={styles.toolbar}>
       <div className={styles.resultCount}>Showing {count} results</div>
+      {centerContent && <div style={{ fontSize: '14px', fontWeight: 600 }}>{centerContent}</div>}
       <div className={styles.toolbarRight}>
         <div className={styles.viewToggle}>
           <button className={view === "list" ? styles.iconBtnActive : styles.iconBtn} onClick={() => onViewChange("list")} aria-label="List view">

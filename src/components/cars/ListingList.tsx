@@ -7,6 +7,8 @@ import Pagination from "./Pagination";
 import styles from "./cars.module.css";
 import { fetchDataset, getRowCount, Row } from "@/lib/dataset";
 import { FiltersData } from "./Filters";
+import Link from "next/link";
+import { getQuizAnswers } from "@/utils/storage";
 
 function num(v: unknown): number {
   const raw = String(v ?? "").trim();
@@ -55,6 +57,15 @@ export default function ListingList({ filters }: { filters?: FiltersData }) {
     } catch {}
     return 1;
   });
+
+  const [hasQuiz, setHasQuiz] = useState(false);
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+       const saved = getQuizAnswers();
+       if (saved && Object.keys(saved).length > 0) setHasQuiz(true);
+    }
+  }, []);
+
   useEffect(() => {
     try { if (typeof window !== "undefined") window.sessionStorage.setItem("cars:view", view); } catch {}
   }, [view]);
@@ -281,7 +292,35 @@ export default function ListingList({ filters }: { filters?: FiltersData }) {
     <div className={styles.panel}>
   
       <div className={styles.panelBody}>
-        <ResultsToolbar count={countLabel} view={view} sort={sort} onViewChange={setView} onSortChange={setSort} />
+        <ResultsToolbar 
+          count={countLabel} 
+          view={view} 
+          sort={sort} 
+          onViewChange={setView} 
+          onSortChange={setSort} 
+          centerContent={
+            <Link 
+              href="/quiz" 
+              style={{ 
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                backgroundColor: 'rgba(201,71,45,0.1)', 
+                color: 'var(--kendo-color-primary)', 
+                textDecoration: 'none', 
+                padding: '8px 16px',
+                borderRadius: '999px',
+                fontSize: '14px',
+                fontWeight: 700,
+                border: '1px solid rgba(201,71,45,0.25)',
+                transition: 'all 0.2s ease',
+                boxShadow: '0 4px 12px rgba(201,71,45,0.12)'
+              }}
+            >
+              {hasQuiz ? "✨ Return to your quiz results" : "💖 Find your true love with our quiz"}
+            </Link>
+          }
+        />
         {(() => {
           return view === "grid" ? (
             <div className={styles.listGrid}>
