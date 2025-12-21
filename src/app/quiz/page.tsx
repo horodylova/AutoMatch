@@ -382,11 +382,11 @@ export default function Page() {
       paddingTop: quiz.showGallery 
         ? (quiz.isMobile ? "30px" : "50px") 
         : (quiz.isMobile ? "calc(clamp(72px, 12vw, 140px) + 16px)" : "clamp(72px, 12vw, 140px)"),
-      paddingBottom: quiz.showGallery 
+      paddingBottom: (quiz.showGallery || quiz.showFinal)
         ? "calc(40px + env(safe-area-inset-bottom, 0px))" 
         : (quiz.isMobile ? "calc(160px + env(safe-area-inset-bottom, 0px))" : "60px"),
       height: "100dvh",
-      overflowY: quiz.showGallery ? "auto" : "hidden",
+      overflowY: (quiz.showGallery || quiz.showFinal) ? "auto" : "hidden",
     }}>
 
       <QuizHeader onExit={() => { setExitDestination("/"); quiz.setShowExitModal(true); }} />
