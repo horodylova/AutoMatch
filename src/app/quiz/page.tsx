@@ -385,7 +385,7 @@ export default function Page() {
         : (quiz.isMobile ? "calc(clamp(72px, 12vw, 140px) + 16px)" : "clamp(72px, 12vw, 140px)"),
       paddingBottom: (quiz.showGallery || quiz.showFinal)
         ? "calc(40px + env(safe-area-inset-bottom, 0px))" 
-        : (quiz.isMobile ? "calc(160px + env(safe-area-inset-bottom, 0px))" : "60px"),
+        : (quiz.isMobile ? "calc(240px + env(safe-area-inset-bottom, 0px))" : "60px"),
       height: "100dvh",
       overflowY: "auto",
     }}>
