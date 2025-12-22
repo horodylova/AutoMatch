@@ -259,7 +259,7 @@ export default function Page() {
       const seenMakes = new Set<string>();
 
       for (const m of matches) {
-        // Normalize make to ensure consistent keys
+   
         const make = m.car.make.toLowerCase().trim();
         
         if (!seenMakes.has(make)) {

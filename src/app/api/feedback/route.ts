@@ -13,7 +13,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Rating is required" }, { status: 400 });
     }
 
-    // Use the ID from env
+  
     const sheetId = process.env.GOOGLE_SHEETS_SPREADSHEET_ID;
     
     if (!sheetId) {
@@ -21,12 +21,11 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Server configuration error: Missing Sheet ID" }, { status: 500 });
     }
 
-    // Range targeting the Feedback sheet
+ 
     const range = "Feedback!A:C"; 
-    
-    // Format: Date, Rating, Comment
+
     const now = new Date();
-    // Convert to Eastern Time (New York)
+ 
     const dateStr = now.toLocaleString("en-US", { 
       timeZone: "America/New_York",
       year: 'numeric',
@@ -58,7 +57,7 @@ export async function POST(request: Request) {
     
     const err = error as { message?: string; response?: { data: unknown } };
 
-    // Log detailed Google API error if available
+  
     if (err?.response) {
        console.error("Feedback API: Google Error Response:", err.response.data);
     }
