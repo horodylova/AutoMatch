@@ -23,19 +23,24 @@ export const metadata: Metadata = {
     icon: "/logos/logo.svg",
   },
   openGraph: {
-    title: "CarCupid — Find Your Perfect Car Match",
+    title: "Find Your Perfect Car Match",
     description: "Personalized car matching powered by real data and behavioral insights.",
     siteName: "CarCupid",
     type: "website",
     images: [
-      { url: "/logos/logo.svg", width: 128, height: 128, alt: "CarCupid logo" },
+      { 
+        url: "/poster.jpg", 
+        width: 1200, 
+        height: 630, 
+        alt: "CarCupid - Find Your Perfect Car Match" 
+      },
     ],
   },
   twitter: {
-    card: "summary",
-    title: "CarCupid — Find Your Perfect Car Match",
+    card: "summary_large_image",
+    title: "Find Your Perfect Car Match",
     description: "Personalized car matching powered by real data and behavioral insights.",
-    images: ["/logos/logo.svg"],
+    images: ["/poster.jpg"],
   },
   themeColor: "#0E1B24",
 };

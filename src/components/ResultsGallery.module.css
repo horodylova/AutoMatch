@@ -4,6 +4,44 @@
   max-width: 100vw; /* Prevent horizontal overflow */
 }
 
+.shareSection {
+  margin-block: 2rem;
+  text-align: center;
+}
+
+.shareTitle {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: rgb(230, 214, 180);
+  margin-bottom: 1rem;
+}
+
+.socialIcons {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.socialIcon {
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(230, 214, 180, 0.1);
+  border-radius: 50%;
+  color: rgb(230, 214, 180);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.socialIcon:hover {
+  background: rgba(230, 214, 180, 0.2);
+  transform: translateY(-2px);
+  color: white;
+}
+
 .sectionFirst {
   margin-top: 0;
   margin-bottom: 1rem;
