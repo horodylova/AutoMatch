@@ -23,8 +23,8 @@ export const metadata: Metadata = {
     icon: "/logos/logo.svg",
   },
   openGraph: {
-    title: "Find Your Perfect Car Match",
-    description: "Personalized car matching powered by real data and behavioral insights.",
+    title: "Find Your Perfect Car",
+    description: "Find the car that fits your lifestyle.",
     siteName: "CarCupid",
     type: "website",
     images: [
@@ -38,8 +38,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Find Your Perfect Car Match",
-    description: "Personalized car matching powered by real data and behavioral insights.",
+    title: "Find Your Perfect Car",
+    description: "Find the car that fits your lifestyle.",
     images: ["/poster.jpg"],
   },
   themeColor: "#0E1B24",
