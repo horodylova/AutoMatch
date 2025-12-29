@@ -22,6 +22,7 @@ export default function ResultsGallery({ results = [], onSaveProgress }: Results
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [shareUrl, setShareUrl] = useState('');
   const [isSaved, setIsSaved] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
     // Use the origin (home page) for sharing to ensure visitors start fresh
@@ -29,6 +30,34 @@ export default function ResultsGallery({ results = [], onSaveProgress }: Results
       setShareUrl(window.location.origin);
     }
   }, []);
+
+  const handleScroll = () => {
+    if (scrollContainerRef.current) {
+      const container = scrollContainerRef.current;
+      const cards = Array.from(container.children) as HTMLElement[];
+      if (cards.length === 0) return;
+
+      const containerRect = container.getBoundingClientRect();
+      const containerCenter = containerRect.left + containerRect.width / 2;
+      
+      let closestIndex = 0;
+      let minDiff = Infinity;
+
+      cards.forEach((card, index) => {
+        const cardRect = card.getBoundingClientRect();
+        const cardCenter = cardRect.left + cardRect.width / 2;
+        const diff = Math.abs(containerCenter - cardCenter);
+        if (diff < minDiff) {
+          minDiff = diff;
+          closestIndex = index;
+        }
+      });
+
+      if (closestIndex !== activeIndex) {
+        setActiveIndex(closestIndex);
+      }
+    }
+  };
 
   const handleSaveResults = () => {
     if (typeof window !== 'undefined') {
@@ -79,6 +108,8 @@ export default function ResultsGallery({ results = [], onSaveProgress }: Results
 
       const targetCard = cards[targetIndex];
       targetCard.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      // Update active index immediately for button click
+      setActiveIndex(targetIndex);
     }
   };
 
@@ -173,7 +204,11 @@ export default function ResultsGallery({ results = [], onSaveProgress }: Results
                 </svg>
               </button>
 
-              <div className={styles.galleryContainer} ref={scrollContainerRef}>
+              <div 
+                className={styles.galleryContainer} 
+                ref={scrollContainerRef}
+                onScroll={handleScroll}
+              >
                 {results.map((car, index) => (
                   <div key={car.id} className={styles.cardWrapper}>
                       <Link href={`/cars/${car.id}`} target="_blank" rel="noopener noreferrer" className={styles.cardLink}>
@@ -191,16 +226,25 @@ export default function ResultsGallery({ results = [], onSaveProgress }: Results
                           <div className={styles.carDetails}>{car.model} • {car.year}</div>
                         </div>
                       </Link>
-                      <Link 
-                        href={`/cars/${car.id}`} 
-                        target="_blank" 
-                        rel="noopener noreferrer" 
-                        className={styles.mobileDetailsButton}
-                      >
-                        View Details
-                      </Link>
                     </div>
                 ))}
+              </div>
+
+              <div className={styles.mobileStaticInfo}>
+                <div className={styles.staticCarName}>
+                  {results[activeIndex]?.year} {results[activeIndex]?.make}
+                </div>
+                <div className={styles.staticCarModel}>
+                  {results[activeIndex]?.model}
+                </div>
+                <Link 
+                  href={`/cars/${results[activeIndex]?.id}`} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className={styles.staticDetailsButton}
+                >
+                  View Details
+                </Link>
               </div>
 
               <button 

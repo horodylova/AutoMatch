@@ -108,7 +108,7 @@
 }
 
 /* Gallery Styles */
-.mobileDetailsButton {
+.mobileStaticInfo {
   display: none;
 }
 
@@ -467,13 +467,38 @@
     pointer-events: none; /* Disable click on image */
   }
 
-  .mobileDetailsButton {
+  .mobileStaticInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    margin-top: 1rem;
+    width: 100%;
+    text-align: center;
+    padding: 0 1rem;
+    box-sizing: border-box;
+  }
+
+  .staticCarName {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: rgb(230, 214, 180);
+    line-height: 1.2;
+  }
+
+  .staticCarModel {
+    font-size: 1.1rem;
+    color: rgba(230, 214, 180, 0.8);
+    margin-bottom: 0.75rem;
+  }
+
+  .staticDetailsButton {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 100%;
+    max-width: 300px;
     padding: 0.8rem;
-    margin-top: 0.5rem;
     background-color: #c9472d;
     color: rgb(230, 214, 180);
     font-weight: 700;
@@ -482,6 +507,15 @@
     font-size: 1rem;
     box-shadow: 0 4px 6px rgba(0,0,0,0.2);
     z-index: 10;
+    transition: transform 0.2s ease;
+  }
+  
+  .staticDetailsButton:active {
+    transform: scale(0.98);
+  }
+
+  .overlay {
+    display: none; /* Hide overlay on mobile as we show info below */
   }
 
   .navButton {
