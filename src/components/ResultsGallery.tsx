@@ -193,50 +193,65 @@ export default function ResultsGallery({ results = [], onSaveProgress }: Results
               <p>No cars found with images. Please check your data source.</p>
             </div>
           ) : (
-            <div className={styles.galleryWrapper}>
-              <button 
-                className={styles.navButton} 
-                onClick={() => scroll('left')}
-                aria-label="Scroll left"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-                </svg>
-              </button>
-
-              <div 
-                className={styles.galleryContainer} 
-                ref={scrollContainerRef}
-                onScroll={handleScroll}
-              >
-                {results.map((car, index) => (
-                  <div key={car.id} className={styles.cardWrapper}>
-                      <Link href={`/cars/${car.id}`} target="_blank" rel="noopener noreferrer" className={styles.cardLink}>
-                        <Image 
-                          src={car.image} 
-                          alt={`${car.make} ${car.model}`} 
-                          fill
-                          sizes="(max-width: 768px) 80vw, 600px"
-                          className={styles.image}
-                          style={{ objectFit: 'cover' }}
-                          priority={index < 2}
-                        />
-                        <div className={styles.overlay}>
-                          <div className={styles.carName}>{car.make}</div>
-                          <div className={styles.carDetails}>{car.model} • {car.year}</div>
-                        </div>
-                      </Link>
-                    </div>
-                ))}
-              </div>
-
-              <div className={styles.mobileStaticInfo}>
+            <>
+              <div className={styles.mobileHeader}>
                 <div className={styles.staticCarName}>
                   {results[activeIndex]?.year} {results[activeIndex]?.make}
                 </div>
                 <div className={styles.staticCarModel}>
                   {results[activeIndex]?.model}
                 </div>
+              </div>
+
+              <div className={styles.galleryWrapper}>
+                <button 
+                  className={styles.navButton} 
+                  onClick={() => scroll('left')}
+                  aria-label="Scroll left"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                  </svg>
+                </button>
+
+                <div 
+                  className={styles.galleryContainer} 
+                  ref={scrollContainerRef}
+                  onScroll={handleScroll}
+                >
+                  {results.map((car, index) => (
+                    <div key={car.id} className={styles.cardWrapper}>
+                        <Link href={`/cars/${car.id}`} target="_blank" rel="noopener noreferrer" className={styles.cardLink}>
+                          <Image 
+                            src={car.image} 
+                            alt={`${car.make} ${car.model}`} 
+                            fill
+                            sizes="(max-width: 768px) 80vw, 600px"
+                            className={styles.image}
+                            style={{ objectFit: 'cover' }}
+                            priority={index < 2}
+                          />
+                          <div className={styles.overlay}>
+                            <div className={styles.carName}>{car.make}</div>
+                            <div className={styles.carDetails}>{car.model} • {car.year}</div>
+                          </div>
+                        </Link>
+                      </div>
+                  ))}
+                </div>
+
+                <button 
+                  className={styles.navButton} 
+                  onClick={() => scroll('right')}
+                  aria-label="Scroll right"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                  </svg>
+                </button>
+              </div>
+
+              <div className={styles.mobileFooter}>
                 <Link 
                   href={`/cars/${results[activeIndex]?.id}`} 
                   target="_blank" 
@@ -246,17 +261,7 @@ export default function ResultsGallery({ results = [], onSaveProgress }: Results
                   View Details
                 </Link>
               </div>
-
-              <button 
-                className={styles.navButton} 
-                onClick={() => scroll('right')}
-                aria-label="Scroll right"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                </svg>
-              </button>
-            </div>
+            </>
           )}
         </div>
       </div>

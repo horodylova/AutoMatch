@@ -108,6 +108,8 @@
 }
 
 /* Gallery Styles */
+.mobileHeader,
+.mobileFooter,
 .mobileStaticInfo {
   display: none;
 }
@@ -467,14 +469,23 @@
     pointer-events: none; /* Disable click on image */
   }
 
-  .mobileStaticInfo {
+  .mobileHeader {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 0.25rem;
-    margin-top: 1rem;
+    margin-bottom: 0.5rem;
     width: 100%;
     text-align: center;
+    padding: 0 1rem;
+    box-sizing: border-box;
+  }
+
+  .mobileFooter {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 0.5rem;
     padding: 0 1rem;
     box-sizing: border-box;
   }
@@ -489,7 +500,7 @@
   .staticCarModel {
     font-size: 1.1rem;
     color: rgba(230, 214, 180, 0.8);
-    margin-bottom: 0.75rem;
+    margin-bottom: 0;
   }
 
   .staticDetailsButton {
