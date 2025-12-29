@@ -1,7 +1,7 @@
 .section {
   margin-block: 1.5rem;
   overflow: hidden;
-  max-width: 100vw; /* Prevent horizontal overflow */
+  max-width: 100vw;
 }
 
 .shareSection {
@@ -54,9 +54,8 @@
   display: flex;
   justify-content: center;
   width: 100%;
-  max-width: 100vw; /* Critical fix */
+  max-width: 100vw;
   box-sizing: border-box;
-  /* overflow: hidden; Removed to prevent clipping of shadows and content */
 }
 
 .container {
@@ -107,10 +106,8 @@
   background-color: #d1492d;
 }
 
-/* Gallery Styles */
 .mobileHeader,
-.mobileFooter,
-.mobileStaticInfo {
+.mobileFooter {
   display: none;
 }
 
@@ -122,7 +119,6 @@
   max-width: 100%;
   position: relative;
   box-sizing: border-box;
-  overflow: visible; /* Allow buttons to be visible */
 }
 
 .galleryContainer {
@@ -133,10 +129,9 @@
   scroll-snap-type: x mandatory;
   display: flex;
   gap: 1.5rem;
-  padding: 1rem; /* Increased padding to prevent cutoff */
+  padding: 1rem;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
-  /* Remove any margins that could cause overflow */
   margin: 0;
 }
 
@@ -158,6 +153,7 @@
   transition: all 0.3s ease;
   flex-shrink: 0;
   z-index: 10;
+  position: relative;
 }
 
 .navButton:hover {
@@ -173,16 +169,15 @@
 .navButton svg {
   width: 1.5rem;
   height: 1.5rem;
-  stroke-width: 2;
 }
 
 .cardWrapper {
   flex: 0 0 auto;
   scroll-snap-align: center;
-  width: min(80vw, 600px); /* Better responsive sizing */
+  width: min(80vw, 600px);
   position: relative;
   transition: transform 0.3s ease;
-  will-change: transform; /* Optimize animations */
+  will-change: transform;
 }
 
 .cardWrapper:hover {
@@ -200,13 +195,11 @@
   width: 100%;
 }
 
-/* Actions Section */
 .actionsSection {
   margin-block: 2rem;
   padding-bottom: 3rem;
 }
 
-/* Desktop Styles */
 .desktopActions {
   display: block;
   width: 100%;
@@ -224,18 +217,18 @@
 .desktopColumn {
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* Left align text */
+  align-items: flex-start;
   gap: 1rem;
   text-align: left;
   padding: 0;
-  background: transparent; /* Remove background */
+  background: transparent;
   border-radius: 0;
   flex: 1;
   max-width: 30rem;
 }
 
 .desktopTitle {
-  font-size: 1.25rem; /* Slightly smaller, more elegant */
+  font-size: 1.25rem;
   font-weight: 600;
   color: rgb(230, 214, 180);
   margin: 0;
@@ -254,7 +247,7 @@
 
 .desktopButtonsRow {
   display: flex;
-  flex-direction: row; /* Horizontal buttons */
+  flex-direction: row;
   gap: 1rem;
   width: 100%;
   align-items: center;
@@ -267,14 +260,14 @@
   padding: 0.8rem 2rem;
   font-size: 0.95rem;
   font-weight: 600;
-  color: #1a1a1a; /* Dark text for contrast */
-  background-color: rgb(230, 214, 180); /* Light background */
+  color: #1a1a1a;
+  background-color: rgb(230, 214, 180);
   border: none;
-  border-radius: 4px; /* Less rounded, more serious */
+  border-radius: 4px;
   cursor: pointer;
   transition: all 0.2s ease;
   text-decoration: none;
-  width: 260px; /* Fixed width */
+  width: 260px;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   white-space: nowrap;
@@ -294,12 +287,12 @@
   font-weight: 600;
   color: rgb(230, 214, 180);
   background-color: transparent;
-  border: 1px solid rgba(230, 214, 180, 0.3); /* Thinner border */
+  border: 1px solid rgba(230, 214, 180, 0.3);
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.2s ease;
   text-decoration: none;
-  width: 260px; /* Fixed width */
+  width: 260px;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   white-space: nowrap;
@@ -311,13 +304,173 @@
   color: white;
 }
 
-/* Mobile Actions (Hidden on Desktop) */
 .mobileActions {
   display: none;
 }
 
-/* Mobile Styles */
+.image {
+  transition: transform 0.5s ease;
+  will-change: transform;
+}
+
+.cardLink:hover .image {
+  transform: scale(1.05);
+}
+
+.overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+  padding: 2rem;
+  color: white;
+  z-index: 2;
+}
+
+.carName {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.carDetails {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  font-weight: 400;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 3rem 0;
+  color: rgba(230, 214, 180, 0.7);
+  font-size: 1.1rem;
+  width: 100%;
+}
+
 @media (max-width: 768px) {
+  .sectionFirst {
+    margin-top: 8rem;
+  }
+
+  .wrapping {
+    padding-inline: 1rem;
+  }
+  
+  .section {
+    margin-block: 1rem;
+  }
+  
+  .galleryWrapper {
+    gap: 0;
+    position: relative;
+  }
+  
+  .navButton {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 100;
+    background: rgba(0, 0, 0, 0.75);
+    border: 2px solid rgba(255, 255, 255, 0.9);
+    color: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    width: 3rem;
+    height: 3rem;
+    backdrop-filter: blur(4px);
+  }
+
+  .navButton:hover {
+    background: rgba(0, 0, 0, 0.85);
+    border-color: white;
+  }
+
+  .navButtonLeft {
+    left: 0.5rem;
+  }
+  
+  .navButtonRight {
+    right: 0.5rem;
+  }
+  
+  .galleryContainer {
+    padding: 0.5rem 0;
+    gap: 1rem;
+  }
+  
+  .cardWrapper {
+    width: 90vw;
+  }
+  
+  .overlay {
+    display: none;
+  }
+  
+  .mobileTextHidden {
+    display: none !important;
+  }
+
+  .cardLink {
+    pointer-events: none;
+  }
+
+  .mobileHeader {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    margin-bottom: 1rem;
+    width: 100%;
+    text-align: center;
+    padding: 0 1rem;
+    box-sizing: border-box;
+  }
+
+  .mobileFooter {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 1rem;
+    padding: 0 1rem;
+    box-sizing: border-box;
+  }
+
+  .staticCarName {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: rgb(230, 214, 180);
+    line-height: 1.2;
+  }
+
+  .staticCarModel {
+    font-size: 1.15rem;
+    color: rgba(230, 214, 180, 0.85);
+    font-weight: 500;
+  }
+
+  .staticDetailsButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 320px;
+    padding: 0.9rem;
+    background-color: #c9472d;
+    color: rgb(230, 214, 180);
+    font-weight: 700;
+    text-decoration: none;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    transition: all 0.2s ease;
+  }
+  
+  .staticDetailsButton:active {
+    transform: scale(0.98);
+    background-color: #b33f28;
+  }
+
   .desktopActions {
     display: none;
   }
@@ -357,202 +510,38 @@
   }
 }
 
-.image {
-  transition: transform 0.5s ease;
-  will-change: transform;
-}
-
-.cardLink:hover .image {
-  transform: scale(1.05);
-}
-
-.overlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
-  padding: 2rem;
-  color: white;
-  z-index: 2;
-}
-
-.carName {
-  font-size: 1.75rem;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-}
-
-.carDetails {
-  font-size: 1.1rem;
-  opacity: 0.9;
-  font-weight: 400;
-}
-
-/* Empty State */
-.emptyState {
-  text-align: center;
-  padding: 3rem 0;
-  color: rgba(230, 214, 180, 0.7);
-  font-size: 1.1rem;
-  width: 100%;
-}
-
-/* Mobile Responsiveness */
-@media (max-width: 768px) {
-  .sectionFirst {
-    margin-top: 8rem;
-  }
-
-  .wrapping {
-    padding-inline: 1rem;
-  }
-  
-  .section {
-    margin-block: 1rem;
-  }
-  
-  .galleryWrapper {
-    gap: 0;
-    overflow: visible; /* Ensure buttons are visible */
-  }
-  
-  .navButton {
-    display: flex;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 20;
-    background: rgba(0, 0, 0, 0.6);
-    border-color: rgba(255, 255, 255, 0.9);
-    color: white;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-    width: 3rem;
-    height: 3rem;
-  }
-
-  .navButton:first-of-type {
-    left: 0.5rem;
-  }
-  
-  .navButton:last-of-type {
-    right: 0.5rem;
-  }
-  
-  .galleryContainer {
-    padding: 0.25rem 0;
-    gap: 1rem;
-  }
-  
-  .cardWrapper {
-    width: min(85vw, 500px);
-  }
-  
-  .overlay {
-    padding: 1.25rem;
-  }
-  
-  .carName {
-    font-size: 1.4rem;
-  }
-  
-  .carDetails {
-    font-size: 0.95rem;
-  }
-
-  .mobileTextHidden {
-    display: none !important;
-  }
-
-  .cardLink {
-    pointer-events: none; /* Disable click on image */
-  }
-
-  .mobileHeader {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.25rem;
-    margin-bottom: 0.5rem;
-    width: 100%;
-    text-align: center;
-    padding: 0 1rem;
-    box-sizing: border-box;
-  }
-
-  .mobileFooter {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    margin-top: 0.5rem;
-    padding: 0 1rem;
-    box-sizing: border-box;
-  }
-
-  .staticCarName {
-    font-size: 1.5rem;
-    font-weight: 800;
-    color: rgb(230, 214, 180);
-    line-height: 1.2;
-  }
-
-  .staticCarModel {
-    font-size: 1.1rem;
-    color: rgba(230, 214, 180, 0.8);
-    margin-bottom: 0;
-  }
-
-  .staticDetailsButton {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    max-width: 300px;
-    padding: 0.8rem;
-    background-color: #c9472d;
-    color: rgb(230, 214, 180);
-    font-weight: 700;
-    text-decoration: none;
-    border-radius: 0.5rem;
-    font-size: 1rem;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-    z-index: 10;
-    transition: transform 0.2s ease;
-  }
-  
-  .staticDetailsButton:active {
-    transform: scale(0.98);
-  }
-
-  .overlay {
-    display: none; /* Hide overlay on mobile as we show info below */
-  }
-
-  .navButton {
-    opacity: 1 !important;
-    visibility: visible !important;
-    background: rgba(0, 0, 0, 0.7); /* Slightly darker for better visibility */
-  }
-}
-
-/* Extra small screens */
 @media (max-width: 480px) {
   .wrapping {
     padding-inline: 0.5rem;
   }
   
   .cardWrapper {
-    width: 90vw;
+    width: 92vw;
   }
   
   .navButton {
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+
+  .navButtonLeft {
+    left: 0.25rem;
+  }
+  
+  .navButtonRight {
+    right: 0.25rem;
   }
   
   .navButton svg {
-    width: 1.25rem;
-    height: 1.25rem;
+    width: 1.35rem;
+    height: 1.35rem;
+  }
+
+  .staticCarName {
+    font-size: 1.4rem;
+  }
+
+  .staticCarModel {
+    font-size: 1rem;
   }
 }
