@@ -212,13 +212,14 @@ export default function Filters({ onApply }: Props) {
                     const hay = `${mk} ${md} ${tr} ${yr}`.toLowerCase();
                     const ok = tokens.every(t => hay.includes(t));
                     if (!ok) continue;
-                    const label = [mk, md, tr, yr].filter(Boolean).join(" ");
+                    // Exclude trim to reduce duplicates and show more years
+                    const label = [mk, md, yr].filter(Boolean).join(" ");
                     if (label) set.add(label);
-                    if (set.size >= 8) break;
+                    if (set.size >= 100) break;
                   }
                   const arr = Array.from(set.values());
                   if (arr.length === 0) {
-                    return makes.filter(m => m.toLowerCase().includes(search.toLowerCase())).slice(0, 8).map(m => (
+                    return makes.filter(m => m.toLowerCase().includes(search.toLowerCase())).slice(0, 100).map(m => (
                       <button key={m} className={styles.suggestItem} onClick={() => { setSelectedMakes(prev => prev.includes(m) ? prev : [...prev, m]); setSearch(""); setShowSuggest(false); }}>
                         {m}
                       </button>

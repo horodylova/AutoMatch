@@ -40,6 +40,7 @@ export interface CarSpecs {
   torque: number;
   engineSize: number;
   cylinders: number;
+  zeroSixty: number;
   driveType: string;
   transmission: string;
   classification: string;
@@ -65,6 +66,27 @@ export interface CarSpecs {
 
   length: number;
   width: number;
+  height: number;
+  frontTrack: number;
+  rearTrack: number;
+
+  colorsExterior: string;
+  colorsInterior: string;
+  angleApproach: number;
+  angleDeparture: number;
+  dragCoefficient: number;
+  epaInteriorVolume: number;
+  grossWeight: number;
+  horsepowerRpm: number;
+  torqueRpm: number;
+  valves: number;
+  valveTiming: string;
+  camType: string;
+  engineType: string;
+  epaCityMpge: number;
+  epaHighwayMpge: number;
+  epaKwh100Mi: number;
+  hipRoomFront: number;
 
   basicWarranty: string;
   drivetrainWarranty: string;
@@ -162,7 +184,7 @@ export function parseCarData(
     str("picture") ||
     str("calculated_image_url");
 
-  let image = "/placeholder-car.jpg";
+  let image = "/no-image-available.jpg";
   if (rawImage) {
     const parts = rawImage
       .split(/[;,]/)
@@ -188,20 +210,36 @@ export function parseCarData(
     maxCargoCapacity: n("maximum cargo capacity (cu ft)"),
     curbWeight: n("curb weight (lbs)"),
     turningCircle: n("turning circle (ft)"),
+    dragCoefficient: n("drag coefficient (cd)"),
+    grossWeight: n("gross weight (lbs)"),
+    angleApproach: n("angle of approach (degrees)"),
+    angleDeparture: n("angle of departure (degrees)"),
+
+    colorsExterior: str("colors exterior"),
+    colorsInterior: str("colors interior"),
 
     headroomFront: n("front headroom (in)"),
     legroomFront: n("front legroom (in)"),
     shoulderRoomFront: n("front shoulder room (in)"),
+    hipRoomFront: n("front hip room (in)"),
     headroomRear: n("rear headroom (in)"),
     legroomRear: n("rear legroom (in)"),
     shoulderRoomRear: n("rear shoulder room (in)"),
     hipRoomRear: n("rear hip room (in)"),
+    epaInteriorVolume: n("epa interior volume (cu ft)"),
     wheelbase: n("wheelbase (in)"),
 
     horsepower: n("horsepower (hp)"),
+    horsepowerRpm: n("horsepower (rpm)"),
     torque: n("torque (ft-lbs)"),
+    torqueRpm: n("torque (rpm)"),
     engineSize: n("engine size (l)"),
     cylinders: n("cylinders"),
+    valves: n("valves"),
+    valveTiming: str("valve timing"),
+    camType: str("cam type"),
+    engineType: str("engine type"),
+    zeroSixty: n("0-60 mph (sec)") || n("0-60 time (sec)") || n("0-60 mph") || n("acceleration (0-60)"),
     driveType: str("drive type"),
     transmission: str("transmission"),
     classification: str("classification"),
@@ -211,15 +249,18 @@ export function parseCarData(
     fuelType: str("fuel type"),
     fuelTankCapacity: n("fuel tank capacity (gal)"),
     epaCombinedMpg: n("epa combined mpg"),
-    epaCityMpg: n("epa city mpg"),
+    epaCityMpg: n("epa city/highway mpg") || n("epa city mpg"), // Try split if combined
     epaHighwayMpg: n("epa highway mpg"),
-    rangeCity: 0,
-    rangeHwy: 0,
+    rangeCity: n("range in miles (city/hwy)") || n("range city"),
+    rangeHwy: n("range hwy"),
 
     mpge: n("epa combined mpge"),
-    evRange: n("ev range (mi)"),
+    epaCityMpge: n("epa city mpge"),
+    epaHighwayMpge: n("epa highway mpge"),
+    evRange: n("epa electricity range (mi)") || n("range in miles (city/hwy)"), // Fallback
+    epaKwh100Mi: n("epa kwh/100 mi"),
     batteryCapacity: n("battery capacity (kwh)"),
-    chargingTime: n("charging time (240v)"),
+    chargingTime: n("epa time to charge battery (at 240v) (hr)"),
 
     maxTowingCapacity: n("maximum towing capacity (lbs)"),
     maxPayload: n("maximum payload (lbs)"),
@@ -227,11 +268,14 @@ export function parseCarData(
 
     length: n("length (in)"),
     width: n("width (in)"),
+    height: n("height (in)"),
+    frontTrack: n("front track (in)"),
+    rearTrack: n("rear track (in)"),
 
-    basicWarranty: str("basic warranty"),
-    drivetrainWarranty: str("drivetrain warranty"),
+    basicWarranty: str("basic"),
+    drivetrainWarranty: str("drivetrain"),
     roadsideAssistance: str("roadside assistance"),
-    rustWarranty: str("rust warranty"),
+    rustWarranty: str("rust"),
     countryOfOrigin: str("country of origin"),
   };
 }

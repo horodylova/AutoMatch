@@ -1,0 +1,417 @@
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 120px 24px 48px;
+  min-height: 100vh;
+  box-sizing: border-box;
+  color: var(--kendo-color-on-app-surface);
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 100px 16px 32px;
+  }
+}
+
+.title {
+  font-size: 32px;
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 12px;
+  background: linear-gradient(135deg, var(--kendo-color-primary) 0%, #E6D6B4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+  width: 100%;
+}
+
+.subtitle {
+  text-align: center;
+  color: rgba(230, 214, 180, 0.7);
+  max-width: 600px;
+  margin: 0 auto 48px;
+  line-height: 1.6;
+}
+
+/* Selection Grid */
+.selectionGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin-bottom: 48px;
+  position: relative;
+}
+
+@media (max-width: 768px) {
+  .selectionGrid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+.selectionCard {
+  background: rgba(230, 214, 180, 0.03);
+  border: 1px solid var(--kendo-color-border);
+  border-radius: 24px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-height: 200px;
+  justify-content: center;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.selectionCard:hover {
+  border-color: rgba(230, 214, 180, 0.3);
+  background: rgba(230, 214, 180, 0.05);
+}
+
+.cardTitle {
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(230, 214, 180, 0.5);
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+/* Search Input Styles (Adapted from cars.module.css) */
+.searchWrap {
+  position: relative;
+  width: 100%;
+}
+
+.searchBar {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 16px;
+  width: 20px;
+  height: 20px;
+  color: var(--kendo-color-primary);
+}
+
+.searchField {
+  width: 100%;
+  padding: 16px 16px 16px 48px;
+  border-radius: 16px;
+  border: 1px solid var(--kendo-color-border);
+  background-color: var(--kendo-color-surface);
+  color: var(--kendo-color-on-app-surface);
+  font-size: 16px;
+  outline: none;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.searchField::placeholder {
+  color: rgba(230, 214, 180, 0.4);
+}
+
+.searchField:focus {
+  border-color: var(--kendo-color-primary);
+  box-shadow: 0 0 0 2px rgba(201, 71, 45, 0.2);
+}
+
+.suggestList {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + 8px);
+  display: grid;
+  gap: 4px;
+  border: 1px solid var(--kendo-color-border);
+  background: var(--kendo-color-surface);
+  border-radius: 16px;
+  padding: 8px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+  z-index: 100;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.suggestItem {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--kendo-color-on-app-surface);
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+}
+
+.suggestItem:hover {
+  background: rgba(230, 214, 180, 0.08);
+  border-color: rgba(230, 214, 180, 0.1);
+}
+
+/* Selected Car Display */
+.selectedCar {
+  text-align: center;
+}
+
+.carImage {
+  width: 100%;
+  height: 180px;
+  object-fit: contain;
+  margin-bottom: 16px;
+  border-radius: 12px;
+}
+
+.carName {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.carTrim {
+  font-size: 14px;
+  color: rgba(230, 214, 180, 0.6);
+  margin-bottom: 16px;
+}
+
+.changeButton {
+  background: transparent;
+  border: 1px solid var(--kendo-color-border);
+  color: rgba(230, 214, 180, 0.6);
+  padding: 8px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 13px;
+}
+
+.changeButton:hover {
+  border-color: var(--kendo-color-primary);
+  color: var(--kendo-color-primary);
+}
+
+/* Start Button */
+.actionArea {
+  text-align: center;
+  margin-bottom: 64px;
+}
+
+/* Sticky Header for Mobile */
+.stickyHeader {
+  position: sticky;
+  top: 70px; /* Adjust based on global header height */
+  background: var(--kendo-color-surface);
+  z-index: 90;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--kendo-color-border);
+  margin-bottom: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.stickyCol {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--kendo-color-primary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.stickyImg {
+  width: 40px;
+  height: 24px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+@media (min-width: 769px) {
+  .stickyHeader {
+    display: none;
+  }
+}
+
+.compareButton {
+  background: var(--kendo-color-primary);
+  color: white;
+  border: none;
+  padding: 16px 48px;
+  border-radius: 999px;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 8px 24px rgba(201, 71, 45, 0.3);
+  outline: none;
+}
+
+.compareButton:focus {
+  outline: none;
+}
+
+.compareButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(201, 71, 45, 0.4);
+  background: var(--kendo-color-primary-hover);
+}
+
+.compareButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Comparison View */
+.comparisonView {
+  display: grid;
+  gap: 48px;
+}
+
+.sectionTitle {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: var(--kendo-color-primary);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sectionTitle::after {
+  content: "";
+  height: 1px;
+  flex: 1;
+  background: linear-gradient(90deg, var(--kendo-color-border) 0%, transparent 100%);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(230, 214, 180, 0.06);
+}
+
+.rowLabel {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(230, 214, 180, 0.5);
+  margin-bottom: 4px;
+  text-align: center;
+}
+
+.rowValue {
+  grid-row: 2;
+  font-size: 14px;
+  text-align: center;
+  word-break: break-word;
+}
+
+.rowValue:first-of-type {
+  grid-column: 1;
+}
+
+.rowValue:last-of-type {
+  grid-column: 2;
+}
+
+.rowValue.highlight {
+  color: var(--kendo-color-primary);
+  font-weight: 600;
+}
+
+@media (min-width: 769px) {
+  .row {
+    grid-template-columns: 1fr 150px 1fr;
+    align-items: center;
+    gap: 24px;
+  }
+  
+  .rowLabel {
+    grid-column: 2;
+    grid-row: 1;
+    text-align: center;
+    margin-bottom: 0;
+  }
+  
+  .rowValue {
+    grid-row: 1;
+  }
+  
+  .rowValue:first-of-type {
+    grid-column: 1;
+    text-align: right;
+  }
+  
+  .rowValue:last-of-type {
+    grid-column: 3;
+    text-align: left;
+  }
+}
+
+.vsBadge {
+  display: inline-flex;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--kendo-color-surface);
+  border: 1px solid var(--kendo-color-border);
+  color: var(--kendo-color-primary);
+  font-weight: 800;
+  font-style: italic;
+  z-index: 10;
+}
+
+@media (min-width: 769px) {
+  .vsBadge {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+@media (max-width: 768px) {
+  .vsBadge {
+    position: absolute;
+    left: 50%;
+    top: 50%; /* Position in the middle of the grid height? No, that's unreliable */
+    /* Instead, let's use top: auto and position it between the cards */
+    top: calc(50% - 20px); /* Rough approximation if cards are equal height */
+    /* Better approach: hide it from grid flow and position absolutely? */
+    /* Or just make it part of the flow? */
+    /* If it's part of the flow (grid item), it takes a whole row. */
+  }
+}
+
+/* Actually, let's make it simpler for mobile */
+@media (max-width: 768px) {
+  .vsBadge {
+    position: static;
+    transform: none;
+    justify-self: center;
+    margin: -12px 0; /* Slight negative margin to pull them closer? */
+    z-index: 10;
+  }
+  
+  .compareButton {
+    padding: 16px 32px;
+    width: 100%;
+    max-width: 300px;
+  }
+}
