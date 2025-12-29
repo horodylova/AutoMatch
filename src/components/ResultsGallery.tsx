@@ -105,7 +105,6 @@ export default function ResultsGallery({ results = [], onSaveProgress }: Results
 
       const targetCard = cards[targetIndex];
       targetCard.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-      setActiveIndex(targetIndex);
     }
   };
 
@@ -213,21 +212,21 @@ export default function ResultsGallery({ results = [], onSaveProgress }: Results
                 >
                   {results.map((car, index) => (
                     <div key={car.id} className={styles.cardWrapper}>
-                      <Link href={`/cars/${car.id}`} target="_blank" rel="noopener noreferrer" className={styles.cardLink}>
-                        <Image 
-                          src={car.image} 
-                          alt={`${car.make} ${car.model}`} 
-                          fill
-                          sizes="(max-width: 768px) 90vw, 600px"
-                          className={styles.image}
-                          style={{ objectFit: 'cover' }}
-                          priority={index < 2}
-                        />
-                        <div className={styles.overlay}>
-                          <div className={styles.carName}>{car.make}</div>
-                          <div className={styles.carDetails}>{car.model} • {car.year}</div>
-                        </div>
-                      </Link>
+                        <Link href={`/cars/${car.id}`} target="_blank" rel="noopener noreferrer" className={styles.cardLink}>
+                          <Image 
+                            src={car.image} 
+                            alt={`${car.make} ${car.model}`} 
+                            fill
+                            sizes="(max-width: 768px) 80vw, 600px"
+                            className={styles.image}
+                            style={{ objectFit: 'cover' }}
+                            priority={index < 2}
+                          />
+                          <div className={styles.overlay}>
+                            <div className={styles.carName}>{car.make}</div>
+                            <div className={styles.carDetails}>{car.model} • {car.year}</div>
+                          </div>
+                        </Link>
                     </div>
                   ))}
                 </div>

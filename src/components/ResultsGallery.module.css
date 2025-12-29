@@ -106,7 +106,10 @@
   background-color: #d1492d;
 }
 
-.mobileHeader,
+.mobileHeader {
+  display: none;
+}
+
 .mobileFooter {
   display: none;
 }
@@ -154,6 +157,7 @@
   flex-shrink: 0;
   z-index: 10;
   position: relative;
+  outline: none;
 }
 
 .navButton:hover {
@@ -164,6 +168,10 @@
 
 .navButton:active {
   transform: scale(0.95);
+}
+
+.navButton:focus {
+  outline: none;
 }
 
 .navButton svg {
@@ -193,6 +201,13 @@
   position: relative;
   aspect-ratio: 16/10;
   width: 100%;
+  border: none;
+  outline: none;
+}
+
+.cardLink:focus {
+  outline: none;
+  border: none;
 }
 
 .actionsSection {
@@ -349,6 +364,7 @@
   width: 100%;
 }
 
+/* Mobile Responsiveness */
 @media (max-width: 768px) {
   .sectionFirst {
     margin-top: 8rem;
@@ -356,15 +372,23 @@
 
   .wrapping {
     padding-inline: 1rem;
+    overflow: visible;
+    flex-direction: column;
+    align-items: center;
   }
   
   .section {
     margin-block: 1rem;
+    overflow: visible;
   }
   
   .galleryWrapper {
     gap: 0;
     position: relative;
+    overflow: visible;
+    width: 100%;
+    margin: 0;
+    padding: 0;
   }
   
   .navButton {
@@ -372,35 +396,54 @@
     top: 50%;
     transform: translateY(-50%);
     z-index: 100;
-    background: rgba(0, 0, 0, 0.75);
-    border: 2px solid rgba(255, 255, 255, 0.9);
+    background: rgba(0, 0, 0, 0.6);
+    border: 2px solid rgba(255, 255, 255, 0.8);
     color: white;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
     width: 3rem;
     height: 3rem;
     backdrop-filter: blur(4px);
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    padding: 0;
+    cursor: pointer;
   }
 
   .navButton:hover {
-    background: rgba(0, 0, 0, 0.85);
+    background: rgba(0, 0, 0, 0.8);
     border-color: white;
   }
 
   .navButtonLeft {
-    left: 0.5rem;
+    left: 0;
   }
   
   .navButtonRight {
-    right: 0.5rem;
+    right: 0;
   }
   
   .galleryContainer {
-    padding: 0.5rem 0;
+    padding: 0;
     gap: 1rem;
+    width: 100%;
+    margin: 0;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* IE 10+ */
+  }
+  
+  .galleryContainer::-webkit-scrollbar {
+    display: none; /* Chrome/Safari/Webkit */
+    width: 0;
+    height: 0;
+    background: transparent;
   }
   
   .cardWrapper {
-    width: 90vw;
+    width: 85vw; /* Slightly smaller to see next card */
+    max-width: 400px;
+    margin: 0;
   }
   
   .overlay {
@@ -413,27 +456,38 @@
 
   .cardLink {
     pointer-events: none;
+    border: none;
+    outline: none;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
   }
 
   .mobileHeader {
-    display: flex;
+    display: flex !important;
     flex-direction: column;
     align-items: center;
+    justify-content: flex-end;
     gap: 0.25rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
     width: 100%;
+    height: 7rem;
     text-align: center;
     padding: 0 1rem;
     box-sizing: border-box;
+    visibility: visible;
+    z-index: 20;
+    position: relative;
   }
 
   .mobileFooter {
-    display: flex;
+    display: flex !important;
     justify-content: center;
     width: 100%;
     margin-top: 1rem;
     padding: 0 1rem;
     box-sizing: border-box;
+    visibility: visible;
+    z-index: 20;
+    position: relative;
   }
 
   .staticCarName {
@@ -441,12 +495,17 @@
     font-weight: 800;
     color: rgb(230, 214, 180);
     line-height: 1.2;
+    display: block;
+    visibility: visible;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
   }
 
   .staticCarModel {
     font-size: 1.15rem;
-    color: rgba(230, 214, 180, 0.85);
+    color: rgba(230, 214, 180, 0.9);
     font-weight: 500;
+    display: block;
+    visibility: visible;
   }
 
   .staticDetailsButton {
@@ -464,6 +523,12 @@
     font-size: 1rem;
     box-shadow: 0 4px 6px rgba(0,0,0,0.2);
     transition: all 0.2s ease;
+    border: none;
+    outline: none;
+  }
+
+  .staticDetailsButton:focus {
+    outline: none;
   }
   
   .staticDetailsButton:active {
