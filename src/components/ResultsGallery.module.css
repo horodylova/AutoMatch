@@ -366,8 +366,17 @@
 
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
+  .title {
+    display: none;
+  }
+
+  .shareSection {
+    margin-block: 0.5rem;
+    margin-bottom: 0;
+  }
+
   .sectionFirst {
-    margin-top: 8rem;
+    margin-top: 4rem;
   }
 
   .wrapping {
@@ -544,7 +553,7 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 0.5rem;
-    padding: 0 1rem;
+    padding: 0;
     width: 100%;
     margin: 0 auto;
   }

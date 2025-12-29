@@ -44,7 +44,10 @@ export default function ResultsPage() {
     <div style={{ paddingTop: "80px", minHeight: "100vh", background: "#0e1b24" }}>
       <QuizHeader onExit={() => setShowExitModal(true)} />
       
-      <ResultsGallery results={results} />
+      <ResultsGallery 
+        results={results} 
+        onSaveProgress={() => router.push('/cars')}
+      />
 
       {showExitModal && (
         <ExitModal 
