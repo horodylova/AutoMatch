@@ -23,6 +23,7 @@ export interface IconChoiceOption {
   key: string;
   title: string;
   desc: string;
+  mobileDesc?: string;
   icon: string;
   categories?: {
     primary: CategoryValue;
@@ -148,6 +149,7 @@ export const QUIZ_QUESTIONS: QuizQuestionData[] = [
         key: "security_safety",
         title: "Security & Safety",
         desc: "I want to feel protected and shielded from the world",
+        mobileDesc: "Protected & shielded from the world",
         icon: "/commanding view icons/important.svg",
         categories: {
           primary: Categories.RELIABILITY,
@@ -158,6 +160,7 @@ export const QUIZ_QUESTIONS: QuizQuestionData[] = [
         key: "freedom_possibility",
         title: "Freedom & Possibility",
         desc: "I want to feel like I can go anywhere at any time",
+        mobileDesc: "Go anywhere, anytime",
         icon: "/commanding view icons/helpful.svg",
         categories: {
           primary: Categories.ADVENTURE,
@@ -168,6 +171,7 @@ export const QUIZ_QUESTIONS: QuizQuestionData[] = [
         key: "status_achievement",
         title: "Status & Achievement",
         desc: "I want to feel proud of what I’ve earned and show it",
+        mobileDesc: "Proud of what I’ve earned",
         icon: "/commanding view icons/not-important.svg",
         categories: {
           primary: Categories.LUXURY,
@@ -178,6 +182,7 @@ export const QUIZ_QUESTIONS: QuizQuestionData[] = [
         key: "joy_excitement",
         title: "Joy & Excitement",
         desc: "I want to smile every time I start the engine",
+        mobileDesc: "Smile every time I start the engine",
         icon: "/commanding view icons/depends.svg",
         categories: {
           primary: Categories.PERFORMANCE,
@@ -337,6 +342,7 @@ export const QUIZ_QUESTIONS: QuizQuestionData[] = [
         key: "near_silence",
         title: "Near-Silence",
         desc: "A serene cabin where you hear only whispers and refinement",
+        mobileDesc: "Serene cabin, whispers only",
         icon: "/noise level icons/near-silence.svg",
         categories: {
           primary: Categories.COMFORT,
@@ -347,6 +353,7 @@ export const QUIZ_QUESTIONS: QuizQuestionData[] = [
         key: "natural_ambient",
         title: "Natural Ambient Sound",
         desc: "Balanced road noise that keeps you connected to the drive",
+        mobileDesc: "Balanced sound, connected drive",
         icon: "/noise level icons/natural-ambient.svg",
         categories: {
           primary: Categories.COMFORT,
@@ -357,6 +364,7 @@ export const QUIZ_QUESTIONS: QuizQuestionData[] = [
         key: "engine_sound",
         title: "Engine Sound Energizes Me",
         desc: "The roar and rumble that makes every acceleration thrilling",
+        mobileDesc: "Roar & rumble, thrilling drive",
         icon: "/noise level icons/engine-sound.svg",
         categories: {
           primary: Categories.PERFORMANCE,
@@ -1020,6 +1028,7 @@ export const QUIZ_QUESTIONS: QuizQuestionData[] = [
         key: "high_commanding",
         title: "High & commanding",
         desc: "I like seeing over traffic and feeling in control",
+        mobileDesc: "Seeing over traffic & in control",
         icon: "/commanding view icons/important.svg",
         categories: {
           primary: Categories.ADVENTURE,
@@ -1030,6 +1039,7 @@ export const QUIZ_QUESTIONS: QuizQuestionData[] = [
         key: "balanced_flexible",
         title: "Balanced & flexible",
         desc: "I’m comfortable either way, depending on the situation",
+        mobileDesc: "Comfortable either way",
         icon: "/commanding view icons/helpful.svg",
         categories: {
           primary: Categories.PRACTICALITY,
@@ -1040,6 +1050,7 @@ export const QUIZ_QUESTIONS: QuizQuestionData[] = [
         key: "low_connected",
         title: "Low & connected",
         desc: "I prefer feeling close to the road and the car",
+        mobileDesc: "Close to the road & connected",
         icon: "/commanding view icons/not-important.svg",
         categories: {
           primary: Categories.PERFORMANCE,
@@ -1050,6 +1061,7 @@ export const QUIZ_QUESTIONS: QuizQuestionData[] = [
         key: "context_driven",
         title: "Context-driven",
         desc: "It depends on the drive, mood, and surroundings",
+        mobileDesc: "Depends on drive & mood",
         icon: "/commanding view icons/depends.svg",
         categories: {
           primary: Categories.TECHNOLOGY,
@@ -1398,6 +1410,7 @@ export const QUIZ_QUESTIONS: QuizQuestionData[] = [
         key: "prefer_automation",
         title: "Prefer Automation",
         desc: "Let the car handle the driving while you focus on other things",
+        mobileDesc: "Car drives, you relax",
         icon: "/control icons/radar.svg",
         categories: {
           primary: Categories.TECHNOLOGY,
@@ -1408,6 +1421,7 @@ export const QUIZ_QUESTIONS: QuizQuestionData[] = [
         key: "balanced_assist",
         title: "Balanced Assist",
         desc: "I want safety features but I still want to drive",
+        mobileDesc: "Safety features, I still drive",
         icon: "/control icons/shared-responsibility.svg",
         categories: {
           primary: Categories.RELIABILITY,
@@ -1418,6 +1432,7 @@ export const QUIZ_QUESTIONS: QuizQuestionData[] = [
         key: "full_control",
         title: "Full Driver Control",
         desc: "I want to feel everything the car is doing without interference",
+        mobileDesc: "Feel everything, no interference",
         icon: "/control icons/full-mechanical-feedback.svg",
         categories: {
           primary: Categories.PERFORMANCE,

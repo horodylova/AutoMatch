@@ -170,15 +170,19 @@ export default function QuizProgress({ current, total, showIntro = false, showHa
             <div className={styles.introSubtitle}>A quick guide to your CarCupid Match Quiz</div>
           </div>
           <div className={styles.introContent} style={{ alignItems: 'start' }}>
-            <div className={styles.introMedia}>
-              <Image src={introImageSrc || "/before-you-begin.jpg"} alt="intro" fill sizes="(max-width: 768px) 100vw, 50vw" className={styles.introImg} style={{ objectFit: 'cover' }} />
-            </div>
+            {!isMobile && (
+              <div className={styles.introMedia}>
+                <Image src={introImageSrc || "/before-you-begin.jpg"} alt="intro" fill sizes="(max-width: 768px) 100vw, 50vw" className={styles.introImg} style={{ objectFit: 'cover' }} />
+              </div>
+            )}
             <div className={styles.introList}>
               {isMobile ? (
                 <>
                   <div className={styles.introItem}><span className={styles.introDot} /><span className={styles.introText}>25+ questions. Takes about 8 minutes.</span></div>
-                  <div className={styles.introItem}><span className={styles.introDot} /><span className={styles.introText}>Follow your first instinct. No wrong answers.</span></div>
-                  <div className={styles.introItem}><span className={styles.introDot} /><span className={styles.introText}>Pause anytime. Progress is saved.</span></div>
+                  <div className={styles.introItem}><span className={styles.introDot} /><span className={styles.introText}>This isn’t a test — it’s a game.</span></div>
+                  <div className={styles.introItem}><span className={styles.introDot} /><span className={styles.introText}>Follow your first instinct. No wrong answers—just choose what feels true.</span></div>
+                  <div className={styles.introItem}><span className={styles.introDot} /><span className={styles.introText}>Pause anytime. Progress is saved for 24 hours.</span></div>
+                  <div className={styles.introItem}><span className={styles.introDot} /><span className={styles.introText}>At the end, receive personalized match results.</span></div>
                 </>
               ) : (
                 <>

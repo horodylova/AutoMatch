@@ -8,6 +8,7 @@ import styles from "./Header.module.css";
 export default function Header() {
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
   const [scrolled, setScrolled] = useState<boolean>(false);
+  const [hasSavedResults, setHasSavedResults] = useState<boolean>(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -16,6 +17,21 @@ export default function Header() {
 
     handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
+
+    const checkSavedResults = () => {
+      const savedData = localStorage.getItem('autoMatch_savedResults');
+      if (savedData) {
+        try {
+          const parsed = JSON.parse(savedData);
+          if (parsed.expiresAt && parsed.expiresAt > new Date().getTime()) {
+            setHasSavedResults(true);
+          }
+        } catch (e) {
+          // ignore
+        }
+      }
+    };
+    checkSavedResults();
 
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -68,6 +84,9 @@ export default function Header() {
         </div>
 
         <div className={styles.headerRight}>
+          {hasSavedResults && (
+            <Link href="/results" className={styles.resultsButton}>Your Results</Link>
+          )}
           <Link href="/quiz" className={styles.contactButton}>Start Quiz</Link>
         </div>
 
@@ -149,6 +168,15 @@ export default function Header() {
               >
                 Start Quiz
               </Link>
+              {hasSavedResults && (
+                <Link
+                  href="/results"
+                  className={styles.drawerResultsButton}
+                  onClick={() => setIsDrawerOpen(false)}
+                >
+                  Your Results
+                </Link>
+              )}
             </div>
           </div>
         </>

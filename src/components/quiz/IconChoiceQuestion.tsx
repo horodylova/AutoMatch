@@ -9,6 +9,7 @@ import formStyles from '../QuizForm.module.css';
   key: string; 
   title: string; 
   desc: string; 
+  mobileDesc?: string;
   icon: string;
   categories?: {
     primary: string;
@@ -23,9 +24,10 @@ type Props = {
   options: Option[];
   selectedIndex?: number | null;
   onSelect?: (index: number) => void;
+  isMobile?: boolean;
 };
 
-export default function IconChoiceQuestion({ questionId, title, tip, options, selectedIndex = null, onSelect }: Props) {
+export default function IconChoiceQuestion({ questionId, title, tip, options, selectedIndex = null, onSelect, isMobile = false }: Props) {
   const handleSelect = (i: number) => {
     onSelect?.(i);
     const opt = options[i];
@@ -52,20 +54,22 @@ export default function IconChoiceQuestion({ questionId, title, tip, options, se
         {options.map((opt, i) => {
           const active = selectedIndex === i;
           return (
-             <button key={opt.key} className={active ? styles.cardActive : styles.card} onClick={() => handleSelect(i)}>
+             <button key={opt.key} className={`${active ? styles.cardActive : styles.card} ${isMobile ? styles.mobileCard : ''}`} onClick={() => handleSelect(i)}>
                <div className={`${styles.check} ${active ? styles.checkOn : ''}`} />
-              <Image 
-                src={opt.icon} 
-                alt={opt.title} 
-                className={styles.icon} 
-                width={58} 
-                height={58} 
-              />
-              <div className={styles.title}>{opt.title}</div>
-               <div className={styles.desc}>{opt.desc}</div>
-             </button>
-           );
-         })}
+              {!isMobile && (
+                <Image 
+                  src={opt.icon} 
+                  alt={opt.title} 
+                  className={styles.icon} 
+                  width={58} 
+                  height={58} 
+                />
+              )}
+              <div className={isMobile ? styles.mobileTitle : styles.title}>{opt.title}</div>
+              <div className={isMobile ? styles.mobileDesc : styles.desc}>{isMobile && opt.mobileDesc ? opt.mobileDesc : opt.desc}</div>
+            </button>
+          );
+        })}
         </div>
       </div>
     </div>

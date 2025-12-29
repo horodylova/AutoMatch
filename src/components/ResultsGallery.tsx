@@ -21,6 +21,7 @@ interface ResultsGalleryProps {
 export default function ResultsGallery({ results = [], onSaveProgress }: ResultsGalleryProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [shareUrl, setShareUrl] = useState('');
+  const [isSaved, setIsSaved] = useState(false);
 
   useEffect(() => {
     // Use the origin (home page) for sharing to ensure visitors start fresh
@@ -28,6 +29,21 @@ export default function ResultsGallery({ results = [], onSaveProgress }: Results
       setShareUrl(window.location.origin);
     }
   }, []);
+
+  const handleSaveResults = () => {
+    if (typeof window !== 'undefined') {
+      // Save results to localStorage with 24h expiration timestamp
+      const savedData = {
+        results,
+        timestamp: new Date().getTime(),
+        expiresAt: new Date().getTime() + 24 * 60 * 60 * 1000 // 24 hours
+      };
+      localStorage.setItem('autoMatch_savedResults', JSON.stringify(savedData));
+      setIsSaved(true);
+      // Reset success state after 3 seconds
+      setTimeout(() => setIsSaved(false), 3000);
+    }
+  };
 
   const shareText = "I found my perfect car match on CarCupid! Find yours now.";
   const encodedUrl = encodeURIComponent(shareUrl);
@@ -73,7 +89,7 @@ export default function ResultsGallery({ results = [], onSaveProgress }: Results
           <div className={`${styles.container} ${styles.containerSlim}`}>
             <div>
               <h1 className={styles.title}>Your Matches Are Ready</h1>
-              <p className={styles.description}>
+              <p className={`${styles.description} ${styles.mobileTextHidden}`}>
                 We found cars that match your lifestyle. Browse your matches and tap for details.
               </p>
             </div>
@@ -160,22 +176,30 @@ export default function ResultsGallery({ results = [], onSaveProgress }: Results
               <div className={styles.galleryContainer} ref={scrollContainerRef}>
                 {results.map((car, index) => (
                   <div key={car.id} className={styles.cardWrapper}>
-                    <Link href={`/cars/${car.id}`} target="_blank" rel="noopener noreferrer" className={styles.cardLink}>
-                      <Image 
-                        src={car.image} 
-                        alt={`${car.make} ${car.model}`} 
-                        fill
-                        sizes="(max-width: 768px) 80vw, 600px"
-                        className={styles.image}
-                        style={{ objectFit: 'cover' }}
-                        priority={index < 2}
-                      />
-                      <div className={styles.overlay}>
-                        <div className={styles.carName}>{car.make}</div>
-                        <div className={styles.carDetails}>{car.model} • {car.year}</div>
-                      </div>
-                    </Link>
-                  </div>
+                      <Link href={`/cars/${car.id}`} target="_blank" rel="noopener noreferrer" className={styles.cardLink}>
+                        <Image 
+                          src={car.image} 
+                          alt={`${car.make} ${car.model}`} 
+                          fill
+                          sizes="(max-width: 768px) 80vw, 600px"
+                          className={styles.image}
+                          style={{ objectFit: 'cover' }}
+                          priority={index < 2}
+                        />
+                        <div className={styles.overlay}>
+                          <div className={styles.carName}>{car.make}</div>
+                          <div className={styles.carDetails}>{car.model} • {car.year}</div>
+                        </div>
+                      </Link>
+                      <Link 
+                        href={`/cars/${car.id}`} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className={styles.mobileDetailsButton}
+                      >
+                        View Details
+                      </Link>
+                    </div>
                 ))}
               </div>
 
@@ -193,19 +217,71 @@ export default function ResultsGallery({ results = [], onSaveProgress }: Results
         </div>
       </div>
 
-      <div className={styles.section}>
+      <div className={styles.actionsSection}>
         <div className={styles.wrapping}>
-          <div className={`${styles.container} ${styles.containerSlim}`}>
-            <div>
-              <h2 className={styles.title}>Explore More Options</h2>
-              <p className={styles.description}>
-                We&apos;ve filtered these results based on your answers to find your perfect match. 
-                However, if you&apos;d like to see everything we have to offer, you can browse our full catalog.
-              </p>
-              <button className={styles.button} onClick={onSaveProgress}>
-                View Full Car Listing
-              </button>
+          {/* Desktop View */}
+          <div className={styles.desktopActions}>
+            <div className={styles.desktopGrid}>
+              <div className={styles.desktopColumn}>
+                <h2 className={styles.desktopTitle}>Explore More Options</h2>
+                <p className={styles.desktopDescription}>
+                  We&apos;ve filtered these results based on your answers. 
+                  Want to see everything? Browse our full catalog.
+                </p>
+                <button className={styles.desktopPrimaryButton} onClick={onSaveProgress}>
+                  Full Car Listing
+                </button>
+              </div>
+
+              <div className={styles.desktopColumn}>
+                <h2 className={styles.desktopTitle}>Save Your Results</h2>
+                <p className={styles.desktopDescription}>
+                  Don&apos;t lose your perfect match! Save your results for 24 hours 
+                  or email them to yourself.
+                </p>
+                <div className={styles.desktopButtonsRow}>
+                  <button 
+                    className={styles.desktopSecondaryButton} 
+                    onClick={handleSaveResults}
+                    disabled={isSaved}
+                  >
+                    {isSaved ? 'Saved!' : 'Save Results'}
+                  </button>
+                  
+                  <button 
+                    className={`${styles.desktopSecondaryButton} ${styles.disabledButton}`}
+                    onClick={() => alert("Email feature coming soon!")}
+                  >
+                    Email Results
+                  </button>
+                </div>
+              </div>
             </div>
+          </div>
+
+          {/* Mobile View */}
+          <div className={styles.mobileActions}>
+            <button 
+              className={styles.actionButton} 
+              onClick={handleSaveResults}
+              disabled={isSaved}
+            >
+              {isSaved ? 'Saved!' : 'Save (24h)'}
+            </button>
+            
+            <button 
+              className={`${styles.actionButton} ${styles.disabledButton}`}
+              onClick={() => alert("Email feature coming soon!")}
+            >
+              Email
+            </button>
+
+            <button 
+              className={styles.actionButton} 
+              onClick={onSaveProgress}
+            >
+              Full List
+            </button>
           </div>
         </div>
       </div>

@@ -56,7 +56,7 @@
   width: 100%;
   max-width: 100vw; /* Critical fix */
   box-sizing: border-box;
-  overflow: hidden; /* Prevent overflow */
+  /* overflow: hidden; Removed to prevent clipping of shadows and content */
 }
 
 .container {
@@ -92,7 +92,7 @@
   padding: 0.8rem 1.6rem;
   font-size: 1rem;
   font-weight: 700;
-  color: white;
+  color: rgb(230, 214, 180);
   background-color: #c9472d;
   border: none;
   border-radius: 9999px;
@@ -108,6 +108,10 @@
 }
 
 /* Gallery Styles */
+.mobileDetailsButton {
+  display: none;
+}
+
 .galleryWrapper {
   display: flex;
   align-items: center;
@@ -194,6 +198,163 @@
   width: 100%;
 }
 
+/* Actions Section */
+.actionsSection {
+  margin-block: 2rem;
+  padding-bottom: 3rem;
+}
+
+/* Desktop Styles */
+.desktopActions {
+  display: block;
+  width: 100%;
+}
+
+.desktopGrid {
+  display: flex;
+  justify-content: center;
+  gap: 4rem;
+  align-items: flex-start;
+  max-width: 70rem;
+  margin: 0 auto;
+}
+
+.desktopColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Left align text */
+  gap: 1rem;
+  text-align: left;
+  padding: 0;
+  background: transparent; /* Remove background */
+  border-radius: 0;
+  flex: 1;
+  max-width: 30rem;
+}
+
+.desktopTitle {
+  font-size: 1.25rem; /* Slightly smaller, more elegant */
+  font-weight: 600;
+  color: rgb(230, 214, 180);
+  margin: 0;
+  line-height: 1.2;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.desktopDescription {
+  font-size: 0.95rem;
+  color: rgba(230, 214, 180, 0.7);
+  margin: 0;
+  line-height: 1.5;
+  margin-bottom: 0.5rem;
+}
+
+.desktopButtonsRow {
+  display: flex;
+  flex-direction: row; /* Horizontal buttons */
+  gap: 1rem;
+  width: 100%;
+  align-items: center;
+}
+
+.desktopPrimaryButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.8rem 2rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #1a1a1a; /* Dark text for contrast */
+  background-color: rgb(230, 214, 180); /* Light background */
+  border: none;
+  border-radius: 4px; /* Less rounded, more serious */
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  width: 260px; /* Fixed width */
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.desktopPrimaryButton:hover {
+  transform: translateY(-1px);
+  background-color: white;
+}
+
+.desktopSecondaryButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.8rem 2rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: rgb(230, 214, 180);
+  background-color: transparent;
+  border: 1px solid rgba(230, 214, 180, 0.3); /* Thinner border */
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  width: 260px; /* Fixed width */
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.desktopSecondaryButton:hover {
+  border-color: rgb(230, 214, 180);
+  background: rgba(230, 214, 180, 0.05);
+  color: white;
+}
+
+/* Mobile Actions (Hidden on Desktop) */
+.mobileActions {
+  display: none;
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+  .desktopActions {
+    display: none;
+  }
+
+  .mobileActions {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+    padding: 0 1rem;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .actionButton {
+    display: inline-block;
+    padding: 0.8rem 0.2rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: rgb(230, 214, 180);
+    background-color: transparent;
+    border: 2px solid rgba(230, 214, 180, 0.3);
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    width: 100%;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .actionButton:hover {
+    transform: translateY(-2px);
+    border-color: #c9472d;
+    color: #c9472d;
+  }
+}
+
 .image {
   transition: transform 0.5s ease;
   will-change: transform;
@@ -238,6 +399,10 @@
 
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
+  .sectionFirst {
+    margin-top: 8rem;
+  }
+
   .wrapping {
     padding-inline: 1rem;
   }
@@ -292,6 +457,37 @@
   
   .carDetails {
     font-size: 0.95rem;
+  }
+
+  .mobileTextHidden {
+    display: none !important;
+  }
+
+  .cardLink {
+    pointer-events: none; /* Disable click on image */
+  }
+
+  .mobileDetailsButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 0.8rem;
+    margin-top: 0.5rem;
+    background-color: #c9472d;
+    color: rgb(230, 214, 180);
+    font-weight: 700;
+    text-decoration: none;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    z-index: 10;
+  }
+
+  .navButton {
+    opacity: 1 !important;
+    visibility: visible !important;
+    background: rgba(0, 0, 0, 0.7); /* Slightly darker for better visibility */
   }
 }
 

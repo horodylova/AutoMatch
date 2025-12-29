@@ -159,20 +159,12 @@ export default function CompareView({ car1, car2 }: Props) {
       {/* Mobile Sticky Header */}
       <div className={styles.stickyHeader}>
         <div className={styles.stickyCol}>
-          <img 
-            src={car1.image && !car1.image.includes("placeholder") ? car1.image : "/no-image-available.jpg"} 
-            alt="Car 1" 
-            className={styles.stickyImg} 
-          />
-          <span>{car1.model}</span>
+          <span>{car1.year} {car1.make} {car1.model}</span>
+          <span className={styles.stickyTrim}>{car1.trim}</span>
         </div>
         <div className={styles.stickyCol}>
-          <img 
-            src={car2.image && !car2.image.includes("placeholder") ? car2.image : "/no-image-available.jpg"} 
-            alt="Car 2" 
-            className={styles.stickyImg} 
-          />
-          <span>{car2.model}</span>
+          <span>{car2.year} {car2.make} {car2.model}</span>
+          <span className={styles.stickyTrim}>{car2.trim}</span>
         </div>
       </div>
 

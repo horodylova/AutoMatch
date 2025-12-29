@@ -371,6 +371,7 @@ export default function Filters({ onApply }: Props) {
             }).filter(r => typeof r.min !== "undefined" || typeof r.max !== "undefined");
             const effRanges = (effGroups.length > 0 && selectedEffLabels.length >= effGroups.length) ? [] : effSelected;
             onApply?.({ makes: selectedMakes, priceMin: typeof rangeMin === "number" ? rangeMin : undefined, priceMax: typeof rangeMax === "number" ? rangeMax : undefined, priceRanges: ranges, body: selectedBody, fuel: selectedFuel, drive: selectedDrive, transmission: selectedTransmission, cylinders: selectedCylinders, efficiencyUnit: effUnit, efficiencyRanges: effRanges, query: search.trim() || undefined });
+            if (isMobile) setShowFilters(false);
           }}>Apply</Button>
         </div>
       </div>

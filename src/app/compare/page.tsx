@@ -16,35 +16,21 @@ export default function ComparePage() {
   useEffect(() => {
     // Load dataset
     fetchDataset().then(setDataset);
-
-    // Load from localStorage
-    try {
-      const saved1 = localStorage.getItem("compare_car1");
-      const saved2 = localStorage.getItem("compare_car2");
-      if (saved1) setCar1(JSON.parse(saved1));
-      if (saved2) setCar2(JSON.parse(saved2));
-    } catch (e) {
-      console.error("Failed to load comparison state", e);
-    }
   }, []);
 
   const handleSelect1 = (car: CarSpecs) => {
     setCar1(car);
-    localStorage.setItem("compare_car1", JSON.stringify(car));
   };
 
   const handleSelect2 = (car: CarSpecs) => {
     setCar2(car);
-    localStorage.setItem("compare_car2", JSON.stringify(car));
   };
 
   const clearSelection = (slot: 1 | 2) => {
     if (slot === 1) {
       setCar1(null);
-      localStorage.removeItem("compare_car1");
     } else {
       setCar2(null);
-      localStorage.removeItem("compare_car2");
     }
     setIsComparing(false);
   };

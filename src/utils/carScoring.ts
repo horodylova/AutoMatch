@@ -120,7 +120,11 @@ function norm(v: number, min: number, max: number): number {
 }
 
 function hasRealImage(car: CarSpecs) {
-  return car.image && !car.image.includes("placeholder");
+  return (
+    car.image && 
+    !car.image.includes("placeholder") && 
+    !car.image.includes("no-image-available")
+  );
 }
 
 function hasRealNumbers(car: CarSpecs) {

@@ -65,6 +65,24 @@
   text-decoration: none;
 }
 
+.resultsButton {
+  background: transparent;
+  color: var(--kendo-color-on-app-surface);
+  border: 1px solid #c6492d;
+  border-radius: 999px;
+  padding: 0.6rem 1.4rem;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  margin-right: 1rem;
+}
+
+.resultsButton:hover {
+  background: rgba(198, 73, 45, 0.15);
+  transform: translateY(-1px);
+}
+
 .navButton:hover {
   border-color: #c6492d;
   background: rgba(198, 73, 45, 0.15);
@@ -165,7 +183,7 @@
   border-radius: 999px;
   border: none;
   background: transparent;
-  color: #ffffff;
+  color: var(--kendo-color-on-app-surface);
   font-size: 24px;
   font-weight: 700;
   cursor: pointer;
@@ -212,6 +230,30 @@
 .drawerContactButton {
   margin-top: 0.5rem;
   font-weight: 600;
+}
+
+.drawerResultsButton {
+  width: 100%;
+  background: transparent;
+  color: var(--kendo-color-on-app-surface);
+  border: 1px solid #c6492d;
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  display: block;
+  box-sizing: border-box;
+  margin-top: 0.5rem;
+  font-weight: 600;
+}
+
+.drawerResultsButton:hover {
+  background: rgba(198, 73, 45, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(198, 73, 45, 0.15);
 }
 
 
