@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import styles from "./Header.module.css";
+import { RESULTS_UPDATED_EVENT, RESULTS_STORE_KEY } from "../utils/storage";
 
 export default function Header() {
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
@@ -19,21 +20,30 @@ export default function Header() {
     window.addEventListener("scroll", handleScroll, { passive: true });
 
     const checkSavedResults = () => {
-      const savedData = localStorage.getItem('autoMatch_savedResults');
+      const savedData = localStorage.getItem(RESULTS_STORE_KEY);
       if (savedData) {
         try {
           const parsed = JSON.parse(savedData);
           if (parsed.expiresAt && parsed.expiresAt > new Date().getTime()) {
             setHasSavedResults(true);
+            return;
           }
         } catch (e) {
           // ignore
         }
       }
+      setHasSavedResults(false);
     };
     checkSavedResults();
+    
+    window.addEventListener(RESULTS_UPDATED_EVENT, checkSavedResults);
+    window.addEventListener("storage", checkSavedResults);
 
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+        window.removeEventListener("scroll", handleScroll);
+        window.removeEventListener(RESULTS_UPDATED_EVENT, checkSavedResults);
+        window.removeEventListener("storage", checkSavedResults);
+    };
   }, []);
 
   const menuItems: string[] = [

@@ -62,3 +62,41 @@ export function getQuestionAnswer<T = unknown>(id: string): T | null {
   const v = all[key] as T | undefined;
   return typeof v === "undefined" ? null : v;
 }
+
+export const RESULTS_STORE_KEY = "autoMatch_savedResults";
+export const RESULTS_UPDATED_EVENT = "autoMatch_results_updated";
+
+export function getSavedResults(): { results: unknown[]; timestamp: number; expiresAt: number } | null {
+  if (!canUseStorage()) return null;
+  const raw = window.localStorage.getItem(RESULTS_STORE_KEY);
+  if (!raw) return null;
+  try {
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed.expiresAt !== "number") return null;
+    if (Date.now() > parsed.expiresAt) {
+      window.localStorage.removeItem(RESULTS_STORE_KEY);
+      window.dispatchEvent(new Event(RESULTS_UPDATED_EVENT));
+      return null;
+    }
+    return parsed;
+  } catch {
+    return null;
+  }
+}
+
+export function saveResults(results: unknown[]): void {
+  if (!canUseStorage()) return;
+  const savedData = {
+    results,
+    timestamp: Date.now(),
+    expiresAt: Date.now() + 24 * 60 * 60 * 1000 // 24 hours
+  };
+  window.localStorage.setItem(RESULTS_STORE_KEY, JSON.stringify(savedData));
+  window.dispatchEvent(new Event(RESULTS_UPDATED_EVENT));
+}
+
+export function clearSavedResults(): void {
+  if (!canUseStorage()) return;
+  window.localStorage.removeItem(RESULTS_STORE_KEY);
+  window.dispatchEvent(new Event(RESULTS_UPDATED_EVENT));
+}

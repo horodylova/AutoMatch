@@ -59,10 +59,21 @@ export default function ListingList({ filters }: { filters?: FiltersData }) {
   });
 
   const [hasQuiz, setHasQuiz] = useState(false);
+  const [hasResults, setHasResults] = useState(false);
   useEffect(() => {
     if (typeof window !== "undefined") {
        const saved = getQuizAnswers();
        if (saved && Object.keys(saved).length > 0) setHasQuiz(true);
+       
+       const results = localStorage.getItem('autoMatch_savedResults');
+       if (results) {
+         try {
+           const parsed = JSON.parse(results);
+           if (parsed.expiresAt && parsed.expiresAt > new Date().getTime() && parsed.results) {
+             setHasResults(true);
+           }
+         } catch {}
+       }
     }
   }, []);
 
@@ -300,7 +311,7 @@ export default function ListingList({ filters }: { filters?: FiltersData }) {
           onSortChange={setSort} 
           centerContent={
             <Link 
-              href="/quiz" 
+              href={hasResults ? "/results" : "/quiz"} 
               style={{ 
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -317,7 +328,7 @@ export default function ListingList({ filters }: { filters?: FiltersData }) {
                 boxShadow: '0 4px 12px rgba(201,71,45,0.12)'
               }}
             >
-              {hasQuiz ? "✨ Return to your quiz results" : "💖 Find your true love with our quiz"}
+              {hasResults ? "✨ Return to your quiz results" : (hasQuiz ? "✨ Resume your quiz" : "💖 Find your true love with our quiz")}
             </Link>
           }
         />

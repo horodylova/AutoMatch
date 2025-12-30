@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import styles from './ResultsGallery.module.css';
+import { saveResults } from '../utils/storage';
 
 export interface CarResult {
   id: string;
@@ -60,12 +61,7 @@ export default function ResultsGallery({ results = [], onSaveProgress }: Results
 
   const handleSaveResults = () => {
     if (typeof window !== 'undefined') {
-      const savedData = {
-        results,
-        timestamp: new Date().getTime(),
-        expiresAt: new Date().getTime() + 24 * 60 * 60 * 1000
-      };
-      localStorage.setItem('autoMatch_savedResults', JSON.stringify(savedData));
+      saveResults(results);
       setIsSaved(true);
       setTimeout(() => setIsSaved(false), 3000);
     }

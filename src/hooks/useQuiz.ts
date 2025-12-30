@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { clearQuizAnswers, getQuizAnswers } from "../utils/storage";
+import { clearQuizAnswers, getQuizAnswers, clearSavedResults } from "../utils/storage";
 import { QUIZ_QUESTIONS } from "../constants/quizQuestions";
 
 export function useQuiz() {
@@ -155,6 +155,7 @@ export function useQuiz() {
 
   const handleStartFresh = () => {
     clearQuizAnswers();
+    clearSavedResults();
     setAnswers({});
     setShowResumeModal(false);
     setShowIntro(false);

@@ -1,6 +1,6 @@
 import React from "react";
 import { useRouter } from "next/navigation";
-import { clearQuizAnswers } from "../../../utils/storage";
+import { clearQuizAnswers, clearSavedResults } from "../../../utils/storage";
 
 interface ExitModalProps {
   onCancel: () => void;
@@ -80,6 +80,7 @@ export default function ExitModal({ onCancel, destination = "/", onConfirm }: Ex
           <button
             onClick={() => {
               clearQuizAnswers();
+              clearSavedResults();
               router.push(destination);
             }}
             style={{
