@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import styles from './ResultsGallery.module.css';
 import { saveResults } from '../utils/storage';
+import EmailModal from './quiz/modals/EmailModal';
 
 export interface CarResult {
   id: string;
@@ -23,6 +24,7 @@ export default function ResultsGallery({ results = [], onSaveProgress }: Results
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [shareUrl, setShareUrl] = useState('');
   const [isSaved, setIsSaved] = useState(false);
+  const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
@@ -284,8 +286,8 @@ export default function ResultsGallery({ results = [], onSaveProgress }: Results
                   </button>
                   
                   <button 
-                    className={`${styles.desktopSecondaryButton} ${styles.disabledButton}`}
-                    onClick={() => alert("Email feature coming soon!")}
+                    className={styles.desktopSecondaryButton}
+                    onClick={() => setIsEmailModalOpen(true)}
                   >
                     Email Results
                   </button>
@@ -304,8 +306,8 @@ export default function ResultsGallery({ results = [], onSaveProgress }: Results
             </button>
             
             <button 
-              className={`${styles.actionButton} ${styles.disabledButton}`}
-              onClick={() => alert("Email feature coming soon!")}
+              className={styles.actionButton}
+              onClick={() => setIsEmailModalOpen(true)}
             >
               Email
             </button>
@@ -319,6 +321,13 @@ export default function ResultsGallery({ results = [], onSaveProgress }: Results
           </div>
         </div>
       </div>
+
+      {isEmailModalOpen && (
+        <EmailModal 
+          onClose={() => setIsEmailModalOpen(false)} 
+          results={results} 
+        />
+      )}
     </>
   );
 }
