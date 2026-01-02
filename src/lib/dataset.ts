@@ -7,7 +7,8 @@ let datasetPromise: Promise<Dataset> | null = null;
 export async function fetchDataset(): Promise<Dataset> {
   const sheetId = process.env.NEXT_PUBLIC_SHEET_ID || process.env.GOOGLE_SHEETS_SPREADSHEET_ID || "";
   const range = process.env.NEXT_PUBLIC_SHEET_RANGE || process.env.SHEET_NAME || "DATABASE";
-  const cacheKey = `dataset:${sheetId}:${range}`;
+  const cacheKey = `dataset:${sheetId}:${range}:v3`;
+
   try {
     if (typeof window !== "undefined") {
       const raw = window.localStorage.getItem(cacheKey);
@@ -20,9 +21,10 @@ export async function fetchDataset(): Promise<Dataset> {
       }
     }
   } catch {}
+
   if (datasetPromise) return datasetPromise;
   datasetPromise = (async () => {
-    const res = await fetch(`/api/sheet-data?id=${encodeURIComponent(sheetId)}&range=${encodeURIComponent(range)}`);
+    const res = await fetch(`/api/sheet-data?id=${encodeURIComponent(sheetId)}&range=${encodeURIComponent(range)}`, { cache: 'no-store' });
     const data = await res.json();
     const values = ((data?.data?.values || []) as Cell[][]);
     const headers = (values[1] || []).map(v => String(v ?? "").trim());
@@ -30,13 +32,15 @@ export async function fetchDataset(): Promise<Dataset> {
     headers.forEach((h, i) => { idx[h.toLowerCase()] = i; });
     const rows = values.slice(4);
     const out: Dataset = { headers, rows, idx };
+
     try {
       if (typeof window !== "undefined") {
-        const ttl = 3 * 60 * 60 * 1000;
+        const ttl = 3 * 60 * 60 * 1000; // 3 hours
         const payload = { data: out, expiresAt: Date.now() + ttl };
         window.localStorage.setItem(cacheKey, JSON.stringify(payload));
       }
     } catch {}
+
     return out;
   })();
   return datasetPromise;
