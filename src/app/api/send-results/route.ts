@@ -34,9 +34,7 @@ export async function POST(request: Request) {
       <div style="margin-bottom: 24px; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border: 1px solid #eee;">
         <a href="https://carcupid.fit/cars/${car.id}" style="text-decoration: none; color: inherit; display: block;">
           ${car.image ? `
-            <div style="position: relative; width: 100%; padding-bottom: 56.25%; background-color: #f5f5f5;">
-              <img src="${car.image}" alt="${car.make} ${car.model}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;" />
-            </div>
+            <img src="${car.image}" alt="${car.make} ${car.model}" style="width: 100%; height: auto; display: block; border: 0;" />
           ` : ''}
           <div style="padding: 16px;">
             <h3 style="margin: 0 0 8px 0; font-size: 18px; color: #1a1a1a; font-weight: 700;">${car.year} ${car.make} ${car.model}</h3>
@@ -71,7 +69,9 @@ export async function POST(request: Request) {
           <div style="background-color: #f9f9f9; padding: 20px 0;">
             <div class="container">
               <div class="header">
-                <a href="https://carcupid.fit" class="logo">CarCupid</a>
+                <a href="https://carcupid.fit" style="display: inline-block;">
+                  <img src="https://carcupid.fit/cupids/CarCupid%20Keys%20with%20background.png" alt="CarCupid" width="200" style="max-width: 200px; height: auto; border: 0; display: block;" />
+                </a>
               </div>
               
               <div class="intro">
