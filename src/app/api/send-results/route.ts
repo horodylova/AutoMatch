@@ -70,7 +70,7 @@ export async function POST(request: Request) {
             <div class="container">
               <div class="header">
                 <a href="https://carcupid.fit" style="display: inline-block;">
-                  <img src="https://carcupid.fit/cupids/CarCupid%20Keys%20with%20background.png" alt="CarCupid" width="200" style="max-width: 200px; height: auto; border: 0; display: block;" />
+                  <img src="https://carcupid.fit/cupids/carcupid-keys-with-background.png" alt="CarCupid" width="200" style="max-width: 200px; height: auto; border: 0; display: block;" />
                 </a>
               </div>
               
