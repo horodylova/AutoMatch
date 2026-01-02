@@ -24,7 +24,7 @@ export default function Header() {
       if (savedData) {
         try {
           const parsed = JSON.parse(savedData);
-          if (parsed.expiresAt && parsed.expiresAt > new Date().getTime()) {
+          if (parsed.expiresAt && parsed.expiresAt > new Date().getTime() && Array.isArray(parsed.results) && parsed.results.length > 0) {
             setHasSavedResults(true);
             return;
           }

@@ -22,6 +22,7 @@ import { QUIZ_QUESTIONS } from "../../constants/quizQuestions";
 import { parseCarData, matchCars, Row, ScoredCar, QuizFilters } from "../../utils/carScoring";
 import { Categories, CategoryValue } from "../../constants/categories";
 import { fetchDataset } from "../../lib/dataset";
+import { saveResults } from "../../utils/storage";
 
 export default function Page() {
   const quiz = useQuiz();
@@ -400,6 +401,15 @@ export default function Page() {
           onCancel={() => quiz.setShowExitModal(false)} 
           destination={exitDestination} 
           onConfirm={quiz.showGallery ? () => {
+            const resultsToSave = topMatches.map(m => ({
+              id: m.car.id,
+              image: m.car.image,
+              make: m.car.make,
+              model: m.car.model,
+              year: String(m.car.year),
+              price: `$${m.car.baseMsrp.toLocaleString()}`
+            }));
+            saveResults(resultsToSave);
             quiz.setShowExitModal(false);
             setShowFeedbackModal(true);
           } : undefined}

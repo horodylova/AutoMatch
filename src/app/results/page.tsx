@@ -19,12 +19,12 @@ export default function ResultsPage() {
       const savedData = localStorage.getItem('autoMatch_savedResults');
       if (savedData) {
         const parsed = JSON.parse(savedData);
-        if (parsed.expiresAt && parsed.expiresAt > new Date().getTime() && parsed.results) {
+        if (parsed.expiresAt && parsed.expiresAt > new Date().getTime() && Array.isArray(parsed.results) && parsed.results.length > 0) {
           setResults(parsed.results);
-        } else {
-          // Expired or invalid
-          router.replace('/quiz');
+          return;
         }
+        // Expired or invalid
+        router.replace('/quiz');
       } else {
         router.replace('/quiz');
       }

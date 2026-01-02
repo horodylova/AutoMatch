@@ -72,22 +72,22 @@ CarCupid maps your emotional and lifestyle patterns to interpret what kind of ca
               <div className={styles.featureHeader}>
                 <div className={styles.featureIcon}>
                   <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-                    <circle cx="12" cy="12" r="9" stroke="var(--kendo-color-on-app-surface)" stroke-width="2"/>
-                    <circle cx="12" cy="12" r="5" stroke="var(--kendo-color-on-app-surface)" stroke-width="2"/>
+                    <circle cx="12" cy="12" r="9" stroke="var(--kendo-color-on-app-surface)" strokeWidth="2"/>
+                    <circle cx="12" cy="12" r="5" stroke="var(--kendo-color-on-app-surface)" strokeWidth="2"/>
                     <circle cx="12" cy="12" r="2" fill="var(--kendo-color-on-app-surface)"/>
                   </svg>
                 </div>
                 <h5 className={styles.featureTitle}>Smart Matching</h5>
               </div>
               <p className={styles.featureDesc}>Powered by behavioral psychology and verified automotive data,
-CarCupid identifies compatibility the way long-term relationship platforms do — but for cars</p>
+              CarCupid identifies compatibility the way long-term relationship platforms do — but for cars</p>
             </div>
             <div className={styles.featureBox}>
               <div className={styles.featureHeader}>
                 <div className={styles.featureIcon}>
                   <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-                    <circle cx="12" cy="12" r="9" stroke="var(--kendo-color-on-app-surface)" stroke-width="2"/>
-                    <path d="M9.5 12.5l2 2 4-4" stroke="var(--kendo-color-on-app-surface)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="12" cy="12" r="9" stroke="var(--kendo-color-on-app-surface)" strokeWidth="2"/>
+                    <path d="M9.5 12.5l2 2 4-4" stroke="var(--kendo-color-on-app-surface)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                 </div>
                 <h5 className={styles.featureTitle}>Clear Results</h5>
