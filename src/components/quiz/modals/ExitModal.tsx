@@ -38,7 +38,7 @@ export default function ExitModal({ onCancel, destination = "/", onConfirm }: Ex
       }}>
         <div style={{ marginBottom: "20px", display: "flex", justifyContent: "center" }}>
           <Image
-            src="/cupids/CarCupid Keys.png"
+            src="/cupids/carcupid-keys.png"
             alt="CarCupid Keys"
             width={120}
             height={120}
