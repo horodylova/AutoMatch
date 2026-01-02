@@ -212,3 +212,42 @@
   .priceInputs { grid-template-columns: 1fr; }
   .actionRow { position: static; grid-template-columns: 1fr; background: var(--kendo-color-surface); border-top: 1px solid var(--kendo-color-border); }
 }
+
+.dealerBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  padding: 16px 20px;
+  background: #0E1B24;
+  color: #E6D6B4;
+  font-size: 16px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: 1px solid rgba(230,214,180,0.3);
+  border-radius: 14px;
+  cursor: default; /* Changed to default since it doesn't lead anywhere yet */
+  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 0 4px 20px rgba(14, 27, 36, 0.15);
+  text-decoration: none;
+}
+
+.dealerBtn:hover {
+  background: #152530;
+  border-color: rgba(230,214,180,0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(14, 27, 36, 0.25);
+}
+
+.dealerBtn:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 12px rgba(14, 27, 36, 0.15);
+}
+
+.dealerBtnIcon {
+  width: 20px;
+  height: 20px;
+  color: #E6D6B4;
+}

@@ -6,6 +6,7 @@ import DetailsGallery from "./DetailsGallery";
 import DetailsKVSection from "./DetailsKVSection";
 import DetailsReview from "./DetailsReview";
 import DetailsProsCons from "./DetailsProsCons";
+import DealerModal from "./modals/DealerModal";
 
 type Props = { id: string };
 
@@ -16,6 +17,9 @@ function splitList(s: string): string[] {
 export default function CarDetails({ id }: Props) {
   const [row, setRow] = useState<Row | null>(null);
   const [idx, setIdx] = useState<Record<string, number>>({});
+  const [isDealerModalOpen, setIsDealerModalOpen] = useState(false);
+  const [dealerLocation, setDealerLocation] = useState<string | null>(null);
+
   useEffect(() => {
     let active = true;
     const run = async () => {
@@ -224,6 +228,17 @@ export default function CarDetails({ id }: Props) {
         </div>
 
         <div className={`${styles.detailsColRight}`}>
+          <button 
+            className={styles.dealerBtn} 
+            type="button"
+            onClick={() => setIsDealerModalOpen(true)}
+          >
+            <svg className={styles.dealerBtnIcon} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            {dealerLocation ? `Searching near: ${dealerLocation}` : "Find Dealers Near Me"}
+          </button>
           {showLeftInfo ? null : <DetailsKVSection title="Overview" items={kvMain} />}
           <DetailsKVSection title="Dimensions" items={kvDims} />
           {showLeftInfo ? null : <DetailsKVSection title="Engine" items={kvEngine} />}
@@ -233,6 +248,13 @@ export default function CarDetails({ id }: Props) {
           <DetailsKVSection title="Rear Seats" items={kvRear} />
         </div>
       </div>
+      
+      <DealerModal 
+        isOpen={isDealerModalOpen} 
+        onClose={() => setIsDealerModalOpen(false)} 
+        onSearch={(loc) => setDealerLocation(loc)}
+        carInfo={{ make, model, year, trim }} 
+      />
     </div>
   );
 }

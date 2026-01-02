@@ -1,0 +1,244 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(14, 27, 36, 0.85);
+  backdrop-filter: blur(8px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.modal {
+  width: 100%;
+  max-width: 480px;
+  background: #0E1B24;
+  border: 1px solid rgba(230, 214, 180, 0.2);
+  border-radius: 24px;
+  padding: 32px;
+  position: relative;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.closeBtn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  border: none;
+  color: rgba(230, 214, 180, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.closeBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #E6D6B4;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.iconWrap {
+  width: 64px;
+  height: 64px;
+  border-radius: 20px;
+  background: rgba(230, 214, 180, 0.1);
+  color: #E6D6B4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+}
+
+.icon {
+  width: 32px;
+  height: 32px;
+}
+
+.title {
+  color: #E6D6B4;
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 12px;
+}
+
+.subtitle {
+  color: rgba(230, 214, 180, 0.7);
+  font-size: 15px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.subtitle strong {
+  color: #E6D6B4;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.locationBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  padding: 16px;
+  background: transparent;
+  border: 2px solid rgba(230, 214, 180, 0.3);
+  border-radius: 14px;
+  color: #E6D6B4;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.locationBtn:hover:not(:disabled) {
+  background: rgba(230, 214, 180, 0.05);
+  border-color: #E6D6B4;
+}
+
+.locationBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: rgba(230, 214, 180, 0.4);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: rgba(230, 214, 180, 0.15);
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  color: rgba(230, 214, 180, 0.8);
+  font-size: 13px;
+  font-weight: 600;
+  margin-left: 4px;
+}
+
+.inputWrap {
+  display: flex;
+  gap: 8px;
+}
+
+.input {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(230, 214, 180, 0.2);
+  border-radius: 12px;
+  padding: 14px 16px;
+  color: #E6D6B4;
+  font-size: 16px;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.input:focus {
+  border-color: #E6D6B4;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.input::placeholder {
+  color: rgba(230, 214, 180, 0.3);
+}
+
+.searchBtn {
+  padding: 0 24px;
+  background: #E6D6B4;
+  color: #0E1B24;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.searchBtn:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.error {
+  color: #ff6b6b;
+  font-size: 13px;
+  margin-left: 4px;
+  animation: shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(230, 214, 180, 0.3);
+  border-top-color: #E6D6B4;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shake {
+  10%, 90% { transform: translate3d(-1px, 0, 0); }
+  20%, 80% { transform: translate3d(2px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+  40%, 60% { transform: translate3d(4px, 0, 0); }
+}
+
+@media (max-width: 480px) {
+  .modal {
+    padding: 24px;
+  }
+  
+  .inputWrap {
+    flex-direction: column;
+  }
+  
+  .searchBtn {
+    padding: 14px;
+    width: 100%;
+  }
+}
