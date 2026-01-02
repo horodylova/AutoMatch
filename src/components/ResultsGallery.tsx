@@ -112,6 +112,16 @@ export default function ResultsGallery({ results = [], onSaveProgress }: Results
         <div className={styles.wrapping}>
           <div className={`${styles.container} ${styles.containerSlim}`}>
             <div>
+              <div className={styles.logoWrapper}>
+                <Image
+                  src="/cupids/Hugging Car.png"
+                  alt="CarCupid Logo"
+                  width={150}
+                  height={150}
+                  className={styles.desktopLogo}
+                  priority
+                />
+              </div>
               <h1 className={styles.title}>Your Matches Are Ready</h1>
               <p className={`${styles.description} ${styles.mobileTextHidden}`}>
                 We found cars that match your lifestyle. Browse your matches and tap for details.
@@ -184,6 +194,16 @@ export default function ResultsGallery({ results = [], onSaveProgress }: Results
           ) : (
             <>
               <div className={styles.mobileHeader}>
+                <div className={styles.mobileLogoContainer}>
+                  <Image
+                    src="/cupids/Hugging Car.png"
+                    alt="CarCupid Logo"
+                    width={80}
+                    height={80}
+                    className={styles.mobileLogo}
+                    priority
+                  />
+                </div>
                 <div className={styles.staticCarName}>
                   {results[activeIndex]?.year} {results[activeIndex]?.make}
                 </div>

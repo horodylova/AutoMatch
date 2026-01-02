@@ -2,6 +2,8 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { clearQuizAnswers, clearSavedResults } from "../../../utils/storage";
 
+import Image from "next/image";
+
 interface ExitModalProps {
   onCancel: () => void;
   destination?: string;
@@ -34,6 +36,15 @@ export default function ExitModal({ onCancel, destination = "/", onConfirm }: Ex
         border: "1px solid var(--kendo-color-border-alt)",
         animation: "fadeIn 0.2s ease-out"
       }}>
+        <div style={{ marginBottom: "20px", display: "flex", justifyContent: "center" }}>
+          <Image
+            src="/cupids/CarCupid Keys.png"
+            alt="CarCupid Keys"
+            width={120}
+            height={120}
+            style={{ objectFit: "contain" }}
+          />
+        </div>
         <h3 style={{
           fontSize: "24px",
           fontWeight: 800,
