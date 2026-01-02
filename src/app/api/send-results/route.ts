@@ -53,11 +53,7 @@ export async function POST(request: Request) {
           <style>
             body { margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; color: #333; background-color: #f9f9f9; }
             .container { max-width: 600px; margin: 0 auto; padding: 20px; background-color: #ffffff; }
-            .header { text-align: center; padding: 40px 0; background-color: #1a1a1a; margin: -20px -20px 30px -20px; border-radius: 8px 8px 0 0; }
-            .logo { font-size: 24px; font-weight: 800; color: #C9472D; text-decoration: none; letter-spacing: -0.5px; }
-            .intro { margin-bottom: 30px; text-align: center; padding: 0 20px; }
-            .intro h2 { margin: 0 0 16px 0; color: #1a1a1a; font-size: 24px; }
-            .intro p { margin: 0; color: #666; font-size: 16px; }
+            .header { text-align: center; padding: 40px 20px; background-color: #0E1B24; margin: -20px -20px 30px -20px; border-radius: 8px 8px 0 0; }
             .footer { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee; font-size: 12px; color: #888; }
             .btn-primary { display: inline-block; background-color: #C9472D; color: white; padding: 14px 28px; text-decoration: none; border-radius: 99px; font-weight: 600; font-size: 16px; }
             @media only screen and (max-width: 600px) {
@@ -69,14 +65,19 @@ export async function POST(request: Request) {
           <div style="background-color: #f9f9f9; padding: 20px 0;">
             <div class="container">
               <div class="header">
-                <a href="https://carcupid.fit" style="display: inline-block;">
-                  <img src="https://carcupid.fit/cupids/carcupid-keys.png" alt="CarCupid" width="120" style="max-width: 120px; height: auto; border: 0; display: block;" />
-                </a>
-              </div>
-              
-              <div class="intro">
-                <h2>Your Matches Are Ready!</h2>
-                <p>Based on your quiz answers, we've found these cars that perfectly match your lifestyle and preferences.</p>
+                <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                  <tr>
+                    <td valign="middle" width="140" align="center" style="padding-right: 20px;">
+                      <a href="https://carcupid.fit" style="display: inline-block;">
+                        <img src="https://carcupid.fit/cupids/carcupid-keys.png" alt="CarCupid" width="120" style="max-width: 120px; height: auto; border: 0; display: block;" />
+                      </a>
+                    </td>
+                    <td valign="middle" align="left" style="color: #E6D6B4;">
+                      <h1 style="color: #E6D6B4; margin: 0 0 8px 0; font-size: 24px; line-height: 1.2; font-weight: 800;">Your Matches Are Ready!</h1>
+                      <p style="color: #E6D6B4; margin: 0; font-size: 15px; line-height: 1.5; opacity: 0.9;">Based on your quiz answers, we've found these cars that perfectly match your lifestyle and preferences.</p>
+                    </td>
+                  </tr>
+                </table>
               </div>
               
               <div style="margin-top: 20px;">
