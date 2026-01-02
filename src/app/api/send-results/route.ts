@@ -53,7 +53,7 @@ export async function POST(request: Request) {
           <style>
             body { margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; color: #333; background-color: #f9f9f9; }
             .container { max-width: 600px; margin: 0 auto; padding: 20px; background-color: #ffffff; }
-            .header { text-align: center; padding: 30px 0; border-bottom: 1px solid #eee; margin-bottom: 30px; }
+            .header { text-align: center; padding: 40px 0; background-color: #1a1a1a; margin: -20px -20px 30px -20px; border-radius: 8px 8px 0 0; }
             .logo { font-size: 24px; font-weight: 800; color: #C9472D; text-decoration: none; letter-spacing: -0.5px; }
             .intro { margin-bottom: 30px; text-align: center; padding: 0 20px; }
             .intro h2 { margin: 0 0 16px 0; color: #1a1a1a; font-size: 24px; }
@@ -70,7 +70,7 @@ export async function POST(request: Request) {
             <div class="container">
               <div class="header">
                 <a href="https://carcupid.fit" style="display: inline-block;">
-                  <img src="https://carcupid.fit/cupids/carcupid-keys-with-background.png" alt="CarCupid" width="200" style="max-width: 200px; height: auto; border: 0; display: block;" />
+                  <img src="https://carcupid.fit/cupids/carcupid-keys.png" alt="CarCupid" width="120" style="max-width: 120px; height: auto; border: 0; display: block;" />
                 </a>
               </div>
               
