@@ -21,6 +21,15 @@
   position: relative;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
   animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: max-width 0.3s ease, height 0.3s ease;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.modalLarge {
+  max-width: 800px;
+  height: 80vh;
 }
 
 .closeBtn {
@@ -38,6 +47,7 @@
   justify-content: center;
   cursor: pointer;
   transition: all 0.2s ease;
+  z-index: 10;
 }
 
 .closeBtn:hover {
@@ -98,24 +108,25 @@
   gap: 12px;
   width: 100%;
   padding: 16px;
-  background: transparent;
-  border: 2px solid rgba(230, 214, 180, 0.3);
-  border-radius: 14px;
+  background: rgba(230, 214, 180, 0.1);
+  border: 1px solid rgba(230, 214, 180, 0.2);
+  border-radius: 16px;
   color: #E6D6B4;
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
-.locationBtn:hover:not(:disabled) {
-  background: rgba(230, 214, 180, 0.05);
-  border-color: #E6D6B4;
+.locationBtn:hover {
+  background: rgba(230, 214, 180, 0.15);
+  transform: translateY(-2px);
 }
 
 .locationBtn:disabled {
-  opacity: 0.6;
+  opacity: 0.7;
   cursor: not-allowed;
+  transform: none;
 }
 
 .divider {
@@ -123,7 +134,7 @@
   align-items: center;
   gap: 16px;
   color: rgba(230, 214, 180, 0.4);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
 }
 
@@ -132,70 +143,74 @@
   content: "";
   flex: 1;
   height: 1px;
-  background: rgba(230, 214, 180, 0.15);
+  background: rgba(230, 214, 180, 0.1);
 }
 
 .inputGroup {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.label {
-  color: rgba(230, 214, 180, 0.8);
-  font-size: 13px;
-  font-weight: 600;
-  margin-left: 4px;
-}
-
-.inputWrap {
-  display: flex;
-  gap: 8px;
+  gap: 12px;
 }
 
 .input {
   flex: 1;
-  background: rgba(255, 255, 255, 0.05);
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.2);
   border: 1px solid rgba(230, 214, 180, 0.2);
-  border-radius: 12px;
-  padding: 14px 16px;
+  border-radius: 16px;
   color: #E6D6B4;
   font-size: 16px;
   outline: none;
-  transition: all 0.2s ease;
+  transition: border-color 0.2s ease;
 }
 
 .input:focus {
   border-color: #E6D6B4;
-  background: rgba(255, 255, 255, 0.08);
 }
 
 .input::placeholder {
-  color: rgba(230, 214, 180, 0.3);
+  color: rgba(230, 214, 180, 0.4);
 }
 
 .searchBtn {
-  padding: 0 24px;
+  padding: 0 32px;
   background: #E6D6B4;
-  color: #0E1B24;
   border: none;
-  border-radius: 12px;
+  border-radius: 16px;
+  color: #0E1B24;
+  font-size: 16px;
   font-weight: 700;
-  font-size: 15px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
-.searchBtn:hover {
-  filter: brightness(1.1);
-  transform: translateY(-1px);
+.searchBtn:hover:not(:disabled) {
+  background: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(230, 214, 180, 0.2);
+}
+
+.searchBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .error {
   color: #ff6b6b;
-  font-size: 13px;
-  margin-left: 4px;
-  animation: shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  font-size: 14px;
+  text-align: center;
+  background: rgba(255, 107, 107, 0.1);
+  padding: 12px;
+  border-radius: 12px;
+}
+
+.loadingState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  height: 100%;
+  color: #E6D6B4;
 }
 
 .spinner {
@@ -204,7 +219,16 @@
   border: 2px solid rgba(230, 214, 180, 0.3);
   border-top-color: #E6D6B4;
   border-radius: 50%;
-  animation: spin 0.8s linear infinite;
+  animation: spin 1s linear infinite;
+}
+
+.spinnerLarge {
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(230, 214, 180, 0.3);
+  border-top-color: #E6D6B4;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
 }
 
 @keyframes spin {
@@ -217,28 +241,12 @@
 }
 
 @keyframes slideUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes shake {
-  10%, 90% { transform: translate3d(-1px, 0, 0); }
-  20%, 80% { transform: translate3d(2px, 0, 0); }
-  30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
-  40%, 60% { transform: translate3d(4px, 0, 0); }
-}
-
-@media (max-width: 480px) {
-  .modal {
-    padding: 24px;
+  from { 
+    opacity: 0;
+    transform: translateY(20px) scale(0.96);
   }
-  
-  .inputWrap {
-    flex-direction: column;
-  }
-  
-  .searchBtn {
-    padding: 14px;
-    width: 100%;
+  to { 
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }

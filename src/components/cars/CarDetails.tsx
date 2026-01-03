@@ -7,6 +7,7 @@ import DetailsKVSection from "./DetailsKVSection";
 import DetailsReview from "./DetailsReview";
 import DetailsProsCons from "./DetailsProsCons";
 import DealerModal from "./modals/DealerModal";
+import { DealerResult } from "./modals/DealerResults";
 
 type Props = { id: string };
 
@@ -19,6 +20,8 @@ export default function CarDetails({ id }: Props) {
   const [idx, setIdx] = useState<Record<string, number>>({});
   const [isDealerModalOpen, setIsDealerModalOpen] = useState(false);
   const [dealerLocation, setDealerLocation] = useState<string | null>(null);
+  const [dealerResults, setDealerResults] = useState<DealerResult[] | null>(null);
+  const [isSearchingDealers, setIsSearchingDealers] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -201,6 +204,32 @@ export default function CarDetails({ id }: Props) {
     { k: "Rear shoulder room (in)", v: get("rear shoulder room (in)") },
   ];
 
+  const handleDealerSearch = async (location: string) => {
+    setDealerLocation(location);
+    setIsSearchingDealers(true);
+    try {
+      const params = new URLSearchParams({
+        make,
+        model,
+        year,
+        location,
+      });
+      const res = await fetch(`/api/dealers/search?${params.toString()}`);
+      if (!res.ok) throw new Error("Search failed");
+      const data = await res.json();
+      setDealerResults(data.results || []);
+    } catch (err) {
+      console.error(err);
+      // Optional: handle error state
+    } finally {
+      setIsSearchingDealers(false);
+    }
+  };
+
+  const handleClearResults = () => {
+    setDealerResults(null);
+  };
+
   return (
     <div className={styles.details}>
       <div className={styles.detailsHeader}>
@@ -252,7 +281,10 @@ export default function CarDetails({ id }: Props) {
       <DealerModal 
         isOpen={isDealerModalOpen} 
         onClose={() => setIsDealerModalOpen(false)} 
-        onSearch={(loc) => setDealerLocation(loc)}
+        onSearch={handleDealerSearch}
+        onClearResults={handleClearResults}
+        results={dealerResults}
+        isLoading={isSearchingDealers}
         carInfo={{ make, model, year, trim }} 
       />
     </div>

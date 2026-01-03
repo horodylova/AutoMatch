@@ -7,7 +7,7 @@ let datasetPromise: Promise<Dataset> | null = null;
 export async function fetchDataset(): Promise<Dataset> {
   const sheetId = process.env.NEXT_PUBLIC_SHEET_ID || process.env.GOOGLE_SHEETS_SPREADSHEET_ID || "";
   const range = process.env.NEXT_PUBLIC_SHEET_RANGE || process.env.SHEET_NAME || "DATABASE";
-  const cacheKey = `dataset:${sheetId}:${range}:v3`;
+  const cacheKey = `dataset:${sheetId}:${range}:v4`;
 
   try {
     if (typeof window !== "undefined") {
