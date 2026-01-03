@@ -45,7 +45,10 @@ export async function GET(request: NextRequest) {
       const fetchPage = async (start: number) => {
         const url = `https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${cx}&q=${encodeURIComponent(query)}&num=10&start=${start}`;
         const res = await fetch(url);
-        if (!res.ok) throw new Error(`Google API error: ${res.status}`);
+        if (!res.ok) {
+          console.warn(`Google API error for start=${start}: ${res.status}`);
+          return { items: [] };
+        }
         return await res.json();
       };
 
