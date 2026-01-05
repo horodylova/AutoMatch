@@ -174,8 +174,7 @@ export default function CompareView({ car1, car2 }: Props) {
           {section.items.map((item) => {
             const v1 = getValue(car1, item);
             const v2 = getValue(car2, item);
-            
-            // Skip row if both values are missing/empty
+           
             if (v1 === "-" && v2 === "-") return null;
 
             const win = isBetter(car1[item.k], car2[item.k], item.k);

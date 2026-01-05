@@ -13,7 +13,7 @@
  .checkOn { opacity: 1; }
  .check::after { content: ""; width: 10px; height: 6px; border-left: 2px solid #0E1B24; border-bottom: 2px solid #0E1B24; transform: rotate(-45deg); }
 
-/* Mobile-specific styles applied via class */
+
 
 @media (max-width: 900px) {
   .grid4, .grid3 {

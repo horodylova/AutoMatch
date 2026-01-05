@@ -220,7 +220,7 @@ export default function CarDetails({ id }: Props) {
       setDealerResults(data.results || []);
     } catch (err) {
       console.error(err);
-      // Optional: handle error state
+    
     } finally {
       setIsSearchingDealers(false);
     }

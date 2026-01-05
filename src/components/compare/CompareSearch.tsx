@@ -29,7 +29,7 @@ export default function CompareSearch({ dataset, onSelect, placeholder = "Search
     const trIdx = dataset.idx["trim"] ?? -1;
 
     const matches: Row[] = [];
-    // Limit to 50 suggestions to include older models
+  
     for (const r of dataset.rows) {
       if (matches.length >= 50) break;
 

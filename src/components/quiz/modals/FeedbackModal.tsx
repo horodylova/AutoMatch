@@ -28,7 +28,7 @@ export default function FeedbackModal({ onClose, destination }: FeedbackModalPro
         body: JSON.stringify({ rating, comment })
       });
       
-      // Show "Thank you" for a moment
+      
       await new Promise(resolve => setTimeout(resolve, 1500));
     } catch (e) {
       console.error("Failed to save feedback", e);
