@@ -285,7 +285,7 @@ export default function CarDetails({ id }: Props) {
         onClearResults={handleClearResults}
         results={dealerResults}
         isLoading={isSearchingDealers}
-        carInfo={{ make, model, year, trim }} 
+        carInfo={{ make, model, trim }} 
       />
     </div>
   );

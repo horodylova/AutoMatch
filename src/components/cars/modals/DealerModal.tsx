@@ -15,7 +15,6 @@ type Props = {
   carInfo: {
     make: string;
     model: string;
-    year: string;
     trim: string;
   };
 };
@@ -120,7 +119,7 @@ export default function DealerModal({
               </div>
               <h2 className={styles.title}>Find Dealers Nearby</h2>
               <p className={styles.subtitle}>
-                Enter your location to find the best deals for <strong>{carInfo.year} {carInfo.make} {carInfo.model}</strong>
+                Enter your location to find the best deals for <strong>{carInfo.make} {carInfo.model}</strong>
               </p>
             </div>
 
