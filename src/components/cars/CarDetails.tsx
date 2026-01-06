@@ -268,6 +268,24 @@ export default function CarDetails({ id }: Props) {
             </svg>
             {dealerLocation ? `Searching near: ${dealerLocation}` : "Find Dealers Near Me"}
           </button>
+          
+          <button 
+            className={styles.compareBtn} 
+            type="button"
+            onClick={() => {
+              // Navigate to compare page with this car's ID
+              const idIdx = idx["id"] ?? -1;
+              const carId = idIdx >= 0 ? String(row?.[idIdx] ?? "") : "";
+              if (carId) {
+                window.location.href = `/compare?car1=${encodeURIComponent(carId)}`;
+              }
+            }}
+          >
+            <svg className={styles.dealerBtnIcon} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+            </svg>
+            Compare with Another Car
+          </button>
           {showLeftInfo ? null : <DetailsKVSection title="Overview" items={kvMain} />}
           <DetailsKVSection title="Dimensions" items={kvDims} />
           {showLeftInfo ? null : <DetailsKVSection title="Engine" items={kvEngine} />}

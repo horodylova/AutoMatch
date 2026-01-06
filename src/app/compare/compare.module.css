@@ -21,6 +21,7 @@
   margin-bottom: 12px;
   background: linear-gradient(135deg, var(--kendo-color-primary) 0%, #E6D6B4 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   display: inline-block;
   width: 100%;
@@ -34,7 +35,6 @@
   line-height: 1.6;
 }
 
-/* Selection Grid */
 .selectionGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -154,16 +154,19 @@
   border-color: rgba(230, 214, 180, 0.1);
 }
 
-/* Selected Car Display */
 .selectedCar {
   text-align: center;
 }
 
-.carImage {
+.imageWrapper {
   width: 100%;
   height: 180px;
-  object-fit: contain;
+  position: relative;
   margin-bottom: 16px;
+}
+
+.carImage {
+  object-fit: contain;
   border-radius: 12px;
 }
 
@@ -402,20 +405,6 @@
 
 @media (max-width: 768px) {
   .vsBadge {
-    position: absolute;
-    left: 50%;
-    top: 50%; /* Position in the middle of the grid height? No, that's unreliable */
-    /* Instead, let's use top: auto and position it between the cards */
-    top: calc(50% - 20px); /* Rough approximation if cards are equal height */
-    /* Better approach: hide it from grid flow and position absolutely? */
-    /* Or just make it part of the flow? */
-    /* If it's part of the flow (grid item), it takes a whole row. */
-  }
-}
-
-/* Actually, let's make it simpler for mobile */
-@media (max-width: 768px) {
-  .vsBadge {
     position: static;
     transform: none;
     justify-self: center;
@@ -428,4 +417,53 @@
     width: 100%;
     max-width: 300px;
   }
+}
+
+/* Loading Placeholder */
+.loadingPlaceholder {
+  text-align: center;
+  animation: pulse 2s infinite ease-in-out;
+}
+
+.loadingImage {
+  width: 100%;
+  height: 180px;
+  background: rgba(230, 214, 180, 0.05);
+  border-radius: 12px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loadingIcon {
+  width: 40px;
+  height: 40px;
+  color: rgba(230, 214, 180, 0.2);
+  animation: spin 1s linear infinite;
+}
+
+.loadingLine {
+  height: 20px;
+  background: rgba(230, 214, 180, 0.05);
+  border-radius: 4px;
+  margin-bottom: 8px;
+  width: 60%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.loadingLine.short {
+  width: 40%;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }

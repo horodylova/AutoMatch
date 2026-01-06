@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  // Query construction for future Google Search API usage
+  
   const query = `buy ${make} ${model} near ${location}`;
 
   const apiKey = process.env.GOOGLE_SEARCH_API_KEY;

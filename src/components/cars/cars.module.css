@@ -251,3 +251,34 @@
   height: 20px;
   color: #E6D6B4;
 }
+
+.compareBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  padding: 16px 20px;
+  background: transparent;
+  color: #E6D6B4;
+  font-size: 16px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: 2px solid rgba(230,214,180,0.3);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  text-decoration: none;
+  margin-top: 12px;
+}
+
+.compareBtn:hover {
+  background: rgba(230,214,180,0.08);
+  border-color: rgba(230,214,180,0.6);
+  transform: translateY(-2px);
+}
+
+.compareBtn:active {
+  transform: translateY(0);
+}
