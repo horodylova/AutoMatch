@@ -522,40 +522,36 @@ export function matchCars(
     if (filters?.expensePreference) {
       const price = car.baseMsrp || 0;
       
+      // STRICT FILTERING: Eliminate cars outside user's budget segment
       if (filters.expensePreference === "low") {
+         // Target: < 35k
+         if (price > 40000) return { car, scores, matchScore: 0 };
+         
          if (price < 20000) matchScore *= 1.4;
          else if (price <= 35000) matchScore *= 1.2;
-          
-         if (price > 35000) matchScore *= 0.4; 
-         if (price > 50000) matchScore *= 0.1; 
+         else matchScore *= 0.4; // 35k-40k range
       } 
       else if (filters.expensePreference === "balanced") {
-         if (price <= 0) {
-           matchScore *= 0.2;
-         } else {
-           if (price >= 28000 && price < 45000) matchScore *= 1.25;
-           else if (price >= 45000 && price <= 55000) matchScore *= 1.1;
-           else if (price > 55000 && price <= 60000) matchScore *= 1.0;
+         // Target: 25k - 65k
+         if (price < 20000) return { car, scores, matchScore: 0 };
+         if (price > 70000) return { car, scores, matchScore: 0 };
 
-           if (price < 25000) matchScore *= 0.85;
-           if (price > 60000) matchScore *= 0.7;
-           if (price > 70000) matchScore *= 0.5;
-           if (price > 80000) matchScore *= 0.3;
-         }
-
-         if (filters.isFamily && price > 50000) {
-           matchScore *= 0.85;
-         }
+         if (price >= 25000 && price < 48000) matchScore *= 1.25;
+         else if (price >= 48000 && price <= 60000) matchScore *= 1.0;
+         else if (price >= 60000 && price <= 70000) matchScore *= 0.5; // Warning zone
+         
+         if (price < 25000) matchScore *= 0.8;
       } 
       else if (filters.expensePreference === "high") {
+         // Target: 50k - 120k
+         if (price < 40000) return { car, scores, matchScore: 0 };
+         
          if (price >= 50000 && price <= 120000) matchScore *= 1.1;
-          
-         if (price < 40000) matchScore *= 0.6; 
          if (price > 120000) matchScore *= 0.7; 
       }
       else if (filters.expensePreference === "unlimited") {
+         // Target: 75k+
          if (price > 75000) matchScore *= 1.3;
-          
          if (price < 60000) matchScore *= 0.5; 
       }
     }
@@ -639,7 +635,10 @@ export function matchCars(
        if (isSportyBody) matchScore *= 1.3;
 
      
-       if (hp < 200 && !isSportyBody) matchScore *= 0.6; 
+       // Penalize weak engines, but be lenient for budget cars
+       const hpThreshold = filters.expensePreference === "low" ? 140 : 200;
+       if (hp < hpThreshold && !isSportyBody) matchScore *= 0.6; 
+       
        if (isBoring) matchScore *= 0.4; 
        
       
@@ -666,7 +665,7 @@ export function matchCars(
     if (filters?.forceLuxury) {
        const price = car.baseMsrp || 0;
        const brand = (car.make || "").toLowerCase();
-      
+       
        const luxuryBrands = [
          "acura", "alfa romeo", "aston martin", "audi", "bentley", "bmw", 
          "cadillac", "fisker", "genesis", "ineos", "infiniti", "jaguar", 
@@ -676,17 +675,25 @@ export function matchCars(
        ];
        
        const isLuxBrand = luxuryBrands.some(b => brand.includes(b));
+    
+       if (isLuxBrand) matchScore *= 1.35; 
 
-      
-       if (isLuxBrand) matchScore *= 1.3; 
+       // For budget-conscious luxury seekers, boost "Premium" non-luxury brands
+       const premiumBrands = ["mazda", "volkswagen", "mini", "gmc", "jeep"];
+       if (!isLuxBrand && premiumBrands.some(b => brand.includes(b))) {
+           matchScore *= 1.15;
+       }
+    
+       // Luxury pricing alignment (Only apply high-price boosts if budget allows)
+       if (filters.expensePreference !== "low" && filters.expensePreference !== "balanced") {
+          if (price > 75000) matchScore *= 1.2; 
+          if (price > 120000) matchScore *= 1.15;
+          if (scores[Categories.LUXURY] > 70) matchScore *= 1.2;
+       }
 
-       // Luxury pricing alignment (Target $75k+)
-       if (price < 50000) matchScore *= 0.5; // True luxury rarely starts below $50k
-       if (price > 75000) matchScore *= 1.2; 
-       if (price > 120000) matchScore *= 1.15;
-
-       if (scores[Categories.LUXURY] > 70) matchScore *= 1.2;
-       if (scores[Categories.COMFORT] > 70) matchScore *= 1.1;
+       // Universal Luxury indicators (Comfort/Tech)
+       if (scores[Categories.COMFORT] > 70) matchScore *= 1.15;
+       if (scores[Categories.TECHNOLOGY] > 70) matchScore *= 1.1;
     }
 
     if (matchScore > 0.01) {
