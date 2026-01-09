@@ -157,6 +157,46 @@ export default function Page() {
          filters.isFamily = true;
       }
 
+      // --- FAMILY STYLE LOGIC ---
+      // Determine if they are "Minivan Pragmatists" or "SUV Stylists"
+      if (filters.isFamily) {
+          let practicalScore = 0;
+          let imageScore = 0;
+
+          // Question: Emotional Expectation
+          const emotion = quiz.answers["emotional_expectation"] as string;
+          if (emotion === "security_safety") practicalScore += 2;
+          if (emotion === "status_achievement" || emotion === "joy_excitement") imageScore += 2;
+
+          // Question: Home Feel
+          const home = quiz.answers["home_feel"] as string;
+          if (home === "cozy_traditional") practicalScore += 1;
+          if (home === "modern_minimalist" || home === "luxurious_detailed" || home === "industrial_open") imageScore += 1;
+
+          // Question: Perfect Morning
+           const morning = quiz.answers["perfect_morning"] as string;
+           if (morning === "family_chaos") practicalScore += 2; // Needs help managing chaos -> Minivan
+           if (morning === "gym_workout" || morning === "fast_commute") imageScore += 1;
+
+           // Question: Passengers (Crucial for sliding doors utility)
+           if (passengers && passengers.includes("children_car_seats_school_runs")) {
+               practicalScore += 2; // Car seats are the #1 reason to get sliding doors
+           }
+ 
+           // Question: Risk Management
+           const risk = quiz.answers["manage_risks"] as number; 
+           // 0="Avoid" (Reliability)
+           // 1="Prepare" (Practicality)
+           // 2="Calculated" (Performance)
+           // 3="Instinct" (Adventure)
+           // 4="Support" (Comfort)
+           
+           if (risk === 1 || risk === 4) practicalScore += 1; // "Prepare" or "Seek Support" -> Practical/Safe choice
+           if (risk === 2 || risk === 3) imageScore += 1;     // "Calculated Risk" or "Instinct" -> Confident/Image choice
+
+           filters.familyStyle = practicalScore >= imageScore ? "practical" : "image_conscious";
+      }
+
       const cargo = quiz.answers["car_cargo_preference"] as string;
       if (cargo === "groceries") {
          filters.isFamily = true;
