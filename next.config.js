@@ -1,5 +1,8 @@
 const nextConfig = {
   compiler: { styledComponents: true },
+  turbopack: {
+    root: __dirname,
+  },
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'media.ed.edmunds-media.com', pathname: '/**' },

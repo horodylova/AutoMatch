@@ -523,33 +523,40 @@ export function matchCars(
       const price = car.baseMsrp || 0;
       
       if (filters.expensePreference === "low") {
-         // Target: Under $35k
          if (price < 20000) matchScore *= 1.4;
          else if (price <= 35000) matchScore *= 1.2;
-         
+          
          if (price > 35000) matchScore *= 0.4; 
          if (price > 50000) matchScore *= 0.1; 
       } 
       else if (filters.expensePreference === "balanced") {
-         // Target: $35k - $60k
-         if (price >= 25000 && price <= 60000) matchScore *= 1.2;
-         
-         if (price < 25000) matchScore *= 0.8; // Too cheap, maybe lacking quality
-         if (price > 60000) matchScore *= 0.7; 
-         if (price > 80000) matchScore *= 0.3; // Hard cap for balanced budget
+         if (price <= 0) {
+           matchScore *= 0.2;
+         } else {
+           if (price >= 28000 && price < 45000) matchScore *= 1.25;
+           else if (price >= 45000 && price <= 55000) matchScore *= 1.1;
+           else if (price > 55000 && price <= 60000) matchScore *= 1.0;
+
+           if (price < 25000) matchScore *= 0.85;
+           if (price > 60000) matchScore *= 0.7;
+           if (price > 70000) matchScore *= 0.5;
+           if (price > 80000) matchScore *= 0.3;
+         }
+
+         if (filters.isFamily && price > 50000) {
+           matchScore *= 0.85;
+         }
       } 
       else if (filters.expensePreference === "high") {
-         // Target: $50k - $120k
          if (price >= 50000 && price <= 120000) matchScore *= 1.1;
-         
-         if (price < 40000) matchScore *= 0.6; // Too cheap for premium feel
-         if (price > 120000) matchScore *= 0.7; // Too expensive/exotic
+          
+         if (price < 40000) matchScore *= 0.6; 
+         if (price > 120000) matchScore *= 0.7; 
       }
       else if (filters.expensePreference === "unlimited") {
-         // Target: $75k+
          if (price > 75000) matchScore *= 1.3;
-         
-         if (price < 60000) matchScore *= 0.5; // Not luxury enough
+          
+         if (price < 60000) matchScore *= 0.5; 
       }
     }
 
@@ -694,5 +701,4 @@ export function matchCars(
     2
   );
 }
-
 

@@ -133,9 +133,11 @@ export default function Page() {
       const expenseVal = quiz.answers["car_expenses_preference"] as number; 
    
       if (expenseVal === 0) filters.expensePreference = "low";
-      else if (expenseVal === 1 || expenseVal === 4) filters.expensePreference = "balanced";
-      else if (expenseVal === 2 || expenseVal === 5) filters.expensePreference = "high";
+      else if (expenseVal === 1) filters.expensePreference = "balanced";
+      else if (expenseVal === 2) filters.expensePreference = "high";
       else if (expenseVal === 3) filters.expensePreference = "unlimited";
+      else if (expenseVal === 4) filters.expensePreference = "low";
+      else if (expenseVal === 5) filters.expensePreference = "high";
 
      
       const passengers = quiz.answers["freedom_feel"] as string[];
