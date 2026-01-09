@@ -392,6 +392,7 @@ function diversifyByMake(results: ScoredCar[], maxPerMake = 2) {
 
 export interface QuizFilters {
   sizePreference?: "small" | "mid" | "large" | "oversized";
+  drivingPosition?: "low" | "balanced" | "high";
   fuelPriority?: "low" | "medium" | "high" | "critical";
   expensePreference?: "low" | "balanced" | "high" | "unlimited";
   minSeats?: number;
@@ -445,7 +446,16 @@ export function matchCars(
 
       // "small_agile" -> Target < 178 in, Penalize > 185
       if (filters.sizePreference === "small") {
-        if (length > 185 || body.includes("truck") || body.includes("van") || body.includes("minivan") || body.includes("large")) {
+        // STRICT FILTER: Absolutely no trucks, vans, or large SUVs for "Small & Agile"
+        if (body.includes("truck") || body.includes("van") || body.includes("minivan") || body.includes("large suv")) {
+            return { car, scores, matchScore: 0 }; 
+        }
+        
+        if (length > 185) {
+           // Allow slight flexibility for sporty coupes (e.g. Mustang is ~188), but strictly penalize others
+           if (!body.includes("coupe") && !body.includes("convertible")) {
+               return { car, scores, matchScore: 0 }; 
+           }
            matchScore *= 0.4; 
         } else if (length < 178 || body.includes("compact") || body.includes("hatchback")) {
            matchScore *= 1.3; 
@@ -489,6 +499,29 @@ export function matchCars(
       }
     }
 
+    if (filters?.drivingPosition) {
+       const height = car.height || 0;
+       const body = (car.bodyType || "").toLowerCase();
+
+       if (filters.drivingPosition === "low") {
+           // User wants "Low & Connected"
+           if (height > 62 || body.includes("suv") || body.includes("truck") || body.includes("van")) {
+               return { car, scores, matchScore: 0 }; // STRICT: No tall vehicles
+           }
+           if (height < 58 || body.includes("coupe") || body.includes("sedan") || body.includes("hatchback")) {
+               matchScore *= 1.2;
+           }
+       } else if (filters.drivingPosition === "high") {
+           // User wants "High & Commanding"
+           if (height < 60 && !body.includes("suv")) {
+               return { car, scores, matchScore: 0 }; // STRICT: No low vehicles
+           }
+           if (body.includes("suv") || body.includes("truck") || body.includes("van")) {
+               matchScore *= 1.2;
+           }
+       }
+    }
+
     if (filters?.isFamily) {
        const body = (car.bodyType || "").toLowerCase();
        // Boost family friendly cars (SUVs, Minivans, Wagons)
@@ -509,13 +542,17 @@ export function matchCars(
       const mpg = car.epaCombinedMpg || 0;
       const isEV = car.fuelType?.toLowerCase().includes("electric") || car.mpge > 0;
       if (!isEV && mpg < 30) {
-        matchScore *= 0.1; 
+        return { car, scores, matchScore: 0 }; // STRICT: Must be efficient
       }
     } else if (filters?.fuelPriority === "high") {
       const mpg = car.epaCombinedMpg || 0;
       const isEV = car.fuelType?.toLowerCase().includes("electric") || car.mpge > 0;
       if (!isEV && mpg < 25) {
-        matchScore *= 0.6;
+        if (filters.forceUtility) {
+             matchScore *= 0.8; // Mild penalty for work vehicles
+        } else {
+             matchScore *= 0.4; // Strong penalty
+        }
       }
     }
 
@@ -654,7 +691,7 @@ export function matchCars(
        const isUtility = body.includes("truck") || body.includes("van") || body.includes("minivan");
        
      
-       if (isUtility) matchScore *= 1.6; 
+       if (isUtility) matchScore *= 2.2; // Massive boost for utility vehicles
 
        if (tow > 5000) matchScore *= 1.4;
        if (cargo > 60) matchScore *= 1.2;

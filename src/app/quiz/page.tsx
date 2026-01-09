@@ -226,6 +226,11 @@ export default function Page() {
       }
 
   
+      const drivingPos = quiz.answers["driving_position_preference"] as number;
+      if (drivingPos === 0) filters.drivingPosition = "high"; // High & Commanding
+      else if (drivingPos === 1) filters.drivingPosition = "balanced"; // Balanced
+      else if (drivingPos === 2) filters.drivingPosition = "low"; // Low & Connected
+
       let sportCount = 0;
       
       const sportKeys = [
@@ -238,7 +243,7 @@ export default function Page() {
       ];
 
      
-      if (quiz.answers["interior_space_relation"] === 3) sportCount++; 
+      if (quiz.answers["interior_space_relation"] === 3) sportCount += 2; // Cockpit = Sport (Immediate Force)
       if (quiz.answers["fuel_importance"] === 0) sportCount++; 
       if (quiz.answers["interior_feel"] === 1) sportCount++;
       if (quiz.answers["bad_weather_focus"] === 2) sportCount++; 
@@ -274,7 +279,10 @@ export default function Page() {
          if (Array.isArray(val) && val.some(v => utilityKeys.includes(v))) utilityCount++;
       }
 
-      if (cargo === "work_equipment") utilityCount += 2;
+      if (cargo === "work_equipment") {
+        utilityCount += 3; // Immediate Force
+        filters.forceUtility = true;
+      }
       if (cargo === "large_items") utilityCount += 1;
 
       if (utilityCount >= 3) {
