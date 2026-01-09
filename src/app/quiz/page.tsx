@@ -146,9 +146,21 @@ export default function Page() {
           p === "work_crew_clients"
         );
         filters.minSeats = needsMoreSeats ? 4 : 2;
+
+        if (passengers.includes("children_car_seats_school_runs")) {
+           filters.isFamily = true;
+        }
+      }
+
+      const weekend = quiz.answers["ideal_weekend"] as string;
+      if (weekend === "family_trip") {
+         filters.isFamily = true;
       }
 
       const cargo = quiz.answers["car_cargo_preference"] as string;
+      if (cargo === "groceries") {
+         filters.isFamily = true;
+      }
       if (cargo === "large_items" || cargo === "work_equipment") {
         filters.cargoNeeds = "high";
       } else if (cargo === "sports_gear" || cargo === "luggage" || cargo === "kids_stuff") {
@@ -157,7 +169,6 @@ export default function Page() {
         filters.cargoNeeds = "low";
       }
 
-      const weekend = quiz.answers["ideal_weekend"] as string;
       const weather = quiz.answers["bad_weather_focus"] as number; 
   
       
@@ -221,7 +232,8 @@ export default function Page() {
          if (Array.isArray(val) && val.some(v => utilityKeys.includes(v))) utilityCount++;
       }
 
-      if (cargo === "work_equipment" || cargo === "large_items") utilityCount += 2;
+      if (cargo === "work_equipment") utilityCount += 2;
+      if (cargo === "large_items") utilityCount += 1;
 
       if (utilityCount >= 3) {
          filters.forceUtility = true;

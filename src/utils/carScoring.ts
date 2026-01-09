@@ -401,6 +401,7 @@ export interface QuizFilters {
   forceSport?: boolean;
   forceUtility?: boolean;
   forceLuxury?: boolean;
+  isFamily?: boolean;
 }
 
 export function matchCars(
@@ -433,26 +434,69 @@ export function matchCars(
 
     if (filters?.sizePreference) {
       const length = car.length || 0;
-    
-      const cls = (car.classification || "").toLowerCase();
       const body = (car.bodyType || "").toLowerCase();
 
+      // "small_agile" -> Target < 178 in, Penalize > 185
       if (filters.sizePreference === "small") {
-      
-        if (length > 190 || cls.includes("large") || cls.includes("full-size") || body.includes("truck") || body.includes("van")) {
+        if (length > 185 || body.includes("truck") || body.includes("van") || body.includes("minivan") || body.includes("large")) {
            matchScore *= 0.4; 
-        } else if (length < 180 || cls.includes("compact") || cls.includes("mini") || cls.includes("small")) {
+        } else if (length < 178 || body.includes("compact") || body.includes("hatchback")) {
            matchScore *= 1.3; 
         }
-      } else if (filters.sizePreference === "oversized") {
-      
-        if (length < 195 && !body.includes("truck") && !body.includes("van") && !cls.includes("large")) {
+      } 
+      // "mid_size_balanced" -> Target 175-195
+      else if (filters.sizePreference === "mid") {
+        if (length < 170 || length > 200 || body.includes("truck") || body.includes("van")) {
+           matchScore *= 0.6; 
+        } else if (length >= 175 && length <= 195) {
+           matchScore *= 1.2; 
+        }
+      }
+      // "large_comfortable" -> Target 195-215 (SUVs, Minivans)
+      else if (filters.sizePreference === "large") {
+        if (length < 190 || body.includes("compact") || body.includes("small")) {
+           matchScore *= 0.5; 
+        } else if (length >= 195 && length <= 215) {
+           matchScore *= 1.2; 
+        }
+
+        // Boost SUVs for large category as per user preference
+        if (body.includes("suv")) matchScore *= 1.1;
+
+        // Penalize commercial vans unless specifically utility focused (handled later)
+        if (body.includes("van") && !body.includes("minivan") && !filters.forceUtility && filters.cargoNeeds !== "high") {
+           matchScore *= 0.7;
+        }
+      }
+      // "oversized_powerful" -> Target > 215 (Trucks, Large SUVs, Vans)
+      else if (filters.sizePreference === "oversized") {
+        if (length < 200) {
            matchScore *= 0.4; 
+        } else if (length >= 210) {
+           matchScore *= 1.3; 
+        }
+        
+        if (body.includes("truck") || body.includes("large suv") || body.includes("van")) {
+           matchScore *= 1.2;
         }
       }
     }
 
-  
+    if (filters?.isFamily) {
+       const body = (car.bodyType || "").toLowerCase();
+       // Boost family friendly cars (SUVs, Minivans, Wagons)
+       if (body.includes("suv") || body.includes("minivan") || body.includes("crossover") || body.includes("wagon")) {
+           matchScore *= 1.25;
+       }
+       
+       // Penalize commercial vans/trucks unless utility is forced
+       if (!filters.forceUtility && filters.cargoNeeds !== "high") {
+            if (body.includes("truck") || (body.includes("van") && !body.includes("minivan"))) {
+                matchScore *= 0.6;
+            }
+       }
+    }
+
     if (filters?.fuelPriority === "critical") {
      
       const mpg = car.epaCombinedMpg || 0;
@@ -495,10 +539,18 @@ export function matchCars(
        const body = (car.bodyType || "").toLowerCase();
        
        if (filters.cargoNeeds === "high") {
+          const isUtility = body.includes("truck") || body.includes("van") || body.includes("minivan");
        
-          if (body.includes("truck") || body.includes("van") || body.includes("minivan")) {
+          if (isUtility) {
              matchScore *= 1.2; 
-          } else if (cargo < 50) {
+          } 
+
+          // Boost large SUVs for high cargo needs
+          if (body.includes("suv") && cargo > 60) {
+             matchScore *= 1.15;
+          }
+
+          if (cargo < 50 && !isUtility) {
              matchScore *= 0.4; 
           }
        } else if (filters.cargoNeeds === "medium") {
