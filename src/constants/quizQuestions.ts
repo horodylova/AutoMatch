@@ -1436,7 +1436,7 @@ export const QUIZ_QUESTIONS: QuizQuestionData[] = [
         icon: "/control icons/full-mechanical-feedback.svg",
         categories: {
           primary: Categories.PERFORMANCE,
-          secondary: Categories.PRACTICALITY,
+          secondary: Categories.ADVENTURE,
         },
       },
     ],

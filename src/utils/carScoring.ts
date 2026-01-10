@@ -1,9 +1,5 @@
 import { Categories, CategoryValue } from "../constants/categories";
 
-/* =========================
-   TYPES
-========================= */
-
 export type Row = (string | number | boolean | null)[];
 
 export interface AnswerSignal {
@@ -95,10 +91,6 @@ export interface CarSpecs {
   countryOfOrigin: string;
 }
 
-/* =========================
-   HELPERS
-========================= */
-
 function num(x: unknown): number {
   if (x == null) return 0;
   const s = String(x).trim();
@@ -142,10 +134,6 @@ function parseWarrantyYears(w: string): number {
   return m ? Number(m[1]) : 0;
 }
 
-/* =========================
-   USER PREFS (PRIMARY / SECONDARY)
-========================= */
-
 export function buildUserPreferences(
   answers: AnswerSignal[],
   secondaryFactor = 0.5
@@ -168,10 +156,6 @@ function normalizePrefs(prefs: Record<CategoryValue, number>) {
     Object.entries(prefs).map(([k, v]) => [k, v / sum])
   ) as Record<CategoryValue, number>;
 }
-
-/* =========================
-   PARSING
-========================= */
 
 export function parseCarData(
   row: Row,
@@ -253,7 +237,7 @@ export function parseCarData(
     fuelType: str("fuel type"),
     fuelTankCapacity: n("fuel tank capacity (gal)"),
     epaCombinedMpg: n("epa combined mpg"),
-    epaCityMpg: n("epa city/highway mpg") || n("epa city mpg"), // Try split if combined
+    epaCityMpg: n("epa city/highway mpg") || n("epa city mpg"),
     epaHighwayMpg: n("epa highway mpg"),
     rangeCity: n("range in miles (city/hwy)") || n("range city"),
     rangeHwy: n("range hwy"),
@@ -261,7 +245,7 @@ export function parseCarData(
     mpge: n("epa combined mpge"),
     epaCityMpge: n("epa city mpge"),
     epaHighwayMpge: n("epa highway mpge"),
-    evRange: n("epa electricity range (mi)") || n("range in miles (city/hwy)"), // Fallback
+    evRange: n("epa electricity range (mi)") || n("range in miles (city/hwy)"),
     epaKwh100Mi: n("epa kwh/100 mi"),
     batteryCapacity: n("battery capacity (kwh)"),
     chargingTime: n("epa time to charge battery (at 240v) (hr)"),
@@ -284,10 +268,6 @@ export function parseCarData(
   };
 }
 
-/* =========================
-   STATS
-========================= */
-
 export function calculateGlobalStats(cars: CarSpecs[]) {
   const pick = (arr: number[]) => arr.length ? arr : [0];
   return {
@@ -307,10 +287,6 @@ export function calculateGlobalStats(cars: CarSpecs[]) {
     mpgMax: Math.max(...pick(cars.map(c => c.mpge || c.epaCombinedMpg).filter(Boolean))),
   };
 }
-
-/* =========================
-   SCORING
-========================= */
 
 export function calculateCarScores(
   car: CarSpecs,
@@ -348,7 +324,6 @@ export function calculateCarScores(
   scores[Categories.TECHNOLOGY] =
     car.fuelType.toLowerCase().includes("electric") ? 80 : 40;
 
-  // RELIABILITY — fixed to real data
   let rel = 0;
   const basicY = parseWarrantyYears(car.basicWarranty);
   const driveY = parseWarrantyYears(car.drivetrainWarranty);
@@ -371,8 +346,6 @@ export function calculateCarScores(
 
   return scores;
 }
-
-
 
 export interface ScoredCar {
   car: CarSpecs;
@@ -423,36 +396,152 @@ export function matchCars(
 
   const stats = calculateGlobalStats(validCars);
 
+  const luxuryBrands = [
+    "acura", "alfa romeo", "aston martin", "audi", "bentley", "bmw", 
+    "cadillac", "fisker", "genesis", "ineos", "infiniti", "jaguar", 
+    "lamborghini", "land rover", "lexus", "lincoln", "lucid", "maserati", 
+    "mclaren", "mercedes-benz", "polestar", "porsche", "rivian", 
+    "rolls-royce", "tesla", "volvo"
+  ];
+
   const scored = validCars.map(car => {
     const scores = calculateCarScores(car, stats);
     
-   
-    // Base Logic: Weighted sum of categories
     const baseScore = Object.entries(prefs).reduce(
       (sum, [cat, w]) => sum + w * (scores[cat as CategoryValue] || 0),
       0
     );
     let matchScore = baseScore;
 
-    // --- NORMALIZATION & BALANCE FIXES ---
-    // Problem: Some categories (like Performance) can have very high raw scores compared to others.
-    // Solution: We need to ensure "baseScore" isn't dominated by a single outlier stat.
-    // (Already handled by 0-100 normalization in calculateCarScores, but let's be sure).
+    const price = car.baseMsrp || 0;
+    const body = (car.bodyType || "").toLowerCase();
+    const brand = (car.make || "").toLowerCase();
+    const isLuxBrand = luxuryBrands.some(b => brand.includes(b));
 
-    // --- SIZE FILTERS (Updated for stricter City/Small definition) ---
+    if (filters?.expensePreference) {
+      if (filters.expensePreference === "low") {
+         if (price > 40000) return { car, scores, matchScore: 0 };
+         if (price < 20000) matchScore *= 1.4;
+         else if (price <= 35000) matchScore *= 1.2;
+         else matchScore *= 0.4;
+      } 
+      else if (filters.expensePreference === "balanced") {
+         if (price < 20000) return { car, scores, matchScore: 0 };
+         if (price > 70000) return { car, scores, matchScore: 0 };
+         if (price >= 25000 && price < 48000) matchScore *= 1.25;
+         else if (price >= 48000 && price <= 60000) matchScore *= 1.0;
+         else if (price >= 60000 && price <= 70000) matchScore *= 0.5;
+         if (price < 25000) matchScore *= 0.8;
+      } 
+      else if (filters.expensePreference === "high") {
+         if (price < 40000) return { car, scores, matchScore: 0 };
+         if (price >= 50000 && price <= 120000) matchScore *= 1.1;
+         if (price > 120000) matchScore *= 0.7; 
+      }
+      else if (filters.expensePreference === "unlimited") {
+         if (price > 75000) matchScore *= 1.3;
+         if (price < 60000) matchScore *= 0.5; 
+      }
+    }
+
+    if (filters?.isFamily) {
+       if (isLuxBrand && filters.expensePreference !== "high" && filters.expensePreference !== "unlimited") {
+         return { car, scores, matchScore: 0 };
+       }
+
+       if (filters.familyStyle === "practical") {
+           if (body.includes("minivan")) {
+             matchScore *= 2.5;
+           } else if (body.includes("suv") || body.includes("crossover")) {
+             matchScore *= 1.4;
+           } else if (body.includes("wagon")) {
+             matchScore *= 1.3;
+           }
+
+           if (body.includes("coupe") || body.includes("convertible")) {
+             return { car, scores, matchScore: 0 };
+           }
+       } else {
+           if (body.includes("suv") || body.includes("crossover")) {
+             matchScore *= 1.6;
+           } else if (body.includes("minivan")) {
+             matchScore *= 1.2;
+           }
+       }
+
+       if (body.includes("van") && !body.includes("minivan")) {
+           matchScore *= 0.2;
+       }
+
+       if (body.includes("truck")) {
+           matchScore *= 0.3;
+       }
+    }
+
+    if (filters?.forceUtility) {
+       if (isLuxBrand && filters.expensePreference !== "high" && filters.expensePreference !== "unlimited") {
+         return { car, scores, matchScore: 0 };
+       }
+
+       const cargo = Math.max(car.cargoCapacity || 0, car.maxCargoCapacity || 0);
+       const tow = car.maxTowingCapacity || 0;
+       const isUtility = body.includes("truck") || body.includes("van");
+
+       if (!isUtility) {
+         matchScore *= 0.15;
+       } else {
+         matchScore *= 3.0;
+       }
+
+       if (tow > 5000) matchScore *= 1.5;
+       if (cargo > 60) matchScore *= 1.3;
+    }
+
+    if (filters?.forceSport) {
+       const hp = car.horsepower || 0;
+       const isSportyBody = body.includes("coupe") || body.includes("convertible") || body.includes("sport");
+
+       if (hp > 400) matchScore *= 1.5; 
+       else if (hp > 300) matchScore *= 1.3;
+       
+       if (isSportyBody) matchScore *= 1.4;
+
+       const hpThreshold = filters.expensePreference === "low" ? 140 : 200;
+       if (hp < hpThreshold && !isSportyBody) matchScore *= 0.5;
+
+       const isBoring = !filters.forceUtility && (body.includes("minivan") || body.includes("van") || (body.includes("suv") && hp < 250));
+       if (isBoring) matchScore *= 0.3;
+       
+       if (scores[Categories.PERFORMANCE] > 80) matchScore *= 1.2;
+    }
+
+    if (filters?.forceLuxury) {
+       if (isLuxBrand) matchScore *= 1.5; 
+
+       const premiumBrands = ["mazda", "volkswagen", "mini", "gmc", "jeep"];
+       if (!isLuxBrand && premiumBrands.some(b => brand.includes(b))) {
+           matchScore *= 1.2;
+       }
+    
+       if (filters.expensePreference !== "low" && filters.expensePreference !== "balanced") {
+          if (price > 75000) matchScore *= 1.2; 
+          if (price > 120000) matchScore *= 1.15;
+          if (scores[Categories.LUXURY] > 70) matchScore *= 1.2;
+       }
+
+       if (scores[Categories.COMFORT] > 70) matchScore *= 1.15;
+       if (scores[Categories.TECHNOLOGY] > 70) matchScore *= 1.1;
+    }
+
     if (filters?.sizePreference) {
       const length = car.length || 0;
-      const body = (car.bodyType || "").toLowerCase();
 
-      // "small_agile" -> Target < 178 in, Penalize > 185
       if (filters.sizePreference === "small") {
-        // STRICT FILTER: Absolutely no trucks, vans, or large SUVs for "Small & Agile"
         if (body.includes("truck") || body.includes("van") || body.includes("minivan") || body.includes("large suv")) {
             return { car, scores, matchScore: 0 }; 
         }
         
         if (length > 185) {
-           // Allow slight flexibility for sporty coupes (e.g. Mustang is ~188), but strictly penalize others
            if (!body.includes("coupe") && !body.includes("convertible")) {
                return { car, scores, matchScore: 0 }; 
            }
@@ -461,7 +550,6 @@ export function matchCars(
            matchScore *= 1.3; 
         }
       } 
-      // "mid_size_balanced" -> Target 175-195
       else if (filters.sizePreference === "mid") {
         if (length < 170 || length > 200 || body.includes("truck") || body.includes("van")) {
            matchScore *= 0.6; 
@@ -469,7 +557,6 @@ export function matchCars(
            matchScore *= 1.2; 
         }
       }
-      // "large_comfortable" -> Target 195-215 (SUVs, Minivans)
       else if (filters.sizePreference === "large") {
         if (length < 190 || body.includes("compact") || body.includes("small")) {
            matchScore *= 0.5; 
@@ -477,15 +564,12 @@ export function matchCars(
            matchScore *= 1.2; 
         }
 
-        // Boost SUVs for large category as per user preference
         if (body.includes("suv")) matchScore *= 1.1;
 
-        // Penalize commercial vans unless specifically utility focused (handled later)
         if (body.includes("van") && !body.includes("minivan") && !filters.forceUtility && filters.cargoNeeds !== "high") {
            matchScore *= 0.7;
         }
       }
-      // "oversized_powerful" -> Target > 215 (Trucks, Large SUVs, Vans)
       else if (filters.sizePreference === "oversized") {
         if (length < 200) {
            matchScore *= 0.4; 
@@ -501,20 +585,17 @@ export function matchCars(
 
     if (filters?.drivingPosition) {
        const height = car.height || 0;
-       const body = (car.bodyType || "").toLowerCase();
 
        if (filters.drivingPosition === "low") {
-           // User wants "Low & Connected"
            if (height > 62 || body.includes("suv") || body.includes("truck") || body.includes("van")) {
-               return { car, scores, matchScore: 0 }; // STRICT: No tall vehicles
+               return { car, scores, matchScore: 0 };
            }
            if (height < 58 || body.includes("coupe") || body.includes("sedan") || body.includes("hatchback")) {
                matchScore *= 1.2;
            }
        } else if (filters.drivingPosition === "high") {
-           // User wants "High & Commanding"
            if (height < 60 && !body.includes("suv")) {
-               return { car, scores, matchScore: 0 }; // STRICT: No low vehicles
+               return { car, scores, matchScore: 0 };
            }
            if (body.includes("suv") || body.includes("truck") || body.includes("van")) {
                matchScore *= 1.2;
@@ -522,89 +603,33 @@ export function matchCars(
        }
     }
 
-    if (filters?.isFamily) {
-       const body = (car.bodyType || "").toLowerCase();
-       // Boost family friendly cars (SUVs, Minivans, Wagons)
-       if (body.includes("suv") || body.includes("minivan") || body.includes("crossover") || body.includes("wagon")) {
-           matchScore *= 1.25;
-       }
-       
-       // Penalize commercial vans/trucks unless utility is forced
-       if (!filters.forceUtility && filters.cargoNeeds !== "high") {
-            if (body.includes("truck") || (body.includes("van") && !body.includes("minivan"))) {
-                matchScore *= 0.6;
-            }
-       }
-    }
-
     if (filters?.fuelPriority === "critical") {
-     
       const mpg = car.epaCombinedMpg || 0;
       const isEV = car.fuelType?.toLowerCase().includes("electric") || car.mpge > 0;
       if (!isEV && mpg < 30) {
-        return { car, scores, matchScore: 0 }; // STRICT: Must be efficient
+        return { car, scores, matchScore: 0 };
       }
     } else if (filters?.fuelPriority === "high") {
       const mpg = car.epaCombinedMpg || 0;
       const isEV = car.fuelType?.toLowerCase().includes("electric") || car.mpge > 0;
       if (!isEV && mpg < 25) {
         if (filters.forceUtility) {
-             matchScore *= 0.8; // Mild penalty for work vehicles
+             matchScore *= 0.8;
         } else {
-             matchScore *= 0.4; // Strong penalty
+             matchScore *= 0.4;
         }
-      }
-    }
-
-    if (filters?.expensePreference) {
-      const price = car.baseMsrp || 0;
-      
-      // STRICT FILTERING: Eliminate cars outside user's budget segment
-      if (filters.expensePreference === "low") {
-         // Target: < 35k
-         if (price > 40000) return { car, scores, matchScore: 0 };
-         
-         if (price < 20000) matchScore *= 1.4;
-         else if (price <= 35000) matchScore *= 1.2;
-         else matchScore *= 0.4; // 35k-40k range
-      } 
-      else if (filters.expensePreference === "balanced") {
-         // Target: 25k - 65k
-         if (price < 20000) return { car, scores, matchScore: 0 };
-         if (price > 70000) return { car, scores, matchScore: 0 };
-
-         if (price >= 25000 && price < 48000) matchScore *= 1.25;
-         else if (price >= 48000 && price <= 60000) matchScore *= 1.0;
-         else if (price >= 60000 && price <= 70000) matchScore *= 0.5; // Warning zone
-         
-         if (price < 25000) matchScore *= 0.8;
-      } 
-      else if (filters.expensePreference === "high") {
-         // Target: 50k - 120k
-         if (price < 40000) return { car, scores, matchScore: 0 };
-         
-         if (price >= 50000 && price <= 120000) matchScore *= 1.1;
-         if (price > 120000) matchScore *= 0.7; 
-      }
-      else if (filters.expensePreference === "unlimited") {
-         // Target: 75k+
-         if (price > 75000) matchScore *= 1.3;
-         if (price < 60000) matchScore *= 0.5; 
       }
     }
 
     if (filters?.minSeats) {
        const seats = car.totalSeating || 0;
        if (seats < filters.minSeats) {
-        
           matchScore *= 0.0; 
        }
     }
 
-   
     if (filters?.cargoNeeds) {
        const cargo = Math.max(car.cargoCapacity || 0, car.maxCargoCapacity || 0);
-       const body = (car.bodyType || "").toLowerCase();
        
        if (filters.cargoNeeds === "high") {
           const isUtility = body.includes("truck") || body.includes("van") || body.includes("minivan");
@@ -613,7 +638,6 @@ export function matchCars(
              matchScore *= 1.2; 
           } 
 
-          // Boost large SUVs for high cargo needs
           if (body.includes("suv") && cargo > 60) {
              matchScore *= 1.15;
           }
@@ -623,13 +647,11 @@ export function matchCars(
           }
        } else if (filters.cargoNeeds === "medium") {
           if (cargo < 15 && !body.includes("hatchback") && !body.includes("suv") && !body.includes("crossover") && !body.includes("wagon")) {
-            
              matchScore *= 0.7; 
           }
        }
     }
 
-    
     if (filters?.awdPreferred) {
        const drive = (car.driveType || "").toLowerCase();
        const isAWD = drive.includes("awd") || drive.includes("4wd") || drive.includes("four");
@@ -655,82 +677,6 @@ export function matchCars(
              matchScore *= 0.5; 
           }
        }
-    }
-
-    if (filters?.forceSport) {
-       const hp = car.horsepower || 0;
-       const body = (car.bodyType || "").toLowerCase();
-       const isSportyBody = body.includes("coupe") || body.includes("convertible") || body.includes("sport");
-
-       const isUtilityMode = filters.forceUtility || false;
-       const isBoring = !isUtilityMode && (body.includes("minivan") || body.includes("van") || (body.includes("suv") && hp < 250));
-
-       if (hp > 400) matchScore *= 1.4; 
-       else if (hp > 300) matchScore *= 1.2;
-       
-    
-       if (isSportyBody) matchScore *= 1.3;
-
-     
-       // Penalize weak engines, but be lenient for budget cars
-       const hpThreshold = filters.expensePreference === "low" ? 140 : 200;
-       if (hp < hpThreshold && !isSportyBody) matchScore *= 0.6; 
-       
-       if (isBoring) matchScore *= 0.4; 
-       
-      
-       if (scores[Categories.PERFORMANCE] > 80) matchScore *= 1.2;
-    }
-
-    
-    if (filters?.forceUtility) {
-       const body = (car.bodyType || "").toLowerCase();
-       const cargo = Math.max(car.cargoCapacity || 0, car.maxCargoCapacity || 0);
-       const tow = car.maxTowingCapacity || 0;
-
-       const isUtility = body.includes("truck") || body.includes("van") || body.includes("minivan");
-       
-     
-       if (isUtility) matchScore *= 2.2; // Massive boost for utility vehicles
-
-       if (tow > 5000) matchScore *= 1.4;
-       if (cargo > 60) matchScore *= 1.2;
-
-       if (cargo < 30 && tow < 2000) matchScore *= 0.4; 
-    }
-
-    if (filters?.forceLuxury) {
-       const price = car.baseMsrp || 0;
-       const brand = (car.make || "").toLowerCase();
-       
-       const luxuryBrands = [
-         "acura", "alfa romeo", "aston martin", "audi", "bentley", "bmw", 
-         "cadillac", "fisker", "genesis", "ineos", "infiniti", "jaguar", 
-         "lamborghini", "land rover", "lexus", "lincoln", "lucid", "maserati", 
-         "mclaren", "mercedes-benz", "polestar", "porsche", "rivian", 
-         "rolls-royce", "tesla", "volvo"
-       ];
-       
-       const isLuxBrand = luxuryBrands.some(b => brand.includes(b));
-    
-       if (isLuxBrand) matchScore *= 1.35; 
-
-       // For budget-conscious luxury seekers, boost "Premium" non-luxury brands
-       const premiumBrands = ["mazda", "volkswagen", "mini", "gmc", "jeep"];
-       if (!isLuxBrand && premiumBrands.some(b => brand.includes(b))) {
-           matchScore *= 1.15;
-       }
-    
-       // Luxury pricing alignment (Only apply high-price boosts if budget allows)
-       if (filters.expensePreference !== "low" && filters.expensePreference !== "balanced") {
-          if (price > 75000) matchScore *= 1.2; 
-          if (price > 120000) matchScore *= 1.15;
-          if (scores[Categories.LUXURY] > 70) matchScore *= 1.2;
-       }
-
-       // Universal Luxury indicators (Comfort/Tech)
-       if (scores[Categories.COMFORT] > 70) matchScore *= 1.15;
-       if (scores[Categories.TECHNOLOGY] > 70) matchScore *= 1.1;
     }
 
     if (matchScore > 0.01) {

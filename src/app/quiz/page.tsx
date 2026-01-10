@@ -37,7 +37,6 @@ export default function Page() {
     async function load() {
       const ds = await fetchDataset();
       setIdx(ds.idx);
-  
       setRows(ds.rows.slice(9));
     }
     load();
@@ -109,21 +108,17 @@ export default function Page() {
         }
       });
 
-     
       const cars = rows.map((r) => parseCarData(r, idx));
-
       const validCars = cars.filter(c => c.image && c.image !== "/placeholder-car.jpg");
      
       const filters: QuizFilters = {};
       
-    
       const sizeVal = quiz.answers["car_size_scale"] as string;
       if (sizeVal === "small_agile") filters.sizePreference = "small";
       else if (sizeVal === "mid_size_balanced") filters.sizePreference = "mid";
       else if (sizeVal === "large_comfortable") filters.sizePreference = "large";
       else if (sizeVal === "oversized_powerful") filters.sizePreference = "oversized";
 
-    
       const fuelVal = quiz.answers["fuel_importance"] as number;
       if (fuelVal === 3) filters.fuelPriority = "critical";
       else if (fuelVal === 2) filters.fuelPriority = "high";
@@ -131,7 +126,6 @@ export default function Page() {
       else filters.fuelPriority = "low";
 
       const expenseVal = quiz.answers["car_expenses_preference"] as number; 
-   
       if (expenseVal === 0) filters.expensePreference = "low";
       else if (expenseVal === 1) filters.expensePreference = "balanced";
       else if (expenseVal === 2) filters.expensePreference = "high";
@@ -139,7 +133,6 @@ export default function Page() {
       else if (expenseVal === 4) filters.expensePreference = "low";
       else if (expenseVal === 5) filters.expensePreference = "high";
 
-     
       const passengers = quiz.answers["freedom_feel"] as string[];
       if (passengers) {
         const needsMoreSeats = passengers.some(p => 
@@ -159,44 +152,31 @@ export default function Page() {
          filters.isFamily = true;
       }
 
-      // --- FAMILY STYLE LOGIC ---
-      // Determine if they are "Minivan Pragmatists" or "SUV Stylists"
       if (filters.isFamily) {
           let practicalScore = 0;
           let imageScore = 0;
 
-          // Question: Emotional Expectation
           const emotion = quiz.answers["emotional_expectation"] as string;
           if (emotion === "security_safety") practicalScore += 2;
           if (emotion === "status_achievement" || emotion === "joy_excitement") imageScore += 2;
 
-          // Question: Home Feel
           const home = quiz.answers["home_feel"] as string;
           if (home === "cozy_traditional") practicalScore += 1;
           if (home === "modern_minimalist" || home === "luxurious_detailed" || home === "industrial_open") imageScore += 1;
 
-          // Question: Perfect Morning
-           const morning = quiz.answers["perfect_morning"] as string;
-           if (morning === "family_chaos") practicalScore += 2; // Needs help managing chaos -> Minivan
-           if (morning === "gym_workout" || morning === "fast_commute") imageScore += 1;
+          const morning = quiz.answers["perfect_morning"] as string;
+          if (morning === "family_chaos") practicalScore += 2;
+          if (morning === "gym_workout" || morning === "fast_commute") imageScore += 1;
 
-           // Question: Passengers (Crucial for sliding doors utility)
-           if (passengers && passengers.includes("children_car_seats_school_runs")) {
-               practicalScore += 2; // Car seats are the #1 reason to get sliding doors
-           }
+          if (passengers && passengers.includes("children_car_seats_school_runs")) {
+              practicalScore += 2;
+          }
  
-           // Question: Risk Management
-           const risk = quiz.answers["manage_risks"] as number; 
-           // 0="Avoid" (Reliability)
-           // 1="Prepare" (Practicality)
-           // 2="Calculated" (Performance)
-           // 3="Instinct" (Adventure)
-           // 4="Support" (Comfort)
-           
-           if (risk === 1 || risk === 4) practicalScore += 1; // "Prepare" or "Seek Support" -> Practical/Safe choice
-           if (risk === 2 || risk === 3) imageScore += 1;     // "Calculated Risk" or "Instinct" -> Confident/Image choice
+          const risk = quiz.answers["manage_risks"] as number; 
+          if (risk === 1 || risk === 4) practicalScore += 1;
+          if (risk === 2 || risk === 3) imageScore += 1;
 
-           filters.familyStyle = practicalScore >= imageScore ? "practical" : "image_conscious";
+          filters.familyStyle = practicalScore >= imageScore ? "practical" : "image_conscious";
       }
 
       const cargo = quiz.answers["car_cargo_preference"] as string;
@@ -212,8 +192,6 @@ export default function Page() {
       }
 
       const weather = quiz.answers["bad_weather_focus"] as number; 
-  
-      
       if (weekend === "outdoors_hiking" || weekend === "road_trip" || weather === 1) {
         filters.awdPreferred = true;
       }
@@ -225,14 +203,12 @@ export default function Page() {
          filters.transmissionPreference = "automatic";
       }
 
-  
       const drivingPos = quiz.answers["driving_position_preference"] as number;
-      if (drivingPos === 0) filters.drivingPosition = "high"; // High & Commanding
-      else if (drivingPos === 1) filters.drivingPosition = "balanced"; // Balanced
-      else if (drivingPos === 2) filters.drivingPosition = "low"; // Low & Connected
+      if (drivingPos === 0) filters.drivingPosition = "high";
+      else if (drivingPos === 1) filters.drivingPosition = "balanced";
+      else if (drivingPos === 2) filters.drivingPosition = "low";
 
       let sportCount = 0;
-      
       const sportKeys = [
         "joy_excitement", 
         "engine_sound", 
@@ -242,15 +218,13 @@ export default function Page() {
         "Cockpit-like", 
       ];
 
-     
-      if (quiz.answers["interior_space_relation"] === 3) sportCount += 2; // Cockpit = Sport (Immediate Force)
+      if (quiz.answers["interior_space_relation"] === 3) sportCount += 2;
       if (quiz.answers["fuel_importance"] === 0) sportCount++; 
       if (quiz.answers["interior_feel"] === 1) sportCount++;
       if (quiz.answers["bad_weather_focus"] === 2) sportCount++; 
       if (quiz.answers["control_preference"] === 2) sportCount++; 
       if (quiz.answers["driving_position_preference"] === 2) sportCount++; 
       
- 
       for (const val of Object.values(quiz.answers)) {
          if (typeof val === 'string' && sportKeys.includes(val)) sportCount++;
          if (Array.isArray(val) && val.some(v => sportKeys.includes(v))) sportCount++;
@@ -273,14 +247,13 @@ export default function Page() {
       ];
 
       if (quiz.answers["interior_feel"] === 5) utilityCount++; 
-   
       for (const val of Object.values(quiz.answers)) {
          if (typeof val === 'string' && utilityKeys.includes(val)) utilityCount++;
          if (Array.isArray(val) && val.some(v => utilityKeys.includes(v))) utilityCount++;
       }
 
       if (cargo === "work_equipment") {
-        utilityCount += 3; // Immediate Force
+        utilityCount += 3;
         filters.forceUtility = true;
       }
       if (cargo === "large_items") utilityCount += 1;
@@ -298,7 +271,7 @@ export default function Page() {
         "Pay more for quality", 
         "Pay more if it improves quality and experience", 
         "A smooth, elegant interior with premium textures, warm lighting, and details that feel intentionally crafted.", 
-        "Near-Silence", // noise_level
+        "Near-Silence",
         "near_silence"
       ];
 
@@ -317,12 +290,10 @@ export default function Page() {
 
       const matches = matchCars(validCars, prefs, filters);
 
-
       const uniqueMatches: ScoredCar[] = [];
       const seenMakes = new Set<string>();
 
       for (const m of matches) {
-   
         const make = m.car.make.toLowerCase().trim();
         
         if (!seenMakes.has(make)) {
