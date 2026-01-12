@@ -14,13 +14,7 @@ export async function GET(request: NextRequest) {
   }
 
   
-  // Construct query
-  // We rely on Google CSE settings for site filtering as per user configuration
-  // Use direct location for zip codes to avoid "near" operator issues with numeric locations
-  const isZip = /^\d{5}(-\d{4})?$/.test(location.trim());
-  const query = isZip 
-    ? `buy ${make} ${model} ${location}` 
-    : `buy ${make} ${model} near ${location}`;
+  const query = `buy ${make} ${model} near ${location}`;
 
   const apiKey = process.env.GOOGLE_SEARCH_API_KEY;
   const cx = process.env.GOOGLE_SEARCH_CX;
