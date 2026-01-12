@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import styles from "./DealerResults.module.css";
+import { trackDealerClick } from "@/lib/gtag";
 
 export interface DealerResult {
   title: string;
@@ -19,9 +20,11 @@ interface Props {
   results: DealerResult[];
   location: string;
   onBack: () => void;
+  carMake?: string;
+  carModel?: string;
 }
 
-export default function DealerResults({ results, location, onBack }: Props) {
+export default function DealerResults({ results, location, onBack, carMake, carModel }: Props) {
   const [currentPage, setCurrentPage] = useState(1);
   const RESULTS_PER_PAGE = 5;
   
@@ -59,6 +62,11 @@ export default function DealerResults({ results, location, onBack }: Props) {
               target="_blank" 
               rel="noopener noreferrer" 
               className={styles.resultItem}
+              onClick={() => {
+                if (carMake && carModel) {
+                  trackDealerClick(carMake, carModel, result.displayLink || result.link);
+                }
+              }}
             >
               {imageSrc && (
                 <img 

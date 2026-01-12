@@ -107,6 +107,8 @@ export default function DealerModal({
               onClearResults();
               setPostalCode("");
             }} 
+            carMake={carInfo.make}
+            carModel={carInfo.model}
           />
         ) : (
           <>

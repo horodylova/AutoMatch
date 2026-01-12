@@ -23,6 +23,7 @@ import { parseCarData, matchCars, Row, ScoredCar, QuizFilters } from "../../util
 import { Categories, CategoryValue } from "../../constants/categories";
 import { fetchDataset } from "../../lib/dataset";
 import { saveResults } from "../../utils/storage";
+import { trackQuizComplete } from "@/lib/gtag";
 
 export default function Page() {
   const quiz = useQuiz();
@@ -305,6 +306,7 @@ export default function Page() {
       }
 
       setTopMatches(uniqueMatches);
+      trackQuizComplete(uniqueMatches.length);
     }
   }, [quiz.showFinal, rows, idx, quiz.answers]);
 

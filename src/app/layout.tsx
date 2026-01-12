@@ -4,8 +4,10 @@ import "./globals.css";
 import HeaderVisibility from "../components/HeaderVisibility";
 import Footer from "../components/Footer";
 import StyledComponentsRegistry from "@/lib/styled-registry";
+import { GoogleAnalytics } from '@next/third-parties/google';
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://carcupid.fit"),
   title: {
     default: "CarCupid — Find Your Perfect Car Match",
     template: "%s | CarCupid",
@@ -58,27 +60,23 @@ export default function RootLayout({
         fontFamily: "var(--kendo-font-family)", 
         position: "fixed",
         inset: 0,
-        width: "100%",
-        height: "100%",
-        overflow: "hidden",
-        display: "flex", 
-        flexDirection: "column" 
+        overflow: "hidden"
       }}>
         <StyledComponentsRegistry>
-          <div style={{ 
-            flex: 1, 
-            display: "flex", 
-            flexDirection: "column", 
+          <HeaderVisibility />
+          <main style={{ 
+            height: "100%", 
             overflowY: "auto", 
             overflowX: "hidden",
-            WebkitOverflowScrolling: "touch",
-            height: "100%"
+            display: "flex",
+            flexDirection: "column",
+            position: "relative"
           }}>
-            <HeaderVisibility />
-            <main style={{ flex: "1 0 auto" }}>{children}</main>
+            {children}
             <Footer />
-          </div>
+          </main>
         </StyledComponentsRegistry>
+        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ""} />
       </body>
     </html>
   );
