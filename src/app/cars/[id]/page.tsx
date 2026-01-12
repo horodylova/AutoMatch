@@ -20,7 +20,7 @@ export default function Page() {
   }, []);
   return (
     <div className={styles.page}>
-      <div className="container">
+      <div className="container" style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
         {ready ? <CarDetails id={String(id || "")} /> : <Loader />}
       </div>
     </div>

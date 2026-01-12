@@ -16,12 +16,12 @@ export default function QuizIntro({ onNext, imageSrc }: Props) {
           <Image src={imageSrc || '/images/quiz-intro.jpg'} alt="intro" fill sizes="(max-width: 768px) 100vw, 50vw" className={styles.mediaImg} style={{ objectFit: 'cover' }} />
         </div>
         <div className={styles.list}>
-          <div className={styles.item}><span className={styles.dot} /><span className={styles.itemText}>CarCupid contains 25+ thoughtful questions and usually takes about 8 minutes to complete.</span></div>
-          <div className={styles.item}><span className={styles.dot} /><span className={styles.itemText}>This isn’t a test — it’s a game.</span></div>
-          <div className={styles.item}><span className={styles.dot} /><span className={styles.itemText}>Follow your first instinct. There are no right or wrong answers; just choose what feels true in the moment.</span></div>
+          <div className={styles.item}><span className={styles.dot} /><span className={styles.itemText}>Takes about 8 minutes.</span></div>
+          <div className={styles.item}><span className={styles.dot} /><span className={styles.itemText}>This is a game.</span></div>
+          <div className={styles.item}><span className={styles.dot} /><span className={styles.itemText}>Follow your first instinct.</span></div>
           <div className={styles.item}><span className={styles.dot} /><span className={styles.itemText}>You can pause at any time.</span></div>
-          <div className={styles.item}><span className={styles.dot} /><span className={styles.itemText}>Your progress will be saved for 24 hours, so you can return and continue whenever you’re ready. If more than 24 hours pass, you’ll start fresh.</span></div>
-          <div className={styles.item}><span className={styles.dot} /><span className={styles.itemText}>At the end, you’ll receive your personalized match results, with options to share on social media or email them to yourself.</span></div>
+          <div className={styles.item}><span className={styles.dot} /><span className={styles.itemText}>Your progress is saved for 24h.</span></div>
+          <div className={styles.item}><span className={styles.dot} /><span className={styles.itemText}>Get your match results at the end.</span></div>
         </div>
       </div>
       <div className={styles.actions}>
