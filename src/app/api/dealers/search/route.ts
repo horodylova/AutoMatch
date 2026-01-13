@@ -15,6 +15,8 @@ export async function GET(request: NextRequest) {
 
   
   const query = `buy ${make} ${model} near ${location}`;
+  console.log('🔍 Location received:', location); 
+  console.log('🔍 Query sent to Google:', query);
 
   const apiKey = process.env.GOOGLE_SEARCH_API_KEY;
   const cx = process.env.GOOGLE_SEARCH_CX;
