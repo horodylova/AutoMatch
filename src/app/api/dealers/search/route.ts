@@ -4,18 +4,15 @@ export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const make = searchParams.get("make");
   const model = searchParams.get("model");
-  const location = searchParams.get("location");
 
-  if (!make || !model || !location) {
+  if (!make || !model) {
     return NextResponse.json(
-      { error: "Missing required parameters: make, model, location" },
+      { error: "Missing required parameters: make, model" },
       { status: 400 }
     );
   }
 
-  
-  const query = `buy ${make} ${model} near ${location}`;
-  console.log('🔍 Location received:', location); 
+  const query = `buy ${make} ${model}`;
   console.log('🔍 Query sent to Google:', query);
 
   const apiKey = process.env.GOOGLE_SEARCH_API_KEY;
@@ -69,7 +66,7 @@ export async function GET(request: NextRequest) {
     results = Array.from({ length: 15 }, (_, i) => ({
       title: `${make} ${model} for sale - Dealer ${i + 1}`,
       link: `https://example.com/dealer-${i + 1}`,
-      snippet: `Find the best deals on ${make} ${model} near ${location}. Available in stock at Dealer ${i + 1}. Call for price.`,
+      snippet: `Find the best deals on ${make} ${model}. Available in stock at Dealer ${i + 1}. Call for price.`,
       pagemap: {
         cse_image: [
           { src: "https://placehold.co/200x150/0E1B24/E6D6B4?text=Car+Image" }
@@ -88,7 +85,7 @@ export async function GET(request: NextRequest) {
 
   return NextResponse.json({
     query,
-    filters: { make, model, location },
+    filters: { make, model },
     results,
     message
   });

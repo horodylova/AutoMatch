@@ -3,22 +3,21 @@
   background: var(--kendo-color-app-surface);
   margin-top: 110px;
   padding: 0 0 60px;
-  overflow: hidden;
   width: 100%;
 }
 
-.banner { position: relative; width: 100%; min-height: 56vh; }
+.banner { position: relative; width: 100%; height: 65vh; min-height: 500px; }
 .swiper { width: 100%; height: 100%; padding: 0 12px; }
-.slide { position: relative; width: clamp(240px, 24vw, 420px); height: clamp(320px, 56vh, 520px); border-radius: 18px; overflow: hidden; flex: 0 0 auto; }
+.slide { position: relative; width: clamp(240px, 24vw, 420px); height: 100%; border-radius: 18px; overflow: hidden; flex: 0 0 auto; }
 .slideImg { width: 100%; height: 100%; object-fit: cover; display: block; }
-.introBox { position: absolute; z-index: 2; top: 82%; left: 50%; transform: translate(-50%, -50%); max-width: 640px; width: calc(100% - 32px); padding: 28px; border-radius: 18px; text-align: center; background: rgba(14,27,36,0.9); color: var(--kendo-color-on-app-surface); box-shadow: 0 16px 48px rgba(0,0,0,0.6); backdrop-filter: blur(8px); box-sizing: border-box; }
+.introBox { position: absolute; z-index: 2; top: 50%; left: 50%; transform: translate(-50%, -50%); max-width: 640px; width: calc(100% - 32px); padding: 28px; border-radius: 18px; text-align: center; background: rgba(14,27,36,0.9); color: var(--kendo-color-on-app-surface); box-shadow: 0 16px 48px rgba(0,0,0,0.6); backdrop-filter: blur(8px); box-sizing: border-box; }
 .introTitle { margin: 0 0 12px 0; font-size: clamp(24px, 4vw, 36px); font-weight: 800; letter-spacing: 0.4px; }
 .introText { margin: 0 0 18px 0; font-size: clamp(14px, 2.6vw, 18px); color: rgba(230,214,180,0.85); line-height: 1.7; }
-.introCta { display: inline-flex; width: 100%; justify-content: center; padding: 16px 24px; border-radius: 12px; background: var(--kendo-color-primary); color: var(--kendo-color-on-app-surface); text-decoration: none; font-weight: 600; box-sizing: border-box; transition: transform 0.15s ease, box-shadow 0.2s ease, filter 0.2s ease; will-change: transform; }
+.introCta { display: inline-flex; width: auto; min-width: 240px; justify-content: center; padding: 16px 32px; border-radius: 12px; background: var(--kendo-color-primary); color: var(--kendo-color-on-app-surface); text-decoration: none; font-weight: 600; box-sizing: border-box; transition: transform 0.15s ease, box-shadow 0.2s ease, filter 0.2s ease; will-change: transform; }
 .introCta:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(201, 71, 45, 0.35); filter: brightness(1.05); }
 .introCta:active { transform: translateY(0) scale(0.98); box-shadow: 0 4px 12px rgba(201, 71, 45, 0.25); }
 
-.introSection { padding: 24px 24px 40px; margin-top: 0; position: relative; z-index: 1; }
+.introSection { padding: 40px 24px 60px; }
 .container { max-width: 1200px; margin: 0 auto; }
 .lead { display: flex; align-items: center; justify-content: center; }
 .leadText { max-width: 840px; text-align: center; font-size: clamp(18px, 3vw, 24px); line-height: 1.6; color: rgba(230,214,180,0.9); }
@@ -37,11 +36,15 @@
 .ctaRow { display: none; }
 
 @media (max-width: 1400px) {
+  .banner {
+    height: 50vh;
+    min-height: 400px;
+  }
   .slide {
-    height: clamp(280px, 50vh, 460px);
+    height: 100%;
   }
   .introBox {
-    top: 70%;
+    top: 50%;
     padding: 24px;
     max-width: 580px;
   }
@@ -57,7 +60,7 @@
 
 @media (max-width: 992px) {
   .section { margin-top: 90px; padding: 16px 0 24px; }
-  .banner { min-height: auto; padding-bottom: 12px; }
+  .banner { min-height: auto; height: auto; padding-bottom: 12px; }
   .swiper { display: none; }
   .introBox { position: relative; top: auto; left: auto; transform: none; margin: 0 auto; max-width: 560px; }
   .features { grid-template-columns: 1fr; }

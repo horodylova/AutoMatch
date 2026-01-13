@@ -1,13 +1,13 @@
 "use client";
 import { useEffect, useMemo, useState, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { fetchDataset, Row } from "@/lib/dataset";
 import styles from "./cars.module.css";
 import DetailsGallery from "./DetailsGallery";
 import DetailsKVSection from "./DetailsKVSection";
 import DetailsReview from "./DetailsReview";
 import DetailsProsCons from "./DetailsProsCons";
-import DealerModal from "./modals/DealerModal";
-import { DealerResult } from "./modals/DealerResults";
+import DealerResults, { DealerResult } from "./modals/DealerResults";
 
 type Props = { id: string };
 
@@ -19,7 +19,6 @@ export default function CarDetails({ id }: Props) {
   const [row, setRow] = useState<Row | null>(null);
   const [idx, setIdx] = useState<Record<string, number>>({});
   const [isDealerModalOpen, setIsDealerModalOpen] = useState(false);
-  const [dealerLocation, setDealerLocation] = useState<string | null>(null);
   const [dealerResults, setDealerResults] = useState<DealerResult[] | null>(null);
   const [isSearchingDealers, setIsSearchingDealers] = useState(false);
 
@@ -103,7 +102,7 @@ export default function CarDetails({ id }: Props) {
     if (cylinders) out.push(cylinders);
     if (engineType) out.push(engineType);
     if (seats) out.push(`${seats} seats`);
-    return out;
+    return Array.from(new Set(out));
   }, [get]);
 
   const kvMain = [
@@ -204,15 +203,14 @@ export default function CarDetails({ id }: Props) {
     { k: "Rear shoulder room (in)", v: get("rear shoulder room (in)") },
   ];
 
-  const handleDealerSearch = async (location: string) => {
-    setDealerLocation(location);
+  const handleDealerSearch = async () => {
+    setIsDealerModalOpen(true);
     setIsSearchingDealers(true);
     try {
       const params = new URLSearchParams({
         make,
         model,
         year,
-        location,
       });
       const res = await fetch(`/api/dealers/search?${params.toString()}`);
       if (!res.ok) throw new Error("Search failed");
@@ -228,6 +226,7 @@ export default function CarDetails({ id }: Props) {
 
   const handleClearResults = () => {
     setDealerResults(null);
+    setIsDealerModalOpen(false);
   };
 
   return (
@@ -260,13 +259,13 @@ export default function CarDetails({ id }: Props) {
           <button 
             className={styles.dealerBtn} 
             type="button"
-            onClick={() => setIsDealerModalOpen(true)}
+            onClick={handleDealerSearch}
           >
             <svg className={styles.dealerBtnIcon} fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
-            {dealerLocation ? `Searching near: ${dealerLocation}` : "Find Dealers Near Me"}
+            Find Dealers
           </button>
           
           <button 
@@ -296,15 +295,31 @@ export default function CarDetails({ id }: Props) {
         </div>
       </div>
       
-      <DealerModal 
-        isOpen={isDealerModalOpen} 
-        onClose={() => setIsDealerModalOpen(false)} 
-        onSearch={handleDealerSearch}
-        onClearResults={handleClearResults}
-        results={dealerResults}
-        isLoading={isSearchingDealers}
-        carInfo={{ make, model, trim }} 
-      />
+      {isDealerModalOpen && typeof document !== "undefined" && createPortal(
+        <div className={styles.overlay} onClick={handleClearResults}>
+          <div className={styles.modal} onClick={e => e.stopPropagation()}>
+            <button className={styles.closeBtn} onClick={handleClearResults}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M18 6L6 18M6 6l12 12" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+            
+            {isSearchingDealers ? (
+              <div className={styles.loadingState}>
+                <div className={styles.spinnerLarge}></div>
+                <p>Searching for dealers...</p>
+              </div>
+            ) : dealerResults ? (
+              <DealerResults 
+                results={dealerResults} 
+                carMake={make}
+                carModel={model}
+              />
+            ) : null}
+          </div>
+        </div>,
+        document.body
+      )}
     </div>
   );
 }

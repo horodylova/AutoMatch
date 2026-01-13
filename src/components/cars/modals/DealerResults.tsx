@@ -18,13 +18,11 @@ export interface DealerResult {
 
 interface Props {
   results: DealerResult[];
-  location: string;
-  onBack: () => void;
   carMake?: string;
   carModel?: string;
 }
 
-export default function DealerResults({ results, location, onBack, carMake, carModel }: Props) {
+export default function DealerResults({ results, carMake, carModel }: Props) {
   const [currentPage, setCurrentPage] = useState(1);
   const RESULTS_PER_PAGE = 5;
   
@@ -42,11 +40,8 @@ export default function DealerResults({ results, location, onBack, carMake, carM
     <div className={styles.container}>
       <div className={styles.header}>
         <div className={styles.title}>
-          {results.length} Dealers near {location}
+          {results.length} Dealers Found
         </div>
-        <button onClick={onBack} className={styles.backBtn}>
-          Change Location
-        </button>
       </div>
 
       <div className={styles.resultsList}>
@@ -69,14 +64,20 @@ export default function DealerResults({ results, location, onBack, carMake, carM
               }}
             >
               {imageSrc && (
-                <img 
-                  src={imageSrc} 
-                  alt={result.title} 
-                  className={styles.resultImage}
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).style.display = "none";
-                  }}
-                />
+                <div className={styles.resultImage}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img 
+                    src={imageSrc} 
+                    alt={result.title} 
+                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      if (target) {
+                        target.style.display = "none";
+                      }
+                    }}
+                  />
+                </div>
               )}
               <div className={styles.resultContent}>
                 <div className={styles.resultTitle}>{result.title}</div>
@@ -95,7 +96,7 @@ export default function DealerResults({ results, location, onBack, carMake, carM
             disabled={currentPage === 1}
             onClick={() => handlePageChange(currentPage - 1)}
           >
-            Prev
+            Previous
           </button>
           <span className={styles.pageInfo}>
             Page {currentPage} of {totalPages}
