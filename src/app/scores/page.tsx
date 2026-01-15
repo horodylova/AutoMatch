@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import styles from "./scores.module.css";
 import { useEffect } from "react";
 
@@ -17,7 +18,7 @@ export default function Page() {
 
       <section className={styles.section}>
         <div className={styles.text}>
-          When we first started designing our car quiz, the task seemed straightforward:
+          When we first started designing our <Link href="/quiz">car quiz</Link>, the task seemed straightforward:
         </div>
         <div className={styles.highlightBox}>
           <div className={styles.quote}>ask users a few questions → assign weights to categories → rank cars.</div>
@@ -254,6 +255,9 @@ export default function Page() {
         <h2 className={styles.conclusionTitle}>A Matching System That Thinks Like a Human</h2>
         <p className={styles.conclusionText}>
           What we ended up with is not a filter and not a leaderboard. It’s a decision model. Enthusiasts see driver-focused cars. Families never see two-seat sports cars. Professionals get tools, not compromises.
+        </p>
+        <p className={styles.conclusionText}>
+          Ready to see it in action? Start the <Link href="/quiz">car match quiz</Link>, explore the <Link href="/cars">car database</Link>, and <Link href="/compare">compare cars side by side</Link>.
         </p>
         <div className={styles.finalNote}>
           We stopped trying to find the best car. We started matching the right life.

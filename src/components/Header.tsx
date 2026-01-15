@@ -28,8 +28,7 @@ export default function Header() {
             setHasSavedResults(true);
             return;
           }
-        } catch (e) {
-         
+        } catch {
         }
       }
       setHasSavedResults(false);

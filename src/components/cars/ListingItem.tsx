@@ -1,8 +1,8 @@
 "use client";
 import { Button } from "@progress/kendo-react-buttons";
 import Link from "next/link";
+import Image from "next/image";
 import styles from "./cars.module.css";
-
 export type ListingItemData = {
   id: string;
   imageUrl: string;
@@ -17,7 +17,7 @@ export default function ListingItem({ item }: { item: ListingItemData }) {
   return (
     <div className={styles.card} data-id={item.id}>
       <div className={styles.imgWrap}>
-        <img src={item.imageUrl} alt={item.title} />
+        <Image src={item.imageUrl} alt={item.title} fill className={styles.cardImg} />
         <div className={styles.badgeBar}>
           {item.badges.map((b) => (
             <span key={b} className={styles.badge}>{b}</span>

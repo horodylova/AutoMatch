@@ -1,3 +1,4 @@
+import Image from "next/image";
 import styles from "./CarPersonalities.module.css";
 
 const logos = [
@@ -32,7 +33,7 @@ function Row({ logos }: { logos: string[] }) {
     <div className={styles.track}>
       {sequence.map((src, i) => (
         <div key={`${src}:${i}`} className={styles.logoWrap}>
-          <img src={src} alt="brand" width={160} height={56} className={styles.logoImg} />
+          <Image src={src} alt="brand" width={160} height={56} className={styles.logoImg} />
         </div>
       ))}
     </div>
