@@ -89,6 +89,21 @@
   color: rgba(230, 214, 180, 0.9);
 }
 
+.inlineLink {
+  color: var(--kendo-color-primary);
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(201, 71, 45, 0.4);
+  padding-bottom: 1px;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.inlineLink:hover,
+.inlineLink:focus-visible {
+  color: #fff;
+  border-color: var(--kendo-color-primary);
+}
+
 .list {
   list-style: none;
   padding: 0;

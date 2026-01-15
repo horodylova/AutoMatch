@@ -9,20 +9,21 @@ import DetailsReview from "./DetailsReview";
 import DetailsProsCons from "./DetailsProsCons";
 import DealerResults, { DealerResult } from "./modals/DealerResults";
 
-type Props = { id: string };
+type Props = { id: string; initialRow?: Row | null; initialIdx?: Record<string, number> };
 
 function splitList(s: string): string[] {
   return s.split(/[;,\n]/).map(x => x.trim()).filter(Boolean);
 }
 
-export default function CarDetails({ id }: Props) {
-  const [row, setRow] = useState<Row | null>(null);
-  const [idx, setIdx] = useState<Record<string, number>>({});
+export default function CarDetails({ id, initialRow, initialIdx }: Props) {
+  const [row, setRow] = useState<Row | null>(initialRow ?? null);
+  const [idx, setIdx] = useState<Record<string, number>>(initialIdx ?? {});
   const [isDealerModalOpen, setIsDealerModalOpen] = useState(false);
   const [dealerResults, setDealerResults] = useState<DealerResult[] | null>(null);
   const [isSearchingDealers, setIsSearchingDealers] = useState(false);
 
   useEffect(() => {
+    if (row && Object.keys(idx).length > 0) return;
     let active = true;
     const run = async () => {
       const ds = await fetchDataset();
@@ -44,7 +45,7 @@ export default function CarDetails({ id }: Props) {
     };
     run();
     return () => { active = false; };
-  }, [id]);
+  }, [id, row, idx]);
 
   const get = useCallback((key: string): string => {
     const i = idx[key.toLowerCase()] ?? -1;
