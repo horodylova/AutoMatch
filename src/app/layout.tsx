@@ -70,7 +70,8 @@ export default function RootLayout({
             overflowX: "hidden",
             display: "flex",
             flexDirection: "column",
-            position: "relative"
+            position: "relative",
+            justifyContent: "space-between"
           }}>
             {children}
             <Footer />

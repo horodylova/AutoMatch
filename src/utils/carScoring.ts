@@ -176,11 +176,31 @@ export function parseCarData(
   if (rawImage) {
     const parts = rawImage
       .split(/[;,]/)
-      .map(s => s.trim().replace(/^['"]|['"]$/g, ""));
-    const valid = parts.find(p =>
-      p.startsWith("http") || p.startsWith("/") || p.startsWith("www.")
-    );
-    if (valid) image = valid.startsWith("www.") ? `https://${valid}` : valid;
+      .map(s => s.trim())
+      .filter(Boolean);
+
+    const sanitize = (u: string): string => {
+      const cleaned = u
+        .replace(/^['"]|['"]$/g, "")
+        .replace(/[)]+$/, "")
+        .replace(/\s+/g, "%20");
+      if (
+        cleaned.startsWith("https://") ||
+        cleaned.startsWith("http://") ||
+        cleaned.startsWith("/")
+      ) {
+        return cleaned;
+      }
+      if (cleaned.startsWith("www.")) {
+        return `https://${cleaned}`;
+      }
+      return "/no-image-available.jpg";
+    };
+
+    const candidates = parts.map(sanitize).filter(Boolean);
+    if (candidates.length > 0) {
+      image = candidates[0];
+    }
   }
 
   return {
@@ -691,4 +711,3 @@ export function matchCars(
     2
   );
 }
-

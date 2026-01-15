@@ -3,7 +3,7 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 120px 24px 48px;
-  min-height: 100vh;
+  min-height: auto;
   box-sizing: border-box;
   color: var(--kendo-color-on-app-surface);
 }
