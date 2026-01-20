@@ -3,6 +3,7 @@ import "@progress/kendo-theme-default/dist/all.css";
 import "./globals.css";
 import HeaderVisibility from "../components/HeaderVisibility";
 import Footer from "../components/Footer";
+import PromoModal from "../components/PromoModal";
 import StyledComponentsRegistry from "@/lib/styled-registry";
 import { GoogleAnalytics } from '@next/third-parties/google';
 
@@ -62,6 +63,7 @@ export default function RootLayout({
         inset: 0,
         overflow: "hidden"
       }}>
+        <PromoModal />
         <StyledComponentsRegistry>
           <HeaderVisibility />
           <main style={{ 

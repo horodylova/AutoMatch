@@ -1,0 +1,118 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  opacity: 0;
+  animation: fadeIn 0.3s forwards;
+  backdrop-filter: blur(4px);
+}
+
+.modal {
+  position: relative;
+  background-color: #000;
+  border-radius: 12px;
+  overflow: hidden;
+  max-width: 90vw;
+  max-height: 90vh;
+  width: 800px; /* Default width, can adjust based on video aspect ratio */
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  transform: scale(0.95);
+  animation: popIn 0.3s forwards;
+  display: flex;
+  flex-direction: column;
+}
+
+.closeButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.5);
+  border: none;
+  color: #fff;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+
+.closeButton:hover {
+  background-color: rgba(201, 71, 45, 0.8); /* Brand color or just red */
+}
+
+.videoContainer {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9; /* Assume standard 16:9, or let video determine height */
+  background: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.replayOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+
+.replayOverlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.replayButton {
+  background-color: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 24px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  backdrop-filter: blur(4px);
+  transition: all 0.2s;
+}
+
+.replayButton:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+@keyframes popIn {
+  to { transform: scale(1); }
+}
+
+@media (max-width: 600px) {
+  .modal {
+    width: 95vw;
+  }
+}
