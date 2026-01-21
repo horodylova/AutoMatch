@@ -107,7 +107,8 @@ export default function ListingList({ filters }: { filters?: FiltersData }) {
     
     // Fix for local images: if it's just a filename, assume it's in /photos-cars/
     if (img && !img.startsWith("/") && !img.startsWith("http")) {
-      img = `/photos-cars/${img}`;
+      // Encode URI component to handle spaces in filenames
+      img = `/photos-cars/${encodeURIComponent(img)}`;
     }
     
     img = img || "/no-image-available.jpg";

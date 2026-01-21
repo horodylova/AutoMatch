@@ -61,7 +61,7 @@ export default function CarDetails({ id, initialRow, initialIdx }: Props) {
       if (cleaned.startsWith("https://") || cleaned.startsWith("http://") || cleaned.startsWith("/")) return cleaned;
       if (cleaned.startsWith("www.")) return `https://${cleaned}`;
       // Fix for local images: if it's just a filename, assume it's in /photos-cars/
-      if (cleaned && !cleaned.includes("/")) return `/photos-cars/${cleaned}`;
+      if (cleaned && !cleaned.includes("/")) return `/photos-cars/${encodeURIComponent(cleaned)}`;
       return "/no-image-available.jpg";
     };
     const out = arr.map(sanitize).filter(Boolean);
