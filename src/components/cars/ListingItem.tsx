@@ -17,7 +17,7 @@ export default function ListingItem({ item }: { item: ListingItemData }) {
   return (
     <div className={styles.card} data-id={item.id}>
       <div className={styles.imgWrap}>
-        <Image src={item.imageUrl} alt={item.title} fill className={styles.cardImg} />
+        <Image src={item.imageUrl} alt={item.title} fill unoptimized className={styles.cardImg} />
         <div className={styles.badgeBar}>
           {item.badges.map((b) => (
             <span key={b} className={styles.badge}>{b}</span>

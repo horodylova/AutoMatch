@@ -103,12 +103,17 @@ export default function ListingList({ filters }: { filters?: FiltersData }) {
     const desc = get("trim (description)");
     const doors = get("doors");
     const imgStr = get("image url");
-    let img = imgStr.split(";").map(s => s.trim()).filter(Boolean)[0];
+    // Align splitting logic with CarDetails: split by ; or ,
+    const rawImgs = imgStr.split(/[;,]/).map(s => s.trim()).filter(Boolean);
+    let img = rawImgs[0];
     
     // Fix for local images: if it's just a filename, assume it's in /photos-cars/
     if (img && !img.startsWith("/") && !img.startsWith("http")) {
       // Encode URI component to handle spaces in filenames
       img = `/photos-cars/${encodeURIComponent(img)}`;
+    } else if (img) {
+      // Ensure spaces in remote URLs are encoded too, similar to CarDetails
+      img = img.replace(/\s+/g, "%20");
     }
     
     img = img || "/no-image-available.jpg";
