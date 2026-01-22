@@ -106,6 +106,7 @@ export default function ComparePage() {
                   src={car1.image && !car1.image.includes("placeholder") ? car1.image : "/no-image-available.jpg"} 
                   alt={`${car1.make} ${car1.model}`} 
                   fill
+                  unoptimized
                   className={styles.carImage}
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
@@ -137,6 +138,7 @@ export default function ComparePage() {
                   src={car2.image && !car2.image.includes("placeholder") ? car2.image : "/no-image-available.jpg"} 
                   alt={`${car2.make} ${car2.model}`} 
                   fill
+                  unoptimized
                   className={styles.carImage}
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />

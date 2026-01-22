@@ -182,19 +182,20 @@ export function parseCarData(
     const sanitize = (u: string): string => {
       const cleaned = u
         .replace(/^['"]|['"]$/g, "")
-        .replace(/[)]+$/, "")
-        .replace(/\s+/g, "%20");
+        .replace(/[)]+$/, "");
+        
       if (
         cleaned.startsWith("https://") ||
         cleaned.startsWith("http://") ||
         cleaned.startsWith("/")
       ) {
-        return cleaned;
+        return cleaned.replace(/\s+/g, "%20");
       }
       if (cleaned.startsWith("www.")) {
-        return `https://${cleaned}`;
+        return `https://${cleaned.replace(/\s+/g, "%20")}`;
       }
-      return "/no-image-available.jpg";
+      // Fix for local images: if it's just a filename, assume it's in /photos-cars/
+      return `/photos-cars/${encodeURIComponent(cleaned)}`;
     };
 
     const candidates = parts.map(sanitize).filter(Boolean);
