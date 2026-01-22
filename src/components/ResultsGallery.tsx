@@ -20,6 +20,30 @@ interface ResultsGalleryProps {
   onSaveProgress?: () => void;
 }
 
+function ResultCard({ car, index }: { car: CarResult; index: number }) {
+  const [imgSrc, setImgSrc] = useState(car.image);
+
+  return (
+    <Link href={`/cars/${car.id}`} target="_blank" rel="noopener noreferrer" className={styles.cardLink}>
+      <Image 
+        src={imgSrc} 
+        alt={`${car.make} ${car.model}`} 
+        fill
+        unoptimized
+        sizes="(max-width: 768px) 80vw, 600px"
+        className={styles.image}
+        style={{ objectFit: 'cover' }}
+        priority={index < 2}
+        onError={() => setImgSrc("/no-image-available.jpg")}
+      />
+      <div className={styles.overlay}>
+        <div className={styles.carName}>{car.make}</div>
+        <div className={styles.carDetails}>{car.model} • {car.year}</div>
+      </div>
+    </Link>
+  );
+}
+
 export default function ResultsGallery({ results = [], onSaveProgress }: ResultsGalleryProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [shareUrl, setShareUrl] = useState('');
@@ -230,21 +254,7 @@ export default function ResultsGallery({ results = [], onSaveProgress }: Results
                 >
                   {results.map((car, index) => (
                     <div key={car.id} className={styles.cardWrapper}>
-                        <Link href={`/cars/${car.id}`} target="_blank" rel="noopener noreferrer" className={styles.cardLink}>
-                          <Image 
-                            src={car.image} 
-                            alt={`${car.make} ${car.model}`} 
-                            fill
-                            sizes="(max-width: 768px) 80vw, 600px"
-                            className={styles.image}
-                            style={{ objectFit: 'cover' }}
-                            priority={index < 2}
-                          />
-                          <div className={styles.overlay}>
-                            <div className={styles.carName}>{car.make}</div>
-                            <div className={styles.carDetails}>{car.model} • {car.year}</div>
-                          </div>
-                        </Link>
+                      <ResultCard car={car} index={index} />
                     </div>
                   ))}
                 </div>
