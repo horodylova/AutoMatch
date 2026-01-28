@@ -49,6 +49,7 @@ export default function Header() {
     "Match Algorithm",
     "Car Listings",
     "Compare",
+    "For Partners",
   ];
 
   return (
@@ -81,6 +82,10 @@ export default function Header() {
                 </Link>
               ) : item === "Compare" ? (
                 <Link key={item} href="/compare" className={styles.navButton}>
+                  {item}
+                </Link>
+              ) : item === "For Partners" ? (
+                <Link key={item} href="/partners" className={styles.navButton}>
                   {item}
                 </Link>
               ) : (
@@ -154,6 +159,15 @@ export default function Header() {
                   <Link
                     key={item}
                     href="/compare"
+                    className={styles.drawerItem}
+                    onClick={() => setIsDrawerOpen(false)}
+                  >
+                    {item}
+                  </Link>
+                ) : item === "For Partners" ? (
+                  <Link
+                    key={item}
+                    href="/partners"
                     className={styles.drawerItem}
                     onClick={() => setIsDrawerOpen(false)}
                   >

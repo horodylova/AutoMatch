@@ -1,0 +1,221 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 100px 24px 80px;
+  font-family: var(--kendo-font-family, sans-serif);
+  color: var(--kendo-color-on-app-surface);
+  flex: 1;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.contentWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  width: 100%;
+  align-items: center;
+}
+
+/* Header Row base styles (mobile) */
+.headerRow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.logoWrapper {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin-bottom: 1.5rem;
+}
+
+.image {
+  object-fit: contain;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  line-height: 1.1;
+  background: linear-gradient(135deg, var(--kendo-color-primary) 0%, var(--kendo-color-on-app-surface) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin: 0;
+}
+
+/* Desktop layout */
+@media (min-width: 900px) {
+  .contentWrapper {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 4rem;
+  }
+
+  .infoSection {
+    flex: 1;
+    padding-right: 2rem;
+  }
+
+  .headerRow {
+    flex-direction: row;
+    align-items: center;
+    text-align: left;
+    gap: 1.5rem;
+  }
+
+  .logoWrapper {
+    margin-bottom: 0;
+    flex-shrink: 0;
+  }
+
+  .formSection {
+    flex: 1;
+    max-width: 500px;
+  }
+}
+
+.formSection {
+  width: 100%;
+}
+
+.subtitle {
+  font-size: 1.25rem;
+  color: var(--kendo-color-subtle, #666);
+  font-weight: 300;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.featuresList {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2rem 0;
+}
+
+.featureItem {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  color: var(--kendo-color-on-app-surface);
+}
+
+.featureIcon {
+  margin-right: 1rem;
+  color: var(--kendo-color-primary);
+  font-weight: bold;
+}
+
+.formCard {
+  background: var(--kendo-color-surface, #15202B);
+  padding: 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--kendo-color-border, rgba(230, 214, 180, 0.18));
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media (min-width: 900px) {
+  .formCard {
+    padding: 2.5rem;
+  }
+}
+
+.formTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: var(--kendo-color-on-app-surface, #E6D6B4);
+}
+
+.formGroup {
+  margin-bottom: 1.25rem;
+}
+
+.label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: var(--kendo-color-on-app-surface, #E6D6B4);
+  opacity: 0.9;
+}
+
+.input,
+.textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--kendo-color-border, rgba(230, 214, 180, 0.18));
+  font-family: inherit;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  background: var(--kendo-color-surface, #15202B);
+  color: var(--kendo-color-on-app-surface, #E6D6B4);
+}
+
+.input:-webkit-autofill,
+.input:-webkit-autofill:hover, 
+.input:-webkit-autofill:focus, 
+.textarea:-webkit-autofill,
+.textarea:-webkit-autofill:hover,
+.textarea:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--kendo-color-on-app-surface, #E6D6B4);
+  -webkit-box-shadow: 0 0 0px 1000px var(--kendo-color-surface, #15202B) inset;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: rgba(230, 214, 180, 0.5);
+}
+
+.input:focus,
+.textarea:focus {
+  outline: none;
+  border-color: var(--kendo-color-primary, #C9472D);
+  box-shadow: 0 0 0 3px rgba(201, 71, 45, 0.15);
+  background: var(--kendo-color-surface, #15202B);
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.submitButton {
+  width: 100%;
+  padding: 14px;
+  background: var(--kendo-color-primary, #e63946);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  margin-top: 1rem;
+}
+
+.submitButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(var(--kendo-color-primary-rgb, 230, 57, 70), 0.3);
+}
+
+.disclaimer {
+  font-size: 0.8rem;
+  color: var(--kendo-color-subtle, #888);
+  margin-top: 1rem;
+  text-align: center;
+}
