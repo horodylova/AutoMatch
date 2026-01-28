@@ -85,7 +85,7 @@ export default function Header() {
                   {item}
                 </Link>
               ) : item === "For Dealers" ? (
-                <Link key={item} href="/partners" className={styles.navButton}>
+                <Link key={item} href="/dealers" className={styles.navButton}>
                   {item}
                 </Link>
               ) : (
@@ -167,7 +167,7 @@ export default function Header() {
                 ) : item === "For Dealers" ? (
                   <Link
                     key={item}
-                    href="/partners"
+                    href="/dealers"
                     className={styles.drawerItem}
                     onClick={() => setIsDrawerOpen(false)}
                   >

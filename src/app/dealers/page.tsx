@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import styles from "./partners.module.css";
+import styles from "./dealers.module.css";
 import { submitForm } from "../../utils/formSubmission";
 import Toast, { ToastType } from "../../components/Toast";
 
