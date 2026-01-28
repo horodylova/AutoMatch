@@ -49,7 +49,7 @@ export default function Header() {
     "Match Algorithm",
     "Car Listings",
     "Compare",
-    "For Partners",
+    "For Dealers",
   ];
 
   return (
@@ -84,7 +84,7 @@ export default function Header() {
                 <Link key={item} href="/compare" className={styles.navButton}>
                   {item}
                 </Link>
-              ) : item === "For Partners" ? (
+              ) : item === "For Dealers" ? (
                 <Link key={item} href="/partners" className={styles.navButton}>
                   {item}
                 </Link>
@@ -164,7 +164,7 @@ export default function Header() {
                   >
                     {item}
                   </Link>
-                ) : item === "For Partners" ? (
+                ) : item === "For Dealers" ? (
                   <Link
                     key={item}
                     href="/partners"

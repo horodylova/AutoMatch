@@ -1,0 +1,113 @@
+
+.toastContainer {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  pointer-events: none;
+}
+
+.toast {
+  pointer-events: auto;
+  min-width: 300px;
+  max-width: 400px;
+  padding: 16px;
+  border-radius: 12px;
+  background: var(--kendo-color-surface, #15202B);
+  border: 1px solid var(--kendo-color-border, rgba(230, 214, 180, 0.18));
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  color: var(--kendo-color-on-app-surface, #E6D6B4);
+  backdrop-filter: blur(8px);
+}
+
+.success {
+  border-left: 4px solid var(--kendo-color-success, #0F5748);
+}
+
+.error {
+  border-left: 4px solid var(--kendo-color-error, #B23D2A);
+}
+
+.icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+}
+
+.success .icon {
+  color: var(--kendo-color-success, #0F5748);
+}
+
+.error .icon {
+  color: var(--kendo-color-error, #B23D2A);
+}
+
+.content {
+  flex: 1;
+}
+
+.title {
+  font-weight: 700;
+  font-size: 15px;
+  margin-bottom: 4px;
+  line-height: 1.4;
+}
+
+.message {
+  font-size: 14px;
+  color: var(--kendo-color-subtle, #A3A3A3);
+  line-height: 1.5;
+}
+
+.closeButton {
+  background: transparent;
+  border: none;
+  color: var(--kendo-color-subtle, #A3A3A3);
+  cursor: pointer;
+  padding: 4px;
+  margin: -4px -4px 0 0;
+  border-radius: 4px;
+  transition: color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.closeButton:hover {
+  color: var(--kendo-color-on-app-surface, #E6D6B4);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+}
+
+.exiting {
+  animation: fadeOut 0.2s ease-in forwards;
+}

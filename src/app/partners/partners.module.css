@@ -41,7 +41,7 @@
 }
 
 .title {
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: 800;
   line-height: 1.1;
   background: linear-gradient(135deg, var(--kendo-color-primary) 0%, var(--kendo-color-on-app-surface) 100%);
@@ -51,8 +51,33 @@
   margin: 0;
 }
 
+/* Utility classes for responsive text */
+.mobileOnly {
+  display: block;
+}
+
+.desktopOnly {
+  display: none;
+}
+
 /* Desktop layout */
 @media (min-width: 900px) {
+  .mobileOnly {
+    display: none;
+  }
+
+  .desktopOnly {
+    display: block;
+  }
+
+  .container {
+    padding-top: 150px;
+  }
+
+  .title {
+    font-size: 2.5rem;
+  }
+
   .contentWrapper {
     flex-direction: row;
     align-items: flex-start;
@@ -81,6 +106,26 @@
     flex: 1;
     max-width: 500px;
   }
+
+  .subtitle {
+    font-size: 1.25rem;
+  }
+
+  .bodyText {
+    font-size: 1.1rem;
+  }
+
+  .featureItem {
+    font-size: 1.1rem;
+  }
+
+  .formTitle {
+    font-size: 1.5rem;
+  }
+
+  .pricingTeaser {
+    font-size: 1.2rem;
+  }
 }
 
 .formSection {
@@ -88,11 +133,22 @@
 }
 
 .subtitle {
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   color: var(--kendo-color-subtle, #666);
   font-weight: 300;
   margin-bottom: 2rem;
   line-height: 1.6;
+}
+
+.bodyText {
+  font-size: 1rem;
+  color: var(--kendo-color-on-app-surface);
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.bodyText p {
+  margin-bottom: 1rem;
 }
 
 .featuresList {
@@ -103,16 +159,18 @@
 
 .featureItem {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: 1rem;
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: var(--kendo-color-on-app-surface);
+  line-height: 1.4;
 }
 
 .featureIcon {
   margin-right: 1rem;
   color: var(--kendo-color-primary);
   font-weight: bold;
+  flex-shrink: 0;
 }
 
 .formCard {
@@ -132,7 +190,7 @@
 }
 
 .formTitle {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 600;
   margin-bottom: 1.5rem;
   color: var(--kendo-color-on-app-surface, #E6D6B4);
@@ -152,7 +210,8 @@
 }
 
 .input,
-.textarea {
+.textarea,
+.select {
   width: 100%;
   box-sizing: border-box;
   padding: 12px 16px;
@@ -165,12 +224,32 @@
   color: var(--kendo-color-on-app-surface, #E6D6B4);
 }
 
+.select {
+  appearance: none;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23E6D6B4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1em;
+  padding-right: 2.5rem; /* Make room for arrow */
+  color-scheme: dark; /* Force dark native picker on supported browsers */
+}
+
+.select option {
+  background-color: var(--kendo-color-surface, #15202B);
+  color: var(--kendo-color-on-app-surface, #E6D6B4);
+  padding: 10px;
+}
+
 .input:-webkit-autofill,
 .input:-webkit-autofill:hover, 
 .input:-webkit-autofill:focus, 
 .textarea:-webkit-autofill,
 .textarea:-webkit-autofill:hover,
-.textarea:-webkit-autofill:focus {
+.textarea:-webkit-autofill:focus,
+.select:-webkit-autofill,
+.select:-webkit-autofill:hover,
+.select:-webkit-autofill:focus {
   -webkit-text-fill-color: var(--kendo-color-on-app-surface, #E6D6B4);
   -webkit-box-shadow: 0 0 0px 1000px var(--kendo-color-surface, #15202B) inset;
   transition: background-color 5000s ease-in-out 0s;
@@ -182,7 +261,8 @@
 }
 
 .input:focus,
-.textarea:focus {
+.textarea:focus,
+.select:focus {
   outline: none;
   border-color: var(--kendo-color-primary, #C9472D);
   box-shadow: 0 0 0 3px rgba(201, 71, 45, 0.15);
@@ -201,21 +281,75 @@
   color: white;
   border: none;
   border-radius: 8px;
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: all 0.2s ease;
   margin-top: 1rem;
 }
 
 .submitButton:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(var(--kendo-color-primary-rgb, 230, 57, 70), 0.3);
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.submitButton:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+  filter: none;
+  opacity: 0.7;
 }
 
 .disclaimer {
-  font-size: 0.8rem;
-  color: var(--kendo-color-subtle, #888);
   margin-top: 1rem;
+  font-size: 0.8rem;
+  color: var(--kendo-color-subtle, #999);
   text-align: center;
+  line-height: 1.4;
+}
+
+.toastContainer {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  pointer-events: none;
+}
+
+.pricingTeaser {
+  margin-top: 4rem;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--kendo-color-on-app-surface);
+  max-width: 600px;
+  background: rgba(230, 214, 180, 0.05);
+  padding: 1.5rem 2rem;
+  border-radius: 12px;
+  border: 1px solid rgba(230, 214, 180, 0.1);
+}
+
+.certaintyCue {
+  margin-top: 2rem;
+  text-align: center;
+  max-width: 600px;
+}
+
+.certaintyCue p {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--kendo-color-subtle, #999);
+  line-height: 1.5;
+}
+
+.certaintyCue strong {
+  color: var(--kendo-color-primary);
+  font-weight: 700;
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
 }
