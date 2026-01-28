@@ -36,7 +36,7 @@ export default function PartnersPage() {
 
     setIsSubmitting(true);
 
-    const endpoint = process.env.NEXT_PUBLIC_FORMSPREE_ENDPOINT;
+    const endpoint = process.env.NEXT_PUBLIC_FORMSPREE_ENDPOINT || "https://formspree.io/f/mqebkzdj";
     
     if (!endpoint) {
       showToast('Form submission is not configured (missing endpoint).', 'error', 'Configuration Error');
