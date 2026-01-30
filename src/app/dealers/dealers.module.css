@@ -147,6 +147,52 @@
   line-height: 1.6;
 }
 
+.howItWorksSection {
+  margin-bottom: 3rem;
+}
+
+.howItWorksTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: var(--kendo-color-on-app-surface);
+}
+
+.stepsList {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.stepItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.stepTitle {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--kendo-color-primary);
+  margin-bottom: 0.25rem;
+}
+
+.stepDescription {
+  font-size: 1rem;
+  color: var(--kendo-color-on-app-surface);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.trustSignal {
+  margin: 2rem 0;
+  font-weight: 500;
+  color: var(--kendo-color-subtle);
+  border-left: 3px solid var(--kendo-color-primary);
+  padding-left: 1rem;
+  font-size: 1.1rem;
+}
+
 .bodyText p {
   margin-bottom: 1rem;
 }
@@ -307,6 +353,17 @@
   color: var(--kendo-color-subtle, #999);
   text-align: center;
   line-height: 1.4;
+}
+
+.disclaimer a {
+  color: var(--kendo-color-primary, #C9472D);
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.disclaimer a:hover {
+  text-decoration: underline;
+  opacity: 0.9;
 }
 
 .toastContainer {

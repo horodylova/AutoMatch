@@ -1,0 +1,69 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 120px 24px 80px;
+  font-family: var(--kendo-font-family, sans-serif);
+  color: var(--kendo-color-on-app-surface);
+  line-height: 1.6;
+}
+
+.header {
+  margin-bottom: 3rem;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  color: var(--kendo-color-primary);
+}
+
+.date {
+  font-size: 0.9rem;
+  color: var(--kendo-color-subtle, #999);
+}
+
+.lastUpdated {
+  font-size: 0.9rem;
+  color: var(--kendo-color-subtle, #999);
+  margin-bottom: 3rem;
+  display: block;
+}
+
+.section {
+  margin-bottom: 2.5rem;
+}
+
+.sectionTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--kendo-color-on-app-surface);
+}
+
+.text {
+  margin-bottom: 1rem;
+  color: var(--kendo-color-on-app-surface);
+  opacity: 0.9;
+}
+
+.list {
+  margin-bottom: 1rem;
+  padding-left: 1.5rem;
+}
+
+.listItem {
+  margin-bottom: 0.5rem;
+  color: var(--kendo-color-on-app-surface);
+  opacity: 0.9;
+}
+
+.link {
+  color: var(--kendo-color-primary);
+  text-decoration: underline;
+  transition: opacity 0.2s;
+}
+
+.link:hover {
+  opacity: 0.8;
+}

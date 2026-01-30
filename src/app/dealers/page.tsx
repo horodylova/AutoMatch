@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import styles from "./dealers.module.css";
 import { submitForm } from "../../utils/formSubmission";
 import Toast, { ToastType } from "../../components/Toast";
@@ -84,21 +85,29 @@ export default function PartnersPage() {
             <h1 className={styles.title}>Send High-Intent Buyers Directly to Your Inventory</h1>
           </div>
           <p className={styles.subtitle}>
-            <span className={styles.desktopOnly}>CarCupid matches serious buyers to your cars — without selling your listings or auctioning leads.</span>
-            <span className={styles.mobileOnly}>Match serious buyers to your cars. No listing fees. No sold leads.</span>
+            CarCupid matches serious buyers directly to your actual inventory — without selling listings or auctioning leads.
           </p>
 
-          <div className={styles.bodyText}>
-            <div className={styles.desktopOnly}>
-              <p>CarCupid connects your existing inventory to buyers who have already told us exactly what they want.</p>
-              <p>We don’t sell listings. We don’t resell leads.</p>
-              <p>We route high-intent demand directly to the dealer that actually has the right car.</p>
+          <div className={styles.howItWorksSection}>
+            <h3 className={styles.howItWorksTitle}>How CarCupid Works</h3>
+            <div className={styles.stepsList}>
+              <div className={styles.stepItem}>
+                <div className={styles.stepTitle}>1. Connect your inventory</div>
+                <p className={styles.stepDescription}>We connect to your existing inventory feed (Cox, your website, or custom).</p>
+              </div>
+              <div className={styles.stepItem}>
+                <div className={styles.stepTitle}>2. Buyers declare real intent</div>
+                <p className={styles.stepDescription}>Shoppers tell CarCupid exactly what they want — budget, specs, timing.</p>
+              </div>
+              <div className={styles.stepItem}>
+                <div className={styles.stepTitle}>3. Matched buyers land on your cars</div>
+                <p className={styles.stepDescription}>High-intent buyers are routed directly to the dealer that actually has the right vehicle.</p>
+              </div>
             </div>
-            <div className={styles.mobileOnly}>
-              <p>We match buyers who know what they want directly to your car.</p>
-              <p>No sold listings. No resold leads.</p>
-              <p>Just direct, high-intent demand.</p>
-            </div>
+          </div>
+
+          <div className={styles.trustSignal}>
+            Built for dealers tired of paying for unqualified leads
           </div>
 
           <ul className={styles.featuresList}>
@@ -127,7 +136,7 @@ export default function PartnersPage() {
 
         <div className={styles.formSection}>
           <div className={styles.formCard}>
-            <h2 className={styles.formTitle}>Dealer Inquiry</h2>
+            <h2 className={styles.formTitle}>Get Matched Buyers (No Listings, No Leads)</h2>
             <form onSubmit={handleSubmit}>
               <div className={styles.formGroup}>
                 <label htmlFor="company" className={styles.label}>Dealership Name</label>
@@ -153,10 +162,10 @@ export default function PartnersPage() {
                   defaultValue=""
                 >
                   <option value="" disabled>Select an option</option>
-                  <option value="learn_more">Learn how CarCupid works</option>
-                  <option value="inventory_integration">Explore inventory integration</option>
-                  <option value="partnership_pricing">Discuss partnership pricing</option>
-                  <option value="other">Other</option>
+                  <option value="learn_more">See how CarCupid matches buyers to inventory</option>
+                  <option value="inventory_integration">Connect my inventory feed</option>
+                  <option value="partnership_pricing">Evaluate pricing options</option>
+                  <option value="other">Just exploring</option>
                 </select>
               </div>
 
@@ -165,7 +174,7 @@ export default function PartnersPage() {
               </button>
 
               <p className={styles.disclaimer}>
-                By submitting this form, you agree to our partner terms and privacy policy.
+                By submitting this form, you agree to our <Link href="/terms">dealer terms</Link> and <Link href="/privacy">privacy policy</Link>.
               </p>
             </form>
           </div>
@@ -173,7 +182,7 @@ export default function PartnersPage() {
       </div>
 
       <div className={styles.pricingTeaser}>
-        Most dealers activate CarCupid in under a week. Flat monthly pricing.
+        Most dealers activate CarCupid in under a week. Flat monthly pricing. No per-lead fees. No commissions.
       </div>
 
       <div className={styles.certaintyCue}>
