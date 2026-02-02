@@ -10,19 +10,40 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: 20px;
 }
 
-@media (min-width: 600px) {
+@media (min-width: 768px) {
   .inner {
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
   }
+}
+
+.socials {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.socialLink {
+  color: rgba(230, 214, 180, 0.75);
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.socialLink:hover {
+  color: var(--kendo-color-primary);
+  transform: translateY(-2px);
 }
 
 .copy { 
   font-size: 14px; 
-  color: rgba(230, 214, 180, 0.75); 
+  color: rgba(230, 214, 180, 0.5); 
 }
 
 .links {

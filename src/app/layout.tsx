@@ -79,7 +79,9 @@ export default function RootLayout({
             <Footer />
           </main>
         </StyledComponentsRegistry>
-        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ""} />
+        {process.env.NODE_ENV === 'production' && (
+          <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ""} />
+        )}
       </body>
     </html>
   );
