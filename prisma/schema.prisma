@@ -1,0 +1,47 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
+}
+
+model Dealer {
+  id          String   @id @default(uuid())
+  name        String
+  slug        String   @unique
+  feedUrl     String?
+  cars        Car[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Car {
+  id          String   @id @default(uuid())
+  vin         String
+  make        String
+  model       String
+  year        Int
+  price       Decimal  @db.Decimal(10, 2)
+  mileage     Int?
+  imageUrl    String?
+  features    Json?
+  dealerId    String
+  dealer      Dealer   @relation(fields: [dealerId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([dealerId, vin])
+}
+
+model Admin {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String?
+  inviteToken  String?  @unique
+  role         String   @default("ADMIN")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
