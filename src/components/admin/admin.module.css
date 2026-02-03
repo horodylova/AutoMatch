@@ -4,6 +4,7 @@
   background-color: var(--kendo-color-app-surface);
   color: var(--kendo-color-on-app-surface);
   font-family: var(--kendo-font-family, 'Archivo', sans-serif);
+  padding-top: 80px; /* Offset for fixed header */
 }
 
 .adminContainer * {
