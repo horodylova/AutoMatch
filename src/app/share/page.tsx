@@ -19,10 +19,17 @@ export async function generateMetadata(
   
   const title = make && model ? `My Perfect Match: ${make} ${model}` : 'Find Your Perfect Car Match';
   const description = 'I found my dream car on CarCupid. Take the quiz to find yours!';
+  const baseUrl = 'https://carcupid.fit';
+
+  const ogParams = new URLSearchParams();
+  if (make) ogParams.set('make', make);
+  if (model) ogParams.set('model', model);
+  if (year) ogParams.set('year', year);
+  if (image) ogParams.set('image', image);
 
   const ogImage = make && model 
-    ? `/api/og?make=${encodeURIComponent(make)}&model=${encodeURIComponent(model)}&year=${year || ''}&image=${encodeURIComponent(image as string || '')}`
-    : '/poster.jpg';
+    ? `${baseUrl}/api/og?${ogParams.toString()}`
+    : `${baseUrl}/poster.jpg`;
 
   return {
     title,
@@ -30,6 +37,10 @@ export async function generateMetadata(
     openGraph: {
       title,
       description,
+      url: `${baseUrl}/share`,
+      siteName: 'CarCupid',
+      locale: 'en_US',
+      type: 'website',
       images: [
         {
           url: ogImage,
