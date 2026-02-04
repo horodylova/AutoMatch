@@ -158,19 +158,6 @@ export default function ResultsGallery({ results = [], onSaveProgress }: Results
         <div className={styles.wrapping}>
           <div className={`${styles.container} ${styles.containerSlim}`}>
             <h3 className={styles.shareTitle}>Found your perfect match? Tell the world!</h3>
-            
-            {/* Share Preview Card - Visible Warm-up */}
-            {ogPreviewUrl && (
-              <div className={styles.sharePreviewContainer}>
-                <div className={styles.sharePreviewLabel}>Preview:</div>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img 
-                  src={ogPreviewUrl} 
-                  alt="Share Preview" 
-                  className={styles.sharePreviewImage}
-                />
-              </div>
-            )}
 
             <div className={styles.socialIcons}>
               <a 
