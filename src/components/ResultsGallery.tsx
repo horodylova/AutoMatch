@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useRef, useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -53,9 +55,20 @@ export default function ResultsGallery({ results = [], onSaveProgress }: Results
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      setShareUrl(window.location.origin);
+      if (results && results.length > 0) {
+        const topMatch = results[0];
+        const params = new URLSearchParams();
+        if (topMatch.make) params.set('make', topMatch.make);
+        if (topMatch.model) params.set('model', topMatch.model);
+        if (topMatch.year) params.set('year', topMatch.year.toString());
+        if (topMatch.image) params.set('image', topMatch.image);
+        
+        setShareUrl(`${window.location.origin}/share?${params.toString()}`);
+      } else {
+        setShareUrl(window.location.origin);
+      }
     }
-  }, []);
+  }, [results]);
 
   const handleScroll = () => {
     if (scrollContainerRef.current) {

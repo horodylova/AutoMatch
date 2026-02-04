@@ -1,6 +1,5 @@
 'use client';
 import { useState } from 'react';
-import { Slider } from '@progress/kendo-react-inputs';
 import formStyles from '../QuizForm.module.css';
 import styles from './TagQuestion.module.css';
 import { setQuestionAnswer } from '../../utils/storage';
@@ -59,13 +58,14 @@ export default function SliderQuestion({ questionId, title, tip, min = 0, max = 
         </div>
         <div style={{ padding: '12px 8px', display: 'grid', justifyItems: 'center' }}>
           <div style={{ width: 'min(100%, 600px)' }}>
-            <Slider
+            <input
+              type="range"
               min={min}
               max={max}
               step={step}
               value={typeof val === 'number' ? val : Math.round((min + max) / 2)}
-              onChange={(e) => handle(e.value)}
-              style={{ width: '100%' }}
+              onChange={(e) => handle(Number(e.target.value))}
+              style={{ width: '100%', accentColor: 'var(--kendo-color-primary)' }}
             />
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', marginTop: 8, color: 'rgba(14,27,36,0.85)', fontSize: 14 }}>
               {labels ? (
