@@ -11,7 +11,8 @@ export async function GET(request: Request) {
     }
     const data = await getSheetData(sheetId, range);
     return NextResponse.json({ data: { values: data } });
-  } catch {
+  } catch (error) {
+    console.error("API Error:", error);
     return NextResponse.json({ error: "Failed to fetch sheet data" }, { status: 500 });
   }
 }

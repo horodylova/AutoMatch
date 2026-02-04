@@ -1,11 +1,10 @@
-"use client";
-
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import styles from './ResultsGallery.module.css';
 import { saveResults } from '../utils/storage';
 import EmailModal from './quiz/modals/EmailModal';
+import ShareModal, { ShareNetwork } from './ShareModal';
 
 export interface CarResult {
   id: string;
@@ -48,38 +47,10 @@ function ResultCard({ car, index }: { car: CarResult; index: number }) {
 
 export default function ResultsGallery({ results = [], onSaveProgress }: ResultsGalleryProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const [shareUrl, setShareUrl] = useState('');
-  const [ogPreviewUrl, setOgPreviewUrl] = useState('');
-  const [twitterPreviewUrl, setTwitterPreviewUrl] = useState('');
   const [isSaved, setIsSaved] = useState(false);
   const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
+  const [selectedShareNetwork, setSelectedShareNetwork] = useState<ShareNetwork | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      if (results && results.length > 0) {
-        const topMatch = results[0];
-        const params = new URLSearchParams();
-        if (topMatch.make) params.set('make', topMatch.make);
-        if (topMatch.model) params.set('model', topMatch.model);
-        if (topMatch.year) params.set('year', topMatch.year.toString());
-        
-        const generatedShareUrl = `${window.location.origin}/share?${params.toString()}`;
-        setShareUrl(generatedShareUrl);
-
-        // Prepare preview URLs for warming up
-        // We render these as hidden images to force the browser/server to generate and cache them immediately
-        const standardParams = new URLSearchParams(params);
-        setOgPreviewUrl(`${window.location.origin}/api/og?${standardParams.toString()}`);
-
-        const simpleParams = new URLSearchParams(params);
-        simpleParams.set('type', 'simple');
-        setTwitterPreviewUrl(`${window.location.origin}/api/og?${simpleParams.toString()}`);
-      } else {
-        setShareUrl(window.location.origin);
-      }
-    }
-  }, [results]);
 
   const handleScroll = () => {
     if (scrollContainerRef.current) {
@@ -117,9 +88,13 @@ export default function ResultsGallery({ results = [], onSaveProgress }: Results
     }
   };
 
-  const shareText = "I found my perfect car match on CarCupid! Find yours now.";
-  const encodedUrl = encodeURIComponent(shareUrl);
-  const encodedText = encodeURIComponent(shareText);
+  const handleShareClick = (network: ShareNetwork) => {
+    setSelectedShareNetwork(network);
+  };
+
+  const closeShareModal = () => {
+    setSelectedShareNetwork(null);
+  };
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollContainerRef.current) {
@@ -199,9 +174,8 @@ export default function ResultsGallery({ results = [], onSaveProgress }: Results
 
             <div className={styles.socialIcons}>
               <a 
-                href={`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`}
-                target="_blank"
-                rel="noopener noreferrer"
+                href="#"
+                onClick={(e) => { e.preventDefault(); handleShareClick('facebook'); }}
                 className={styles.socialIcon} 
                 aria-label="Share on Facebook"
               >
@@ -210,9 +184,8 @@ export default function ResultsGallery({ results = [], onSaveProgress }: Results
                 </svg>
               </a>
               <a 
-                href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`}
-                target="_blank"
-                rel="noopener noreferrer"
+                href="#"
+                onClick={(e) => { e.preventDefault(); handleShareClick('linkedin'); }}
                 className={styles.socialIcon} 
                 aria-label="Share on LinkedIn"
               >
@@ -221,9 +194,8 @@ export default function ResultsGallery({ results = [], onSaveProgress }: Results
                 </svg>
               </a>
               <a 
-                href={`https://www.threads.net/intent/post?text=${encodedText}%20${encodedUrl}`}
-                target="_blank"
-                rel="noopener noreferrer"
+                href="#"
+                onClick={(e) => { e.preventDefault(); handleShareClick('threads'); }}
                 className={styles.socialIcon} 
                 aria-label="Share on Threads"
               >
@@ -232,9 +204,8 @@ export default function ResultsGallery({ results = [], onSaveProgress }: Results
                 </svg>
               </a>
               <a 
-                href={`https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedText}`}
-                target="_blank"
-                rel="noopener noreferrer"
+                href="#"
+                onClick={(e) => { e.preventDefault(); handleShareClick('twitter'); }}
                 className={styles.socialIcon} 
                 aria-label="Share on X"
               >
@@ -397,17 +368,13 @@ export default function ResultsGallery({ results = [], onSaveProgress }: Results
         />
       )}
 
-      {/* Hidden Previews for Social Warming */}
-      <div style={{ position: 'absolute', width: 0, height: 0, overflow: 'hidden', opacity: 0, pointerEvents: 'none' }}>
-        {ogPreviewUrl && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={ogPreviewUrl} alt="" aria-hidden="true" />
-        )}
-        {twitterPreviewUrl && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={twitterPreviewUrl} alt="" aria-hidden="true" />
-        )}
-      </div>
+      {selectedShareNetwork && (
+        <ShareModal 
+          results={results} 
+          network={selectedShareNetwork}
+          onClose={closeShareModal} 
+        />
+      )}
     </>
   );
 }
