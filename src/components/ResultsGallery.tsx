@@ -61,9 +61,22 @@ export default function ResultsGallery({ results = [], onSaveProgress }: Results
         if (topMatch.make) params.set('make', topMatch.make);
         if (topMatch.model) params.set('model', topMatch.model);
         if (topMatch.year) params.set('year', topMatch.year.toString());
-        if (topMatch.image) params.set('image', topMatch.image);
         
-        setShareUrl(`${window.location.origin}/share?${params.toString()}`);
+        // Ensure image URL is absolute for OG generation
+        let imageUrl = topMatch.image;
+        if (imageUrl && imageUrl.startsWith('/')) {
+          imageUrl = `${window.location.origin}${imageUrl}`;
+        }
+        if (imageUrl) params.set('image', imageUrl);
+        
+        const generatedShareUrl = `${window.location.origin}/share?${params.toString()}`;
+        setShareUrl(generatedShareUrl);
+
+        // Warm up the OG image cache immediately
+        // This triggers the edge function to generate and cache the image
+        // so it's ready when the user clicks share or pastes the link
+        const ogUrl = `${window.location.origin}/api/og?${params.toString()}`;
+        fetch(ogUrl, { mode: 'no-cors' }).catch(() => {});
       } else {
         setShareUrl(window.location.origin);
       }
