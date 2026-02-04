@@ -1,4 +1,4 @@
-# CarCupid Update
+# CarCupid 
 
 Next.js application that scores and filters vehicles from a Google Sheets dataset.
 
