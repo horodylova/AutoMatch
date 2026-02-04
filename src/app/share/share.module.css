@@ -1,6 +1,6 @@
 .container {
   min-height: 100vh;
-  background-color: #121212;
+  background-color: #0E1B24;
   color: #fff;
   display: flex;
   flex-direction: column;
@@ -11,7 +11,7 @@
 }
 
 .card {
-  background: #1e1e1e;
+  background: #15202B;
   border-radius: 1rem;
   overflow: hidden;
   max-width: 600px;
@@ -24,7 +24,7 @@
   position: relative;
   width: 100%;
   aspect-ratio: 16 / 9;
-  background: #000;
+  background: #0E1B24;
 }
 
 .image {

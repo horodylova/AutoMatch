@@ -49,6 +49,8 @@ function ResultCard({ car, index }: { car: CarResult; index: number }) {
 export default function ResultsGallery({ results = [], onSaveProgress }: ResultsGalleryProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [shareUrl, setShareUrl] = useState('');
+  const [ogPreviewUrl, setOgPreviewUrl] = useState('');
+  const [twitterPreviewUrl, setTwitterPreviewUrl] = useState('');
   const [isSaved, setIsSaved] = useState(false);
   const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -62,21 +64,17 @@ export default function ResultsGallery({ results = [], onSaveProgress }: Results
         if (topMatch.model) params.set('model', topMatch.model);
         if (topMatch.year) params.set('year', topMatch.year.toString());
         
-        // Ensure image URL is absolute for OG generation
-        let imageUrl = topMatch.image;
-        if (imageUrl && imageUrl.startsWith('/')) {
-          imageUrl = `${window.location.origin}${imageUrl}`;
-        }
-        if (imageUrl) params.set('image', imageUrl);
-        
         const generatedShareUrl = `${window.location.origin}/share?${params.toString()}`;
         setShareUrl(generatedShareUrl);
 
-        // Warm up the OG image cache immediately
-        // This triggers the edge function to generate and cache the image
-        // so it's ready when the user clicks share or pastes the link
-        const ogUrl = `${window.location.origin}/api/og?${params.toString()}`;
-        fetch(ogUrl, { mode: 'no-cors' }).catch(() => {});
+        // Prepare preview URLs for warming up
+        // We render these as hidden images to force the browser/server to generate and cache them immediately
+        const standardParams = new URLSearchParams(params);
+        setOgPreviewUrl(`${window.location.origin}/api/og?${standardParams.toString()}`);
+
+        const simpleParams = new URLSearchParams(params);
+        simpleParams.set('type', 'simple');
+        setTwitterPreviewUrl(`${window.location.origin}/api/og?${simpleParams.toString()}`);
       } else {
         setShareUrl(window.location.origin);
       }
@@ -185,6 +183,20 @@ export default function ResultsGallery({ results = [], onSaveProgress }: Results
         <div className={styles.wrapping}>
           <div className={`${styles.container} ${styles.containerSlim}`}>
             <h3 className={styles.shareTitle}>Found your perfect match? Tell the world!</h3>
+            
+            {/* Share Preview Card - Visible Warm-up */}
+            {ogPreviewUrl && (
+              <div className={styles.sharePreviewContainer}>
+                <div className={styles.sharePreviewLabel}>Preview:</div>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img 
+                  src={ogPreviewUrl} 
+                  alt="Share Preview" 
+                  className={styles.sharePreviewImage}
+                />
+              </div>
+            )}
+
             <div className={styles.socialIcons}>
               <a 
                 href={`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`}
@@ -384,6 +396,18 @@ export default function ResultsGallery({ results = [], onSaveProgress }: Results
           results={results} 
         />
       )}
+
+      {/* Hidden Previews for Social Warming */}
+      <div style={{ position: 'absolute', width: 0, height: 0, overflow: 'hidden', opacity: 0, pointerEvents: 'none' }}>
+        {ogPreviewUrl && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={ogPreviewUrl} alt="" aria-hidden="true" />
+        )}
+        {twitterPreviewUrl && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={twitterPreviewUrl} alt="" aria-hidden="true" />
+        )}
+      </div>
     </>
   );
 }

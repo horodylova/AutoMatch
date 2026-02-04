@@ -16,6 +16,31 @@
   margin-bottom: 1rem;
 }
 
+.sharePreviewContainer {
+  margin: 0 auto 1.5rem;
+  max-width: 500px;
+  width: 100%;
+  padding: 0 1rem;
+  box-sizing: border-box;
+}
+
+.sharePreviewLabel {
+  font-size: 0.9rem;
+  color: rgba(230, 214, 180, 0.7);
+  margin-bottom: 0.5rem;
+  text-align: left;
+  display: none; /* Optional: hide label if self-explanatory */
+}
+
+.sharePreviewImage {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(230, 214, 180, 0.1);
+  display: block;
+}
+
 .socialIcons {
   display: flex;
   justify-content: center;
