@@ -67,13 +67,11 @@ export async function generateMetadata(
     openGraph: {
       title,
       description,
-      images: [car.image],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
-      images: [car.image],
     },
   };
 }
