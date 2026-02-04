@@ -45,6 +45,9 @@ export const metadata: Metadata = {
     description: "Find the car that fits your lifestyle.",
     images: ["/poster.jpg"],
   },
+};
+
+export const viewport = {
   themeColor: "#0E1B24",
 };
 

@@ -14,9 +14,15 @@ export async function generateMetadata(
   const params = await searchParams;
   const make = params.make as string;
   const model = params.model as string;
+  const year = params.year as string;
+  const image = params.image as string;
   
   const title = make && model ? `My Perfect Match: ${make} ${model}` : 'Find Your Perfect Car Match';
   const description = 'I found my dream car on CarCupid. Take the quiz to find yours!';
+
+  const ogImage = make && model 
+    ? `/api/og?make=${encodeURIComponent(make)}&model=${encodeURIComponent(model)}&year=${year || ''}&image=${encodeURIComponent(image as string || '')}`
+    : '/poster.jpg';
 
   return {
     title,
@@ -24,11 +30,20 @@ export async function generateMetadata(
     openGraph: {
       title,
       description,
+      images: [
+        {
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
+      images: [ogImage],
     }
   };
 }

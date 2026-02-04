@@ -1,16 +1,14 @@
 import { ImageResponse } from 'next/og';
+import { NextRequest } from 'next/server';
 
-export const alt = 'My Perfect Car Match';
-export const size = {
-  width: 1200,
-  height: 630,
-};
+export const runtime = 'edge';
 
-export const contentType = 'image/png';
-
-export default async function Image({ searchParams }: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
-  const params = await searchParams;
-  const { make, model, year, image } = params;
+export async function GET(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
+  const make = searchParams.get('make');
+  const model = searchParams.get('model');
+  const year = searchParams.get('year');
+  const image = searchParams.get('image');
 
   // Default if no data
   if (!make || !model) {
@@ -32,7 +30,10 @@ export default async function Image({ searchParams }: { searchParams: Promise<{ 
           <div style={{ fontSize: 40, marginTop: 20 }}>Find Your Perfect Match</div>
         </div>
       ),
-      { ...size }
+      {
+        width: 1200,
+        height: 630,
+      }
     );
   }
 
@@ -106,11 +107,10 @@ export default async function Image({ searchParams }: { searchParams: Promise<{ 
               transform: 'rotate(-3deg)',
             }}
           />
-          
-          {/* Main Image */}
           {image ? (
+            /* eslint-disable-next-line @next/next/no-img-element */
             <img
-              src={image as string}
+              src={image}
               alt={`${make} ${model}`}
               style={{
                 width: '100%',
@@ -125,7 +125,8 @@ export default async function Image({ searchParams }: { searchParams: Promise<{ 
       </div>
     ),
     {
-      ...size,
+      width: 1200,
+      height: 630,
     }
   );
 }
