@@ -1,11 +1,41 @@
+/* eslint-disable @next/next/no-img-element */
 import { ImageResponse } from 'next/og';
 
 export const runtime = 'edge';
+
+async function fetchImageWithTimeout(url: string, timeout = 3000): Promise<ArrayBuffer | null> {
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), timeout);
+    
+    const response = await fetch(url, {
+      signal: controller.signal,
+      headers: { 'User-Agent': 'CarCupid-OG-Bot' }
+    });
+    clearTimeout(timeoutId);
+    
+    if (!response.ok) return null;
+    return await response.arrayBuffer();
+  } catch {
+    return null;
+  }
+}
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const title = searchParams.get('title') || 'My Perfect Match';
   const image = searchParams.get('image');
+
+  let backgroundImage = null;
+
+  if (image && image.startsWith('http')) {
+    const imageData = await fetchImageWithTimeout(image);
+    if (imageData) {
+      const base64 = Buffer.from(imageData).toString('base64');
+      const mimeType = image.endsWith('.png') ? 'image/png' : 'image/jpeg';
+      backgroundImage = `data:${mimeType};base64,${base64}`;
+    }
+  }
 
   return new ImageResponse(
     (
@@ -20,10 +50,9 @@ export async function GET(request: Request) {
           position: 'relative',
         }}
       >
-        {image && (
-          // eslint-disable-next-line @next/next/no-img-element
+        {backgroundImage && (
           <img
-            src={image}
+            src={backgroundImage}
             alt="Car"
             style={{
               position: 'absolute',
@@ -49,7 +78,7 @@ export async function GET(request: Request) {
             style={{
               fontSize: 60,
               fontWeight: 900,
-              color: '#E6D6B4', // Gold color from theme
+              color: '#E6D6B4',
               marginBottom: '20px',
               textShadow: '0 4px 10px rgba(0,0,0,0.8)',
               fontFamily: 'sans-serif',
@@ -88,6 +117,10 @@ export async function GET(request: Request) {
     {
       width: 1200,
       height: 630,
+      headers: {
+        'Cache-Control': 'public, max-age=31536000, immutable',
+        'Content-Type': 'image/png',
+      },
     },
   );
 }
