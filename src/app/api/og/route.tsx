@@ -1,42 +1,11 @@
-/* eslint-disable @next/next/no-img-element */
 import { ImageResponse } from 'next/og';
 
 export const runtime = 'edge';
-
-async function fetchImageWithTimeout(url: string, timeout = 3000): Promise<ArrayBuffer | null> {
-  try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), timeout);
-    
-    const response = await fetch(url, {
-      signal: controller.signal,
-      headers: { 'User-Agent': 'CarCupid-OG-Bot' }
-    });
-    clearTimeout(timeoutId);
-    
-    if (!response.ok) return null;
-    return await response.arrayBuffer();
-  } catch {
-    return null;
-  }
-}
 
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const title = searchParams.get('title') || 'My Perfect Match';
-    const image = searchParams.get('image');
-
-    let backgroundImage = null;
-
-    if (image && image.startsWith('http')) {
-      const imageData = await fetchImageWithTimeout(image);
-      if (imageData) {
-        const base64 = Buffer.from(imageData).toString('base64');
-        const mimeType = image.match(/\.(png|webp)$/i) ? 'image/png' : 'image/jpeg';
-        backgroundImage = `data:${mimeType};base64,${base64}`;
-      }
-    }
 
     return new ImageResponse(
       (
@@ -45,74 +14,80 @@ export async function GET(request: Request) {
             display: 'flex',
             height: '100%',
             width: '100%',
+            background: '#121212',
+            flexDirection: 'row',
             alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: '#000',
-            position: 'relative',
+            padding: '40px',
+            fontFamily: 'sans-serif',
           }}
         >
-          {backgroundImage && (
-            <img
-              src={backgroundImage}
-              alt="Car"
-              style={{
-                position: 'absolute',
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                opacity: 0.6,
-              }}
-            />
-          )}
           <div
             style={{
               display: 'flex',
               flexDirection: 'column',
-              alignItems: 'center',
               justifyContent: 'center',
-              zIndex: 10,
-              padding: '40px',
-              textAlign: 'center',
-              backgroundColor: backgroundImage ? 'rgba(0,0,0,0.7)' : 'transparent',
-              borderRadius: '20px',
+              width: '40%',
+              paddingRight: '40px',
             }}
           >
-            <div
-              style={{
-                fontSize: 60,
-                fontWeight: 900,
-                color: '#E6D6B4',
-                marginBottom: '20px',
-                textShadow: '0 4px 10px rgba(0,0,0,0.8)',
-                fontFamily: 'sans-serif',
-              }}
-            >
-              CarCupid Match
+            <div style={{ fontSize: 30, color: 'rgb(230, 214, 180)', marginBottom: '10px', textTransform: 'uppercase' }}>
+              My Perfect Match
             </div>
-            <div
-              style={{
-                fontSize: 40,
-                fontWeight: 700,
-                color: 'white',
-                textShadow: '0 4px 8px rgba(0,0,0,0.8)',
-                fontFamily: 'sans-serif',
-                maxWidth: '900px',
-              }}
-            >
+            <div style={{ fontSize: 50, fontWeight: 'bold', color: 'white', lineHeight: 1.2, marginBottom: '20px' }}>
               {title}
             </div>
             <div
               style={{
-                marginTop: '40px',
-                backgroundColor: '#E6D6B4',
+                background: 'rgb(230, 214, 180)',
                 color: '#000',
-                padding: '10px 30px',
-                borderRadius: '50px',
+                padding: '15px 30px',
+                borderRadius: '30px',
                 fontSize: 24,
                 fontWeight: 'bold',
+                display: 'flex',
+                width: 'fit-content',
               }}
             >
-              Find Your Match
+              Take the Quiz
+            </div>
+          </div>
+
+          <div
+            style={{
+              display: 'flex',
+              width: '60%',
+              height: '100%',
+              alignItems: 'center',
+              justifyContent: 'center',
+              position: 'relative',
+            }}
+          >
+            <div
+              style={{
+                position: 'absolute',
+                width: '100%',
+                height: '80%',
+                background: 'rgba(230, 214, 180, 0.1)',
+                borderRadius: '20px',
+                transform: 'rotate(-3deg)',
+              }}
+            />
+            <div
+              style={{
+                width: '100%',
+                height: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: 'linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%)',
+                borderRadius: '20px',
+                color: 'rgb(230, 214, 180)',
+                fontSize: 80,
+                fontWeight: 'bold',
+                boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
+              }}
+            >
+              
             </div>
           </div>
         </div>
@@ -121,38 +96,13 @@ export async function GET(request: Request) {
         width: 1200,
         height: 630,
         headers: {
-          'Cache-Control': 'public, max-age=31536000, immutable',
+          'Cache-Control': 'public, max-age=86400, immutable',
           'Content-Type': 'image/png',
         },
       }
     );
   } catch (e) {
-    console.error('OG Image generation error:', e);
-    return new ImageResponse(
-      (
-        <div
-          style={{
-            display: 'flex',
-            height: '100%',
-            width: '100%',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: '#000',
-            color: '#E6D6B4',
-            fontSize: 48,
-            fontWeight: 'bold',
-          }}
-        >
-          CarCupid: Find Your Match
-        </div>
-      ),
-      {
-        width: 1200,
-        height: 630,
-        headers: {
-          'Cache-Control': 'no-store',
-        },
-      }
-    );
+    console.error(e);
+    return new Response('Error', { status: 500 });
   }
 }

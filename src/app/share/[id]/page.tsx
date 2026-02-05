@@ -64,7 +64,7 @@ export async function generateMetadata(
     // Construct the OG image URL
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://carcupid.fit';
     const ogParams = new URLSearchParams();
-    ogParams.set('image', paramImage);
+    // We only send title now, as image fetching is too slow for edge functions
     if (typeof paramTitle === 'string') {
       ogParams.set('title', paramTitle);
     }
