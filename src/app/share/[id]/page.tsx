@@ -42,13 +42,59 @@ async function getCarData(id: string) {
 }
 
 type Props = {
-  params: Promise<{ id: string }>
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 export async function generateMetadata(
-  { params }: Props
+  { params, searchParams }: Props
 ): Promise<Metadata> {
   const { id } = await params;
+  const { image: paramImage, title: paramTitle } = await searchParams;
+
+  // Optimized: If image is in URL params, use it directly (Stateless Mode)
+  // This avoids fetching from the database/sheet entirely for the preview generation
+  if (paramImage && typeof paramImage === 'string') {
+    const title = typeof paramTitle === 'string' 
+      ? `I matched with ${paramTitle}!` 
+      : `I matched with a car on CarCupid!`;
+      
+    const description = "Take the AutoMatch quiz to find your perfect car.";
+
+    // Construct the OG image URL
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://carcupid.fit';
+    const ogParams = new URLSearchParams();
+    ogParams.set('image', paramImage);
+    if (typeof paramTitle === 'string') {
+      ogParams.set('title', paramTitle);
+    }
+    const ogImage = `${baseUrl}/api/og?${ogParams.toString()}`;
+
+    return {
+      title,
+      description,
+      openGraph: {
+        title,
+        description,
+        images: [
+          {
+            url: ogImage,
+            width: 1200,
+            height: 630,
+            alt: title,
+          }
+        ],
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title,
+        description,
+        images: [ogImage],
+      },
+    };
+  }
+
+  // Fallback: If no params (legacy link), fetch from DB
   const car = await getCarData(id);
 
   if (!car) {
@@ -67,18 +113,37 @@ export async function generateMetadata(
     openGraph: {
       title,
       description,
+      images: [car.image],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
+      images: [car.image],
     },
   };
 }
 
-export default async function SharePage({ params }: Props) {
+export default async function SharePage({ params, searchParams }: Props) {
   const { id } = await params;
-  const car = await getCarData(id);
+  const { image: paramImage, title: paramTitle } = await searchParams;
+
+  let car;
+
+  // Optimized: Try to build car object from URL params first
+  if (paramImage && typeof paramImage === 'string' && paramTitle && typeof paramTitle === 'string') {
+    const titleParts = paramTitle.split(' ');
+    car = {
+      id,
+      image: paramImage,
+      year: titleParts[0] || "",
+      make: titleParts.slice(1, -1).join(' ') || titleParts[1] || "",
+      model: titleParts[titleParts.length - 1] || "",
+    };
+  } else {
+    // Fallback: Fetch from DB
+    car = await getCarData(id);
+  }
 
   if (!car) {
     return (
@@ -91,6 +156,9 @@ export default async function SharePage({ params }: Props) {
     );
   }
 
+  // Extract display title
+  const displayTitle = car.make.includes(car.model) ? car.make : `${car.year} ${car.make} ${car.model}`.trim();
+
   return (
     <div style={{ 
       minHeight: '100vh', 
@@ -100,47 +168,51 @@ export default async function SharePage({ params }: Props) {
       flexDirection: 'column', 
       alignItems: 'center', 
       justifyContent: 'center',
-      padding: '1rem'
+      padding: '2rem'
     }}>
-      <div style={{ maxWidth: '600px', width: '100%', textAlign: 'center' }}>
-        <h1 style={{ color: 'rgb(230, 214, 180)', marginBottom: '1rem' }}>
-          Your Perfect Match
-        </h1>
-        
-        <div style={{ position: 'relative', width: '100%', aspectRatio: '4/3', marginBottom: '2rem', borderRadius: '12px', overflow: 'hidden' }}>
+      <div style={{ 
+        maxWidth: '800px', 
+        width: '100%', 
+        background: '#1a1a1a', 
+        borderRadius: '12px', 
+        overflow: 'hidden',
+        boxShadow: '0 8px 32px rgba(0,0,0,0.5)'
+      }}>
+        <div style={{ position: 'relative', width: '100%', aspectRatio: '16/9' }}>
           <Image 
             src={car.image} 
-            alt={`${car.make} ${car.model}`}
+            alt="Matched Car"
             fill
-            style={{ objectFit: 'cover' }}
+            style={{ objectFit: 'contain' }}
             priority
-            unoptimized
           />
         </div>
-
-        <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>
-          {car.year} {car.make} {car.model}
-        </h2>
         
-        <p style={{ marginBottom: '2rem', color: '#ccc' }}>
-          Want to find your own dream car?
-        </p>
-
-        <Link 
-          href="/" 
-          style={{ 
-            display: 'inline-block',
-            padding: '1rem 2rem',
-            background: 'rgb(230, 214, 180)',
-            color: '#000',
-            fontWeight: 'bold',
-            borderRadius: '50px',
-            textDecoration: 'none',
-            fontSize: '1.1rem'
-          }}
-        >
-          Start Quiz
-        </Link>
+        <div style={{ padding: '2rem', textAlign: 'center' }}>
+          <h1 style={{ marginBottom: '1rem', color: 'rgb(230, 214, 180)' }}>
+            My Perfect Match: {displayTitle}
+          </h1>
+          <p style={{ marginBottom: '2rem', color: '#ccc', fontSize: '1.1rem' }}>
+            I found my dream car using AutoMatch. Take the quiz to find yours!
+          </p>
+          
+          <Link 
+            href="/"
+            style={{ 
+              display: 'inline-block',
+              background: 'rgb(230, 214, 180)',
+              color: '#000',
+              padding: '1rem 2rem',
+              borderRadius: '50px',
+              textDecoration: 'none',
+              fontWeight: 'bold',
+              fontSize: '1.1rem',
+              transition: 'transform 0.2s'
+            }}
+          >
+            Find Your Match
+          </Link>
+        </div>
       </div>
     </div>
   );

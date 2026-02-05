@@ -38,9 +38,15 @@ export default function ShareModal({ results, network, onClose }: ShareModalProp
     setSelectedCar(car);
     setStep('redirect');
     
-    // Construct the share URL pointing to our dynamic share page
+    // Construct the share URL pointing to our dynamic share page with params to avoid DB lookup
     const origin = typeof window !== 'undefined' ? window.location.origin : '';
-    const sharePageUrl = `${origin}/share/${car.id}`;
+    
+    // Encode parameters for the share URL
+    const params = new URLSearchParams();
+    params.set('image', car.image);
+    params.set('title', `${car.year} ${car.make} ${car.model}`);
+    
+    const sharePageUrl = `${origin}/share/${car.id}?${params.toString()}`;
     const encodedUrl = encodeURIComponent(sharePageUrl);
     const shareText = "I found my perfect car match on CarCupid! Find yours now.";
     const encodedText = encodeURIComponent(shareText);
