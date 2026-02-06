@@ -51,7 +51,7 @@ export default function JournalPreview() {
 
         <div className={styles.grid}>
           {ARTICLES.map((article) => (
-            <Link key={article.id} href="/journal" className={styles.card}>
+            <Link key={article.id} href={`/journal/${article.slug}`} className={styles.card}>
               <div className={styles.imageWrapper}>
                 <Image
                   src={article.image}
