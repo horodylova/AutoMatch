@@ -43,7 +43,8 @@ export default function ShareModal({ results, network, onClose }: ShareModalProp
     
     // Encode parameters for the share URL
     const params = new URLSearchParams();
-    params.set('image', car.image);
+    // We don't need the image param anymore as we use a static poster
+    // params.set('image', car.image);
     params.set('title', `${car.year} ${car.make} ${car.model}`);
     
     const sharePageUrl = `${origin}/share/${car.id}?${params.toString()}`;

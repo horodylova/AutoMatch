@@ -1,7 +1,6 @@
 import { Metadata } from 'next';
-import Image from 'next/image';
-import Link from 'next/link';
 import { getSheetData } from '@/lib/googleSheets';
+import ClientRedirect from './ClientRedirect';
 
 // Replicating logic from dataset.ts to ensure consistency without importing client-side code
 async function getCarData(id: string) {
@@ -50,25 +49,17 @@ export async function generateMetadata(
   { params, searchParams }: Props
 ): Promise<Metadata> {
   const { id } = await params;
-  const { image: paramImage, title: paramTitle } = await searchParams;
+  const { title: paramTitle } = await searchParams;
 
-  // Optimized: If image is in URL params, use it directly (Stateless Mode)
-  // This avoids fetching from the database/sheet entirely for the preview generation
-  if (paramImage && typeof paramImage === 'string') {
-    const title = typeof paramTitle === 'string' 
-      ? `I matched with ${paramTitle}!` 
-      : `I matched with a car on CarCupid!`;
-      
+  // Optimized: If title is in URL params, use it directly (Stateless Mode)
+  if (typeof paramTitle === 'string') {
+    const title = `I matched with ${paramTitle}!`;
     const description = "Take the AutoMatch quiz to find your perfect car.";
 
     // Construct the OG image URL
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://carcupid.fit';
-    const ogParams = new URLSearchParams();
-    // We only send title now, as image fetching is too slow for edge functions
-    if (typeof paramTitle === 'string') {
-      ogParams.set('title', paramTitle);
-    }
-    const ogImage = `${baseUrl}/api/og?${ogParams.toString()}`;
+    // Use static poster image as requested by user
+    const posterImage = `${baseUrl}/poster.jpg`;
 
     return {
       title,
@@ -78,7 +69,7 @@ export async function generateMetadata(
         description,
         images: [
           {
-            url: ogImage,
+            url: posterImage,
             width: 1200,
             height: 630,
             alt: title,
@@ -89,7 +80,7 @@ export async function generateMetadata(
         card: 'summary_large_image',
         title,
         description,
-        images: [ogImage],
+        images: [posterImage],
       },
     };
   }
@@ -99,13 +90,15 @@ export async function generateMetadata(
 
   if (!car) {
     return {
-      title: 'AutoMatch',
-      description: 'Find your perfect car match.',
+      title: 'CarCupid',
+      description: 'Find your perfect car match!',
     };
   }
 
   const title = `I matched with ${car.year} ${car.make} ${car.model}!`;
   const description = "Take the AutoMatch quiz to find your perfect car.";
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://carcupid.fit';
+  const posterImage = `${baseUrl}/poster.jpg`;
 
   return {
     title,
@@ -113,107 +106,26 @@ export async function generateMetadata(
     openGraph: {
       title,
       description,
-      images: [car.image],
+      images: [
+        {
+          url: posterImage,
+          width: 1200,
+          height: 630,
+          alt: title,
+        }
+      ],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
-      images: [car.image],
+      images: [posterImage],
     },
   };
 }
 
-export default async function SharePage({ params, searchParams }: Props) {
-  const { id } = await params;
-  const { image: paramImage, title: paramTitle } = await searchParams;
-
-  let car;
-
-  // Optimized: Try to build car object from URL params first
-  if (paramImage && typeof paramImage === 'string' && paramTitle && typeof paramTitle === 'string') {
-    const titleParts = paramTitle.split(' ');
-    car = {
-      id,
-      image: paramImage,
-      year: titleParts[0] || "",
-      make: titleParts.slice(1, -1).join(' ') || titleParts[1] || "",
-      model: titleParts[titleParts.length - 1] || "",
-    };
-  } else {
-    // Fallback: Fetch from DB
-    car = await getCarData(id);
-  }
-
-  if (!car) {
-    return (
-      <div style={{ padding: '2rem', textAlign: 'center', color: '#fff', background: '#111', minHeight: '100vh' }}>
-        <h1>Car not found</h1>
-        <Link href="/" style={{ color: 'rgb(230, 214, 180)', textDecoration: 'underline' }}>
-          Go Home
-        </Link>
-      </div>
-    );
-  }
-
-  // Extract display title
-  const displayTitle = car.make.includes(car.model) ? car.make : `${car.year} ${car.make} ${car.model}`.trim();
-
-  return (
-    <div style={{ 
-      minHeight: '100vh', 
-      background: '#111', 
-      color: '#fff', 
-      display: 'flex', 
-      flexDirection: 'column', 
-      alignItems: 'center', 
-      justifyContent: 'center',
-      padding: '2rem'
-    }}>
-      <div style={{ 
-        maxWidth: '800px', 
-        width: '100%', 
-        background: '#1a1a1a', 
-        borderRadius: '12px', 
-        overflow: 'hidden',
-        boxShadow: '0 8px 32px rgba(0,0,0,0.5)'
-      }}>
-        <div style={{ position: 'relative', width: '100%', aspectRatio: '16/9' }}>
-          <Image 
-            src={car.image} 
-            alt="Matched Car"
-            fill
-            style={{ objectFit: 'contain' }}
-            priority
-          />
-        </div>
-        
-        <div style={{ padding: '2rem', textAlign: 'center' }}>
-          <h1 style={{ marginBottom: '1rem', color: 'rgb(230, 214, 180)' }}>
-            My Perfect Match: {displayTitle}
-          </h1>
-          <p style={{ marginBottom: '2rem', color: '#ccc', fontSize: '1.1rem' }}>
-            I found my dream car using AutoMatch. Take the quiz to find yours!
-          </p>
-          
-          <Link 
-            href="/"
-            style={{ 
-              display: 'inline-block',
-              background: 'rgb(230, 214, 180)',
-              color: '#000',
-              padding: '1rem 2rem',
-              borderRadius: '50px',
-              textDecoration: 'none',
-              fontWeight: 'bold',
-              fontSize: '1.1rem',
-              transition: 'transform 0.2s'
-            }}
-          >
-            Find Your Match
-          </Link>
-        </div>
-      </div>
-    </div>
-  );
+export default function SharePage() {
+  // We use a client component to redirect users to the quiz start page
+  // while allowing bots/scrapers to see the metadata generated above.
+  return <ClientRedirect />;
 }

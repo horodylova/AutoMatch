@@ -5,6 +5,7 @@ import ResultsGallery, { CarResult } from "../../components/ResultsGallery";
 import QuizHeader from "../../components/quiz/QuizHeader";
 import ExitModal from "../../components/quiz/modals/ExitModal";
 import FeedbackModal from "../../components/quiz/modals/FeedbackModal";
+import Loader from "../../components/Loader";
 import { useRouter } from "next/navigation";
 
 export default function ResultsPage() {
@@ -36,7 +37,11 @@ export default function ResultsPage() {
     }
   }, [router]);
 
-  if (loading) return <div style={{ minHeight: "100vh", background: "#0e1b24" }}></div>;
+  if (loading) return (
+    <div style={{ minHeight: "100vh", background: "#0e1b24", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <Loader label="Finding your matches..." />
+    </div>
+  );
 
   if (results.length === 0) return null;
 
