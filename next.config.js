@@ -13,6 +13,7 @@ const nextConfig = {
       { protocol: 'https', hostname: 'assets.carsdn.co', pathname: '/**' },
       { protocol: 'https', hostname: 'images.autotrader.com', pathname: '/**' },
       { protocol: 'https', hostname: 'static.cargurus.com', pathname: '/**' },
+      { protocol: 'https', hostname: 'cdn.sanity.io', pathname: '/**' },
     ],
     formats: ['image/avif', 'image/webp'],
   },
