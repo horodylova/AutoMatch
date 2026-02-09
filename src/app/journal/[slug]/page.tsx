@@ -3,10 +3,17 @@ import { PortableText } from "@portabletext/react";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./article.module.css";
-import { SanityImageSource } from "@sanity/image-url/lib/types/types";
 
 
 export const revalidate = 60;
+
+interface PortableTextImage {
+  asset: {
+    _ref: string;
+    _type: "reference";
+  };
+  alt?: string;
+}
 
 export async function generateStaticParams() {
   const posts = await client.fetch<Post[]>(`*[_type == "post"]{ slug }`);
@@ -28,7 +35,10 @@ async function getPost(slug: string): Promise<Post> {
 
 const components = {
   types: {
-    image: ({ value }: { value: SanityImageSource & { alt?: string } }) => {
+    image: ({ value }: { value: PortableTextImage }) => {
+      if (!value?.asset) {
+        return null;
+      }
       return (
         <div className={styles.imageWrapper}>
           <Image
