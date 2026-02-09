@@ -1,4 +1,5 @@
 const nextConfig = {
+  // Config restored
   compiler: { styledComponents: true },
   turbopack: {
     root: __dirname,
