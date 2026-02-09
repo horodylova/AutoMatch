@@ -3,6 +3,7 @@ import { PortableText } from "@portabletext/react";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./article.module.css";
+import { SanityImageSource } from "@sanity/image-url/lib/types/types";
 
 
 export const revalidate = 60;
@@ -24,6 +25,24 @@ async function getPost(slug: string): Promise<Post> {
     { slug }
   );
 }
+
+const components = {
+  types: {
+    image: ({ value }: { value: SanityImageSource & { alt?: string } }) => {
+      return (
+        <div className={styles.imageWrapper}>
+          <Image
+            src={urlFor(value).width(800).height(450).url()}
+            alt={value.alt || 'Article image'}
+            fill
+            className={styles.image}
+            sizes="(max-width: 800px) 100vw, 800px"
+          />
+        </div>
+      );
+    },
+  },
+};
 
 export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -75,7 +94,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
       )}
 
       <div className={styles.body}>
-        {post.body && <PortableText value={post.body} />}
+        {post.body && <PortableText value={post.body} components={components} />}
       </div>
     </article>
   );
