@@ -1,11 +1,7 @@
 import type { Metadata } from "next";
 import "@progress/kendo-theme-default/dist/all.css";
 import "./globals.css";
-import HeaderVisibility from "../components/HeaderVisibility";
-import Footer from "../components/Footer";
-import PromoModal from "../components/PromoModal";
-import StyledComponentsRegistry from "@/lib/styled-registry";
-import { GoogleAnalytics } from '@next/third-parties/google';
+import ClientLayout from "../components/ClientLayout";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://carcupid.fit"),
@@ -58,34 +54,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body style={{ 
-        backgroundColor: "var(--kendo-color-app-surface)", 
-        color: "var(--kendo-color-on-app-surface)", 
-        fontFamily: "var(--kendo-font-family)", 
-        position: "fixed",
-        inset: 0,
-        overflow: "hidden"
-      }}>
-        <PromoModal />
-        <StyledComponentsRegistry>
-          <HeaderVisibility />
-          <main style={{ 
-            height: "100%", 
-            overflowY: "auto", 
-            overflowX: "hidden",
-            display: "flex",
-            flexDirection: "column",
-            position: "relative",
-            justifyContent: "space-between"
-          }}>
-            {children}
-            <Footer />
-          </main>
-        </StyledComponentsRegistry>
-        {process.env.NODE_ENV === 'production' && (
-          <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ""} />
-        )}
-      </body>
+      <ClientLayout>
+        {children}
+      </ClientLayout>
     </html>
   );
 }
