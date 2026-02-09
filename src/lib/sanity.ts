@@ -25,4 +25,5 @@ export interface Post {
   body: PortableTextBlock[];
   isFeatured?: boolean;
   excerpt?: string;
+  categories?: { title: string }[];
 }

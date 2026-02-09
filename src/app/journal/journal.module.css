@@ -8,7 +8,6 @@
   margin: 0 auto;
 }
 
-/* Removed pageHeader, pageTitle, pageSubtitle styles */
 
 .grid {
   display: grid;
@@ -17,9 +16,8 @@
   grid-auto-rows: auto;
 }
 
-/* Featured Article Styling (First Item) */
 .featured {
-  grid-column: 1 / -1; /* Spans full width */
+  grid-column: 1 / -1;
   display: grid;
   grid-template-columns: 1.2fr 0.8fr;
   gap: 40px;
@@ -91,7 +89,6 @@
   margin-bottom: 32px;
 }
 
-/* Regular Card Styling */
 .card {
   display: flex;
   flex-direction: column;
@@ -207,7 +204,6 @@
     gap: 24px;
   }
 
-  /* Stack featured card vertically on mobile */
   .featured {
     grid-template-columns: 1fr;
     gap: 0;
