@@ -27,6 +27,7 @@ async function getPost(slug: string): Promise<Post> {
       title,
       mainImage,
       publishedAt,
+      _createdAt,
       body,
       "categories": categories[]->{title},
       tags
@@ -98,15 +99,13 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
       <header className={styles.header}>
         <h1 className={styles.title}>{post.title}</h1>
         <div className={styles.meta}>
-          {post.publishedAt && (
-            <time dateTime={post.publishedAt}>
-              {new Date(post.publishedAt).toLocaleDateString('en-US', {
-                month: 'long',
-                day: 'numeric',
-                year: 'numeric'
-              })}
-            </time>
-          )}
+          <time dateTime={post.publishedAt || post._createdAt}>
+            {new Date(post.publishedAt || post._createdAt).toLocaleDateString('en-US', {
+              month: 'long',
+              day: 'numeric',
+              year: 'numeric'
+            })}
+          </time>
           {post.categories && post.categories.length > 0 && (
             <span>• {post.categories.map(c => c.title).join(', ')}</span>
           )}

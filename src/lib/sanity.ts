@@ -22,6 +22,7 @@ export interface Post {
   slug: { current: string };
   mainImage: SanityImageSource;
   publishedAt: string;
+  _createdAt: string;
   body: PortableTextBlock[];
   isFeatured?: boolean;
   excerpt?: string;
