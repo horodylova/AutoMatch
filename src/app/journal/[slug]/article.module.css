@@ -100,6 +100,35 @@
   text-underline-offset: 4px;
 }
 
+.tags {
+  margin-top: 64px;
+  padding-top: 32px;
+  border-top: 1px solid rgba(230, 214, 180, 0.15);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 16px;
+  background: rgba(230, 214, 180, 0.05);
+  border: 1px solid rgba(230, 214, 180, 0.1);
+  border-radius: 100px;
+  color: rgba(230, 214, 180, 0.8);
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.tag:hover {
+  background: rgba(230, 214, 180, 0.1);
+  border-color: rgba(230, 214, 180, 0.2);
+  color: #e6d6b4;
+  transform: translateY(-1px);
+}
+
 .body blockquote {
   border-left: 4px solid rgba(230, 214, 180, 0.3);
   padding-left: 24px;

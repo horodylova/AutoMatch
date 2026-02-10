@@ -26,4 +26,5 @@ export interface Post {
   isFeatured?: boolean;
   excerpt?: string;
   categories?: { title: string }[];
+  tags?: string[];
 }

@@ -27,7 +27,8 @@ async function getPost(slug: string): Promise<Post> {
       mainImage,
       publishedAt,
       body,
-      "categories": categories[]->{title}
+      "categories": categories[]->{title},
+      tags
     }`,
     { slug }
   );
@@ -106,6 +107,16 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
       <div className={styles.body}>
         {post.body && <PortableText value={post.body} components={components} />}
       </div>
+
+      {post.tags && post.tags.length > 0 && (
+        <div className={styles.tags}>
+          {post.tags.map((tag) => (
+            <span key={tag} className={styles.tag}>
+              #{tag}
+            </span>
+          ))}
+        </div>
+      )}
     </article>
   );
 }
