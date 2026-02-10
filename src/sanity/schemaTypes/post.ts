@@ -98,6 +98,16 @@ export const post = defineType({
                 layout: 'radio',
                 isHighlighted: true
               },
+              initialValue: 'center'
+            },
+            {
+              name: 'link',
+              type: 'url',
+              title: 'Link URL',
+              description: 'Optional link for the image (e.g., for banners)',
+              options: {
+                isHighlighted: true
+              }
             }
           ]
         }

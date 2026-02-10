@@ -14,6 +14,7 @@ interface PortableTextImage {
   };
   alt?: string;
   position?: 'left' | 'right' | 'center';
+  link?: string;
 }
 
 export async function generateStaticParams() {
@@ -57,20 +58,30 @@ const components = {
         wrapperClass = styles.imageWrapper;
       }
 
+      const imageElement = (
+        <Image
+          src={urlFor(value).width(width).url()}
+          alt={value.alt || 'Article image'}
+          width={width}
+          height={Math.round(width * 0.75)} // Default aspect ratio fallback
+          className={styles.image}
+          style={{
+            width: '100%',
+            height: 'auto',
+          }}
+          sizes={position === 'center' ? "(max-width: 800px) 100vw, 800px" : "(max-width: 768px) 100vw, 400px"}
+        />
+      );
+
       return (
         <div className={wrapperClass}>
-          <Image
-            src={urlFor(value).width(width).url()}
-            alt={value.alt || 'Article image'}
-            width={width}
-            height={Math.round(width * 0.75)} // Default aspect ratio fallback
-            className={styles.image}
-            style={{
-              width: '100%',
-              height: 'auto',
-            }}
-            sizes={position === 'center' ? "(max-width: 800px) 100vw, 800px" : "(max-width: 768px) 100vw, 400px"}
-          />
+          {value.link ? (
+            <Link href={value.link} target={value.link.startsWith('http') ? '_blank' : undefined} rel={value.link.startsWith('http') ? 'noopener noreferrer' : undefined}>
+              {imageElement}
+            </Link>
+          ) : (
+            imageElement
+          )}
         </div>
       );
     },
