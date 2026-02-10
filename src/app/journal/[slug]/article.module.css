@@ -43,6 +43,10 @@
   gap: 12px;
   font-size: 16px;
   color: rgba(230, 214, 180, 0.6);
+  font-family: var(--font-mono, monospace);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-top: 16px;
 }
 
 .imageWrapper {
@@ -55,6 +59,27 @@
   border: 1px solid rgba(230, 214, 180, 0.15);
 }
 
+.imageCenter {
+  width: 100%;
+  margin: 48px 0;
+}
+
+.imageLeft {
+  float: left;
+  margin-right: 32px;
+  margin-bottom: 24px;
+  max-width: 350px;
+  width: 100%;
+}
+
+.imageRight {
+  float: right;
+  margin-left: 32px;
+  margin-bottom: 24px;
+  max-width: 350px;
+  width: 100%;
+}
+
 .image {
   object-fit: cover;
 }
@@ -63,6 +88,7 @@
   font-size: 20px;
   line-height: 1.8;
   color: rgba(230, 214, 180, 0.9);
+  display: flow-root;
 }
 
 .body h2 {
@@ -96,8 +122,16 @@
 
 .body a {
   color: #e6d6b4;
-  text-decoration: underline;
-  text-underline-offset: 4px;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(230, 214, 180, 0.4);
+  transition: all 0.2s ease;
+  padding-bottom: 1px;
+}
+
+.body a:hover {
+  border-bottom-color: #e6d6b4;
+  background: rgba(230, 214, 180, 0.1);
+  color: #fff;
 }
 
 .tags {
@@ -145,5 +179,12 @@
   
   .body {
     font-size: 18px;
+  }
+
+  .imageLeft, .imageRight {
+    float: none;
+    margin: 32px 0;
+    max-width: 100%;
+    width: 100%;
   }
 }

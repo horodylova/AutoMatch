@@ -13,6 +13,7 @@ interface PortableTextImage {
     _type: "reference";
   };
   alt?: string;
+  position?: 'left' | 'right' | 'center';
 }
 
 export async function generateStaticParams() {
@@ -40,14 +41,34 @@ const components = {
       if (!value?.asset) {
         return null;
       }
+      
+      const position = value.position || 'center';
+      let wrapperClass = styles.imageCenter;
+      let width = 800;
+      
+      if (position === 'left') {
+        wrapperClass = styles.imageLeft;
+        width = 400;
+      } else if (position === 'right') {
+        wrapperClass = styles.imageRight;
+        width = 400;
+      } else {
+        wrapperClass = styles.imageWrapper;
+      }
+
       return (
-        <div className={styles.imageWrapper}>
+        <div className={wrapperClass}>
           <Image
-            src={urlFor(value).width(800).height(450).url()}
+            src={urlFor(value).width(width).url()}
             alt={value.alt || 'Article image'}
-            fill
+            width={width}
+            height={Math.round(width * 0.75)} // Default aspect ratio fallback
             className={styles.image}
-            sizes="(max-width: 800px) 100vw, 800px"
+            style={{
+              width: '100%',
+              height: 'auto',
+            }}
+            sizes={position === 'center' ? "(max-width: 800px) 100vw, 800px" : "(max-width: 768px) 100vw, 400px"}
           />
         </div>
       );
