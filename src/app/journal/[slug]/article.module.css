@@ -122,6 +122,7 @@
 
 .body a {
   color: #e6d6b4;
+  font-weight: 700;
   text-decoration: none;
   border-bottom: 1px solid rgba(230, 214, 180, 0.4);
   transition: all 0.2s ease;
