@@ -102,16 +102,14 @@ const components = {
       
       const position = value.position || 'center';
       let wrapperClass = styles.imageCenter;
-      let width = 800;
+      let width = 1000;
       
       if (position === 'left') {
         wrapperClass = styles.imageLeft;
-        width = 400;
+        width = 600;
       } else if (position === 'right') {
         wrapperClass = styles.imageRight;
-        width = 400;
-      } else {
-        wrapperClass = styles.imageWrapper;
+        width = 600;
       }
 
       const imageElement = (
@@ -125,7 +123,7 @@ const components = {
             width: '100%',
             height: 'auto',
           }}
-          sizes={position === 'center' ? "(max-width: 800px) 100vw, 800px" : "(max-width: 768px) 100vw, 400px"}
+          sizes={position === 'center' ? "(max-width: 800px) 100vw, 800px" : "(max-width: 768px) 100vw, 500px"}
         />
       );
 
@@ -156,8 +154,6 @@ const components = {
         wrapperClass = styles.imageLeft;
       } else if (position === 'right') {
         wrapperClass = styles.imageRight;
-      } else {
-        wrapperClass = styles.imageWrapper;
       }
 
       const videoElement = (
