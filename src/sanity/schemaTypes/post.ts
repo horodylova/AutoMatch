@@ -110,6 +110,44 @@ export const post = defineType({
               }
             }
           ]
+        },
+        {
+          type: 'file',
+          name: 'videoBanner',
+          title: 'Video Banner',
+          options: { accept: 'video/*' },
+          fields: [
+            {
+              name: 'alt',
+              type: 'string',
+              title: 'Alternative Text',
+              validation: (Rule: Rule) => Rule.required(),
+            },
+            {
+              name: 'position',
+              type: 'string',
+              title: 'Position',
+              options: {
+                list: [
+                  { title: 'Center (Full Width)', value: 'center' },
+                  { title: 'Left (Float)', value: 'left' },
+                  { title: 'Right (Float)', value: 'right' }
+                ],
+                layout: 'radio',
+                isHighlighted: true
+              },
+              initialValue: 'center'
+            },
+            {
+              name: 'link',
+              type: 'url',
+              title: 'Link URL',
+              description: 'Optional link for the video banner',
+              options: {
+                isHighlighted: true
+              }
+            }
+          ]
         }
       ]
     }),

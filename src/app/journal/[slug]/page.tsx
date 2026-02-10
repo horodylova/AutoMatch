@@ -9,7 +9,27 @@ import styles from "./article.module.css";
 
 export const revalidate = 60;
 
+const buildFileUrl = (ref: string) => {
+  const parts = ref.split('-');
+  if (parts.length < 3) return undefined;
+  const fileId = parts[1];
+  const extension = parts[parts.length - 1];
+  const projectId = client.config().projectId;
+  const dataset = client.config().dataset;
+  return `https://cdn.sanity.io/files/${projectId}/${dataset}/${fileId}.${extension}`;
+};
+
 interface PortableTextImage {
+  asset: {
+    _ref: string;
+    _type: "reference";
+  };
+  alt?: string;
+  position?: 'left' | 'right' | 'center';
+  link?: string;
+}
+
+interface PortableTextVideo {
   asset: {
     _ref: string;
     _type: "reference";
@@ -117,6 +137,54 @@ const components = {
             </Link>
           ) : (
             imageElement
+          )}
+        </div>
+      );
+    },
+    videoBanner: ({ value }: { value: PortableTextVideo }) => {
+      if (!value?.asset?._ref) {
+        return null;
+      }
+      
+      const videoUrl = buildFileUrl(value.asset._ref);
+      if (!videoUrl) return null;
+
+      const position = value.position || 'center';
+      let wrapperClass = styles.imageCenter;
+      
+      if (position === 'left') {
+        wrapperClass = styles.imageLeft;
+      } else if (position === 'right') {
+        wrapperClass = styles.imageRight;
+      } else {
+        wrapperClass = styles.imageWrapper;
+      }
+
+      const videoElement = (
+        <video
+          src={videoUrl}
+          autoPlay
+          loop
+          muted
+          playsInline
+          className={styles.image}
+          style={{
+            width: '100%',
+            height: 'auto',
+            display: 'block'
+          }}
+          aria-label={value.alt || 'Video banner'}
+        />
+      );
+
+      return (
+        <div className={wrapperClass}>
+          {value.link ? (
+            <Link href={value.link} target={value.link.startsWith('http') ? '_blank' : undefined} rel={value.link.startsWith('http') ? 'noopener noreferrer' : undefined}>
+              {videoElement}
+            </Link>
+          ) : (
+            videoElement
           )}
         </div>
       );
