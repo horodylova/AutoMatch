@@ -1,5 +1,5 @@
 .container {
-  max-width: 800px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 120px 24px;
   color: var(--kendo-color-on-app-surface, #e6d6b4);
