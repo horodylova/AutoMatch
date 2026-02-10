@@ -2,6 +2,8 @@ import { client, urlFor, Post } from "@/lib/sanity";
 import { PortableText } from "@portabletext/react";
 import Image from "next/image";
 import Link from "next/link";
+import type { Metadata } from "next";
+import ShareButtons from "@/components/ShareButtons";
 import styles from "./article.module.css";
 
 
@@ -22,6 +24,39 @@ export async function generateStaticParams() {
   return posts.map((post: Post) => ({ slug: post.slug.current }));
 }
 
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const post = await getPost(slug);
+
+  if (!post) {
+    return {
+      title: 'Post Not Found',
+    };
+  }
+
+  const ogImage = post.mainImage ? urlFor(post.mainImage).width(1200).height(630).url() : undefined;
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://carcupid.fit';
+
+  return {
+    title: post.title,
+    description: post.excerpt,
+    openGraph: {
+      title: post.title,
+      description: post.excerpt,
+      type: 'article',
+      url: `${baseUrl}/journal/${slug}`,
+      publishedTime: post.publishedAt || post._createdAt,
+      images: ogImage ? [{ url: ogImage }] : undefined,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description: post.excerpt,
+      images: ogImage ? [ogImage] : undefined,
+    },
+  };
+}
+
 async function getPost(slug: string): Promise<Post> {
   return client.fetch(
     `*[_type == "post" && slug.current == $slug][0]{
@@ -29,6 +64,7 @@ async function getPost(slug: string): Promise<Post> {
       mainImage,
       publishedAt,
       _createdAt,
+      excerpt,
       body,
       "categories": categories[]->{title},
       tags
@@ -134,6 +170,11 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           />
         </div>
       )}
+
+      <ShareButtons 
+        url={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://carcupid.fit'}/journal/${slug}`} 
+        title={post.title} 
+      />
 
       <div className={styles.body}>
         {post.body && <PortableText value={post.body} components={components} />}
