@@ -8,6 +8,7 @@ import PromoModal from "./PromoModal";
 import StyledComponentsRegistry from "@/lib/styled-registry";
 import { GoogleAnalytics } from '@next/third-parties/google';
 import FacebookPixel from "./FacebookPixel";
+import CarListingTimer from "./CarListingTimer";
 
 export default function ClientLayout({
   children,
@@ -54,6 +55,7 @@ export default function ClientLayout({
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ""} />
       )}
       <FacebookPixel />
+      <CarListingTimer />
     </body>
   );
 }
