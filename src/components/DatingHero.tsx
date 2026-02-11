@@ -7,6 +7,7 @@ import { Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import styles from './DatingHero.module.css';
 import { trackQuizStart } from '@/lib/gtag';
+import { event } from '@/lib/pixel';
 
 const photos = [
   '/photos-cars/amir-riazipour-TeYK3zOIkUk-unsplash.jpg',
@@ -49,6 +50,7 @@ export default function DatingHero() {
             <p className={styles.introText}>This isn’t a quick quiz. It’s a personality match built with depth, intuition, and real automotive intelligence</p>
             <Button themeColor="primary" fillMode="solid" size="large" className={styles.introCta} onClick={() => {
               trackQuizStart();
+              event("StartQuizBottom");
               router.push('/quiz');
             }}>Start Quiz</Button>
           </div>

@@ -7,6 +7,7 @@ import { fetchDataset, Dataset } from "@/lib/dataset";
 import { CarSpecs, parseCarData } from "@/utils/carScoring";
 import CompareSearch from "@/components/compare/CompareSearch";
 import CompareView from "@/components/compare/CompareView";
+import { event } from "@/lib/pixel";
 
 export default function ComparePage() {
   const [dataset, setDataset] = useState<Dataset | null>(null);
@@ -16,6 +17,7 @@ export default function ComparePage() {
   const [isLoadingSharedCar, setIsLoadingSharedCar] = useState(false);
 
   useEffect(() => {
+    event("CompareCarsView");
    
     let hasSharedCar = false;
     if (typeof window !== "undefined") {

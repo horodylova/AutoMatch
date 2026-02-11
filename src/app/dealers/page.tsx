@@ -6,6 +6,7 @@ import Link from "next/link";
 import styles from "./dealers.module.css";
 import { submitForm } from "../../utils/formSubmission";
 import Toast, { ToastType } from "../../components/Toast";
+import { event } from "@/lib/pixel";
 
 export default function PartnersPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -13,6 +14,7 @@ export default function PartnersPage() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    event("ForDealersView");
   }, []);
 
   const showToast = (message: string, type: ToastType, title?: string) => {
@@ -49,6 +51,7 @@ export default function PartnersPage() {
 
     if (result.ok) {
       showToast('Your message has been sent successfully!', 'success', 'Success!');
+      event("ForDealersRequest");
       form.reset();
     } else {
       showToast(result.error || 'There was an error sending your message. Please try again later.', 'error', 'Submission Failed');

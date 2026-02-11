@@ -24,6 +24,7 @@ import { Categories, CategoryValue } from "../../constants/categories";
 import { fetchDataset } from "../../lib/dataset";
 import { saveResults } from "../../utils/storage";
 import { trackQuizComplete } from "@/lib/gtag";
+import { event } from "@/lib/pixel";
 
 export default function Page() {
   const quiz = useQuiz();
@@ -33,6 +34,10 @@ export default function Page() {
   const [rows, setRows] = useState<Row[]>([]);
   const [idx, setIdx] = useState<Record<string, number>>({});
   const [topMatches, setTopMatches] = useState<ScoredCar[]>([]);
+
+  useEffect(() => {
+    event("StartQuizView");
+  }, []);
 
   useEffect(() => {
     async function load() {
@@ -307,6 +312,7 @@ export default function Page() {
 
       setTopMatches(uniqueMatches);
       trackQuizComplete(uniqueMatches.length);
+      event("CompletedQuiz", { matches_count: uniqueMatches.length });
     }
   }, [quiz.showFinal, rows, idx, quiz.answers]);
 
@@ -498,7 +504,12 @@ export default function Page() {
               showFinal={quiz.showFinal}
               showIntro={quiz.showIntro}
               showHalfway={quiz.showHalfway}
-              handleNext={quiz.handleNext}
+              handleNext={() => {
+                if (quiz.showIntro) {
+                  event("StartQuiz");
+                }
+                quiz.handleNext();
+              }}
               isNextDisabled={quiz.isNextDisabled}
             />
           </div>

@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import styles from "./Header.module.css";
 import { RESULTS_UPDATED_EVENT, RESULTS_STORE_KEY } from "../utils/storage";
+import { event } from "@/lib/pixel";
 
 export default function Header() {
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
@@ -78,19 +79,19 @@ export default function Header() {
                   {item}
                 </Link>
               ) : item === "Car Listings" ? (
-                <Link key={item} href="/cars" className={styles.navButton}>
+                <Link key={item} href="/cars" className={styles.navButton} onClick={() => event("CarListingClick")}>
                   {item}
                 </Link>
               ) : item === "Compare" ? (
-                <Link key={item} href="/compare" className={styles.navButton}>
+                <Link key={item} href="/compare" className={styles.navButton} onClick={() => event("CompareCarsClick")}>
                   {item}
                 </Link>
               ) : item === "Journal" ? (
-                <Link key={item} href="/journal" className={styles.navButton}>
+                <Link key={item} href="/journal" className={styles.navButton} onClick={() => event("JournalClick")}>
                   {item}
                 </Link>
               ) : item === "For Dealers" ? (
-                <Link key={item} href="/dealers" className={styles.navButton}>
+                <Link key={item} href="/dealers" className={styles.navButton} onClick={() => event("ForDealersClick")}>
                   {item}
                 </Link>
               ) : (

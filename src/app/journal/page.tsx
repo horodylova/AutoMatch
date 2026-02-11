@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import styles from "./journal.module.css";
 import { groq } from "next-sanity";
+import JournalViewTracker from "@/components/JournalViewTracker";
 
 export const revalidate = 60;
 
@@ -32,6 +33,7 @@ export default async function JournalPage() {
 
   return (
     <div className={styles.page}>
+      <JournalViewTracker />
       <div className={styles.content}>
         
         <div className={styles.grid}>
