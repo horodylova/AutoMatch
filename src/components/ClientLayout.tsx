@@ -7,6 +7,7 @@ import Footer from "./Footer";
 import PromoModal from "./PromoModal";
 import StyledComponentsRegistry from "@/lib/styled-registry";
 import { GoogleAnalytics } from '@next/third-parties/google';
+import FacebookPixel from "./FacebookPixel";
 
 export default function ClientLayout({
   children,
@@ -52,6 +53,7 @@ export default function ClientLayout({
       {process.env.NODE_ENV === 'production' && (
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ""} />
       )}
+      <FacebookPixel />
     </body>
   );
 }
