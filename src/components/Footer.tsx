@@ -29,7 +29,7 @@ export default function Footer() {
               </div>
             </Link>
             <p className={styles.brandDesc}>
-              Find your perfect car match with AI-powered personality insights.
+              Find your perfect car match with our unique personality insights.
             </p>
           </div>
           <div className={styles.socials}>
