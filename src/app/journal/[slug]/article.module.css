@@ -181,10 +181,19 @@
     font-size: 18px;
   }
 
-  .imageLeft, .imageRight {
+  .imageLeft, .imageRight, .imageCenter {
     float: none;
-    margin: 32px 0;
-    max-width: 100%;
+    margin: 24px auto;
     width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .image {
+    width: auto !important;
+    max-width: 100% !important;
+    max-height: 400px !important;
+    border-radius: 12px;
+    object-fit: contain;
   }
 }
