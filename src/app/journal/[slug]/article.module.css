@@ -138,8 +138,6 @@
 
 .tags {
   margin-top: 64px;
-  padding-top: 32px;
-  border-top: 1px solid rgba(230, 214, 180, 0.15);
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
