@@ -1,6 +1,7 @@
 "use client";
 
 import React from 'react';
+import Image from 'next/image';
 import styles from './ShareButtons.module.css';
 
 interface ShareButtonsProps {
@@ -66,6 +67,14 @@ export default function ShareButtons({ url, title }: ShareButtonsProps) {
 
   return (
     <div className={styles.container}>
+      <div className={styles.logoWrapper}>
+        <Image
+          src="/logos/logo.svg"
+          alt="CarCupid"
+          fill
+          className={styles.logo}
+        />
+      </div>
       <span className={styles.label}>Share:</span>
       {networks.map((network) => (
         <a

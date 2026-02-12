@@ -4,8 +4,18 @@
   gap: 16px;
   margin-bottom: 48px;
   padding: 24px 0;
-  border-top: 1px solid rgba(230, 214, 180, 0.15);
-  border-bottom: 1px solid rgba(230, 214, 180, 0.15);
+}
+
+.logoWrapper {
+  position: relative;
+  width: 100px;
+  height: 24px;
+  margin-right: 16px;
+}
+
+.logo {
+  object-fit: contain;
+  object-position: left center;
 }
 
 .label {
