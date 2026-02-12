@@ -3,7 +3,10 @@ export const FB_PIXEL_ID = "1594732338344456";
 export const pageview = () => {
   if (typeof window !== "undefined") {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (window as any).fbq("track", "PageView");
+    const fbq = (window as any).fbq;
+    if (typeof fbq === "function") {
+      fbq("track", "PageView");
+    }
   }
 };
 
@@ -12,6 +15,9 @@ export const pageview = () => {
 export const event = (name: string, options: any = {}) => {
   if (typeof window !== "undefined") {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (window as any).fbq("trackCustom", name, options);
+    const fbq = (window as any).fbq;
+    if (typeof fbq === "function") {
+      fbq("trackCustom", name, options);
+    }
   }
 };
