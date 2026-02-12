@@ -29,7 +29,7 @@
 .brandRow {
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 12px;
   margin-bottom: 24px;
 }
 
@@ -40,8 +40,8 @@
 
 .logoBox {
   position: relative;
-  width: 220px;
-  height: 60px;
+  width: 90px;
+  height: 90px;
 }
 
 .logoImg {
