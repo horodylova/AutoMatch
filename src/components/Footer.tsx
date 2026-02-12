@@ -17,19 +17,21 @@ export default function Footer() {
       <div className={styles.inner}>
         {/* Brand Column */}
         <div className={styles.column}>
-          <Link href="/" className={styles.brandLogo}>
-            <div className={styles.logoBox}>
-              <Image
-                src="/logos/logo.svg"
-                alt="CarCupid"
-                fill
-                className={styles.logoImg}
-              />
-            </div>
-          </Link>
-          <p className={styles.brandDesc}>
-            Find your perfect car match with AI-powered personality insights.
-          </p>
+          <div className={styles.brandRow}>
+            <Link href="/" className={styles.brandLogo}>
+              <div className={styles.logoBox}>
+                <Image
+                  src="/logos/logo.svg"
+                  alt="CarCupid"
+                  fill
+                  className={styles.logoImg}
+                />
+              </div>
+            </Link>
+            <p className={styles.brandDesc}>
+              Find your perfect car match with AI-powered personality insights.
+            </p>
+          </div>
           <div className={styles.socials}>
             <a href="https://www.facebook.com/CarCupid.fit" target="_blank" rel="noopener noreferrer" className={styles.socialLink} aria-label="Facebook">
               <FaFacebook />
