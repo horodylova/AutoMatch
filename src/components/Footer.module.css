@@ -26,14 +26,20 @@
   gap: 16px;
 }
 
-.brandName {
-  font-size: 28px;
-  font-weight: 800;
-  color: var(--kendo-color-primary);
-  margin-bottom: 8px;
+.brandLogo {
   display: inline-block;
-  text-decoration: none;
-  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+}
+
+.logoBox {
+  position: relative;
+  width: 160px;
+  height: 40px;
+}
+
+.logoImg {
+  object-fit: contain;
+  object-position: left center;
 }
 
 .brandDesc {

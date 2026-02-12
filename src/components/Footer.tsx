@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { FaFacebook, FaInstagram, FaLinkedin, FaXTwitter, FaYoutube } from "react-icons/fa6";
 import styles from "./Footer.module.css";
@@ -16,7 +17,16 @@ export default function Footer() {
       <div className={styles.inner}>
         {/* Brand Column */}
         <div className={styles.column}>
-          <Link href="/" className={styles.brandName}>CarCupid</Link>
+          <Link href="/" className={styles.brandLogo}>
+            <div className={styles.logoBox}>
+              <Image
+                src="/logos/logo.svg"
+                alt="CarCupid"
+                fill
+                className={styles.logoImg}
+              />
+            </div>
+          </Link>
           <p className={styles.brandDesc}>
             Find your perfect car match with AI-powered personality insights.
           </p>
