@@ -90,6 +90,8 @@
   line-height: 1.8;
   color: rgba(230, 214, 180, 0.9);
   display: flow-root;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .body h2 {
