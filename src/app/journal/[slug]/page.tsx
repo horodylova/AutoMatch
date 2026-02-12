@@ -93,6 +93,19 @@ async function getPost(slug: string): Promise<Post> {
   );
 }
 
+async function getRelatedPosts(slug: string): Promise<Post[]> {
+  return client.fetch(
+    `*[_type == "post" && slug.current != $slug] | order(publishedAt desc)[0...3] {
+      _id,
+      title,
+      slug,
+      mainImage,
+      publishedAt
+    }`,
+    { slug }
+  );
+}
+
 const components = {
   types: {
     image: ({ value }: { value: PortableTextImage }) => {
@@ -191,6 +204,7 @@ const components = {
 export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const post = await getPost(slug);
+  const relatedPosts = await getRelatedPosts(slug);
 
   if (!post) {
     return (
@@ -251,6 +265,31 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
               #{tag}
             </span>
           ))}
+        </div>
+      )}
+
+      {relatedPosts.length > 0 && (
+        <div className={styles.readAlso}>
+          <h3 className={styles.readAlsoTitle}>Read Also</h3>
+          <div className={styles.readAlsoGrid}>
+            {relatedPosts.map((relatedPost) => (
+              <Link href={`/journal/${relatedPost.slug.current}`} key={relatedPost._id} className={styles.readAlsoCard}>
+                <div className={styles.readAlsoImageWrapper}>
+                  {relatedPost.mainImage && (
+                    <Image
+                      src={urlFor(relatedPost.mainImage).width(400).height(225).url()}
+                      alt={relatedPost.title}
+                      fill
+                      className={styles.readAlsoImage}
+                    />
+                  )}
+                </div>
+                <div className={styles.readAlsoContent}>
+                  <h4 className={styles.readAlsoCardTitle}>{relatedPost.title}</h4>
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
       )}
     </article>
