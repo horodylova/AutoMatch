@@ -1,11 +1,13 @@
 .page {
   color: #fff;
   padding: 120px 24px 120px;
+  width: 100%;
 }
 
 .content {
   max-width: 1200px;
   margin: 0 auto;
+  width: 100%;
 }
 
 
@@ -29,6 +31,7 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
   text-decoration: none;
   color: inherit;
+  width: 100%;
 }
 
 .featured:hover {
@@ -217,7 +220,7 @@
   }
 
   .featuredContent {
-    padding: 24px;
+    padding: 16px;
   }
 
   .featuredTitle {

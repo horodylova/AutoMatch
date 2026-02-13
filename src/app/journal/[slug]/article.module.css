@@ -3,6 +3,7 @@
   margin: 0 auto;
   padding: 120px 24px;
   color: var(--kendo-color-on-app-surface, #e6d6b4);
+  width: 100%;
 }
 
 .backLink {
@@ -237,6 +238,10 @@
 }
 
 @media (max-width: 768px) {
+  .container {
+    padding: 100px 16px 40px;
+  }
+
   .title {
     font-size: 32px;
   }
