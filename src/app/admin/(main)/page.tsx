@@ -24,7 +24,7 @@ export default async function AdminDashboard() {
     }
   });
 
-  // Fetch dealers to derive recent activity
+  
   const dealersForActivity = await prisma.dealer.findMany({
     select: {
       name: true,
@@ -40,7 +40,6 @@ export default async function AdminDashboard() {
     }
   });
 
-  // Generate a combined list of activities (Creations and Updates)
   interface Activity {
     id: string;
     source: string;
@@ -52,7 +51,6 @@ export default async function AdminDashboard() {
   const activities: Activity[] = dealersForActivity.flatMap((dealer: typeof dealersForActivity[number]) => {
     const events: Activity[] = [];
 
-    // Event 1: Dealer Creation
     events.push({
       id: `${dealer.name}-created-${dealer.createdAt.getTime()}`,
       source: dealer.name,
@@ -61,21 +59,20 @@ export default async function AdminDashboard() {
       color: 'var(--kendo-color-primary)'
     });
 
-    // Event 2: Last Inventory Update (only if cars exist)
     if (dealer.cars.length > 0) {
       events.push({
         id: `${dealer.name}-updated-${dealer.cars[0].updatedAt.getTime()}`,
         source: dealer.name,
         event: `Inventory Synced (${dealer._count.cars} cars total)`,
         time: dealer.cars[0].updatedAt,
-        color: 'var(--kendo-color-success)' // Green for success/active
+        color: 'var(--kendo-color-success)' 
       });
     }
 
     return events;
   })
   .sort((a: Activity, b: Activity) => b.time.getTime() - a.time.getTime())
-  .slice(0, 10); // Show top 10 most recent events
+  .slice(0, 10); 
 
   return (
     <div>
