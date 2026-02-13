@@ -1,0 +1,4 @@
+VIN,Make,Model,Year,Price,Mileage,ImageURL,Features
+5YJ3E1EA1JF054321,Tesla,Model 3,2023,35000,5000,https://images.unsplash.com/photo-1560958089-b8a1929cea89?w=800,Autopilot|Long Range|Premium Interior
+1G1FX6S07H4112233,Chevrolet,Bolt EV,2020,18500,40000,https://images.unsplash.com/photo-1590325492237-7f858e653303?w=800,DC Fast Charging|Heated Steering Wheel
+JN1AZ0CP4BT998877,Nissan,Leaf,2022,22000,12000,https://images.unsplash.com/photo-1571127236794-81c0bbfe1ce3?w=800,ProPILOT|E-Pedal|Range Plus

@@ -21,6 +21,7 @@
   position: sticky;
   top: 0;
   height: 100vh;
+  overflow-y: auto;
 }
 
 .logo {
@@ -99,7 +100,7 @@
 
 .statsGrid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 24px;
   margin-bottom: 32px;
 }
@@ -143,6 +144,7 @@
   color: var(--kendo-color-subtle);
   border-bottom: 1px solid var(--kendo-color-border);
   font-weight: 500;
+  white-space: nowrap;
 }
 
 .table td {
@@ -165,6 +167,7 @@
   border-radius: 20px;
   font-size: 12px;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .statusActive {
@@ -266,42 +269,12 @@
 .btnDanger {
   color: #f87171;
   border-color: rgba(239, 68, 68, 0.2);
-}
-
-.btnDanger:hover {
-  background-color: rgba(239, 68, 68, 0.1);
-  border-color: #f87171;
-  color: #f87171;
-}
-
-.actions {
-  display: flex;
-  gap: 8px;
-}
-
-.btnSecondary {
-  background-color: transparent;
-  border: 1px solid var(--kendo-color-border);
-  color: var(--kendo-color-on-app-surface);
-}
-
-.btnSecondary:hover {
-  border-color: var(--kendo-color-on-app-surface);
-  background-color: rgba(230, 214, 180, 0.05);
-}
-
-.btnDanger {
-  color: #f87171;
   background-color: rgba(239, 68, 68, 0.1);
 }
 
 .btnDanger:hover {
   background-color: rgba(239, 68, 68, 0.2);
-}
-
-.btnSm {
-  padding: 6px 12px;
-  font-size: 13px;
+  border-color: #f87171;
 }
 
 .actions {
@@ -309,28 +282,100 @@
   gap: 8px;
 }
 
-.statsGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 24px;
-  margin-bottom: 32px;
-}
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .adminContainer {
+    flex-direction: column;
+  }
 
-.statCard {
-  background-color: var(--kendo-color-surface);
-  border: 1px solid var(--kendo-color-border);
-  border-radius: 12px;
-  padding: 20px;
-}
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    border-right: none;
+    border-bottom: 1px solid var(--kendo-color-border);
+    padding: 16px;
+    margin-top: 20px; /* Add margin to push sidebar down from fixed header */
+  }
 
-.statValue {
-  font-size: 32px;
-  font-weight: 700;
-  color: #fff;
-  margin-bottom: 4px;
-}
+  .logo {
+    margin-bottom: 16px;
+  }
 
-.statLabel {
-  color: var(--kendo-color-subtle);
-  font-size: 14px;
+  .nav {
+    flex-direction: row;
+    overflow-x: auto;
+    gap: 12px;
+    padding-bottom: 4px;
+    margin-bottom: 8px;
+    /* Hide scrollbar for cleaner look */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .navItem {
+    white-space: nowrap;
+    padding: 8px 12px;
+    font-size: 14px;
+    background-color: rgba(255, 255, 255, 0.03);
+  }
+
+  .mainContent {
+    padding: 16px;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  
+  .header > div {
+    width: 100%;
+  }
+
+  .header button {
+    width: 100%;
+  }
+
+  .statsGrid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .statCard {
+    padding: 16px;
+  }
+  
+  .statValue {
+    font-size: 24px;
+  }
+
+  .card {
+    padding: 16px;
+  }
+
+  .formGrid {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .table th, .table td {
+    padding: 12px 8px;
+    font-size: 13px;
+  }
+  
+  .actions {
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .actions button {
+    width: 100%;
+  }
 }

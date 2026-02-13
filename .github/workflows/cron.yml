@@ -1,0 +1,35 @@
+name: Daily Inventory Sync
+
+on:
+  schedule:
+    # Runs at 08:00 UTC daily
+    # 08:00 UTC = 03:00 AM EST (New York Time)
+    - cron: '0 8 * * *'
+  workflow_dispatch: # Allows manual triggering from GitHub Actions tab
+
+jobs:
+  cron-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call Sync Endpoint
+        run: |
+          if [ -z "${{ secrets.APP_URL }}" ]; then
+            echo "Error: APP_URL secret is not set"
+            exit 1
+          fi
+          
+          echo "Triggering sync at ${{ secrets.APP_URL }}..."
+          
+          response=$(curl -s -w "\n%{http_code}" -X GET "${{ secrets.APP_URL }}/api/cron/sync-dealers" \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}")
+          
+          http_code=$(echo "$response" | tail -n1)
+          content=$(echo "$response" | sed '$d')
+          
+          echo "Response code: $http_code"
+          echo "Response body: $content"
+          
+          if [ "$http_code" -ne 200 ]; then
+            echo "Sync failed with status $http_code"
+            exit 1
+          fi

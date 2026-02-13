@@ -8,7 +8,6 @@ interface Admin {
   email: string;
   role: string;
   createdAt: string;
-  inviteToken: string | null;
 }
 
 export default function AdminUsersPage() {
@@ -146,11 +145,7 @@ export default function AdminUsersPage() {
                   <span className={styles.badge}>{admin.role}</span>
                 </td>
                 <td>
-                  {admin.inviteToken ? (
-                    <span className={styles.badge} style={{ background: 'rgba(255, 193, 7, 0.1)', color: '#ffc107', border: '1px solid rgba(255, 193, 7, 0.2)' }}>Pending</span>
-                  ) : (
-                    <span className={styles.badge} style={{ background: 'rgba(76, 175, 80, 0.1)', color: '#4caf50', border: '1px solid rgba(76, 175, 80, 0.2)' }}>Active</span>
-                  )}
+                  <span className={styles.badge} style={{ background: 'rgba(76, 175, 80, 0.1)', color: '#4caf50', border: '1px solid rgba(76, 175, 80, 0.2)' }}>Active</span>
                 </td>
                 <td>{new Date(admin.createdAt).toLocaleDateString()}</td>
                 {currentUserRole === 'SUPER_ADMIN' && (

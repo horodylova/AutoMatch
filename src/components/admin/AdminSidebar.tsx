@@ -1,11 +1,14 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import styles from './admin.module.css';
+import ChangePasswordModal from './ChangePasswordModal';
 
 export default function AdminSidebar() {
   const pathname = usePathname();
+  const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
 
   const isActive = (path: string) => {
     return pathname === path || pathname?.startsWith(`${path}/`);
@@ -47,6 +50,13 @@ export default function AdminSidebar() {
 
       <div className={styles.nav}>
         <button 
+          onClick={() => setIsChangePasswordOpen(true)}
+          className={styles.navItem} 
+          style={{ width: '100%', textAlign: 'left', cursor: 'pointer', background: 'none' }}
+        >
+          Change Password
+        </button>
+        <button 
           onClick={async () => {
             await fetch('/api/admin/logout', { method: 'POST' });
             window.location.href = '/admin/login';
@@ -57,6 +67,11 @@ export default function AdminSidebar() {
           Logout
         </button>
       </div>
+      
+      <ChangePasswordModal 
+        isOpen={isChangePasswordOpen} 
+        onClose={() => setIsChangePasswordOpen(false)} 
+      />
     </aside>
   );
 }

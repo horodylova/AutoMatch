@@ -12,35 +12,7 @@ interface Request {
   date: string;
 }
 
-const MOCK_REQUESTS: Request[] = [
-  {
-    id: '1',
-    name: 'John Smith',
-    email: 'john@bestcars.com',
-    phone: '(555) 123-4567',
-    dealership: 'Best Cars LLC',
-    status: 'new',
-    date: '2 hours ago'
-  },
-  {
-    id: '2',
-    name: 'Sarah Johnson',
-    email: 'sarah@autoworld.net',
-    phone: '(555) 987-6543',
-    dealership: 'Auto World',
-    status: 'contacted',
-    date: '1 day ago'
-  },
-  {
-    id: '3',
-    name: 'Mike Brown',
-    email: 'mike@truckcenter.com',
-    phone: '(555) 456-7890',
-    dealership: 'The Truck Center',
-    status: 'approved',
-    date: '3 days ago'
-  }
-];
+const MOCK_REQUESTS: Request[] = [];
 
 export default function RequestsPage() {
   return (
@@ -53,6 +25,11 @@ export default function RequestsPage() {
       </div>
 
       <div className={styles.card}>
+        {MOCK_REQUESTS.length === 0 ? (
+           <div style={{ padding: '3rem', textAlign: 'center', color: 'var(--kendo-color-subtle)' }}>
+             <p>No new partnership requests.</p>
+           </div>
+        ) : (
         <div className={styles.tableContainer}>
           <table className={styles.table}>
             <thead>
@@ -108,6 +85,7 @@ export default function RequestsPage() {
             </tbody>
           </table>
         </div>
+        )}
       </div>
     </div>
   );

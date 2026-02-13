@@ -15,7 +15,6 @@ export async function GET() {
         email: true,
         role: true,
         createdAt: true,
-        inviteToken: true, // Optional: to show pending status
       },
       orderBy: { createdAt: 'desc' },
     });
