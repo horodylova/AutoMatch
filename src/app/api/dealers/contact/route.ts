@@ -1,15 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
+import prisma from "@/lib/prisma";
 
-type DealerContactRequestDelegate = {
-  create: (args: Record<string, unknown>) => Promise<unknown>;
-};
-
-interface ExtendedPrismaClient extends PrismaClient {
-  dealerContactRequest: DealerContactRequestDelegate;
-}
-
-const prisma: ExtendedPrismaClient = new PrismaClient() as ExtendedPrismaClient;
+const dealerContactRequest = (prisma as unknown as {
+  dealerContactRequest: {
+    create: (args: { data: unknown }) => Promise<unknown>;
+  };
+}).dealerContactRequest;
 
 export async function POST(request: NextRequest) {
   try {
@@ -25,7 +21,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
-    await prisma.dealerContactRequest.create({
+    await dealerContactRequest.create({
       data: {
         dealershipName,
         contactName,

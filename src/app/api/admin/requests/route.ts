@@ -1,18 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
+import prisma from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
 
-type DealerContactRequestDelegate = {
-  create?: (args: Record<string, unknown>) => Promise<unknown>;
-  findMany: (args?: Record<string, unknown>) => Promise<unknown[]>;
-  delete: (args: Record<string, unknown>) => Promise<unknown>;
-};
-
-interface ExtendedPrismaClient extends PrismaClient {
-  dealerContactRequest: DealerContactRequestDelegate;
-}
-
-const prisma: ExtendedPrismaClient = new PrismaClient() as ExtendedPrismaClient;
+const dealerContactRequest = (prisma as unknown as {
+  dealerContactRequest: {
+    findMany: (args?: unknown) => Promise<unknown[]>;
+    delete: (args: unknown) => Promise<unknown>;
+  };
+}).dealerContactRequest;
 
 export async function GET() {
   try {
@@ -21,7 +16,7 @@ export async function GET() {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const requests = await prisma.dealerContactRequest.findMany({
+    const requests = await dealerContactRequest.findMany({
       orderBy: { createdAt: "desc" },
     });
 
@@ -46,7 +41,7 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: "Missing id" }, { status: 400 });
     }
 
-    await prisma.dealerContactRequest.delete({
+    await dealerContactRequest.delete({
       where: { id },
     });
 
