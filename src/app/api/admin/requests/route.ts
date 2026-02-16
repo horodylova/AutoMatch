@@ -6,6 +6,7 @@ const dealerContactRequest = (prisma as unknown as {
   dealerContactRequest: {
     findMany: (args?: unknown) => Promise<unknown[]>;
     delete: (args: unknown) => Promise<unknown>;
+    update: (args: unknown) => Promise<unknown>;
   };
 }).dealerContactRequest;
 
@@ -48,6 +49,33 @@ export async function DELETE(request: NextRequest) {
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Delete partnership request error:", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
+}
+
+export async function PATCH(request: NextRequest) {
+  try {
+    const session = await getSession();
+    if (!session) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const body = await request.json();
+    const id = typeof body.id === "string" ? body.id : "";
+    const status = typeof body.status === "string" ? body.status : "";
+
+    if (!id || !status) {
+      return NextResponse.json({ error: "Missing id or status" }, { status: 400 });
+    }
+
+    await dealerContactRequest.update({
+      where: { id },
+      data: { status },
+    });
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("Update partnership request status error:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

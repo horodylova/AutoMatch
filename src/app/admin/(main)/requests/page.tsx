@@ -60,6 +60,28 @@ export default function RequestsPage() {
     fetchRequests();
   }, []);
 
+  const handleReview = async (id: string) => {
+    try {
+      const res = await fetch('/api/admin/requests', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id, status: 'contacted' as RequestStatus }),
+      });
+      if (!res.ok) {
+        throw new Error('Failed to update request status');
+      }
+      setRequests((prev) =>
+        prev.map((req) =>
+          req.id === id ? { ...req, status: 'contacted' } : req
+        )
+      );
+    } catch (error) {
+      console.error('Failed to update partnership request status', error);
+    }
+  };
+
   const handleDelete = async (id: string) => {
     try {
       const res = await fetch(`/api/admin/requests?id=${encodeURIComponent(id)}`, {
@@ -130,8 +152,6 @@ export default function RequestsPage() {
                       className={`${styles.statusBadge} ${
                         req.status === 'new'
                           ? styles.statusActive
-                          : req.status === 'approved'
-                          ? styles.statusActive
                           : styles.statusInactive
                       }`}
                       style={{
@@ -154,7 +174,11 @@ export default function RequestsPage() {
                   </td>
                   <td>
                     <div className={styles.actions}>
-                      <button className={`${styles.btn} ${styles.btnSecondary} ${styles.btnSm}`}>
+                      <button
+                        className={`${styles.btn} ${styles.btnSecondary} ${styles.btnSm}`}
+                        onClick={() => handleReview(req.id)}
+                        disabled={req.status !== 'new'}
+                      >
                         Review
                       </button>
                       <button
