@@ -52,6 +52,27 @@ export default function PartnersPage() {
     if (result.ok) {
       showToast('Your message has been sent successfully!', 'success', 'Success!');
       event("ForDealersRequest");
+
+      try {
+        const payload = {
+          company,
+          name,
+          email,
+          interest: formData.get('interest')?.toString() || "",
+          phone: formData.get('phone')?.toString() || "",
+        };
+
+        await fetch("/api/dealers/contact", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        });
+      } catch (error) {
+        console.error("Dealer contact logging failed:", error);
+      }
+
       form.reset();
     } else {
       showToast(result.error || 'There was an error sending your message. Please try again later.', 'error', 'Submission Failed');

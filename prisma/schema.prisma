@@ -44,3 +44,15 @@ model Admin {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 }
+
+model DealerContactRequest {
+  id             String   @id @default(uuid())
+  dealershipName String
+  contactName    String
+  email          String
+  phone          String?
+  interest       String?
+  status         String   @default("new")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}

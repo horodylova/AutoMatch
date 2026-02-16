@@ -1,20 +1,87 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import styles from '@/components/admin/admin.module.css';
+
+type RequestStatus = 'new' | 'contacted' | 'approved' | 'declined';
 
 interface Request {
   id: string;
-  name: string;
+  contactName: string;
   email: string;
-  phone: string;
-  dealership: string;
-  status: 'new' | 'contacted' | 'approved' | 'declined';
-  date: string;
+  phone: string | null;
+  dealershipName: string;
+  interest: string | null;
+  status: RequestStatus;
+  createdAt: string;
 }
 
-const MOCK_REQUESTS: Request[] = [];
+interface RawRequest {
+  id: string;
+  contactName: string;
+  email: string;
+  phone?: string | null;
+  dealershipName: string;
+  interest?: string | null;
+  status?: string;
+  createdAt: string;
+}
 
 export default function RequestsPage() {
+  const [requests, setRequests] = useState<Request[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchRequests = async () => {
+      try {
+        const res = await fetch('/api/admin/requests');
+        if (!res.ok) {
+          throw new Error('Failed to fetch requests');
+        }
+        const data = await res.json();
+        const mapped: Request[] = (data as RawRequest[]).map((item) => ({
+          id: item.id,
+          contactName: item.contactName,
+          email: item.email,
+          phone: item.phone || null,
+          dealershipName: item.dealershipName,
+          interest: item.interest || null,
+          status: (item.status || 'new') as RequestStatus,
+          createdAt: item.createdAt,
+        }));
+        setRequests(mapped);
+      } catch (error) {
+        console.error('Failed to load partnership requests', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRequests();
+  }, []);
+
+  const handleDelete = async (id: string) => {
+    try {
+      const res = await fetch(`/api/admin/requests?id=${encodeURIComponent(id)}`, {
+        method: 'DELETE',
+      });
+      if (!res.ok) {
+        throw new Error('Failed to delete request');
+      }
+      setRequests((prev) => prev.filter((req) => req.id !== id));
+    } catch (error) {
+      console.error('Failed to delete partnership request', error);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className={styles.loadingState}>
+        Loading...
+      </div>
+    );
+  }
+
   return (
     <div>
       <div className={styles.header}>
@@ -25,7 +92,7 @@ export default function RequestsPage() {
       </div>
 
       <div className={styles.card}>
-        {MOCK_REQUESTS.length === 0 ? (
+        {requests.length === 0 ? (
            <div style={{ padding: '3rem', textAlign: 'center', color: 'var(--kendo-color-subtle)' }}>
              <p>No new partnership requests.</p>
            </div>
@@ -43,41 +110,59 @@ export default function RequestsPage() {
               </tr>
             </thead>
             <tbody>
-              {MOCK_REQUESTS.map((req) => (
+              {requests.map((req) => (
                 <tr key={req.id}>
                   <td>
-                    <div style={{ fontWeight: 600, color: '#fff' }}>{req.name}</div>
+                    <div style={{ fontWeight: 600, color: '#fff' }}>{req.contactName}</div>
                   </td>
-                  <td>{req.dealership}</td>
+                  <td>{req.dealershipName}</td>
                   <td>
                     <div style={{ fontSize: 13 }}>{req.email}</div>
-                    <div style={{ fontSize: 13, color: 'var(--kendo-color-subtle)' }}>{req.phone}</div>
+                    {req.phone && (
+                      <div style={{ fontSize: 13, color: 'var(--kendo-color-subtle)' }}>{req.phone}</div>
+                    )}
+                    {req.interest && (
+                      <div style={{ fontSize: 13, color: 'var(--kendo-color-subtle)' }}>{req.interest}</div>
+                    )}
                   </td>
                   <td>
-                    <span className={`${styles.statusBadge} ${
-                      req.status === 'new' ? styles.statusActive : 
-                      req.status === 'contacted' ? '' :
-                      req.status === 'approved' ? styles.statusActive :
-                      styles.statusInactive
-                    }`} style={{
-                      backgroundColor: req.status === 'new' ? 'rgba(59, 130, 246, 0.15)' : undefined,
-                      color: req.status === 'new' ? '#60a5fa' : undefined,
-                      border: req.status === 'new' ? '1px solid rgba(59, 130, 246, 0.2)' : undefined,
-                    }}>
+                    <span
+                      className={`${styles.statusBadge} ${
+                        req.status === 'new'
+                          ? styles.statusActive
+                          : req.status === 'approved'
+                          ? styles.statusActive
+                          : styles.statusInactive
+                      }`}
+                      style={{
+                        backgroundColor: req.status === 'new' ? 'rgba(59, 130, 246, 0.15)' : undefined,
+                        color: req.status === 'new' ? '#60a5fa' : undefined,
+                        border: req.status === 'new' ? '1px solid rgba(59, 130, 246, 0.2)' : undefined,
+                      }}
+                    >
                       {req.status}
                     </span>
                   </td>
-                  <td>{req.date}</td>
+                  <td>
+                    {new Date(req.createdAt).toLocaleString('en-US', {
+                      month: 'short',
+                      day: 'numeric',
+                      year: 'numeric',
+                      hour: 'numeric',
+                      minute: 'numeric',
+                    })}
+                  </td>
                   <td>
                     <div className={styles.actions}>
                       <button className={`${styles.btn} ${styles.btnSecondary} ${styles.btnSm}`}>
                         Review
                       </button>
-                      {req.status === 'new' && (
-                        <button className={`${styles.btn} ${styles.btnPrimary} ${styles.btnSm}`}>
-                          Approve
-                        </button>
-                      )}
+                      <button
+                        className={`${styles.btn} ${styles.btnPrimary} ${styles.btnSm}`}
+                        onClick={() => handleDelete(req.id)}
+                      >
+                        Delete
+                      </button>
                     </div>
                   </td>
                 </tr>
