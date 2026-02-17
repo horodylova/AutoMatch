@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { FaFacebook, FaInstagram, FaLinkedin, FaXTwitter, FaYoutube } from "react-icons/fa6";
+import { FaFacebook, FaInstagram, FaLinkedin, FaXTwitter, FaYoutube, FaThreads } from "react-icons/fa6";
 import styles from "./Footer.module.css";
 
 export default function Footer() {
@@ -38,6 +38,9 @@ export default function Footer() {
             </a>
             <a href="https://www.instagram.com/carcupid.fit/" target="_blank" rel="noopener noreferrer" className={styles.socialLink} aria-label="Instagram">
               <FaInstagram />
+            </a>
+            <a href="https://www.threads.com/@carcupid.fit" target="_blank" rel="noopener noreferrer" className={styles.socialLink} aria-label="Threads">
+              <FaThreads />
             </a>
             <a href="https://www.youtube.com/@CarCupid_fit" target="_blank" rel="noopener noreferrer" className={styles.socialLink} aria-label="YouTube">
               <FaYoutube />
