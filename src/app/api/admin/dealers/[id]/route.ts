@@ -17,6 +17,10 @@ export async function DELETE(
 
     const { id } = await params;
 
+    await prisma.car.deleteMany({
+      where: { dealerId: id },
+    });
+
     await prisma.dealer.delete({
       where: { id },
     });
