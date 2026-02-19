@@ -9,7 +9,7 @@ export const revalidate = 60;
 
 async function getJournalPosts() {
   return client.fetch(groq`
-    *[_type == "post"] | order(publishedAt desc) {
+    *[_type == "post"] | order(isFeatured desc, publishedAt desc) {
       _id,
       title,
       slug,

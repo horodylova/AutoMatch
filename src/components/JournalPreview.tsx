@@ -13,7 +13,7 @@ export default function JournalPreview() {
     const fetchPosts = async () => {
       try {
         const data = await client.fetch<Post[]>(
-          `*[_type == "post"][0...3] | order(publishedAt desc) {
+          `*[_type == "post"] | order(publishedAt desc)[0...3] {
             _id,
             title,
             slug,
