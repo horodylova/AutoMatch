@@ -20,12 +20,10 @@ html, body {
 body {
   background-color: var(--kendo-color-app-surface);
   background-image:
-    linear-gradient(90deg, rgba(230, 214, 180, 0.06) 1px, transparent 1px),
-    linear-gradient(0deg, rgba(230, 214, 180, 0.06) 1px, transparent 1px),
-    radial-gradient(circle at 20% 20%, rgba(20, 82, 113, 0.20), transparent 50%),
-    radial-gradient(circle at 80% 0%, rgba(20, 82, 113, 0.15), transparent 60%);
-  background-size: 120px 120px, 120px 120px, 100% 100%, 100% 100%;
-  background-position: 0 0, 0 0, 0 0, 0 0;
+    linear-gradient(90deg, var(--app-background-body-grid-color) 1px, transparent 1px),
+    linear-gradient(0deg, var(--app-background-body-grid-color) 1px, transparent 1px);
+  background-size: 120px 120px, 120px 120px;
+  background-position: 0 0, 0 0;
   animation: grid-scroll-up 20s linear infinite;
 }
 
@@ -229,8 +227,239 @@ body {
   --kendo-border-radius-xxl: 32px;
   --kendo-border-radius-xxxl: 64px;
   --kendo-border-radius-full: 9999px;
+  --app-background-body-grid-color: rgba(230, 214, 180, 0.06);
+  --app-background-body-accent-a: rgba(20, 82, 113, 0.20);
+  --app-background-body-accent-b: rgba(20, 82, 113, 0.15);
   --section-horizontal-gradient: linear-gradient(90deg, var(--kendo-color-app-surface) 0, var(--kendo-color-app-surface) 25%, var(--kendo-color-surface) 50%, var(--kendo-color-app-surface) 75%, var(--kendo-color-app-surface) 100%);
   --selfdrivingcars-section-gradient: linear-gradient(to bottom, var(--kendo-color-app-surface) 0, var(--kendo-color-surface) 80%, var(--kendo-color-surface) 100%);
+  --app-accent-strong: #C9472D;
+  --app-accent-strong-soft: rgba(198, 73, 45, 0.15);
+  --app-header-background: rgba(14, 27, 36, 0.65);
+  --app-header-background-scrolled: rgba(14, 27, 36, 0.82);
+  --app-header-mobile-drawer-bg: #0B161F;
+  --app-header-backdrop: rgba(0, 0, 0, 0.45);
+  --app-footer-background: rgba(14, 27, 36, 0.95);
+  --app-footer-text-main: rgba(230, 214, 180, 0.8);
+  --app-footer-text-muted: rgba(230, 214, 180, 0.7);
+  --app-footer-nav-title: rgba(230, 214, 180, 0.4);
+  --app-footer-link: rgba(230, 214, 180, 0.8);
+  --app-footer-social: rgba(230, 214, 180, 0.6);
+  --app-footer-bottom: rgba(230, 214, 180, 0.4);
+  --app-footer-divider: rgba(230, 214, 180, 0.1);
+  --app-footer-logo-background: transparent;
+  --car-personalities-subtitle-color: rgba(230, 214, 180, 0.8);
+  --car-personalities-subtitle-bg: transparent;
+  --car-personalities-logo-filter: invert(85%) sepia(10%) saturate(120%) hue-rotate(350deg) brightness(100%);
+  --stats-subtitle-color: rgba(230, 214, 180, 0.8);
+  --stats-text-color: rgba(230, 214, 180, 0.9);
+  --stats-metric-label-color: rgba(230, 214, 180, 0.8);
+  --stats-timeline-line: rgba(230, 214, 180, 0.2);
+  --stats-timeline-tick: rgba(230, 214, 180, 0.3);
+  --stats-timeline-label: rgba(230, 214, 180, 0.6);
+  --stats-donut-background: rgba(230, 214, 180, 0.2);
+  --stats-donut-a: #C9472D;
+  --stats-donut-b: #2F7ECF;
+  --stats-donut-c: #4C6984;
+  --stats-donut-d: #7C93A8;
+  --stats-donut-e: #A9B9C8;
+  --journal-title-color: #E6D6B4;
+  --journal-label-color: var(--kendo-color-primary);
+  --journal-card-title-color: #E6D6B4;
+  --journal-card-excerpt-color: rgba(230, 214, 180, 0.8);
+  --journal-card-category-color: rgba(230, 214, 180, 0.6);
+  --journal-action-color: #E6D6B4;
+  --journal-card-bg: rgba(255, 255, 255, 0.03);
+  --journal-card-border: rgba(255, 255, 255, 0.05);
+  --journal-card-border-hover: rgba(230, 214, 180, 0.2);
+  --journal-viewall-border-color: rgba(230, 214, 180, 0.2);
+  --journal-viewall-bg-hover: rgba(230, 214, 180, 0.1);
+  --advice-title-color: var(--kendo-color-on-app-surface);
+  --advice-text-color: rgba(254, 242, 215, 0.9);
+  --advice-overlay-bg: rgba(14,27,36,0.82);
+  --advice-overlay-border: var(--kendo-color-border);
+  --advice-check-bg: var(--kendo-color-primary);
+  --how-subtitle-color: rgba(230, 214, 180, 0.85);
+  --how-comma-color: rgba(230, 214, 180, 0.6);
+  --how-media-overlay-opacity: 0.95;
+  --how-glow-strong: rgba(201, 71, 45, 0.6);
+  --how-glow-soft: rgba(201, 71, 45, 0.4);
+  --how-media-aspect: 16 / 9;
+  --dating-card-bg: rgba(14,27,36,0.7);
+  --dating-card-border: rgba(230,214,180,0.15);
+  --dating-card-border-hover: rgba(230,214,180,0.35);
+  --dating-lead-color: rgba(230,214,180,0.9);
+  --dating-icon-bg: var(--kendo-color-primary);
+  --dating-icon-shadow: 0 6px 16px rgba(201,71,45,0.35);
+  --dating-intro-bg: rgba(14,27,36,0.9);
+  --dating-intro-border: rgba(230,214,180,0.15);
+  --dating-intro-shadow: 0 16px 48px rgba(0,0,0,0.6);
+  --dating-intro-text: var(--kendo-color-on-app-surface);
+}
+
+html[data-theme="light"] {
+  --kendo-color-app-surface: #F4F5F7;
+  --kendo-color-surface: #FFFFFF;
+  --kendo-color-surface-alt: #E4E8F0;
+  --kendo-color-on-app-surface: #1A252F;
+  --kendo-color-subtle: #6C6C6C;
+  --kendo-color-border: rgba(10, 20, 30, 0.08);
+  --kendo-color-border-alt: rgba(10, 20, 30, 0.16);
+  --app-background-body-grid-color: rgba(26, 37, 47, 0.04);
+  --app-background-body-accent-a: rgba(47, 126, 207, 0.16);
+  --app-background-body-accent-b: rgba(201, 71, 45, 0.08);
+  --app-accent-strong: #2F7ECF;
+  --app-accent-strong-soft: rgba(47, 126, 207, 0.13);
+  --app-header-background: rgba(255, 255, 255, 0.9);
+  --app-header-background-scrolled: rgba(255, 255, 255, 0.98);
+  --app-header-mobile-drawer-bg: #FFFFFF;
+  --app-header-backdrop: rgba(10, 20, 30, 0.2);
+  --app-footer-background: #F4F5F7;
+  --app-footer-text-main: rgba(26, 37, 47, 0.9);
+  --app-footer-text-muted: rgba(26, 37, 47, 0.8);
+  --app-footer-nav-title: rgba(26, 37, 47, 0.65);
+  --app-footer-link: rgba(26, 37, 47, 0.9);
+  --app-footer-social: rgba(26, 37, 47, 0.8);
+  --app-footer-bottom: rgba(26, 37, 47, 0.6);
+  --app-footer-divider: rgba(26, 37, 47, 0.08);
+  --app-footer-logo-background: #0E1B24;
+  --car-personalities-subtitle-color: rgba(26, 37, 47, 0.9);
+  --car-personalities-subtitle-bg: rgba(255, 255, 255, 0.85);
+  --car-personalities-logo-filter: none;
+  --stats-subtitle-color: rgba(26, 37, 47, 0.9);
+  --stats-text-color: rgba(26, 37, 47, 0.82);
+  --stats-metric-label-color: rgba(26, 37, 47, 0.75);
+  --stats-timeline-line: rgba(26, 37, 47, 0.12);
+  --stats-timeline-tick: rgba(26, 37, 47, 0.24);
+  --stats-donut-a: #C9472D;
+  --stats-donut-b: #2F7ECF;
+  --stats-donut-c: #4C6984;
+  --stats-donut-d: #7C93A8;
+  --stats-donut-e: #A9B9C8;
+  --stats-timeline-label: #2F7ECF;
+  --stats-timeline-tick: rgba(26, 37, 47, 0.32);
+  --journal-title-color: rgba(26, 37, 47, 0.95);
+  --journal-label-color: var(--kendo-color-primary);
+  --journal-card-title-color: rgba(26, 37, 47, 0.95);
+  --journal-card-excerpt-color: rgba(26, 37, 47, 0.78);
+  --journal-card-category-color: rgba(26, 37, 47, 0.55);
+  --journal-action-color: rgba(26, 37, 47, 0.95);
+  --journal-card-bg: #FFFFFF;
+  --journal-card-border: var(--kendo-color-border);
+  --journal-card-border-hover: var(--kendo-color-border-alt);
+  --journal-viewall-border-color: var(--kendo-color-border);
+  --journal-viewall-bg-hover: rgba(10, 20, 30, 0.06);
+  --advice-title-color: var(--kendo-color-on-app-surface);
+  --advice-text-color: rgba(26, 37, 47, 0.82);
+  --advice-overlay-bg: rgba(255, 255, 255, 0.92);
+  --advice-overlay-border: var(--kendo-color-border);
+  --advice-check-bg: var(--kendo-color-primary);
+  --how-subtitle-color: rgba(26, 37, 47, 0.75);
+  --how-comma-color: rgba(26, 37, 47, 0.5);
+  --how-media-overlay-opacity: 0.2;
+  --how-glow-strong: rgba(26, 37, 47, 0.22);
+  --how-glow-soft: rgba(26, 37, 47, 0.12);
+  --how-media-aspect: 3 / 2;
+  --dating-card-bg: var(--kendo-color-surface);
+  --dating-card-border: var(--kendo-color-border);
+  --dating-card-border-hover: var(--kendo-color-border-alt);
+  --dating-lead-color: rgba(26, 37, 47, 0.75);
+  --dating-icon-bg: var(--kendo-color-primary-subtle);
+  --dating-icon-shadow: 0 4px 14px rgba(201,71,45,0.18);
+  --dating-intro-bg: rgba(255,255,255,0.92);
+  --dating-intro-border: var(--kendo-color-border);
+  --dating-intro-shadow: 0 12px 32px rgba(0,0,0,0.12);
+  --dating-intro-text: var(--kendo-color-on-app-surface);
+
+  --kendo-color-primary-subtle: #FBE4DD;
+  --kendo-color-primary-subtle-hover: #F6D1C5;
+  --kendo-color-primary-subtle-active: #F0BEAD;
+  --kendo-color-primary: #C9472D;
+  --kendo-color-primary-hover: #B93F28;
+  --kendo-color-primary-active: #A33823;
+  --kendo-color-primary-emphasis: #7C2717;
+  --kendo-color-on-primary: #FFFFFF;
+  --kendo-color-primary-on-surface: #C9472D;
+  --kendo-color-primary-on-subtle: #C9472D;
+
+  --kendo-color-secondary-subtle: #F3F3F3;
+  --kendo-color-secondary-subtle-hover: #E5E5E5;
+  --kendo-color-secondary-subtle-active: #D7D7D7;
+  --kendo-color-secondary: #D0D0D0;
+  --kendo-color-secondary-hover: #C4C4C4;
+  --kendo-color-secondary-active: #B8B8B8;
+  --kendo-color-secondary-emphasis: #8C8D96;
+  --kendo-color-on-secondary: #141414;
+  --kendo-color-secondary-on-surface: #6C6C6C;
+  --kendo-color-secondary-on-subtle: #2E2E2E;
+
+  --kendo-color-tertiary-subtle: #FFFFFF;
+  --kendo-color-tertiary-subtle-hover: #F5F5F5;
+  --kendo-color-tertiary-subtle-active: #EBEBEB;
+  --kendo-color-tertiary: #B8B8B8;
+  --kendo-color-tertiary-hover: #A3A3A3;
+  --kendo-color-tertiary-active: #8F8F8F;
+  --kendo-color-tertiary-emphasis: #EBEBEB;
+  --kendo-color-on-tertiary: #141414;
+  --kendo-color-tertiary-on-surface: #B8B8B8;
+  --kendo-color-tertiary-on-subtle: #3D3D3D;
+
+  --kendo-color-error-subtle: #FBE5EA;
+  --kendo-color-error-subtle-hover: #F6D2DC;
+  --kendo-color-error-subtle-active: #F0BFCE;
+  --kendo-color-error: #711426;
+  --kendo-color-error-hover: #8B1830;
+  --kendo-color-error-active: #A61E3A;
+  --kendo-color-error-emphasis: #711426;
+  --kendo-color-on-error: #140508;
+  --kendo-color-error-on-surface: #711426;
+  --kendo-color-error-on-subtle: #711426;
+
+  --kendo-color-success-subtle: #E3F4EC;
+  --kendo-color-success-subtle-hover: #D2EBDF;
+  --kendo-color-success-subtle-active: #C1E2D3;
+  --kendo-color-success: #0F5748;
+  --kendo-color-success-hover: #14715F;
+  --kendo-color-success-active: #188B74;
+  --kendo-color-success-emphasis: #0F5748;
+  --kendo-color-on-success: #0B1511;
+  --kendo-color-success-on-surface: #0F5748;
+  --kendo-color-success-on-subtle: #0F5748;
+
+  --kendo-color-warning-subtle: #F8F1DB;
+  --kendo-color-warning-subtle-hover: #F2E5BD;
+  --kendo-color-warning-subtle-active: #EBDD9F;
+  --kendo-color-warning: #A4891E;
+  --kendo-color-warning-hover: #BF9F22;
+  --kendo-color-warning-active: #D9B526;
+  --kendo-color-warning-emphasis: #A4891E;
+  --kendo-color-on-warning: #14120A;
+  --kendo-color-warning-on-surface: #A4891E;
+  --kendo-color-warning-on-subtle: #A4891E;
+
+  --kendo-color-info-subtle: #E0EEF6;
+  --kendo-color-info-subtle-hover: #D1E4F1;
+  --kendo-color-info-subtle-active: #C2DAEC;
+  --kendo-color-info: #145271;
+  --kendo-color-info-hover: #19658B;
+  --kendo-color-info-active: #1E77A4;
+  --kendo-color-info-emphasis: #145271;
+  --kendo-color-on-info: #0A1013;
+  --kendo-color-info-on-surface: #145271;
+  --kendo-color-info-on-subtle: #145271;
+  --section-horizontal-gradient: linear-gradient(
+    90deg,
+    var(--kendo-color-app-surface) 0,
+    var(--kendo-color-app-surface) 20%,
+    var(--kendo-color-surface) 50%,
+    var(--kendo-color-app-surface) 80%,
+    var(--kendo-color-app-surface) 100%
+  );
+  --selfdrivingcars-section-gradient: linear-gradient(
+    to bottom,
+    var(--kendo-color-app-surface) 0,
+    var(--kendo-color-surface) 70%,
+    var(--kendo-color-surface-alt) 100%
+  );
 }
 
 .scoreRange {

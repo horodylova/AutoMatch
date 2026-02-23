@@ -29,12 +29,13 @@
   margin: 0 0 24px 0;
   font-size: clamp(16px, 2.6vw, 20px);
   line-height: 1.5;
-  color: rgba(230, 214, 180, 0.8);
+  color: var(--car-personalities-subtitle-color);
   max-width: 900px;
   margin-left: auto;
   margin-right: auto;
   padding: 6px 12px;
   border-radius: 999px;
+  background-color: var(--car-personalities-subtitle-bg);
   text-wrap: balance;
 }
 
@@ -67,7 +68,7 @@
   align-items: center;
   justify-content: center;
   opacity: 0.85;
-  filter: invert(85%) sepia(10%) saturate(120%) hue-rotate(350deg) brightness(100%);
+  filter: var(--car-personalities-logo-filter);
 }
 
 .logoImg {

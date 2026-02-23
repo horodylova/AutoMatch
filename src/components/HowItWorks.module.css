@@ -30,7 +30,7 @@
   margin: 0 0 24px 0;
   font-size: clamp(16px, 2.6vw, 20px);
   line-height: 1.5;
-  color: rgba(230, 214, 180, 0.85);
+  color: var(--how-subtitle-color);
 }
 
 .heroWords {
@@ -45,7 +45,7 @@
 
 .heroWord {
   color: var(--kendo-color-on-app-surface);
-  text-shadow: 0 0 0 rgba(201, 71, 45, 0);
+  text-shadow: 0 0 0 var(--how-glow-soft);
   animation: wordGlow 3s ease-in-out infinite;
 }
 
@@ -53,14 +53,12 @@
 .heroWord:nth-child(3) { animation-delay: 0.2s, 0.2s; }
 .heroWord:nth-child(5) { animation-delay: 0.4s, 0.4s; }
 
-.heroComma {
-  color: rgba(230, 214, 180, 0.6);
-}
+.heroComma { color: var(--how-comma-color); }
 
 @keyframes wordGlow {
-  0% { transform: translateY(0) scale(0.98); opacity: 0.9; text-shadow: 0 0 0 rgba(201, 71, 45, 0); }
-  50% { transform: translateY(-1px) scale(1.06); opacity: 1; text-shadow: 0 0 18px rgba(201, 71, 45, 0.6), 0 0 8px rgba(201, 71, 45, 0.4); }
-  100% { transform: translateY(0) scale(0.98); opacity: 0.95; text-shadow: 0 0 2px rgba(201, 71, 45, 0.3); }
+  0% { transform: translateY(0) scale(0.98); opacity: 0.9; text-shadow: 0 0 0 var(--how-glow-soft); }
+  50% { transform: translateY(-1px) scale(1.06); opacity: 1; text-shadow: 0 0 18px var(--how-glow-strong), 0 0 8px var(--how-glow-soft); }
+  100% { transform: translateY(0) scale(0.98); opacity: 0.95; text-shadow: 0 0 2px var(--how-glow-soft); }
 }
 
 .inner {
@@ -98,7 +96,7 @@
   border-radius: 22px;
   overflow: hidden;
   background-color: var(--kendo-color-app-surface);
-  aspect-ratio: 16 / 9;
+  aspect-ratio: var(--how-media-aspect);
   min-height: 420px;
 }
 
@@ -112,12 +110,25 @@
     linear-gradient(to right, var(--kendo-color-app-surface) 0%, rgba(14, 27, 36, 0) 60%),
     linear-gradient(to top, var(--kendo-color-app-surface) 0%, rgba(14, 27, 36, 0) 50%),
     linear-gradient(to bottom, var(--kendo-color-app-surface) 0%, rgba(14, 27, 36, 0) 50%);
-  opacity: 0.98;
+  opacity: var(--how-media-overlay-opacity);
 }
 
 .mediaImg {
   object-fit: cover;
   object-position: center;
+}
+
+:global(html[data-theme="light"]) .mediaImg {
+  object-position: center;
+}
+:global(html[data-theme="light"]) .mediaFrame {
+  padding: 0;
+  background: none;
+  border: 0;
+  border-radius: 22px;
+}
+:global(html[data-theme="light"]) .media {
+  background-color: transparent;
 }
 
 .sectionTitle {

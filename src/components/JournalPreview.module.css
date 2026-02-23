@@ -1,6 +1,6 @@
 .container {
   padding: 80px 24px;
-  color: #fff;
+  color: var(--kendo-color-on-app-surface);
   background: transparent;
 }
 
@@ -27,7 +27,7 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: var(--kendo-color-primary, #e6d6b4);
+  color: var(--journal-label-color);
   margin-bottom: 16px;
 }
 
@@ -36,10 +36,7 @@
   font-weight: 700;
   line-height: 1.1;
   margin: 0;
-  background: linear-gradient(180deg, #e6d6b4 0%, rgba(230, 214, 180, 0.7) 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--journal-title-color);
 }
 
 .viewAll {
@@ -47,17 +44,17 @@
   align-items: center;
   gap: 8px;
   padding: 12px 24px;
-  border: 1px solid rgba(230, 214, 180, 0.2);
+  border: 1px solid var(--journal-viewall-border-color);
   border-radius: 100px;
-  color: #e6d6b4;
+  color: var(--journal-action-color);
   text-decoration: none;
   font-weight: 600;
   transition: all 0.2s ease;
 }
 
 .viewAll:hover {
-  background: rgba(230, 214, 180, 0.1);
-  border-color: rgba(230, 214, 180, 0.4);
+  background: var(--journal-viewall-bg-hover);
+  border-color: var(--journal-card-border-hover);
 }
 
 .grid {
@@ -69,8 +66,8 @@
 .card {
   display: flex;
   flex-direction: column;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: var(--journal-card-bg);
+  border: 1px solid var(--journal-card-border);
   border-radius: 20px;
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -82,7 +79,7 @@
 .card:hover {
   transform: translateY(-8px);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-  border-color: rgba(230, 214, 180, 0.2);
+  border-color: var(--journal-card-border-hover);
 }
 
 .imageWrapper {
@@ -112,7 +109,7 @@
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--journal-card-category-color);
   margin-bottom: 12px;
 }
 
@@ -121,13 +118,13 @@
   font-weight: 700;
   line-height: 1.4;
   margin-bottom: 12px;
-  color: #e6d6b4;
+  color: var(--journal-card-title-color);
 }
 
 .cardExcerpt {
   font-size: 15px;
   line-height: 1.6;
-  color: rgba(230, 214, 180, 0.8);
+  color: var(--journal-card-excerpt-color);
   margin-bottom: 24px;
   flex: 1;
 }
@@ -135,7 +132,7 @@
 .readMore {
   font-size: 14px;
   font-weight: 600;
-  color: #e6d6b4;
+  color: var(--journal-action-color);
   display: flex;
   align-items: center;
   gap: 6px;

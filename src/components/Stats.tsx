@@ -8,11 +8,11 @@ export default function Stats() {
   const r = 70;
   const c = 2 * Math.PI * r;
   const data: Segment[] = [
-    { label: "Sedans", detail: "", percent: 40, color: "#C9472D", offset: 0 },
-    { label: "SUVs / Crossovers", detail: "", percent: 28, color: "rgba(230, 214, 180, 0.75)", offset: 0 },
-    { label: "Pickup Trucks", detail: "", percent: 12, color: "rgba(230, 214, 180, 0.55)", offset: 0 },
-    { label: "Coupes / Performance", detail: "", percent: 10, color: "rgba(230, 214, 180, 0.35)", offset: 0 },
-    { label: "Hatchbacks / Compacts", detail: "", percent: 10, color: "rgba(230, 214, 180, 0.2)", offset: 0 },
+    { label: "Sedans", detail: "", percent: 40, color: "var(--stats-donut-a)", offset: 0 },
+    { label: "SUVs / Crossovers", detail: "", percent: 28, color: "var(--stats-donut-b)", offset: 0 },
+    { label: "Pickup Trucks", detail: "", percent: 12, color: "var(--stats-donut-c)", offset: 0 },
+    { label: "Coupes / Performance", detail: "", percent: 10, color: "var(--stats-donut-d)", offset: 0 },
+    { label: "Hatchbacks / Compacts", detail: "", percent: 10, color: "var(--stats-donut-e)", offset: 0 },
   ];
   const [hover, setHover] = useState<Segment | null>(null);
   const [pos, setPos] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
@@ -34,7 +34,14 @@ export default function Stats() {
               }}
             >
               <svg width={180} height={180} viewBox="0 0 180 180">
-                <circle cx={90} cy={90} r={r} fill="none" stroke="rgba(230, 214, 180, 0.2)" strokeWidth={22} />
+                <circle
+                  cx={90}
+                  cy={90}
+                  r={r}
+                  fill="none"
+                  strokeWidth={22}
+                  style={{ stroke: "var(--stats-donut-background)" }}
+                />
                 {(() => {
                   let accum = 0;
                   return visible.map((d) => {

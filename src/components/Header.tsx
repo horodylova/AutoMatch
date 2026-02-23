@@ -6,11 +6,13 @@ import Image from "next/image";
 import styles from "./Header.module.css";
 import { RESULTS_UPDATED_EVENT, RESULTS_STORE_KEY } from "../utils/storage";
 import { event } from "@/lib/pixel";
+import ThemeToggle from "./ThemeToggle";
 
 export default function Header() {
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
   const [scrolled, setScrolled] = useState<boolean>(false);
   const [hasSavedResults, setHasSavedResults] = useState<boolean>(false);
+  const [logoSrc, setLogoSrc] = useState<string>("/logos/logo.svg");
 
   useEffect(() => {
     const handleScroll = () => {
@@ -35,6 +37,20 @@ export default function Header() {
       setHasSavedResults(false);
     };
     checkSavedResults();
+
+    const updateLogo = () => {
+      const theme = document.documentElement.getAttribute("data-theme");
+      if (theme === "light") {
+        setLogoSrc("/logo-light.png");
+      } else {
+        setLogoSrc("/logos/logo.svg");
+      }
+    };
+
+    updateLogo();
+
+    const observer = new MutationObserver(updateLogo);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
     
     window.addEventListener(RESULTS_UPDATED_EVENT, checkSavedResults);
     window.addEventListener("storage", checkSavedResults);
@@ -43,6 +59,7 @@ export default function Header() {
         window.removeEventListener("scroll", handleScroll);
         window.removeEventListener(RESULTS_UPDATED_EVENT, checkSavedResults);
         window.removeEventListener("storage", checkSavedResults);
+        observer.disconnect();
     };
   }, []);
 
@@ -63,7 +80,7 @@ export default function Header() {
           <Link href="/" className={styles.logoContainer}>
             <div className={styles.logoBox}>
               <Image
-                src="/logos/logo.svg"
+                src={logoSrc}
                 alt="CarCupid logo"
                 fill
                 priority
@@ -104,6 +121,9 @@ export default function Header() {
         </div>
 
         <div className={styles.headerRight}>
+          <div className={styles.themeToggleWrapper}>
+            <ThemeToggle />
+          </div>
           {hasSavedResults && (
             <Link href="/results" className={styles.resultsButton}>Your Results</Link>
           )}
@@ -132,6 +152,9 @@ export default function Header() {
           />
           <div className={styles.mobileDrawer}>
             <div className={styles.drawerHeader}>
+              <div className={styles.drawerHeaderLeft}>
+                <ThemeToggle />
+              </div>
               <button
                 className={styles.closeButton}
                 onClick={() => setIsDrawerOpen(false)}

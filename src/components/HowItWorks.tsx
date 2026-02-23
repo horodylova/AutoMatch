@@ -1,7 +1,23 @@
+'use client';
 import styles from "./HowItWorks.module.css";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 export default function HowItWorks() {
+  const [src, setSrc] = useState<string>("/ContactFormImage.png");
+
+  useEffect(() => {
+    const el = document.documentElement;
+    const apply = () => {
+      const t = el.getAttribute("data-theme");
+      setSrc(t === "light" ? "/car-light.jpg" : "/ContactFormImage.png");
+    };
+    apply();
+    const mo = new MutationObserver(apply);
+    mo.observe(el, { attributes: true, attributeFilter: ["data-theme"] });
+    return () => mo.disconnect();
+  }, []);
+
   return (
     <section id="how-it-works" className={styles.section}>
       <div className={styles.inner}>
@@ -27,7 +43,7 @@ export default function HowItWorks() {
           </div>
           <div className={styles.mediaFrame}>
             <div className={styles.media}>
-              <Image src="/ContactFormImage.png" alt="Car" fill className={styles.mediaImg} />
+              <Image src={src} alt="Car" fill className={styles.mediaImg} sizes="(max-width: 992px) 90vw, 720px" priority />
             </div>
           </div>
       </div>
