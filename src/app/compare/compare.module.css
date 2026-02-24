@@ -467,3 +467,141 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+/* Light Theme Overrides */
+:global(html[data-theme="light"]) .container {
+  color: var(--kendo-color-on-app-surface);
+}
+
+:global(html[data-theme="light"]) .sectionTitle {
+  color: var(--kendo-color-on-app-surface);
+}
+
+:global(html[data-theme="light"]) .sectionTitle::after {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+:global(html[data-theme="light"]) .title {
+  background: none;
+  -webkit-text-fill-color: initial;
+  color: #C9472D;
+}
+
+:global(html[data-theme="light"]) .subtitle {
+  color: var(--kendo-color-subtle);
+}
+
+:global(html[data-theme="light"]) .selectionCard {
+  background: #fff;
+  border-color: rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+:global(html[data-theme="light"]) .selectionCard:hover {
+  border-color: #C9472D;
+  background: rgba(201, 71, 45, 0.02);
+}
+
+:global(html[data-theme="light"]) .cardTitle {
+  color: #1A252F;
+  font-weight: 700;
+}
+
+:global(html[data-theme="light"]) .searchField {
+  background-color: #fff;
+  border-color: rgba(0, 0, 0, 0.15);
+  color: var(--kendo-color-on-app-surface);
+}
+
+:global(html[data-theme="light"]) .searchField::placeholder {
+  color: rgba(0, 0, 0, 0.65);
+}
+
+:global(html[data-theme="light"]) .searchField:focus {
+  border-color: #C9472D;
+  box-shadow: 0 0 0 2px rgba(201, 71, 45, 0.1);
+}
+
+:global(html[data-theme="light"]) .suggestList {
+  background: #fff;
+  border-color: rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+}
+
+:global(html[data-theme="light"]) .suggestItem {
+  color: var(--kendo-color-on-app-surface);
+}
+
+:global(html[data-theme="light"]) .suggestItem:hover {
+  background: rgba(201, 71, 45, 0.05);
+  border-color: rgba(201, 71, 45, 0.1);
+}
+
+:global(html[data-theme="light"]) .carTrim {
+  color: var(--kendo-color-subtle);
+}
+
+:global(html[data-theme="light"]) .changeButton {
+  border-color: rgba(0, 0, 0, 0.15);
+  color: var(--kendo-color-subtle);
+}
+
+:global(html[data-theme="light"]) .changeButton:hover {
+  border-color: #C9472D;
+  color: #C9472D;
+}
+
+:global(html[data-theme="light"]) .compareButton {
+  background: #C9472D;
+  box-shadow: 0 8px 24px rgba(201, 71, 45, 0.25);
+}
+
+:global(html[data-theme="light"]) .compareButton:hover {
+  background: #b53c24;
+  box-shadow: 0 12px 32px rgba(201, 71, 45, 0.35);
+}
+
+:global(html[data-theme="light"]) .stickyHeader {
+  background: rgba(255, 255, 255, 0.9);
+  border-bottom-color: #C9472D;
+}
+
+:global(html[data-theme="light"]) .stickyCol {
+  color: var(--kendo-color-on-app-surface);
+  text-shadow: none;
+}
+
+:global(html[data-theme="light"]) .stickyTrim {
+  color: var(--kendo-color-subtle);
+}
+
+:global(html[data-theme="light"]) .row {
+  border-bottom-color: rgba(0, 0, 0, 0.06);
+}
+
+:global(html[data-theme="light"]) .rowLabel {
+  color: var(--kendo-color-subtle);
+}
+
+:global(html[data-theme="light"]) .rowValue.highlight {
+  color: #C9472D;
+}
+
+:global(html[data-theme="light"]) .vsBadge {
+  background: #fff;
+  border-color: rgba(0, 0, 0, 0.1);
+  color: #2F7ECF;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+:global(html[data-theme="light"]) .loadingImage {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+:global(html[data-theme="light"]) .loadingIcon {
+  color: rgba(0, 0, 0, 0.1);
+}
+
+:global(html[data-theme="light"]) .loadingLine {
+  background: rgba(0, 0, 0, 0.03);
+}

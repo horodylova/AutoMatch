@@ -410,3 +410,113 @@
   margin-bottom: 0.5rem;
   font-size: 1.1rem;
 }
+
+/* Light Theme Overrides */
+:global(html[data-theme="light"]) .container {
+  color: #1A252F;
+}
+
+:global(html[data-theme="light"]) .title {
+  background: none;
+  -webkit-text-fill-color: initial;
+  color: #1A252F;
+}
+
+:global(html[data-theme="light"]) .subtitle {
+  color: rgba(26, 37, 47, 0.7);
+}
+
+:global(html[data-theme="light"]) .bodyText,
+:global(html[data-theme="light"]) .stepDescription,
+:global(html[data-theme="light"]) .featureItem {
+  color: rgba(26, 37, 47, 0.8);
+}
+
+:global(html[data-theme="light"]) .howItWorksTitle,
+:global(html[data-theme="light"]) .formTitle {
+  color: #1A252F;
+}
+
+:global(html[data-theme="light"]) .stepTitle {
+  color: #2F7ECF;
+}
+
+:global(html[data-theme="light"]) .trustSignal {
+  color: rgba(26, 37, 47, 0.7);
+  border-left-color: #2F7ECF;
+}
+
+:global(html[data-theme="light"]) .featureIcon {
+  color: #2F7ECF;
+}
+
+:global(html[data-theme="light"]) .formCard {
+  background: #FFFFFF;
+  border-color: rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+:global(html[data-theme="light"]) .label {
+  color: rgba(26, 37, 47, 0.8);
+}
+
+:global(html[data-theme="light"]) .input,
+:global(html[data-theme="light"]) .textarea,
+:global(html[data-theme="light"]) .select {
+  background: #FFFFFF;
+  border-color: rgba(0, 0, 0, 0.15);
+  color: #1A252F;
+}
+
+:global(html[data-theme="light"]) .input::placeholder,
+:global(html[data-theme="light"]) .textarea::placeholder {
+  color: rgba(26, 37, 47, 0.4);
+}
+
+:global(html[data-theme="light"]) .input:focus,
+:global(html[data-theme="light"]) .textarea:focus,
+:global(html[data-theme="light"]) .select:focus {
+  border-color: #C9472D;
+  box-shadow: 0 0 0 3px rgba(201, 71, 45, 0.1);
+}
+
+/* Fix select arrow for light theme - need a dark SVG or filter */
+:global(html[data-theme="light"]) .select {
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231A252F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1em;
+}
+
+:global(html[data-theme="light"]) .select option {
+  background-color: #FFFFFF;
+  color: #1A252F;
+}
+
+/* Autofill fixes for light theme */
+:global(html[data-theme="light"]) .input:-webkit-autofill,
+:global(html[data-theme="light"]) .input:-webkit-autofill:hover, 
+:global(html[data-theme="light"]) .input:-webkit-autofill:focus, 
+:global(html[data-theme="light"]) .textarea:-webkit-autofill,
+:global(html[data-theme="light"]) .textarea:-webkit-autofill:hover,
+:global(html[data-theme="light"]) .textarea:-webkit-autofill:focus,
+:global(html[data-theme="light"]) .select:-webkit-autofill,
+:global(html[data-theme="light"]) .select:-webkit-autofill:hover,
+:global(html[data-theme="light"]) .select:-webkit-autofill:focus {
+  -webkit-text-fill-color: #1A252F;
+  -webkit-box-shadow: 0 0 0px 1000px #FFFFFF inset;
+}
+
+:global(html[data-theme="light"]) .pricingTeaser {
+  background: rgba(47, 126, 207, 0.05);
+  border-color: rgba(47, 126, 207, 0.1);
+  color: #1A252F;
+}
+
+:global(html[data-theme="light"]) .certaintyCue p {
+  color: rgba(26, 37, 47, 0.6);
+}
+
+:global(html[data-theme="light"]) .certaintyCue strong {
+  color: #C9472D;
+}

@@ -53,3 +53,26 @@
   width: 20px;
   height: 20px;
 }
+
+/* Light Theme Overrides */
+:global(html[data-theme="light"]) .label {
+  color: rgba(26, 37, 47, 0.6);
+}
+
+:global(html[data-theme="light"]) .button {
+  background: #FFFFFF;
+  border-color: rgba(0, 0, 0, 0.15);
+  color: #1A252F;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+:global(html[data-theme="light"]) .button:hover {
+  border-color: #C9472D;
+  color: #C9472D;
+  background: #FFFFFF;
+  box-shadow: 0 4px 12px rgba(201, 71, 45, 0.15);
+}
+
+:global(html[data-theme="light"]) .logo {
+  /* No filter needed for colored raster logo */
+}

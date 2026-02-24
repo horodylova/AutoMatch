@@ -28,9 +28,6 @@ export default function ClientLayout({
 
   return (
     <body style={{ 
-      backgroundColor: "var(--kendo-color-app-surface)", 
-      color: "var(--kendo-color-on-app-surface)", 
-      fontFamily: "var(--kendo-font-family)", 
       position: "fixed",
       inset: 0,
       overflow: "hidden"

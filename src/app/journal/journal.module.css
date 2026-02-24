@@ -1,5 +1,5 @@
 .page {
-  color: #fff;
+  color: var(--kendo-color-on-app-surface);
   padding: 120px 24px 120px;
   width: 100%;
 }
@@ -23,8 +23,8 @@
   display: grid;
   grid-template-columns: 1.2fr 0.8fr;
   gap: 40px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(230, 214, 180, 0.15);
+  background: var(--journal-card-bg, rgba(255, 255, 255, 0.03));
+  border: 1px solid var(--journal-card-border, rgba(230, 214, 180, 0.15));
   border-radius: 24px;
   overflow: hidden;
   margin-bottom: 24px;
@@ -36,8 +36,8 @@
 
 .featured:hover {
   transform: translateY(-4px);
-  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.4);
-  border-color: rgba(230, 214, 180, 0.3);
+  box-shadow: var(--journal-card-hover-shadow, 0 24px 48px rgba(0, 0, 0, 0.4));
+  border-color: var(--journal-card-border-hover, rgba(230, 214, 180, 0.3));
 }
 
 .featuredImageWrapper {
@@ -71,10 +71,10 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1.5px;
-  color: var(--kendo-color-primary, #e6d6b4);
+  color: var(--journal-label-color, #e6d6b4);
   margin-bottom: 16px;
   padding: 6px 12px;
-  background: rgba(230, 214, 180, 0.1);
+  background: var(--journal-viewall-bg-hover, rgba(230, 214, 180, 0.1));
   border-radius: 100px;
   width: fit-content;
 }
@@ -84,21 +84,21 @@
   font-weight: 800;
   line-height: 1.2;
   margin-bottom: 20px;
-  color: #e6d6b4;
+  color: var(--journal-title-color, #e6d6b4);
 }
 
 .featuredExcerpt {
   font-size: 18px;
   line-height: 1.7;
-  color: rgba(230, 214, 180, 0.85);
+  color: var(--journal-card-excerpt-color, rgba(230, 214, 180, 0.85));
   margin-bottom: 32px;
 }
 
 .card {
   display: flex;
   flex-direction: column;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: var(--journal-card-bg, rgba(255, 255, 255, 0.03));
+  border: 1px solid var(--journal-card-border, rgba(255, 255, 255, 0.05));
   border-radius: 20px;
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -109,8 +109,8 @@
 
 .card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-  border-color: rgba(230, 214, 180, 0.2);
+  box-shadow: var(--journal-card-hover-shadow, 0 20px 40px rgba(0, 0, 0, 0.4));
+  border-color: var(--journal-card-border-hover, rgba(230, 214, 180, 0.2));
 }
 
 .imageWrapper {
@@ -140,7 +140,7 @@
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  color: rgba(230, 214, 180, 0.6);
+  color: var(--journal-card-category-color, rgba(230, 214, 180, 0.6));
   margin-bottom: 12px;
 }
 
@@ -149,13 +149,13 @@
   font-weight: 700;
   line-height: 1.4;
   margin-bottom: 12px;
-  color: #e6d6b4;
+  color: var(--journal-card-title-color, #e6d6b4);
 }
 
 .cardExcerpt {
   font-size: 15px;
   line-height: 1.6;
-  color: rgba(230, 214, 180, 0.8);
+  color: var(--journal-card-excerpt-color, rgba(230, 214, 180, 0.8));
   margin-bottom: 24px;
   flex: 1;
 }
@@ -163,7 +163,7 @@
 .readMore {
   font-size: 14px;
   font-weight: 600;
-  color: #e6d6b4;
+  color: var(--journal-action-color, #e6d6b4);
   display: flex;
   align-items: center;
   gap: 6px;
@@ -250,4 +250,63 @@
     overflow-wrap: break-word;
     word-break: break-word;
   }
+}
+
+/* Light Theme Overrides */
+:global(html[data-theme="light"]) .page {
+  background-color: transparent;
+  color: #1A252F;
+}
+
+:global(html[data-theme="light"]) .featured {
+  background: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+}
+
+:global(html[data-theme="light"]) .featured:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(201, 71, 45, 0.15);
+  border-color: rgba(201, 71, 45, 0.3);
+}
+
+:global(html[data-theme="light"]) .featuredLabel {
+  color: #C9472D;
+  background: rgba(201, 71, 45, 0.08);
+}
+
+:global(html[data-theme="light"]) .featuredTitle {
+  color: #1A252F;
+}
+
+:global(html[data-theme="light"]) .featuredExcerpt {
+  color: rgba(26, 37, 47, 0.75);
+}
+
+:global(html[data-theme="light"]) .card {
+  background: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+:global(html[data-theme="light"]) .card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 24px rgba(47, 126, 207, 0.15);
+  border-color: rgba(47, 126, 207, 0.3);
+}
+
+:global(html[data-theme="light"]) .category {
+  color: #2F7ECF;
+}
+
+:global(html[data-theme="light"]) .cardTitle {
+  color: #1A252F;
+}
+
+:global(html[data-theme="light"]) .cardExcerpt {
+  color: rgba(26, 37, 47, 0.7);
+}
+
+:global(html[data-theme="light"]) .readMore {
+  color: #C9472D;
 }

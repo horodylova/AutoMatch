@@ -69,7 +69,7 @@ export default function ShareButtons({ url, title }: ShareButtonsProps) {
     <div className={styles.container}>
       <div className={styles.logoWrapper}>
         <Image
-          src="/logos/logo.svg"
+          src="/cropped logo.png"
           alt="CarCupid"
           fill
           className={styles.logo}

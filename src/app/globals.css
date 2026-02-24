@@ -309,7 +309,7 @@ html[data-theme="light"] {
   --kendo-color-subtle: #6C6C6C;
   --kendo-color-border: rgba(10, 20, 30, 0.08);
   --kendo-color-border-alt: rgba(10, 20, 30, 0.16);
-  --app-background-body-grid-color: rgba(26, 37, 47, 0.04);
+  --app-background-body-grid-color: rgba(26, 37, 47, 0.08);
   --app-background-body-accent-a: rgba(47, 126, 207, 0.16);
   --app-background-body-accent-b: rgba(201, 71, 45, 0.08);
   --app-accent-strong: #2F7ECF;
