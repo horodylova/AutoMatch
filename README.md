@@ -24,3 +24,6 @@ Next.js application that scores and filters vehicles from a Google Sheets datase
 
 ## Caching
 - Client uses `sessionStorage` to cache sheet data and avoid duplicate fetches across pages.
+
+## Recent Updates
+- Improved light theme support for car listings and dealer search modal.
