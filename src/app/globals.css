@@ -294,6 +294,11 @@ body {
   --dating-intro-border: rgba(230,214,180,0.15);
   --dating-intro-shadow: 0 16px 48px rgba(0,0,0,0.6);
   --dating-intro-text: var(--kendo-color-on-app-surface);
+  --advice-check-shadow: 0 6px 20px rgba(201,71,45,0.35);
+  --advice-img-filter: linear-gradient(0deg, rgba(0,0,0,0.10), rgba(0,0,0,0.10));
+  --advice-overlay-shadow: 0 16px 48px rgba(0,0,0,0.45);
+  --journal-card-hover-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  --stats-marker-shadow: 0 0 0 3px rgba(201, 71, 45, 0.25);
 }
 
 html[data-theme="light"] {
@@ -321,7 +326,9 @@ html[data-theme="light"] {
   --app-footer-social: rgba(26, 37, 47, 0.8);
   --app-footer-bottom: rgba(26, 37, 47, 0.6);
   --app-footer-divider: rgba(26, 37, 47, 0.08);
-  --app-footer-logo-background: #0E1B24;
+  --app-footer-logo-background: transparent;
+  --advice-img-filter: none;
+  --advice-overlay-shadow: 0 16px 40px rgba(47, 126, 207, 0.15);
   --car-personalities-subtitle-color: rgba(26, 37, 47, 0.9);
   --car-personalities-subtitle-bg: rgba(255, 255, 255, 0.85);
   --car-personalities-logo-filter: none;
@@ -356,19 +363,22 @@ html[data-theme="light"] {
   --how-subtitle-color: rgba(26, 37, 47, 0.75);
   --how-comma-color: rgba(26, 37, 47, 0.5);
   --how-media-overlay-opacity: 0.2;
-  --how-glow-strong: rgba(26, 37, 47, 0.22);
-  --how-glow-soft: rgba(26, 37, 47, 0.12);
+  --how-glow-strong: rgba(47, 126, 207, 0.25);
+  --how-glow-soft: rgba(47, 126, 207, 0.08);
   --how-media-aspect: 3 / 2;
   --dating-card-bg: var(--kendo-color-surface);
   --dating-card-border: var(--kendo-color-border);
   --dating-card-border-hover: var(--kendo-color-border-alt);
   --dating-lead-color: rgba(26, 37, 47, 0.75);
-  --dating-icon-bg: var(--kendo-color-primary-subtle);
-  --dating-icon-shadow: 0 4px 14px rgba(201,71,45,0.18);
+  --dating-icon-bg: var(--app-accent-strong-soft);
+  --dating-icon-shadow: 0 4px 14px rgba(47, 126, 207, 0.15);
   --dating-intro-bg: rgba(255,255,255,0.92);
   --dating-intro-border: var(--kendo-color-border);
-  --dating-intro-shadow: 0 12px 32px rgba(0,0,0,0.12);
+  --dating-intro-shadow: 0 12px 32px rgba(47, 126, 207, 0.15);
   --dating-intro-text: var(--kendo-color-on-app-surface);
+  --advice-check-shadow: 0 6px 20px rgba(47, 126, 207, 0.25);
+  --journal-card-hover-shadow: 0 20px 40px rgba(47, 126, 207, 0.15);
+  --stats-marker-shadow: 0 0 0 3px rgba(47, 126, 207, 0.25);
 
   --kendo-color-primary-subtle: #FBE4DD;
   --kendo-color-primary-subtle-hover: #F6D1C5;

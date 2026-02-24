@@ -33,8 +33,8 @@
 
 :global(html[data-theme="light"]) .featureDesc { color: var(--kendo-color-on-app-surface); opacity: 0.85; }
 :global(html[data-theme="light"]) .featureBox::before { display: none; }
-:global(html[data-theme="light"]) .featureBox { box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
-:global(html[data-theme="light"]) .featureBox:hover { box-shadow: 0 10px 24px rgba(0,0,0,0.12); }
+:global(html[data-theme="light"]) .featureBox { box-shadow: 0 8px 24px rgba(47, 126, 207, 0.12); border-color: rgba(47, 126, 207, 0.15); }
+:global(html[data-theme="light"]) .featureBox:hover { box-shadow: 0 12px 32px rgba(47, 126, 207, 0.2); transform: translateY(-4px); }
 
 :global(html[data-theme="light"]) .introCta:hover {
   box-shadow: 0 8px 20px rgba(47, 126, 207, 0.28);

@@ -199,11 +199,129 @@
 
 .modeSub {
   font-size: 0.9rem;
-  text-transform: uppercase;
   color: var(--kendo-color-subtle);
-  margin-top: 1rem;
-  margin-bottom: 0.5rem;
-  display: block;
+  line-height: 1.5;
+}
+
+.emphasisText {
+  font-weight: 600;
+  font-size: 1.3rem;
+  color: #fff;
+  margin-bottom: 1.5rem;
+}
+
+/* Light Theme Overrides */
+:global(html[data-theme="light"]) .container {
+  color: var(--kendo-color-on-app-surface);
+}
+
+:global(html[data-theme="light"]) .articleHeader {
+  border-bottom-color: rgba(0,0,0,0.08);
+}
+
+:global(html[data-theme="light"]) .title {
+  background: none;
+  -webkit-text-fill-color: initial;
+  color: var(--kendo-color-on-app-surface);
+}
+
+:global(html[data-theme="light"]) .subtitle {
+  color: rgba(26, 37, 47, 0.75);
+}
+
+:global(html[data-theme="light"]) .text {
+  color: rgba(26, 37, 47, 0.85);
+}
+
+:global(html[data-theme="light"]) .emphasisText {
+  color: #2F7ECF;
+}
+
+:global(html[data-theme="light"]) .highlightBox {
+  background: rgba(201, 71, 45, 0.05);
+  border-left-color: #C9472D;
+  color: var(--kendo-color-on-app-surface);
+}
+
+:global(html[data-theme="light"]) .quote {
+  color: var(--kendo-color-on-app-surface);
+  font-style: normal;
+  opacity: 0.95;
+}
+
+:global(html[data-theme="light"]) .inlineLink {
+  color: #2F7ECF;
+  border-bottom-color: rgba(47, 126, 207, 0.3);
+}
+
+:global(html[data-theme="light"]) .inlineLink:hover {
+  color: #1a5bb0;
+  border-bottom-color: #1a5bb0;
+  background: rgba(47, 126, 207, 0.05);
+}
+
+:global(html[data-theme="light"]) .listItem {
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.08);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  color: var(--kendo-color-on-app-surface);
+}
+
+:global(html[data-theme="light"]) .listItem:hover {
+  background: #fff;
+  border-color: rgba(47, 126, 207, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(47, 126, 207, 0.12);
+}
+
+:global(html[data-theme="light"]) .bulletItem {
+  color: rgba(26, 37, 47, 0.85);
+}
+
+:global(html[data-theme="light"]) .bulletItem::before {
+  color: #C9472D;
+}
+
+:global(html[data-theme="light"]) .modeCard {
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.08);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+}
+
+:global(html[data-theme="light"]) .modeTitle {
+  color: #2F7ECF;
+  border-bottom-color: rgba(47, 126, 207, 0.15);
+}
+
+:global(html[data-theme="light"]) .stepNumber {
+  color: #C9472D;
+}
+
+:global(html[data-theme="light"]) .sectionTitle {
+  color: var(--kendo-color-on-app-surface);
+}
+
+:global(html[data-theme="light"]) .imagePlaceholder {
+  background: rgba(0,0,0,0.02);
+  border: 1px dashed rgba(0,0,0,0.1);
+  color: rgba(0,0,0,0.4);
+}
+
+:global(html[data-theme="light"]) .conclusion {
+  background: rgba(47, 126, 207, 0.08);
+  border-color: rgba(47, 126, 207, 0.2);
+}
+
+:global(html[data-theme="light"]) .conclusionTitle {
+  color: var(--kendo-color-on-app-surface);
+}
+
+:global(html[data-theme="light"]) .conclusionText {
+  color: rgba(26, 37, 47, 0.85);
+}
+
+:global(html[data-theme="light"]) .finalNote {
+  color: #2F7ECF;
 }
 
 .conclusion {

@@ -18,13 +18,13 @@ export default function Pagination({ page, pageSize, total, onChange }: Props) {
   const nums = Array.from({ length: end - start + 1 }, (_, i) => start + i);
   return (
     <div className={styles.pager}>
-      <Button onClick={prev} disabled={page <= 1}>Prev</Button>
+      <Button onClick={prev} disabled={page <= 1} className={styles.pagerBtn}>Prev</Button>
       <div className={styles.pagerNums}>
         {nums.map(n => (
           <button key={n} className={n === page ? styles.pagerBtnActive : styles.pagerBtn} onClick={() => onChange(n)}>{n}</button>
         ))}
       </div>
-      <Button onClick={next} disabled={page >= pages}>Next</Button>
+      <Button onClick={next} disabled={page >= pages} className={styles.pagerBtn}>Next</Button>
     </div>
   );
 }

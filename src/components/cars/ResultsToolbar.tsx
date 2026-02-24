@@ -14,10 +14,10 @@ export default function ResultsToolbar({ count = 0, view, sort, onViewChange, on
       <div className={styles.toolbarRight}>
         <div className={styles.viewToggle}>
           <button className={view === "list" ? styles.iconBtnActive : styles.iconBtn} onClick={() => onViewChange("list")} aria-label="List view">
-            <SvgIcon icon={thumbnailsLeftIcon} style={{ color: view === "list" ? "var(--kendo-color-on-primary)" : "rgba(230,214,180,0.85)" }} />
+            <SvgIcon icon={thumbnailsLeftIcon} />
           </button>
           <button className={view === "grid" ? styles.iconBtnActive : styles.iconBtn} onClick={() => onViewChange("grid")} aria-label="Grid view">
-            <SvgIcon icon={gridLayoutIcon} style={{ color: view === "grid" ? "var(--kendo-color-on-primary)" : "rgba(230,214,180,0.85)" }} />
+            <SvgIcon icon={gridLayoutIcon} />
           </button>
         </div>
         <div className={styles.sortRow}>

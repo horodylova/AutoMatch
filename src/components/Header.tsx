@@ -41,7 +41,7 @@ export default function Header() {
     const updateLogo = () => {
       const theme = document.documentElement.getAttribute("data-theme");
       if (theme === "light") {
-        setLogoSrc("/logo-light.png");
+        setLogoSrc("/cropped logo.png");
       } else {
         setLogoSrc("/logos/logo.svg");
       }

@@ -20,6 +20,7 @@
 }
 .loaderWrap { display: grid; justify-items: center; align-items: center; gap: 10px; padding: 32px 0; min-height: 260px; flex: 1; }
 .spinner { width: 34px; height: 34px; border-radius: 50%; border: 3px solid rgba(230,214,180,0.25); border-top-color: var(--kendo-color-primary); animation: spin 0.8s linear infinite; }
+.spinnerLarge { width: 48px; height: 48px; border-radius: 50%; border: 4px solid rgba(230,214,180,0.25); border-top-color: var(--kendo-color-primary); animation: spin 0.8s linear infinite; }
 .loaderLabel { display: none; }
 @keyframes spin { to { transform: rotate(360deg); } }
 .toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
@@ -289,7 +290,7 @@
 .overlay {
   position: fixed;
   inset: 0;
-  background: rgba(14, 27, 36, 0.85);
+  background: rgba(14, 27, 36, 0.6);
   backdrop-filter: blur(8px);
   z-index: 9999;
   display: flex;
@@ -300,30 +301,33 @@
 }
 
 .modal {
-  width: 100%;
-  max-width: 800px;
-  height: 80vh;
-  background: #0E1B24;
-  border: 1px solid rgba(230, 214, 180, 0.2);
-  border-radius: 24px;
-  padding: 32px;
   position: relative;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  background: #0E1B24;
+  border: 1px solid rgba(230,214,180,0.15);
+  border-radius: 20px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+  padding: 32px;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow-y: auto;
 }
 
 .closeBtn {
   position: absolute;
-  top: 20px;
-  right: 20px;
-  width: 32px;
-  height: 32px;
+  top: 16px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(230,214,180,0.05);
   border: none;
-  color: rgba(230, 214, 180, 0.6);
+  color: rgba(230,214,180,0.6);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -333,41 +337,371 @@
 }
 
 .closeBtn:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(230,214,180,0.15);
   color: #E6D6B4;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Light Theme Overrides */
+:global(html[data-theme="light"]) .overlay {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+:global(html[data-theme="light"]) .page {
+  background: var(--kendo-color-app-surface);
+  color: var(--kendo-color-on-app-surface);
+}
+
+:global(html[data-theme="light"]) .panel {
+  background: #fff;
+  border-color: rgba(0,0,0,0.08);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+}
+
+:global(html[data-theme="light"]) .panelHead {
+  background: rgba(0,0,0,0.03);
+  border-bottom-color: rgba(0,0,0,0.08);
+  color: var(--kendo-color-on-app-surface);
+}
+
+:global(html[data-theme="light"]) .section {
+  background: #fff;
+  border-color: rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+}
+
+:global(html[data-theme="light"]) .section:hover {
+  border-color: rgba(201, 71, 45, 0.4);
+  box-shadow: 0 6px 16px rgba(201, 71, 45, 0.12);
+}
+
+:global(html[data-theme="light"]) .sectionAccent {
+  background: #C9472D;
+  box-shadow: none;
+}
+
+:global(html[data-theme="light"]) .sectionActive {
+  background: rgba(201, 71, 45, 0.05);
+  border-color: #C9472D;
+  box-shadow: 0 4px 12px rgba(201, 71, 45, 0.15);
+}
+
+:global(html[data-theme="light"]) .sectionActive .sectionAccent {
+  background: #C9472D;
+  box-shadow: none;
+}
+
+:global(html[data-theme="light"]) .sectionTitle {
+  color: var(--kendo-color-on-app-surface);
+}
+
+:global(html[data-theme="light"]) .searchField {
+  background: #fff;
+  border-color: rgba(0,0,0,0.15);
+  color: var(--kendo-color-on-app-surface);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+}
+
+:global(html[data-theme="light"]) .searchField::placeholder {
+  color: rgba(0,0,0,0.4);
+}
+
+:global(html[data-theme="light"]) .searchField:focus {
+  border-color: #C9472D;
+  box-shadow: 0 0 0 2px rgba(201, 71, 45, 0.2);
+}
+
+:global(html[data-theme="light"]) .searchIcon {
+  color: #C9472D;
+  filter: none;
+}
+
+:global(html[data-theme="light"]) .pill {
+  background: #fff;
+  border-color: rgba(0,0,0,0.15);
+  color: var(--kendo-color-on-app-surface);
+}
+
+:global(html[data-theme="light"]) .pillActive {
+  background: #C9472D;
+  color: #fff;
+  border-color: #C9472D;
+}
+
+:global(html[data-theme="light"]) .card {
+  background: #fff;
+  border-color: rgba(0,0,0,0.08);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+:global(html[data-theme="light"]) .filtersToggleBtn {
+  background: #fff;
+  color: var(--kendo-color-on-app-surface);
+  border-color: rgba(0,0,0,0.15);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+:global(html[data-theme="light"]) .actionRow {
+  background: #fff;
+  border-top-color: rgba(0,0,0,0.08);
+}
+
+:global(html[data-theme="light"]) .badge {
+  background: rgba(201, 71, 45, 0.1);
+  color: #C9472D;
+  border-color: rgba(201, 71, 45, 0.2);
+}
+
+:global(html[data-theme="light"]) .iconBtnActive {
+  background: #C9472D;
+  border-color: #C9472D;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(201, 71, 45, 0.25);
+}
+
+:global(html[data-theme="light"]) .pagerBtnActive {
+  background: #C9472D;
+  border-color: #C9472D;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(201, 71, 45, 0.25);
+}
+
+:global(html[data-theme="light"]) .priceBadge {
+  background: rgba(201, 71, 45, 0.1);
+  color: #C9472D;
+  border-color: rgba(201, 71, 45, 0.2);
+}
+
+:global(html[data-theme="light"]) .spinner {
+  border-color: rgba(0,0,0,0.1);
+  border-top-color: #C9472D;
+  border-right-color: rgba(201, 71, 45, 0.2);
+  border-bottom-color: rgba(201, 71, 45, 0.2);
+  border-left-color: rgba(201, 71, 45, 0.2);
+}
+
+:global(html[data-theme="light"]) .detailsBtn {
+  background: #fff;
+  color: #2F7ECF;
+  border-color: #2F7ECF;
+  box-shadow: none;
+}
+
+:global(html[data-theme="light"]) .detailsBtn:hover {
+  background: #2F7ECF;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(47, 126, 207, 0.25);
 }
 
 .loadingState {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 20px;
-  height: 100%;
-  color: #E6D6B4;
+  gap: 16px;
+  color: rgba(230,214,180,0.8);
+  padding: 40px;
 }
 
-.spinnerLarge {
-  width: 48px;
-  height: 48px;
-  border: 4px solid rgba(230, 214, 180, 0.3);
-  border-top-color: #E6D6B4;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
+:global(html[data-theme="light"]) .modal {
+  background: #fff;
+  border-color: rgba(0,0,0,0.1);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+:global(html[data-theme="light"]) .closeBtn {
+  background: rgba(0,0,0,0.05);
+  color: var(--kendo-color-on-app-surface);
 }
 
-@keyframes slideUp {
-  from { 
-    opacity: 0;
-    transform: translateY(20px) scale(0.96);
-  }
-  to { 
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+:global(html[data-theme="light"]) .closeBtn:hover {
+  background: rgba(201, 71, 45, 0.1);
+  color: #C9472D;
+}
+
+:global(html[data-theme="light"]) .loadingState {
+  color: var(--kendo-color-on-app-surface);
+}
+
+:global(html[data-theme="light"]) .spinnerLarge {
+  border-color: rgba(0,0,0,0.1);
+  border-top-color: #C9472D;
+}
+
+:global(html[data-theme="light"]) .actionPrimary {
+  background: #C9472D !important;
+  border-color: #C9472D;
+  color: #fff !important;
+  box-shadow: 0 4px 12px rgba(201, 71, 45, 0.25);
+}
+
+:global(html[data-theme="light"]) .tagCloud::-webkit-scrollbar-thumb {
+  background: #C9472D;
+}
+
+:global(html[data-theme="light"]) .tagCloud::-webkit-scrollbar-track {
+  background: rgba(0,0,0,0.05);
+}
+
+:global(html[data-theme="light"]) .actionSecondary {
+  background: #f5f5f5 !important;
+  color: #333 !important;
+  border-color: rgba(0,0,0,0.1);
+  box-shadow: none;
+}
+
+:global(html[data-theme="light"]) .actionSecondary:hover {
+  background: #e0e0e0 !important;
+}
+
+:global(html[data-theme="light"]) .resultCount,
+:global(html[data-theme="light"]) .sortLabel {
+  color: rgba(0,0,0,0.6);
+}
+
+:global(html[data-theme="light"]) .rowImgWrap,
+:global(html[data-theme="light"]) .imgWrap {
+  background: #f0f0f0;
+}
+
+:global(html[data-theme="light"]) .title,
+:global(html[data-theme="light"]) .rowTitle {
+  color: var(--kendo-color-on-app-surface);
+}
+
+:global(html[data-theme="light"]) .subtitle,
+:global(html[data-theme="light"]) .rowSubtitle {
+  color: rgba(0,0,0,0.6);
+}
+
+:global(html[data-theme="light"]) .spec {
+  background: rgba(0,0,0,0.04);
+  color: rgba(0,0,0,0.7);
+  border-color: rgba(0,0,0,0.08);
+}
+
+:global(html[data-theme="light"]) .price {
+  color: var(--kendo-color-on-app-surface);
+}
+
+:global(html[data-theme="light"]) .iconBtn {
+  background: #fff;
+  border-color: rgba(0,0,0,0.15);
+  color: #2F7ECF;
+}
+
+:global(html[data-theme="light"]) .pagerBtn {
+  background: #fff;
+  border-color: rgba(0,0,0,0.15);
+  color: var(--kendo-color-on-app-surface);
+}
+
+:global(html[data-theme="light"]) .dealerBtn {
+  background: #C9472D;
+  color: #fff;
+  border-color: #C9472D;
+  box-shadow: 0 4px 16px rgba(201, 71, 45, 0.25);
+}
+
+:global(html[data-theme="light"]) .dealerBtn:hover {
+  background: #B33B24;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(201, 71, 45, 0.3);
+}
+
+:global(html[data-theme="light"]) .dealerBtnIcon {
+  color: #fff;
+}
+
+:global(html[data-theme="light"]) .compareBtn {
+  color: #2F7ECF;
+  border-color: rgba(47, 126, 207, 0.3);
+  background: #fff;
+}
+
+:global(html[data-theme="light"]) .compareBtn:hover {
+  background: rgba(47, 126, 207, 0.05);
+  border-color: #2F7ECF;
+  transform: translateY(-2px);
+}
+
+:global(html[data-theme="light"]) .detailsTitle {
+  color: var(--kendo-color-on-app-surface);
+}
+
+:global(html[data-theme="light"]) .detailsSubtitle {
+  color: rgba(0,0,0,0.6);
+}
+
+:global(html[data-theme="light"]) .kvKey {
+  color: rgba(0,0,0,0.6);
+}
+
+:global(html[data-theme="light"]) .kvVal {
+  color: var(--kendo-color-on-app-surface);
+}
+
+:global(html[data-theme="light"]) .gallerySlide {
+  border-color: rgba(0,0,0,0.1);
+  background: #f5f5f5;
+}
+
+:global(html[data-theme="light"]) .reviewText {
+  color: var(--kendo-color-on-app-surface);
+}
+
+:global(html[data-theme="light"]) .row {
+  background: #fff;
+  border-color: rgba(0,0,0,0.08);
+}
+
+:global(html[data-theme="light"]) .priceNote {
+  color: rgba(0,0,0,0.5);
+}
+
+:global(html[data-theme="light"]) .suggestList {
+  background: #fff;
+  border-color: rgba(0,0,0,0.1);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+}
+
+:global(html[data-theme="light"]) .suggestItem {
+  background: #fff;
+  color: var(--kendo-color-on-app-surface);
+  border-color: rgba(0,0,0,0.08);
+}
+
+:global(html[data-theme="light"]) .detailsSection {
+  background: #fff;
+  border-color: rgba(0,0,0,0.08);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+:global(html[data-theme="light"]) .modal {
+  background: #fff;
+  border-color: rgba(0,0,0,0.1);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+  color: var(--kendo-color-on-app-surface);
+}
+
+:global(html[data-theme="light"]) .closeBtn {
+  color: rgba(0,0,0,0.5);
+  background: rgba(0,0,0,0.05);
+}
+
+:global(html[data-theme="light"]) .closeBtn:hover {
+  background: rgba(201, 71, 45, 0.1);
+  color: #C9472D;
+}
+
+:global(html[data-theme="light"]) .loadingState {
+  color: var(--kendo-color-on-app-surface);
+}
+
+:global(html[data-theme="light"]) .spinnerLarge {
+  border-color: rgba(0,0,0,0.1);
+  border-top-color: #C9472D;
 }

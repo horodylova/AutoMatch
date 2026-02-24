@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -8,6 +9,20 @@ import styles from "./Footer.module.css";
 
 export default function Footer() {
   const pathname = usePathname();
+  const [logoSrc, setLogoSrc] = useState<string>("/logos/logo.svg");
+
+  useEffect(() => {
+    const updateLogo = () => {
+      const theme = document.documentElement.getAttribute("data-theme");
+      setLogoSrc(theme === "light" ? "/cropped logo.png" : "/logos/logo.svg");
+    };
+
+    updateLogo();
+    const observer = new MutationObserver(updateLogo);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+    return () => observer.disconnect();
+  }, []);
+
   if (pathname?.startsWith("/quiz")) return null;
 
   const year = new Date().getFullYear();
@@ -21,7 +36,7 @@ export default function Footer() {
             <Link href="/" className={styles.brandLogo}>
               <div className={styles.logoBox}>
                 <Image
-                  src="/logos/logo.svg"
+                  src={logoSrc}
                   alt="CarCupid"
                   fill
                   className={styles.logoImg}

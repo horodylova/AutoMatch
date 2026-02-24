@@ -26,7 +26,7 @@ export default function Page() {
         <div className={styles.text}>
           But very quickly, we realized something fundamental:
         </div>
-        <div className={styles.text} style={{ fontWeight: 600, fontSize: "1.3rem", color: "#fff" }}>
+        <div className={`${styles.text} ${styles.emphasisText}`}>
           People don’t choose cars like spreadsheets.
         </div>
         <div className={styles.text}>
