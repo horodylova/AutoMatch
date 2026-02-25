@@ -58,7 +58,7 @@ export default function EmailModal({ onClose, results }: EmailModalProps) {
             right: "16px",
             background: "transparent",
             border: "none",
-            color: "var(--kendo-color-on-surface)",
+            color: "var(--kendo-color-on-app-surface)",
             opacity: 0.6,
             cursor: "pointer",
             fontSize: "24px",
@@ -74,14 +74,14 @@ export default function EmailModal({ onClose, results }: EmailModalProps) {
               fontSize: "24px",
               fontWeight: 800,
               marginBottom: "12px",
-              color: "var(--kendo-color-on-surface)"
+              color: "var(--kendo-color-on-app-surface)"
             }}>
               Cupid has sent your list!
             </h3>
             <p style={{
-              fontSize: "16px",
-              lineHeight: 1.6,
-              color: "var(--kendo-color-on-surface)",
+              fontSize: "18px",
+              fontWeight: 700,
+              color: "var(--kendo-color-on-app-surface)",
               marginBottom: "28px"
             }}>
               Check your inbox. Your perfect matches are waiting for you.
@@ -92,7 +92,7 @@ export default function EmailModal({ onClose, results }: EmailModalProps) {
                 padding: "16px 32px",
                 borderRadius: "99px",
                 background: "var(--kendo-color-primary)",
-                color: "var(--kendo-color-on-app-surface)",
+                color: "var(--kendo-color-on-primary)",
                 border: "none",
                 fontSize: "16px",
                 fontWeight: 700,
@@ -110,7 +110,7 @@ export default function EmailModal({ onClose, results }: EmailModalProps) {
               fontSize: "24px",
               fontWeight: 800,
               marginBottom: "8px",
-              color: "var(--kendo-color-on-surface)"
+              color: "var(--kendo-color-on-app-surface)"
             }}>
               Saved for later?
             </h3>
@@ -173,7 +173,7 @@ export default function EmailModal({ onClose, results }: EmailModalProps) {
                   padding: "16px 32px",
                   borderRadius: "99px",
                   background: "var(--kendo-color-primary)",
-                  color: "var(--kendo-color-on-app-surface)",
+                  color: "var(--kendo-color-on-primary)",
                   border: "none",
                   fontSize: "16px",
                   fontWeight: 700,

@@ -38,7 +38,7 @@ export default function ResultsPage() {
   }, [router]);
 
   if (loading) return (
-    <div style={{ minHeight: "100vh", background: "#0e1b24", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div style={{ minHeight: "100vh", background: "var(--kendo-color-app-surface)", display: "flex", alignItems: "center", justifyContent: "center" }}>
       <Loader label="Finding your matches..." />
     </div>
   );
@@ -46,7 +46,7 @@ export default function ResultsPage() {
   if (results.length === 0) return null;
 
   return (
-    <div style={{ paddingTop: "80px", minHeight: "100vh", background: "#0e1b24" }}>
+    <div style={{ paddingTop: "80px", minHeight: "100vh", background: "var(--kendo-color-app-surface)" }}>
       <QuizHeader onExit={() => setShowExitModal(true)} />
       
       <ResultsGallery 

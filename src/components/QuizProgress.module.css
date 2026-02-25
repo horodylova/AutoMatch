@@ -1,8 +1,12 @@
 .wrap { width: 100%; }
 .svg { width: 100%; height: 120px; display: block; }
-.road { fill: none; stroke: rgba(230, 214, 180, 0.18); stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.road { fill: none; stroke: var(--road-stroke-color, rgba(230, 214, 180, 0.18)); stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
 .progress { fill: none; stroke: var(--kendo-color-primary); stroke-width: 8; stroke-linecap: butt; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
 .car { transition: transform 200ms ease; }
+.carImage { transition: transform 0.3s ease; }
+:global(html[data-theme="light"]) .carImage {
+  transform: translateY(-8px);
+}
 .carImg { width: 120px; height: 90px; }
 
 .introWrap { margin-top: 12px; background: var(--kendo-color-tertiary-subtle); border: 1px solid var(--kendo-color-border-alt); border-radius: 24px; box-shadow: 0 12px 32px rgba(0,0,0,0.35); padding: clamp(18px, 4vw, 28px); color: var(--kendo-color-on-tertiary); }
@@ -48,8 +52,8 @@
 
 .maskRoadStroke { fill: none; stroke: #fff; stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
 .maskProgressStroke { fill: none; stroke: #fff; stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
-.roadGlow { fill: none; stroke: rgba(230, 214, 180, 0.9); stroke-width: 12; stroke-linecap: round; stroke-linejoin: round; filter: blur(2px); opacity: 0.5; animation: glowPulse 2.6s ease-in-out infinite; }
-.progressGlow { fill: none; stroke: rgba(201, 71, 45, 0.95); stroke-width: 12; stroke-linecap: round; stroke-linejoin: round; filter: blur(2px); opacity: 0.6; animation: glowPulse 2s ease-in-out infinite; }
+.roadGlow { fill: none; stroke: var(--road-glow-stroke-color, rgba(230, 214, 180, 0.9)); stroke-width: 12; stroke-linecap: round; stroke-linejoin: round; filter: blur(2px); opacity: 0.5; animation: glowPulse 2.6s ease-in-out infinite; }
+.progressGlow { fill: none; stroke: var(--progress-glow-stroke-color, rgba(201, 71, 45, 0.95)); stroke-width: 12; stroke-linecap: round; stroke-linejoin: round; filter: blur(2px); opacity: 0.6; animation: glowPulse 2s ease-in-out infinite; }
 
 @keyframes glowPulse {
   0% { opacity: 0.35; }

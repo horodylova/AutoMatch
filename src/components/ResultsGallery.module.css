@@ -96,6 +96,50 @@
   text-align: center;
 }
 
+.headerFlex {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+}
+
+.headerText {
+  display: block;
+  width: 100%;
+}
+
+@media (min-width: 769px) {
+  /* Only apply left alignment to the header section container */
+  :global(html[data-theme="light"]) .sectionFirst .containerSlim {
+    max-width: 70rem;
+    text-align: left;
+  }
+
+  :global(html[data-theme="light"]) .headerFlex {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 3rem;
+    text-align: left;
+  }
+
+  :global(html[data-theme="light"]) .headerText {
+    text-align: left;
+    max-width: 40rem;
+  }
+
+  :global(html[data-theme="light"]) .logoWrapper {
+    margin-bottom: 0;
+    flex-shrink: 0;
+  }
+  
+  :global(html[data-theme="light"]) .title {
+    margin-top: 0;
+  }
+}
+
 .logoWrapper {
   margin-bottom: 1.5rem;
   display: flex;
@@ -106,6 +150,18 @@
   width: 150px;
   height: auto;
   object-fit: contain;
+}
+
+.lightLogo {
+  display: none;
+}
+
+:global(html[data-theme="light"]) .darkLogo {
+  display: none;
+}
+
+:global(html[data-theme="light"]) .lightLogo {
+  display: block;
 }
 
 @media (max-width: 768px) {
@@ -201,6 +257,32 @@
   z-index: 10;
   position: relative;
   outline: none;
+}
+
+:global(html[data-theme="light"]) .title {
+  color: #1e3a8a; /* Deep blue */
+}
+
+:global(html[data-theme="light"]) .description {
+  color: rgba(0, 0, 0, 0.7);
+}
+
+:global(html[data-theme="light"]) .shareTitle {
+  color: var(--kendo-color-on-app-surface);
+}
+
+:global(html[data-theme="light"]) .socialIcon {
+  color: var(--kendo-color-primary);
+  background: rgba(201, 71, 45, 0.1);
+}
+
+:global(html[data-theme="light"]) .socialIcon:hover {
+  background: rgba(201, 71, 45, 0.2);
+  color: var(--kendo-color-primary);
+}
+
+:global(html[data-theme="light"]) .button {
+  color: #ffffff;
 }
 
 .navButton:hover {
@@ -303,6 +385,35 @@
   margin-bottom: 0.5rem;
 }
 
+:global(html[data-theme="light"]) .desktopTitle {
+  color: var(--kendo-color-on-app-surface);
+}
+
+:global(html[data-theme="light"]) .desktopDescription {
+  color: rgba(0, 0, 0, 0.7);
+}
+
+:global(html[data-theme="light"]) .desktopPrimaryButton {
+  background-color: var(--kendo-color-primary);
+  color: #ffffff;
+}
+
+:global(html[data-theme="light"]) .desktopPrimaryButton:hover {
+  background-color: #b53c24; /* darker shade of primary */
+  color: #ffffff;
+}
+
+:global(html[data-theme="light"]) .desktopSecondaryButton {
+  border-color: rgba(0, 0, 0, 0.2);
+  color: var(--kendo-color-on-app-surface);
+}
+
+:global(html[data-theme="light"]) .desktopSecondaryButton:hover {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.4);
+  color: var(--kendo-color-on-app-surface);
+}
+
 .desktopButtonsRow {
   display: flex;
   flex-direction: row;
@@ -382,21 +493,23 @@
   right: 0;
   background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
   padding: 2rem;
-  color: white;
+  color: white !important;
   z-index: 2;
 }
 
 .carName {
   font-size: 1.75rem;
-  font-weight: 700;
+  font-weight: 400;
   margin-bottom: 0.5rem;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+  color: white !important;
 }
 
 .carDetails {
   font-size: 1.1rem;
   opacity: 0.9;
   font-weight: 400;
+  color: white !important;
 }
 
 .emptyState {
@@ -637,6 +750,26 @@
     transform: translateY(-2px);
     border-color: #c9472d;
     color: #c9472d;
+  }
+
+  :global(html[data-theme="light"]) .staticCarName {
+    color: var(--kendo-color-on-app-surface);
+    text-shadow: none;
+    font-weight: 400;
+  }
+  
+  :global(html[data-theme="light"]) .staticCarModel {
+    color: rgba(0, 0, 0, 0.7);
+    text-shadow: none;
+  }
+  
+  :global(html[data-theme="light"]) .actionButton {
+    color: #1e3a8a;
+    border-color: rgba(30, 58, 138, 0.3);
+  }
+
+  :global(html[data-theme="light"]) .staticDetailsButton {
+    color: #ffffff;
   }
 }
 

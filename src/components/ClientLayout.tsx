@@ -17,6 +17,7 @@ export default function ClientLayout({
 }) {
   const pathname = usePathname();
   const isStudio = pathname?.startsWith("/studio");
+  const isResults = pathname === "/results";
 
   if (isStudio) {
     return (
@@ -28,6 +29,9 @@ export default function ClientLayout({
 
   return (
     <body style={{ 
+      backgroundColor: "var(--kendo-color-app-surface)", 
+      color: "var(--kendo-color-on-app-surface)", 
+      fontFamily: "var(--kendo-font-family)", 
       position: "fixed",
       inset: 0,
       overflow: "hidden"
@@ -45,7 +49,7 @@ export default function ClientLayout({
           justifyContent: "space-between"
         }}>
           {children}
-          <Footer />
+          {!isResults && <Footer />}
         </main>
       </StyledComponentsRegistry>
       {process.env.NODE_ENV === 'production' && (

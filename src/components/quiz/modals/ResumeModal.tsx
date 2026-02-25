@@ -33,14 +33,14 @@ export default function ResumeModal({ onResume, onStartFresh }: ResumeModalProps
           fontSize: "24px",
           fontWeight: 800,
           marginBottom: "12px",
-          color: "var(--kendo-color-on-surface)"
+          color: "var(--kendo-color-on-app-surface)"
         }}>
           Welcome back!
         </h3>
         <p style={{
           fontSize: "16px",
           lineHeight: 1.6,
-          color: "rgba(14,27,36,0.85)",
+          color: "var(--kendo-color-on-app-surface)",
           marginBottom: "28px"
         }}>
           We saved your progress. Would you like to pick up where you left off?
@@ -53,7 +53,7 @@ export default function ResumeModal({ onResume, onStartFresh }: ResumeModalProps
               justifySelf: "center",
               borderRadius: "99px",
               background: "var(--kendo-color-primary)",
-              color: "var(--kendo-color-on-app-surface)",
+              color: "var(--kendo-color-on-primary)",
               border: "none",
               fontSize: "16px",
               fontWeight: 700,
@@ -72,7 +72,7 @@ export default function ResumeModal({ onResume, onStartFresh }: ResumeModalProps
               padding: "16px",
               borderRadius: "99px",
               background: "transparent",
-              color: "var(--kendo-color-on-surface)",
+              color: "var(--kendo-color-on-app-surface)",
               opacity: 0.6,
               border: "none",
               fontSize: "16px",

@@ -49,14 +49,14 @@ export default function ExitModal({ onCancel, destination = "/", onConfirm }: Ex
           fontSize: "24px",
           fontWeight: 800,
           marginBottom: "12px",
-          color: "var(--kendo-color-on-surface)"
+          color: "var(--kendo-color-on-app-surface)"
         }}>
           Leaving the driver&apos;s seat?
         </h3>
         <p style={{
           fontSize: "16px",
           lineHeight: 1.6,
-          color: "var(--kendo-color-on-surface)",
+          color: "var(--kendo-color-on-app-surface)",
           marginBottom: "28px"
         }}>
           Life moves fast. We can park your progress here for 24 hours so you don&apos;t lose your spot
@@ -75,7 +75,7 @@ export default function ExitModal({ onCancel, destination = "/", onConfirm }: Ex
               justifySelf: "center",
               borderRadius: "99px",
               background: "var(--kendo-color-primary)",
-              color: "var(--kendo-color-on-app-surface)",
+              color: "var(--kendo-color-on-primary)",
               border: "none",
               fontSize: "16px",
               fontWeight: 700,
@@ -98,7 +98,7 @@ export default function ExitModal({ onCancel, destination = "/", onConfirm }: Ex
               padding: "16px",
               borderRadius: "99px",
               background: "transparent",
-              color: "var(--kendo-color-on-surface)",
+              color: "var(--kendo-color-on-app-surface)",
               opacity: 0.6,
               border: "none",
               fontSize: "16px",
@@ -119,10 +119,14 @@ export default function ExitModal({ onCancel, destination = "/", onConfirm }: Ex
             background: "none",
             border: "none",
             fontSize: "14px",
-            color: "rgba(14,27,36,0.4)",
+            color: "var(--kendo-color-on-app-surface)",
+            opacity: 0.6,
             cursor: "pointer",
-            textDecoration: "underline"
+            textDecoration: "underline",
+            transition: "opacity 0.2s ease"
           }}
+          onMouseEnter={(e) => e.currentTarget.style.opacity = "1"}
+          onMouseLeave={(e) => e.currentTarget.style.opacity = "0.6"}
         >
           Cancel and return to quiz
         </button>

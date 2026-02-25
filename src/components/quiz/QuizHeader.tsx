@@ -15,7 +15,7 @@ export default function QuizHeader({ onExit }: QuizHeaderProps) {
         width: "40px",
         height: "40px",
         borderRadius: "50%",
-        background: "var(--kendo-color-on-app-surface)",
+        background: "var(--kendo-color-surface)",
         border: "1px solid var(--kendo-color-primary)",
         display: "flex",
         alignItems: "center",
@@ -31,7 +31,7 @@ export default function QuizHeader({ onExit }: QuizHeaderProps) {
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.transform = "scale(1)";
-        e.currentTarget.style.backgroundColor = "var(--kendo-color-on-app-surface)";
+        e.currentTarget.style.backgroundColor = "var(--kendo-color-surface)";
       }}
     >
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

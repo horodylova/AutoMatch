@@ -134,21 +134,31 @@ export default function ResultsGallery({ results = [], onSaveProgress }: Results
       <div className={styles.sectionFirst}>
         <div className={styles.wrapping}>
           <div className={`${styles.container} ${styles.containerSlim}`}>
-            <div>
+            <div className={styles.headerFlex}>
               <div className={styles.logoWrapper}>
                 <Image
                   src="/cupids/Hugging Car.png"
                   alt="CarCupid Logo"
                   width={150}
                   height={150}
-                  className={styles.desktopLogo}
+                  className={`${styles.desktopLogo} ${styles.darkLogo}`}
+                  priority
+                />
+                <Image
+                  src="/cropped%20logo.png"
+                  alt="CarCupid Logo"
+                  width={150}
+                  height={150}
+                  className={`${styles.desktopLogo} ${styles.lightLogo}`}
                   priority
                 />
               </div>
-              <h1 className={styles.title}>Your Matches Are Ready</h1>
-              <p className={`${styles.description} ${styles.mobileTextHidden}`}>
-                We found cars that match your lifestyle. Browse your matches and tap for details.
-              </p>
+              <div className={styles.headerText}>
+                <h1 className={styles.title}>Your Matches Are Ready</h1>
+                <p className={`${styles.description} ${styles.mobileTextHidden}`}>
+                  We found cars that match your lifestyle. Browse your matches and tap for details.
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -220,7 +230,15 @@ export default function ResultsGallery({ results = [], onSaveProgress }: Results
                     alt="CarCupid Logo"
                     width={80}
                     height={80}
-                    className={styles.mobileLogo}
+                    className={`${styles.mobileLogo} ${styles.darkLogo}`}
+                    priority
+                  />
+                  <Image
+                    src="/cropped%20logo.png"
+                    alt="CarCupid Logo"
+                    width={80}
+                    height={80}
+                    className={`${styles.mobileLogo} ${styles.lightLogo}`}
                     priority
                   />
                 </div>

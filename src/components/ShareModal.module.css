@@ -20,14 +20,14 @@
   max-height: 90vh;
   display: flex;
   flex-direction: column;
-  color: #fff;
+  color: var(--kendo-color-on-app-surface);
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 20px 50px rgba(0,0,0,0.5);
 }
 
 .modalHeader {
   padding: 1.5rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--kendo-color-border);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -37,13 +37,13 @@
   font-size: 1.5rem;
   font-weight: 600;
   margin: 0;
-  color: rgb(230, 214, 180);
+  color: var(--kendo-color-on-app-surface);
 }
 
 .closeButton {
   background: none;
   border: none;
-  color: #fff;
+  color: var(--kendo-color-on-app-surface);
   cursor: pointer;
   padding: 0.5rem;
   display: flex;
@@ -67,7 +67,8 @@
   font-size: 1.1rem;
   text-align: center;
   margin-bottom: 2rem;
-  color: #e0e0e0;
+  color: var(--kendo-color-on-app-surface);
+  opacity: 0.8;
 }
 
 .grid {
@@ -105,6 +106,8 @@
   color: #fff;
   font-size: 0.9rem;
   text-align: center;
+  font-weight: 400;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.8);
 }
 
 .loadingState {
@@ -121,7 +124,7 @@
   height: 40px;
   border: 3px solid rgba(255,255,255,0.1);
   border-radius: 50%;
-  border-top-color: rgb(230, 214, 180);
+  border-top-color: var(--kendo-color-primary);
   animation: spin 1s ease-in-out infinite;
   margin-bottom: 1.5rem;
 }
@@ -132,7 +135,7 @@
 
 .loadingText {
   font-size: 1.2rem;
-  color: rgb(230, 214, 180);
+  color: var(--kendo-color-on-app-surface);
 }
 
 @media (max-width: 600px) {

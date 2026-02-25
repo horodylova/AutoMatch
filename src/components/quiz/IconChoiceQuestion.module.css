@@ -96,3 +96,21 @@
   color: rgba(230,214,180, 0.95);
   max-width: 100%;
 }
+
+:global(html[data-theme="light"]) .desc,
+:global(html[data-theme="light"]) .mobileDesc {
+  color: rgba(0, 0, 0, 0.65);
+}
+
+:global(html[data-theme="light"]) .icon {
+  filter: none;
+  opacity: 0.85;
+}
+
+:global(html[data-theme="light"]) .check {
+  background: var(--kendo-color-primary);
+}
+
+:global(html[data-theme="light"]) .check::after {
+  border-color: white;
+}

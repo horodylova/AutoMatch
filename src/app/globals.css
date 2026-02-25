@@ -75,7 +75,7 @@ body {
   --kendo-color-primary-hover: #D75B3F;
   --kendo-color-primary-active: #B23D2A;
   --kendo-color-primary-emphasis: #8F2F20;
-  --kendo-color-on-primary: #FFFFFF;
+  --kendo-color-on-primary: #E6D6B4;
   --kendo-color-primary-on-surface: #C9472D;
   --kendo-color-primary-on-subtle: #C9472D;
   --kendo-color-secondary-subtle: #3D3D3D;
@@ -299,6 +299,11 @@ body {
   --advice-overlay-shadow: 0 16px 48px rgba(0,0,0,0.45);
   --journal-card-hover-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
   --stats-marker-shadow: 0 0 0 3px rgba(201, 71, 45, 0.25);
+  --road-glow-color: rgba(230, 214, 180, 1);
+  --progress-glow-color: rgba(201, 71, 45, 1);
+  --road-stroke-color: rgba(230, 214, 180, 0.18);
+  --road-glow-stroke-color: rgba(230, 214, 180, 0.9);
+  --progress-glow-stroke-color: rgba(201, 71, 45, 0.95);
 }
 
 html[data-theme="light"] {
@@ -379,6 +384,11 @@ html[data-theme="light"] {
   --advice-check-shadow: 0 6px 20px rgba(47, 126, 207, 0.25);
   --journal-card-hover-shadow: 0 20px 40px rgba(47, 126, 207, 0.15);
   --stats-marker-shadow: 0 0 0 3px rgba(47, 126, 207, 0.25);
+  --road-glow-color: rgba(47, 126, 207, 0.6);
+  --progress-glow-color: rgba(201, 71, 45, 1);
+  --road-stroke-color: rgba(26, 37, 47, 0.35);
+  --road-glow-stroke-color: rgba(47, 126, 207, 0.5);
+  --progress-glow-stroke-color: rgba(201, 71, 45, 0.95);
 
   --kendo-color-primary-subtle: #FBE4DD;
   --kendo-color-primary-subtle-hover: #F6D1C5;

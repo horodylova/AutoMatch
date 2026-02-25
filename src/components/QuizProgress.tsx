@@ -123,7 +123,7 @@ export default function QuizProgress({ current, total, showIntro = false, showHa
           <filter id="innerGlowRoad" x="-50%" y="-50%" width="200%" height="200%" colorInterpolationFilters="sRGB">
             <feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur" />
             <feComposite in="blur" in2="SourceAlpha" operator="in" result="inner" />
-            <feFlood floodColor="rgba(230,214,180,1)" floodOpacity="0.2" result="color">
+            <feFlood floodColor="var(--road-glow-color, rgba(230,214,180,1))" floodOpacity="0.2" result="color">
               <animate attributeName="flood-opacity" values="0.12;0.28;0.12" dur="2.8s" repeatCount="indefinite" />
             </feFlood>
             <feComposite in="color" in2="inner" operator="in" result="glow" />
@@ -132,7 +132,7 @@ export default function QuizProgress({ current, total, showIntro = false, showHa
           <filter id="innerGlowProgress" x="-50%" y="-50%" width="200%" height="200%" colorInterpolationFilters="sRGB">
             <feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur" />
             <feComposite in="blur" in2="SourceAlpha" operator="in" result="inner" />
-            <feFlood floodColor="rgba(201,71,45,1)" floodOpacity="0.35" result="color">
+            <feFlood floodColor="var(--progress-glow-color, rgba(201,71,45,1))" floodOpacity="0.35" result="color">
               <animate attributeName="flood-opacity" values="0.25;0.55;0.25" dur="2.2s" repeatCount="indefinite" />
             </feFlood>
             <feComposite in="color" in2="inner" operator="in" result="glow" />
@@ -159,7 +159,7 @@ export default function QuizProgress({ current, total, showIntro = false, showHa
         )}
         <g className={styles.car} transform={carTransform}>
           <g transform={`scale(${carScale[0]}, ${carScale[1]})`}>
-            <image href="/cupid.png" x={-(isMobile ? 40 : 60)} y={-(isMobile ? 30 : 45)} width={isMobile ? 80 : 120} height={isMobile ? 60 : 90} preserveAspectRatio="xMidYMid meet" />
+            <image className={styles.carImage} href="/logo%20for%20progress.bar.png" x={-(isMobile ? 40 : 60)} y={-(isMobile ? 30 : 45)} width={isMobile ? 80 : 120} height={isMobile ? 60 : 90} preserveAspectRatio="xMidYMid meet" />
           </g>
         </g>
       </svg>
