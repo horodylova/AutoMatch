@@ -51,6 +51,7 @@ export default function DatingHero() {
             <Button themeColor="primary" fillMode="solid" size="large" className={styles.introCta} onClick={() => {
               trackQuizStart();
               event("StartQuizBottom");
+              event("StartQuiz");
               router.push('/quiz');
             }}>Start Quiz</Button>
           </div>

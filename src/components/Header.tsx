@@ -6,6 +6,7 @@ import Image from "next/image";
 import styles from "./Header.module.css";
 import { RESULTS_UPDATED_EVENT, RESULTS_STORE_KEY } from "../utils/storage";
 import { event } from "@/lib/pixel";
+import { trackQuizStart } from "@/lib/gtag";
 import ThemeToggle from "./ThemeToggle";
 
 export default function Header() {
@@ -127,7 +128,10 @@ export default function Header() {
           {hasSavedResults && (
             <Link href="/results" className={styles.resultsButton}>Your Results</Link>
           )}
-          <Link href="/quiz" className={styles.contactButton}>Start Quiz</Link>
+          <Link href="/quiz" className={styles.contactButton} onClick={() => {
+            trackQuizStart();
+            event("StartQuiz");
+          }}>Start Quiz</Link>
         </div>
 
      

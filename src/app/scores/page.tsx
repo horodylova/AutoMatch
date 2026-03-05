@@ -3,6 +3,8 @@
 import Link from "next/link";
 import styles from "./scores.module.css";
 import { useEffect } from "react";
+import { event } from "@/lib/pixel";
+import { trackQuizStart } from "@/lib/gtag";
 
 export default function Page() {
   useEffect(() => {
@@ -18,7 +20,10 @@ export default function Page() {
 
       <section className={styles.section}>
         <div className={styles.text}>
-          When we first started designing our <Link href="/quiz" className={styles.inlineLink}>car quiz</Link>, the task seemed straightforward:
+          When we first started designing our <Link href="/quiz" className={styles.inlineLink} onClick={() => {
+            trackQuizStart();
+            event("StartQuiz");
+          }}>car quiz</Link>, the task seemed straightforward:
         </div>
         <div className={styles.highlightBox}>
           <div className={styles.quote}>ask users a few questions → assign weights to categories → rank cars.</div>
@@ -257,7 +262,10 @@ export default function Page() {
           What we ended up with is not a filter and not a leaderboard. It’s a decision model. Enthusiasts see driver-focused cars. Families never see two-seat sports cars. Professionals get tools, not compromises.
         </p>
         <p className={styles.conclusionText}>
-          Ready to see it in action? Start the <Link href="/quiz" className={styles.inlineLink}>car match quiz</Link>, explore the <Link href="/cars" className={styles.inlineLink}>car database</Link>, and <Link href="/compare" className={styles.inlineLink}>compare cars side by side</Link>.
+          Ready to see it in action? Start the <Link href="/quiz" className={styles.inlineLink} onClick={() => {
+            trackQuizStart();
+            event("StartQuiz");
+          }}>car match quiz</Link>, explore the <Link href="/cars" className={styles.inlineLink}>car database</Link>, and <Link href="/compare" className={styles.inlineLink}>compare cars side by side</Link>.
         </p>
         <div className={styles.finalNote}>
           We stopped trying to find the best car. We started matching the right life.

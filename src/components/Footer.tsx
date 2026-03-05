@@ -6,6 +6,8 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { FaFacebook, FaInstagram, FaLinkedin, FaXTwitter, FaYoutube, FaThreads } from "react-icons/fa6";
 import styles from "./Footer.module.css";
+import { event } from "@/lib/pixel";
+import { trackQuizStart } from "@/lib/gtag";
 
 export default function Footer() {
   const pathname = usePathname();
@@ -72,7 +74,10 @@ export default function Footer() {
         {/* Discover Column */}
         <div className={styles.column}>
           <div className={styles.navTitle}>Discover</div>
-          <Link href="/quiz" className={styles.navLink}>Take the Quiz</Link>
+          <Link href="/quiz" className={styles.navLink} onClick={() => {
+            trackQuizStart();
+            event("StartQuiz");
+          }}>Take the Quiz</Link>
           <Link href="/cars" className={styles.navLink}>Browse Cars</Link>
           <Link href="/compare" className={styles.navLink}>Compare</Link>
           <Link href="/journal" className={styles.navLink}>Journal</Link>

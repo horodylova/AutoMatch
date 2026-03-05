@@ -23,7 +23,7 @@ import { parseCarData, matchCars, Row, ScoredCar, QuizFilters } from "../../util
 import { Categories, CategoryValue } from "../../constants/categories";
 import { fetchDataset } from "../../lib/dataset";
 import { saveResults } from "../../utils/storage";
-import { trackQuizComplete } from "@/lib/gtag";
+import { trackQuizComplete, trackQuizStart } from "@/lib/gtag";
 import { event } from "@/lib/pixel";
 
 export default function Page() {
@@ -467,7 +467,11 @@ export default function Page() {
       {quiz.showResumeModal && (
         <ResumeModal 
             onResume={quiz.restoreProgress} 
-            onStartFresh={quiz.handleStartFresh} 
+            onStartFresh={() => {
+              trackQuizStart();
+              event("StartQuiz");
+              quiz.handleStartFresh();
+            }} 
         />
       )}
 
@@ -506,6 +510,7 @@ export default function Page() {
               showHalfway={quiz.showHalfway}
               handleNext={() => {
                 if (quiz.showIntro) {
+                  trackQuizStart();
                   event("StartQuiz");
                 }
                 quiz.handleNext();

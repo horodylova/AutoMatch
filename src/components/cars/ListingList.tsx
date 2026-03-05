@@ -9,6 +9,8 @@ import { fetchDataset, getRowCount, Row } from "@/lib/dataset";
 import { FiltersData } from "./Filters";
 import Link from "next/link";
 import { getQuizAnswers } from "@/utils/storage";
+import { event } from "@/lib/pixel";
+import { trackQuizStart } from "@/lib/gtag";
 
 function num(v: unknown): number {
   const raw = String(v ?? "").trim();
@@ -325,6 +327,12 @@ export default function ListingList({ filters }: { filters?: FiltersData }) {
           centerContent={
             <Link 
               href={hasResults ? "/results" : "/quiz"} 
+              onClick={() => {
+                if (!hasResults && !hasQuiz) {
+                  trackQuizStart();
+                  event("StartQuiz");
+                }
+              }}
               style={{ 
                 display: 'inline-flex',
                 alignItems: 'center',
