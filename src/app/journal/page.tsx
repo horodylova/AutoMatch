@@ -22,14 +22,30 @@ async function getJournalPosts() {
   `);
 }
 
-export default async function JournalPage() {
+export default async function JournalPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const params = await searchParams;
   const posts: Post[] = await getJournalPosts();
   
   // Find the first featured post, or default to the first post if none are featured
   const featuredArticle = posts.find(a => a.isFeatured) || posts[0];
   
   // Filter out the featured article from the regular list
-  const regularArticles = posts.filter(a => a._id !== featuredArticle?._id);
+  const allRegularArticles = posts.filter(a => a._id !== featuredArticle?._id);
+
+  // Pagination Logic
+  const pageParam = params?.page;
+  const currentPage = typeof pageParam === 'string' ? parseInt(pageParam, 10) : 1;
+  const page = isNaN(currentPage) || currentPage < 1 ? 1 : currentPage;
+  const ITEMS_PER_PAGE = 6;
+  
+  const totalPages = Math.ceil(allRegularArticles.length / ITEMS_PER_PAGE);
+  const startIndex = (page - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const currentRegularArticles = allRegularArticles.slice(startIndex, endIndex);
 
   return (
     <div className={styles.page}>
@@ -37,8 +53,8 @@ export default async function JournalPage() {
       <div className={styles.content}>
         
         <div className={styles.grid}>
-          {/* Featured Article */}
-          {featuredArticle && (
+          {/* Featured Article - Only show on first page */}
+          {page === 1 && featuredArticle && (
             <Link href={`/journal/${featuredArticle.slug.current}`} className={styles.featured}>
               <div className={styles.featuredImageWrapper}>
                 {featuredArticle.mainImage && (
@@ -67,7 +83,7 @@ export default async function JournalPage() {
           )}
 
           {/* Regular Articles */}
-          {regularArticles.map((article) => (
+          {currentRegularArticles.map((article) => (
             <Link key={article._id} href={`/journal/${article.slug.current}`} className={styles.card}>
               <div className={styles.imageWrapper}>
                 {article.mainImage && (
@@ -96,6 +112,33 @@ export default async function JournalPage() {
             </Link>
           ))}
         </div>
+
+        {/* Pagination Controls */}
+        {totalPages > 1 && (
+          <div className={styles.pagination}>
+            {page > 1 && (
+              <Link href={`/journal?page=${page - 1}`} className={styles.navButton}>
+                Previous
+              </Link>
+            )}
+            
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
+              <Link 
+                key={pageNum} 
+                href={`/journal?page=${pageNum}`}
+                className={`${styles.pageButton} ${pageNum === page ? styles.activePage : ''}`}
+              >
+                {pageNum}
+              </Link>
+            ))}
+
+            {page < totalPages && (
+              <Link href={`/journal?page=${page + 1}`} className={styles.navButton}>
+                Next
+              </Link>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

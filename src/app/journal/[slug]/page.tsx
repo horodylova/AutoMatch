@@ -93,17 +93,41 @@ async function getPost(slug: string): Promise<Post> {
   );
 }
 
-async function getRelatedPosts(slug: string): Promise<Post[]> {
-  return client.fetch(
-    `*[_type == "post" && slug.current != $slug] | order(publishedAt desc)[0...3] {
-      _id,
-      title,
-      slug,
-      mainImage,
-      publishedAt
-    }`,
-    { slug }
-  );
+async function getRelatedPosts(slug: string, publishedAt: string): Promise<Post[]> {
+  const query = `
+    {
+      "previous": *[_type == "post" && slug.current != $slug && coalesce(publishedAt, _createdAt) < $publishedAt] | order(coalesce(publishedAt, _createdAt) desc)[0...3] {
+        _id,
+        title,
+        slug,
+        mainImage,
+        publishedAt
+      },
+      "latest": *[_type == "post" && slug.current != $slug] | order(coalesce(publishedAt, _createdAt) desc)[0...3] {
+        _id,
+        title,
+        slug,
+        mainImage,
+        publishedAt
+      }
+    }
+  `;
+
+  const result = await client.fetch(query, { slug, publishedAt });
+  
+  // Prioritize previous posts (older ones).
+  // If we don't have enough previous posts, fill with the latest posts.
+  const combined = [...result.previous];
+  
+  for (const post of result.latest) {
+    if (combined.length >= 3) break;
+    // Avoid duplicates
+    if (!combined.some(p => p._id === post._id)) {
+      combined.push(post);
+    }
+  }
+  
+  return combined;
 }
 
 const components = {
@@ -204,7 +228,6 @@ const components = {
 export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const post = await getPost(slug);
-  const relatedPosts = await getRelatedPosts(slug);
 
   if (!post) {
     return (
@@ -214,6 +237,8 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
       </div>
     );
   }
+
+  const relatedPosts = await getRelatedPosts(slug, post.publishedAt || post._createdAt);
 
   return (
     <article className={styles.container}>

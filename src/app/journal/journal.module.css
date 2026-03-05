@@ -299,6 +299,88 @@
   color: #2F7ECF;
 }
 
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-top: 64px;
+}
+
+.pageButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--journal-pagination-bg, rgba(255, 255, 255, 0.05));
+  border: 1px solid var(--journal-pagination-border, rgba(255, 255, 255, 0.1));
+  color: var(--journal-pagination-color, var(--kendo-color-on-app-surface));
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.pageButton:hover {
+  background: var(--journal-pagination-bg-hover, rgba(255, 255, 255, 0.1));
+  border-color: var(--journal-pagination-border-hover, rgba(230, 214, 180, 0.4));
+  transform: translateY(-2px);
+}
+
+.activePage {
+  background: var(--app-accent, #C9472D);
+  color: white;
+  border-color: var(--app-accent, #C9472D);
+}
+
+.navButton {
+  padding: 0 20px;
+  height: 40px;
+  border-radius: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--journal-pagination-bg, rgba(255, 255, 255, 0.05));
+  border: 1px solid var(--journal-pagination-border, rgba(255, 255, 255, 0.1));
+  color: var(--journal-pagination-color, var(--kendo-color-on-app-surface));
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.navButton:hover {
+  background: var(--journal-pagination-bg-hover, rgba(255, 255, 255, 0.1));
+  border-color: var(--journal-pagination-border-hover, rgba(230, 214, 180, 0.4));
+  transform: translateY(-2px);
+}
+
+.disabledButton {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+:global(html[data-theme="light"]) .pageButton,
+:global(html[data-theme="light"]) .navButton {
+  background: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  color: #1A252F;
+}
+
+:global(html[data-theme="light"]) .pageButton:hover,
+:global(html[data-theme="light"]) .navButton:hover {
+  border-color: rgba(201, 71, 45, 0.3);
+  background: rgba(201, 71, 45, 0.05);
+}
+
+:global(html[data-theme="light"]) .activePage {
+  background: #C9472D;
+  color: #FFFFFF;
+  border-color: #C9472D;
+}
+
 :global(html[data-theme="light"]) .cardTitle {
   color: #1A252F;
 }
