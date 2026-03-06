@@ -52,9 +52,7 @@ export default function ClientLayout({
           {!isResults && <Footer />}
         </main>
       </StyledComponentsRegistry>
-      {process.env.NODE_ENV === 'production' && (
-        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ""} />
-      )}
+      <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ""} />
       <FacebookPixel />
       <CarListingTimer />
     </body>
