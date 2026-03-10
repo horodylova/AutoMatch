@@ -51,17 +51,17 @@ export default function FeedbackModal({ onClose, destination }: FeedbackModalPro
       backdropFilter: "blur(4px)"
     }}>
       <div style={{
-        background: "#E6D6B4",
+        background: "var(--kendo-color-surface)",
         borderRadius: "24px",
         padding: "32px",
         maxWidth: "400px",
         width: "100%",
         textAlign: "center",
         boxShadow: "0 20px 40px rgba(0,0,0,0.2)",
-        border: "1px solid rgba(230, 214, 180, 0.4)",
+        border: "1px solid var(--kendo-color-border-alt)",
         position: "relative",
         animation: "fadeIn 0.2s ease-out",
-        color: "#0E1B24"
+        color: "var(--kendo-color-on-app-surface)"
       }}>
         {/* Close X */}
         <button 
@@ -74,7 +74,7 @@ export default function FeedbackModal({ onClose, destination }: FeedbackModalPro
             border: "none",
             cursor: "pointer",
             padding: "8px",
-            color: "#0E1B24",
+            color: "var(--kendo-color-on-app-surface)",
             opacity: 0.5
           }}
         >
@@ -88,14 +88,14 @@ export default function FeedbackModal({ onClose, destination }: FeedbackModalPro
           fontSize: "24px",
           fontWeight: 800,
           marginBottom: "12px",
-          color: "#0E1B24"
+          color: "var(--kendo-color-on-app-surface)"
         }}>
           Did We Find Your Match?
         </h3>
         <p style={{
           fontSize: "16px",
           lineHeight: 1.6,
-          color: "#0E1B24",
+          color: "var(--kendo-color-on-app-surface)",
           opacity: 0.8,
           marginBottom: "24px"
         }}>
@@ -117,7 +117,7 @@ export default function FeedbackModal({ onClose, destination }: FeedbackModalPro
                 transition: "transform 0.1s"
               }}
             >
-              <svg width="32" height="32" viewBox="0 0 24 24" fill={rating >= star ? "#C9472D" : "none"} stroke={rating >= star ? "#C9472D" : "#0E1B24"} strokeWidth="2">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill={rating >= star ? "var(--kendo-color-primary)" : "none"} stroke={rating >= star ? "var(--kendo-color-primary)" : "var(--kendo-color-on-app-surface)"} strokeWidth="2">
                 <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
               </svg>
             </button>
@@ -134,9 +134,9 @@ export default function FeedbackModal({ onClose, destination }: FeedbackModalPro
             height: "80px",
             padding: "12px",
             borderRadius: "12px",
-            border: "1px solid rgba(14, 27, 36, 0.2)",
-            background: "rgba(255, 255, 255, 0.4)",
-            color: "#0E1B24",
+            border: "1px solid var(--kendo-color-border)",
+            background: "var(--kendo-color-surface-alt)",
+            color: "var(--kendo-color-on-app-surface)",
             fontSize: "14px",
             resize: "none",
             marginBottom: "24px",
@@ -154,9 +154,9 @@ export default function FeedbackModal({ onClose, destination }: FeedbackModalPro
             width: "100%",
             padding: "16px",
             borderRadius: "99px",
-            background: rating === 0 ? "var(--kendo-color-border, #ccc)" : "var(--kendo-color-primary, #C9472D)",
-            color: "var(--kendo-color-on-app-surface, #fff)",
-            border: "none",
+            background: rating === 0 ? "var(--kendo-color-surface-alt)" : "var(--kendo-color-primary)",
+            color: rating === 0 ? "var(--kendo-color-subtle)" : "var(--kendo-color-on-primary)",
+            border: rating === 0 ? "1px solid var(--kendo-color-border)" : "none",
             fontSize: "16px",
             fontWeight: 700,
             cursor: rating === 0 ? "default" : "pointer",

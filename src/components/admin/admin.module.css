@@ -55,12 +55,12 @@
 }
 
 .navItem:hover {
-  background-color: rgba(230, 214, 180, 0.05);
+  background-color: rgba(255, 255, 255, 0.04);
 }
 
 .navItemActive {
-  background-color: rgba(230, 214, 180, 0.1);
-  border-color: var(--kendo-color-border);
+  background-color: rgba(229, 72, 63, 0.12);
+  border-color: rgba(229, 72, 63, 0.35);
   color: #fff;
 }
 
@@ -158,7 +158,7 @@
 }
 
 .table tr:hover td {
-  background-color: rgba(230, 214, 180, 0.02);
+  background-color: rgba(255, 255, 255, 0.02);
 }
 
 .statusBadge {
@@ -216,7 +216,7 @@
   outline: none;
   border-color: var(--kendo-color-primary);
   background-color: rgba(255, 255, 255, 0.05);
-  box-shadow: 0 0 0 2px rgba(230, 214, 180, 0.1);
+  box-shadow: 0 0 0 2px rgba(229, 72, 63, 0.16);
 }
 
 .input::placeholder {

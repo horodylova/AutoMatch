@@ -12,7 +12,7 @@
 .shareTitle {
   font-size: 1.2rem;
   font-weight: 600;
-  color: rgb(230, 214, 180);
+  color: var(--kendo-color-on-app-surface);
   margin-bottom: 1rem;
 }
 
@@ -26,7 +26,7 @@
 
 .sharePreviewLabel {
   font-size: 0.9rem;
-  color: rgba(230, 214, 180, 0.7);
+  color: var(--kendo-color-subtle);
   margin-bottom: 0.5rem;
   text-align: left;
   display: none; /* Optional: hide label if self-explanatory */
@@ -37,7 +37,7 @@
   height: auto;
   border-radius: 12px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(230, 214, 180, 0.1);
+  border: 1px solid var(--kendo-color-border);
   display: block;
 }
 
@@ -53,18 +53,18 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(230, 214, 180, 0.1);
+  background: rgba(255, 255, 255, 0.04);
   border-radius: 50%;
-  color: rgb(230, 214, 180);
+  color: var(--kendo-color-on-app-surface);
   transition: all 0.3s ease;
   cursor: pointer;
   text-decoration: none;
 }
 
 .socialIcon:hover {
-  background: rgba(230, 214, 180, 0.2);
+  background: rgba(255, 255, 255, 0.06);
   transform: translateY(-2px);
-  color: white;
+  color: var(--kendo-color-on-app-surface);
 }
 
 .sectionFirst {
@@ -174,13 +174,13 @@
   font-size: clamp(1.5rem, 4vw, 2.5rem);
   font-weight: 800;
   margin-bottom: 0.2rem;
-  color: rgb(230, 214, 180);
+  color: var(--kendo-color-on-app-surface);
 }
 
 .description {
   font-size: 1rem;
   line-height: 1.3;
-  color: rgba(230, 214, 180, 0.8);
+  color: var(--kendo-color-subtle);
   margin: 1em 0;
 }
 
@@ -190,19 +190,19 @@
   padding: 0.8rem 1.6rem;
   font-size: 1rem;
   font-weight: 700;
-  color: rgb(230, 214, 180);
-  background-color: #c9472d;
+  color: var(--kendo-color-on-primary);
+  background-color: var(--kendo-color-primary);
   border: none;
   border-radius: 9999px;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(201, 71, 45, 0.3);
+  box-shadow: 0 4px 15px rgba(229, 72, 63, 0.3);
 }
 
 .button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(201, 71, 45, 0.4);
-  background-color: #d1492d;
+  box-shadow: 0 8px 25px rgba(229, 72, 63, 0.4);
+  background-color: var(--kendo-color-primary-hover);
 }
 
 .mobileHeader {
@@ -243,8 +243,8 @@
 
 .navButton {
   background: transparent;
-  border: 1px solid rgba(230, 214, 180, 0.2);
-  color: rgb(230, 214, 180);
+  border: 1px solid var(--kendo-color-border);
+  color: var(--kendo-color-on-app-surface);
   width: 3.5rem;
   height: 3.5rem;
   border-radius: 50%;
@@ -260,7 +260,7 @@
 }
 
 :global(html[data-theme="light"]) .title {
-  color: #1e3a8a; /* Deep blue */
+  color: var(--kendo-color-on-app-surface);
 }
 
 :global(html[data-theme="light"]) .description {
@@ -273,11 +273,11 @@
 
 :global(html[data-theme="light"]) .socialIcon {
   color: var(--kendo-color-primary);
-  background: rgba(201, 71, 45, 0.1);
+  background: rgba(229, 72, 63, 0.1);
 }
 
 :global(html[data-theme="light"]) .socialIcon:hover {
-  background: rgba(201, 71, 45, 0.2);
+  background: rgba(229, 72, 63, 0.2);
   color: var(--kendo-color-primary);
 }
 
@@ -286,8 +286,8 @@
 }
 
 .navButton:hover {
-  background: rgba(230, 214, 180, 0.1);
-  border-color: rgba(230, 214, 180, 0.6);
+  background: rgba(255, 255, 255, 0.04);
+  border-color: var(--kendo-color-border-alt);
   transform: scale(1.05);
 }
 
@@ -370,7 +370,7 @@
 .desktopTitle {
   font-size: 1.25rem;
   font-weight: 600;
-  color: rgb(230, 214, 180);
+  color: var(--kendo-color-on-app-surface);
   margin: 0;
   line-height: 1.2;
   text-transform: uppercase;
@@ -379,7 +379,7 @@
 
 .desktopDescription {
   font-size: 0.95rem;
-  color: rgba(230, 214, 180, 0.7);
+  color: var(--kendo-color-subtle);
   margin: 0;
   line-height: 1.5;
   margin-bottom: 0.5rem;
@@ -399,7 +399,7 @@
 }
 
 :global(html[data-theme="light"]) .desktopPrimaryButton:hover {
-  background-color: #b53c24; /* darker shade of primary */
+  background-color: var(--kendo-color-primary-hover);
   color: #ffffff;
 }
 
@@ -429,8 +429,8 @@
   padding: 0.8rem 2rem;
   font-size: 0.95rem;
   font-weight: 600;
-  color: #1a1a1a;
-  background-color: rgb(230, 214, 180);
+  color: var(--kendo-color-on-primary);
+  background-color: var(--kendo-color-primary);
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -444,7 +444,7 @@
 
 .desktopPrimaryButton:hover {
   transform: translateY(-1px);
-  background-color: white;
+  background-color: var(--kendo-color-primary-hover);
 }
 
 .desktopSecondaryButton {
@@ -454,9 +454,9 @@
   padding: 0.8rem 2rem;
   font-size: 0.95rem;
   font-weight: 600;
-  color: rgb(230, 214, 180);
+  color: var(--kendo-color-on-app-surface);
   background-color: transparent;
-  border: 1px solid rgba(230, 214, 180, 0.3);
+  border: 1px solid var(--kendo-color-border);
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -468,9 +468,9 @@
 }
 
 .desktopSecondaryButton:hover {
-  border-color: rgb(230, 214, 180);
-  background: rgba(230, 214, 180, 0.05);
-  color: white;
+  border-color: var(--kendo-color-border-alt);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--kendo-color-on-app-surface);
 }
 
 .mobileActions {
@@ -515,7 +515,7 @@
 .emptyState {
   text-align: center;
   padding: 3rem 0;
-  color: rgba(230, 214, 180, 0.7);
+  color: var(--kendo-color-subtle);
   font-size: 1.1rem;
   width: 100%;
 }
@@ -671,7 +671,7 @@
   .staticCarName {
     font-size: 1.6rem;
     font-weight: 800;
-    color: rgb(230, 214, 180);
+    color: var(--kendo-color-on-app-surface);
     line-height: 1.2;
     display: block;
     visibility: visible;
@@ -680,7 +680,7 @@
 
   .staticCarModel {
     font-size: 1.15rem;
-    color: rgba(230, 214, 180, 0.9);
+    color: var(--kendo-color-subtle);
     font-weight: 500;
     display: block;
     visibility: visible;
@@ -693,8 +693,8 @@
     width: 100%;
     max-width: 320px;
     padding: 0.9rem;
-    background-color: #c9472d;
-    color: rgb(230, 214, 180);
+    background-color: var(--kendo-color-primary);
+    color: var(--kendo-color-on-primary);
     font-weight: 700;
     text-decoration: none;
     border-radius: 0.5rem;
@@ -711,7 +711,7 @@
   
   .staticDetailsButton:active {
     transform: scale(0.98);
-    background-color: #b33f28;
+    background-color: var(--kendo-color-primary-active);
   }
 
   .desktopActions {
@@ -732,9 +732,9 @@
     padding: 0.8rem 0.2rem;
     font-size: 0.8rem;
     font-weight: 700;
-    color: rgb(230, 214, 180);
+    color: var(--kendo-color-on-app-surface);
     background-color: transparent;
-    border: 2px solid rgba(230, 214, 180, 0.3);
+    border: 2px solid var(--kendo-color-border-alt);
     border-radius: 9999px;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -748,8 +748,8 @@
 
   .actionButton:hover {
     transform: translateY(-2px);
-    border-color: #c9472d;
-    color: #c9472d;
+    border-color: var(--kendo-color-primary);
+    color: var(--kendo-color-primary);
   }
 
   :global(html[data-theme="light"]) .staticCarName {
@@ -759,13 +759,13 @@
   }
   
   :global(html[data-theme="light"]) .staticCarModel {
-    color: rgba(0, 0, 0, 0.7);
+    color: var(--kendo-color-subtle);
     text-shadow: none;
   }
   
   :global(html[data-theme="light"]) .actionButton {
-    color: #1e3a8a;
-    border-color: rgba(30, 58, 138, 0.3);
+    color: var(--kendo-color-primary);
+    border-color: var(--kendo-color-border-alt);
   }
 
   :global(html[data-theme="light"]) .staticDetailsButton {

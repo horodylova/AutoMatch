@@ -40,7 +40,7 @@
 }
 
 .highlightBox {
-  background: rgba(230, 214, 180, 0.05);
+  background: rgba(255, 255, 255, 0.04);
   border-left: 4px solid var(--kendo-color-primary);
   padding: 2rem;
   margin: 2rem 0;
@@ -86,21 +86,21 @@
   font-size: 1.1rem;
   line-height: 1.7;
   margin-bottom: 1.5rem;
-  color: rgba(230, 214, 180, 0.9);
+  color: rgba(245, 245, 247, 0.9);
 }
 
 .inlineLink {
   color: var(--kendo-color-primary);
   font-weight: 600;
   text-decoration: none;
-  border-bottom: 1px solid rgba(201, 71, 45, 0.4);
+  border-bottom: 1px solid rgba(229, 72, 63, 0.4);
   padding-bottom: 1px;
   transition: color 0.15s ease, border-color 0.15s ease;
 }
 
 .inlineLink:hover,
 .inlineLink:focus-visible {
-  color: #fff;
+  color: var(--kendo-color-on-app-surface);
   border-color: var(--kendo-color-primary);
 }
 
@@ -140,7 +140,7 @@
   padding-left: 1.5rem;
   position: relative;
   font-size: 1.1rem;
-  color: rgba(230, 214, 180, 0.9);
+  color: rgba(245, 245, 247, 0.9);
 }
 
 .bulletItem::before {
@@ -226,20 +226,20 @@
 }
 
 :global(html[data-theme="light"]) .subtitle {
-  color: rgba(26, 37, 47, 0.75);
+  color: rgba(17, 18, 20, 0.75);
 }
 
 :global(html[data-theme="light"]) .text {
-  color: rgba(26, 37, 47, 0.85);
+  color: rgba(17, 18, 20, 0.85);
 }
 
 :global(html[data-theme="light"]) .emphasisText {
-  color: #2F7ECF;
+  color: var(--kendo-color-primary);
 }
 
 :global(html[data-theme="light"]) .highlightBox {
-  background: rgba(201, 71, 45, 0.05);
-  border-left-color: #C9472D;
+  background: rgba(229, 72, 63, 0.05);
+  border-left-color: var(--kendo-color-primary);
   color: var(--kendo-color-on-app-surface);
 }
 
@@ -250,14 +250,14 @@
 }
 
 :global(html[data-theme="light"]) .inlineLink {
-  color: #2F7ECF;
-  border-bottom-color: rgba(47, 126, 207, 0.3);
+  color: var(--kendo-color-primary);
+  border-bottom-color: rgba(229, 72, 63, 0.3);
 }
 
 :global(html[data-theme="light"]) .inlineLink:hover {
-  color: #1a5bb0;
-  border-bottom-color: #1a5bb0;
-  background: rgba(47, 126, 207, 0.05);
+  color: var(--kendo-color-primary-hover);
+  border-bottom-color: var(--kendo-color-primary-hover);
+  background: rgba(229, 72, 63, 0.05);
 }
 
 :global(html[data-theme="light"]) .listItem {
@@ -269,9 +269,9 @@
 
 :global(html[data-theme="light"]) .listItem:hover {
   background: #fff;
-  border-color: rgba(47, 126, 207, 0.4);
+  border-color: rgba(229, 72, 63, 0.4);
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(47, 126, 207, 0.12);
+  box-shadow: 0 8px 24px rgba(229, 72, 63, 0.12);
 }
 
 :global(html[data-theme="light"]) .bulletItem {
@@ -279,7 +279,7 @@
 }
 
 :global(html[data-theme="light"]) .bulletItem::before {
-  color: #C9472D;
+  color: var(--kendo-color-primary);
 }
 
 :global(html[data-theme="light"]) .modeCard {
@@ -289,12 +289,12 @@
 }
 
 :global(html[data-theme="light"]) .modeTitle {
-  color: #2F7ECF;
-  border-bottom-color: rgba(47, 126, 207, 0.15);
+  color: var(--kendo-color-primary);
+  border-bottom-color: rgba(229, 72, 63, 0.15);
 }
 
 :global(html[data-theme="light"]) .stepNumber {
-  color: #C9472D;
+  color: var(--kendo-color-primary);
 }
 
 :global(html[data-theme="light"]) .sectionTitle {
@@ -308,8 +308,8 @@
 }
 
 :global(html[data-theme="light"]) .conclusion {
-  background: rgba(47, 126, 207, 0.08);
-  border-color: rgba(47, 126, 207, 0.2);
+  background: rgba(229, 72, 63, 0.08);
+  border-color: rgba(229, 72, 63, 0.2);
 }
 
 :global(html[data-theme="light"]) .conclusionTitle {
@@ -321,11 +321,11 @@
 }
 
 :global(html[data-theme="light"]) .finalNote {
-  color: #2F7ECF;
+  color: var(--kendo-color-primary);
 }
 
 .conclusion {
-  background: linear-gradient(135deg, rgba(201, 71, 45, 0.1) 0%, transparent 100%);
+  background: linear-gradient(135deg, rgba(229, 72, 63, 0.1) 0%, transparent 100%);
   border: 1px solid var(--kendo-color-primary);
   border-radius: 16px;
   padding: 3rem;
@@ -344,7 +344,7 @@
   font-size: 1.2rem;
   max-width: 600px;
   margin: 0 auto 2rem;
-  color: rgba(230, 214, 180, 0.9);
+  color: rgba(245, 245, 247, 0.9);
 }
 
 .finalNote {

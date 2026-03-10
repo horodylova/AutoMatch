@@ -69,7 +69,7 @@
 }
 
 :global(html[data-theme="light"]) .navTitle {
-  color: #2F7ECF;
+  color: var(--app-footer-nav-title);
 }
 
 .navLink {

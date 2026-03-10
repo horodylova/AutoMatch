@@ -59,7 +59,7 @@ export default function ResumeModal({ onResume, onStartFresh }: ResumeModalProps
               fontWeight: 700,
               cursor: "pointer",
               transition: "transform 0.1s ease",
-              boxShadow: "0 4px 12px rgba(201,71,45,0.25)"
+              boxShadow: "0 4px 12px rgba(229,72,63,0.25)"
             }}
             onMouseEnter={(e) => e.currentTarget.style.transform = "scale(1.02)"}
             onMouseLeave={(e) => e.currentTarget.style.transform = "scale(1)"}

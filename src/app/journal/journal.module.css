@@ -24,7 +24,7 @@
   grid-template-columns: 1.2fr 0.8fr;
   gap: 40px;
   background: var(--journal-card-bg, rgba(255, 255, 255, 0.03));
-  border: 1px solid var(--journal-card-border, rgba(230, 214, 180, 0.15));
+  border: 1px solid var(--journal-card-border, rgba(255, 255, 255, 0.08));
   border-radius: 24px;
   overflow: hidden;
   margin-bottom: 24px;
@@ -37,7 +37,7 @@
 .featured:hover {
   transform: translateY(-4px);
   box-shadow: var(--journal-card-hover-shadow, 0 24px 48px rgba(0, 0, 0, 0.4));
-  border-color: var(--journal-card-border-hover, rgba(230, 214, 180, 0.3));
+  border-color: var(--journal-card-border-hover, rgba(255, 255, 255, 0.16));
 }
 
 .featuredImageWrapper {
@@ -71,10 +71,10 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1.5px;
-  color: var(--journal-label-color, #e6d6b4);
+  color: var(--journal-label-color, #E5483F);
   margin-bottom: 16px;
   padding: 6px 12px;
-  background: var(--journal-viewall-bg-hover, rgba(230, 214, 180, 0.1));
+  background: var(--journal-viewall-bg-hover, rgba(255, 255, 255, 0.06));
   border-radius: 100px;
   width: fit-content;
 }
@@ -84,13 +84,13 @@
   font-weight: 800;
   line-height: 1.2;
   margin-bottom: 20px;
-  color: var(--journal-title-color, #e6d6b4);
+  color: var(--journal-title-color, #F5F5F7);
 }
 
 .featuredExcerpt {
   font-size: 18px;
   line-height: 1.7;
-  color: var(--journal-card-excerpt-color, rgba(230, 214, 180, 0.85));
+  color: var(--journal-card-excerpt-color, rgba(245, 245, 247, 0.85));
   margin-bottom: 32px;
 }
 
@@ -110,7 +110,7 @@
 .card:hover {
   transform: translateY(-8px);
   box-shadow: var(--journal-card-hover-shadow, 0 20px 40px rgba(0, 0, 0, 0.4));
-  border-color: var(--journal-card-border-hover, rgba(230, 214, 180, 0.2));
+  border-color: var(--journal-card-border-hover, rgba(255, 255, 255, 0.16));
 }
 
 .imageWrapper {
@@ -140,7 +140,7 @@
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  color: var(--journal-card-category-color, rgba(230, 214, 180, 0.6));
+  color: var(--journal-card-category-color, rgba(245, 245, 247, 0.6));
   margin-bottom: 12px;
 }
 
@@ -149,13 +149,13 @@
   font-weight: 700;
   line-height: 1.4;
   margin-bottom: 12px;
-  color: var(--journal-card-title-color, #e6d6b4);
+  color: var(--journal-card-title-color, #F5F5F7);
 }
 
 .cardExcerpt {
   font-size: 15px;
   line-height: 1.6;
-  color: var(--journal-card-excerpt-color, rgba(230, 214, 180, 0.8));
+  color: var(--journal-card-excerpt-color, rgba(245, 245, 247, 0.8));
   margin-bottom: 24px;
   flex: 1;
 }
@@ -163,7 +163,7 @@
 .readMore {
   font-size: 14px;
   font-weight: 600;
-  color: var(--journal-action-color, #e6d6b4);
+  color: var(--journal-action-color, #F5F5F7);
   display: flex;
   align-items: center;
   gap: 6px;
@@ -266,13 +266,13 @@
 
 :global(html[data-theme="light"]) .featured:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 32px rgba(201, 71, 45, 0.15);
-  border-color: rgba(201, 71, 45, 0.3);
+  box-shadow: 0 12px 32px rgba(229, 72, 63, 0.15);
+  border-color: rgba(229, 72, 63, 0.3);
 }
 
 :global(html[data-theme="light"]) .featuredLabel {
-  color: #C9472D;
-  background: rgba(201, 71, 45, 0.08);
+  color: var(--kendo-color-primary);
+  background: rgba(229, 72, 63, 0.08);
 }
 
 :global(html[data-theme="light"]) .featuredTitle {
@@ -291,12 +291,12 @@
 
 :global(html[data-theme="light"]) .card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 12px 24px rgba(47, 126, 207, 0.15);
-  border-color: rgba(47, 126, 207, 0.3);
+  box-shadow: 0 12px 24px rgba(229, 72, 63, 0.15);
+  border-color: rgba(229, 72, 63, 0.3);
 }
 
 :global(html[data-theme="light"]) .category {
-  color: #2F7ECF;
+  color: var(--kendo-color-primary);
 }
 
 .pagination {
@@ -325,14 +325,14 @@
 
 .pageButton:hover {
   background: var(--journal-pagination-bg-hover, rgba(255, 255, 255, 0.1));
-  border-color: var(--journal-pagination-border-hover, rgba(230, 214, 180, 0.4));
+  border-color: var(--journal-pagination-border-hover, rgba(255, 255, 255, 0.16));
   transform: translateY(-2px);
 }
 
 .activePage {
-  background: var(--app-accent, #C9472D);
+  background: var(--app-accent, #E5483F);
   color: white;
-  border-color: var(--app-accent, #C9472D);
+  border-color: var(--app-accent, #E5483F);
 }
 
 .navButton {
@@ -353,7 +353,7 @@
 
 .navButton:hover {
   background: var(--journal-pagination-bg-hover, rgba(255, 255, 255, 0.1));
-  border-color: var(--journal-pagination-border-hover, rgba(230, 214, 180, 0.4));
+  border-color: var(--journal-pagination-border-hover, rgba(255, 255, 255, 0.16));
   transform: translateY(-2px);
 }
 
@@ -371,14 +371,14 @@
 
 :global(html[data-theme="light"]) .pageButton:hover,
 :global(html[data-theme="light"]) .navButton:hover {
-  border-color: rgba(201, 71, 45, 0.3);
-  background: rgba(201, 71, 45, 0.05);
+  border-color: rgba(229, 72, 63, 0.3);
+  background: rgba(229, 72, 63, 0.05);
 }
 
 :global(html[data-theme="light"]) .activePage {
-  background: #C9472D;
+  background: var(--kendo-color-primary);
   color: #FFFFFF;
-  border-color: #C9472D;
+  border-color: var(--kendo-color-primary);
 }
 
 :global(html[data-theme="light"]) .cardTitle {
@@ -390,5 +390,5 @@
 }
 
 :global(html[data-theme="light"]) .readMore {
-  color: #C9472D;
+  color: var(--kendo-color-primary);
 }

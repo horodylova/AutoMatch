@@ -337,16 +337,16 @@ export default function ListingList({ filters }: { filters?: FiltersData }) {
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '6px',
-                backgroundColor: 'rgba(201,71,45,0.1)', 
+                backgroundColor: 'rgba(229,72,63,0.1)', 
                 color: 'var(--kendo-color-primary)', 
                 textDecoration: 'none', 
                 padding: '8px 16px',
                 borderRadius: '999px',
                 fontSize: '14px',
                 fontWeight: 700,
-                border: '1px solid rgba(201,71,45,0.25)',
+                border: '1px solid rgba(229,72,63,0.25)',
                 transition: 'all 0.2s ease',
-                boxShadow: '0 4px 12px rgba(201,71,45,0.12)'
+                boxShadow: '0 4px 12px rgba(229,72,63,0.12)'
               }}
             >
               {hasResults ? "✨ Return to your quiz results" : (hasQuiz ? "✨ Resume your quiz" : "💖 Find your true love with our quiz")}

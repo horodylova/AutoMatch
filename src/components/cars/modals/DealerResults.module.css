@@ -142,12 +142,12 @@
 }
 
 :global(html[data-theme="light"]) .resultItem:hover {
-  box-shadow: 0 4px 12px rgba(201, 71, 45, 0.15);
-  border-color: #C9472D;
+  box-shadow: 0 4px 12px rgba(229, 72, 63, 0.15);
+  border-color: var(--kendo-color-primary);
 }
 
 :global(html[data-theme="light"]) .resultTitle {
-  color: #C9472D;
+  color: var(--kendo-color-primary);
 }
 
 :global(html[data-theme="light"]) .pageBtn {
@@ -157,9 +157,9 @@
 }
 
 :global(html[data-theme="light"]) .pageBtn:hover {
-  border-color: #C9472D;
-  color: #C9472D;
-  background: rgba(201, 71, 45, 0.05);
+  border-color: var(--kendo-color-primary);
+  color: var(--kendo-color-primary);
+  background: rgba(229, 72, 63, 0.05);
 }
 
 :global(html[data-theme="light"]) .header {

@@ -51,13 +51,22 @@ body {
 }
 
 :root {
-  --kendo-color-app-surface: #0E1B24;
-  --kendo-color-surface: #15202B;
-  --kendo-color-surface-alt: #0B1620;
-  --kendo-color-on-app-surface: #E6D6B4;
-  --kendo-color-subtle: #A3A3A3;
-  --kendo-color-border: rgba(230, 214, 180, 0.18);
-  --kendo-color-border-alt: rgba(230, 214, 180, 0.28);
+  /* DO NOT DELETE COMMENTED COLORS */
+  /* НЕ УДАЛЯТЬ ЗАКОММЕНТИРОВАННЫЕ Цвета */
+  /* --kendo-color-app-surface: #0E1B24; */
+  --kendo-color-app-surface: #1F1F23;
+  /* --kendo-color-surface: #15202B; */
+  --kendo-color-surface: #2C2F36;
+  /* --kendo-color-surface-alt: #0B1620; */
+  --kendo-color-surface-alt: #24262B;
+  /* --kendo-color-on-app-surface: #E6D6B4; */
+  --kendo-color-on-app-surface: #F5F5F7;
+  /* --kendo-color-subtle: #A3A3A3; */
+  --kendo-color-subtle: #B8BCC6;
+  /* --kendo-color-border: rgba(230, 214, 180, 0.18); */
+  --kendo-color-border: rgba(255, 255, 255, 0.08);
+  /* --kendo-color-border-alt: rgba(230, 214, 180, 0.28); */
+  --kendo-color-border-alt: rgba(255, 255, 255, 0.16);
   --kendo-color-base-subtle: #292929;
   --kendo-color-base-subtle-hover: #3D3D3D;
   --kendo-color-base-subtle-active: #525252;
@@ -71,17 +80,22 @@ body {
   --kendo-color-primary-subtle: #F3D7D1;
   --kendo-color-primary-subtle-hover: #EFC9C1;
   --kendo-color-primary-subtle-active: #E7B8AE;
-  --kendo-color-primary: #C9472D;
+  /* --kendo-color-primary: #C9472D; */
+  --kendo-color-primary: #E5483F;
   --kendo-color-primary-hover: #D75B3F;
   --kendo-color-primary-active: #B23D2A;
   --kendo-color-primary-emphasis: #8F2F20;
-  --kendo-color-on-primary: #E6D6B4;
-  --kendo-color-primary-on-surface: #C9472D;
-  --kendo-color-primary-on-subtle: #C9472D;
+  /* --kendo-color-on-primary: #E6D6B4; */
+  --kendo-color-on-primary: #F5F5F7;
+  /* --kendo-color-primary-on-surface: #C9472D; */
+  --kendo-color-primary-on-surface: #E5483F;
+  /* --kendo-color-primary-on-subtle: #C9472D; */
+  --kendo-color-primary-on-subtle: #E5483F;
   --kendo-color-secondary-subtle: #3D3D3D;
   --kendo-color-secondary-subtle-hover: #525252;
   --kendo-color-secondary-subtle-active: #666;
-  --kendo-color-secondary: #525252;
+  /* --kendo-color-secondary: #525252; */
+  --kendo-color-secondary: #3A3F47;
   --kendo-color-secondary-hover: #666;
   --kendo-color-secondary-active: #7A7A7A;
   --kendo-color-secondary-emphasis: #BDBEC7;
@@ -227,110 +241,181 @@ body {
   --kendo-border-radius-xxl: 32px;
   --kendo-border-radius-xxxl: 64px;
   --kendo-border-radius-full: 9999px;
-  --app-background-body-grid-color: rgba(230, 214, 180, 0.06);
+  /* --app-background-body-grid-color: rgba(230, 214, 180, 0.06); */
+  --app-background-body-grid-color: rgba(255, 255, 255, 0.06);
   --app-background-body-accent-a: rgba(20, 82, 113, 0.20);
   --app-background-body-accent-b: rgba(20, 82, 113, 0.15);
   --section-horizontal-gradient: linear-gradient(90deg, var(--kendo-color-app-surface) 0, var(--kendo-color-app-surface) 25%, var(--kendo-color-surface) 50%, var(--kendo-color-app-surface) 75%, var(--kendo-color-app-surface) 100%);
   --selfdrivingcars-section-gradient: linear-gradient(to bottom, var(--kendo-color-app-surface) 0, var(--kendo-color-surface) 80%, var(--kendo-color-surface) 100%);
-  --app-accent-strong: #C9472D;
-  --app-accent-strong-soft: rgba(198, 73, 45, 0.15);
-  --app-header-background: rgba(14, 27, 36, 0.65);
-  --app-header-background-scrolled: rgba(14, 27, 36, 0.82);
-  --app-header-mobile-drawer-bg: #0B161F;
+  /* --app-accent-strong: #C9472D; */
+  --app-accent-strong: var(--kendo-color-primary);
+  /* --app-accent-strong-soft: rgba(198, 73, 45, 0.15); */
+  --app-accent-strong-soft: rgba(229, 72, 63, 0.15);
+  /* --app-header-background: rgba(14, 27, 36, 0.65); */
+  --app-header-background: rgba(31, 31, 35, 0.65);
+  /* --app-header-background-scrolled: rgba(14, 27, 36, 0.82); */
+  --app-header-background-scrolled: rgba(31, 31, 35, 0.82);
+  /* --app-header-mobile-drawer-bg: #0B161F; */
+  --app-header-mobile-drawer-bg: var(--kendo-color-surface-alt);
   --app-header-backdrop: rgba(0, 0, 0, 0.45);
-  --app-footer-background: rgba(14, 27, 36, 0.95);
-  --app-footer-text-main: rgba(230, 214, 180, 0.8);
-  --app-footer-text-muted: rgba(230, 214, 180, 0.7);
-  --app-footer-nav-title: rgba(230, 214, 180, 0.4);
-  --app-footer-link: rgba(230, 214, 180, 0.8);
-  --app-footer-social: rgba(230, 214, 180, 0.6);
-  --app-footer-bottom: rgba(230, 214, 180, 0.4);
-  --app-footer-divider: rgba(230, 214, 180, 0.1);
+  /* --app-footer-background: rgba(14, 27, 36, 0.95); */
+  --app-footer-background: rgba(31, 31, 35, 0.95);
+  /* --app-footer-text-main: rgba(230, 214, 180, 0.8); */
+  --app-footer-text-main: rgba(245, 245, 247, 0.82);
+  /* --app-footer-text-muted: rgba(230, 214, 180, 0.7); */
+  --app-footer-text-muted: rgba(245, 245, 247, 0.7);
+  /* --app-footer-nav-title: rgba(230, 214, 180, 0.4); */
+  --app-footer-nav-title: rgba(245, 245, 247, 0.4);
+  /* --app-footer-link: rgba(230, 214, 180, 0.8); */
+  --app-footer-link: rgba(245, 245, 247, 0.82);
+  /* --app-footer-social: rgba(230, 214, 180, 0.6); */
+  --app-footer-social: rgba(245, 245, 247, 0.6);
+  /* --app-footer-bottom: rgba(230, 214, 180, 0.4); */
+  --app-footer-bottom: rgba(245, 245, 247, 0.45);
+  /* --app-footer-divider: rgba(230, 214, 180, 0.1); */
+  --app-footer-divider: rgba(255, 255, 255, 0.08);
   --app-footer-logo-background: transparent;
-  --car-personalities-subtitle-color: rgba(230, 214, 180, 0.8);
+  /* --car-personalities-subtitle-color: rgba(230, 214, 180, 0.8); */
+  --car-personalities-subtitle-color: rgba(245, 245, 247, 0.8);
   --car-personalities-subtitle-bg: transparent;
   --car-personalities-logo-filter: invert(85%) sepia(10%) saturate(120%) hue-rotate(350deg) brightness(100%);
-  --stats-subtitle-color: rgba(230, 214, 180, 0.8);
-  --stats-text-color: rgba(230, 214, 180, 0.9);
-  --stats-metric-label-color: rgba(230, 214, 180, 0.8);
-  --stats-timeline-line: rgba(230, 214, 180, 0.2);
-  --stats-timeline-tick: rgba(230, 214, 180, 0.3);
-  --stats-timeline-label: rgba(230, 214, 180, 0.6);
-  --stats-donut-background: rgba(230, 214, 180, 0.2);
-  --stats-donut-a: #C9472D;
+  /* --stats-subtitle-color: rgba(230, 214, 180, 0.8); */
+  --stats-subtitle-color: rgba(245, 245, 247, 0.8);
+  /* --stats-text-color: rgba(230, 214, 180, 0.9); */
+  --stats-text-color: rgba(245, 245, 247, 0.9);
+  /* --stats-metric-label-color: rgba(230, 214, 180, 0.8); */
+  --stats-metric-label-color: rgba(245, 245, 247, 0.8);
+  /* --stats-timeline-line: rgba(230, 214, 180, 0.2); */
+  --stats-timeline-line: rgba(245, 245, 247, 0.18);
+  /* --stats-timeline-tick: rgba(230, 214, 180, 0.3); */
+  --stats-timeline-tick: rgba(245, 245, 247, 0.28);
+  /* --stats-timeline-label: rgba(230, 214, 180, 0.6); */
+  --stats-timeline-label: rgba(245, 245, 247, 0.6);
+  /* --stats-donut-background: rgba(230, 214, 180, 0.2); */
+  --stats-donut-background: rgba(245, 245, 247, 0.16);
+  /* --stats-donut-a: #C9472D; */
+  --stats-donut-a: var(--kendo-color-primary);
   --stats-donut-b: #2F7ECF;
   --stats-donut-c: #4C6984;
   --stats-donut-d: #7C93A8;
   --stats-donut-e: #A9B9C8;
-  --journal-title-color: #E6D6B4;
+  /* --journal-title-color: #E6D6B4; */
+  --journal-title-color: var(--kendo-color-on-app-surface);
   --journal-label-color: var(--kendo-color-primary);
-  --journal-card-title-color: #E6D6B4;
-  --journal-card-excerpt-color: rgba(230, 214, 180, 0.8);
-  --journal-card-category-color: rgba(230, 214, 180, 0.6);
-  --journal-action-color: #E6D6B4;
+  /* --journal-card-title-color: #E6D6B4; */
+  --journal-card-title-color: var(--kendo-color-on-app-surface);
+  /* --journal-card-excerpt-color: rgba(230, 214, 180, 0.8); */
+  --journal-card-excerpt-color: rgba(245, 245, 247, 0.8);
+  /* --journal-card-category-color: rgba(230, 214, 180, 0.6); */
+  --journal-card-category-color: rgba(245, 245, 247, 0.6);
+  /* --journal-action-color: #E6D6B4; */
+  --journal-action-color: var(--kendo-color-on-app-surface);
   --journal-card-bg: rgba(255, 255, 255, 0.03);
   --journal-card-border: rgba(255, 255, 255, 0.05);
-  --journal-card-border-hover: rgba(230, 214, 180, 0.2);
-  --journal-viewall-border-color: rgba(230, 214, 180, 0.2);
-  --journal-viewall-bg-hover: rgba(230, 214, 180, 0.1);
+  /* --journal-card-border-hover: rgba(230, 214, 180, 0.2); */
+  --journal-card-border-hover: rgba(245, 245, 247, 0.18);
+  /* --journal-viewall-border-color: rgba(230, 214, 180, 0.2); */
+  --journal-viewall-border-color: rgba(255, 255, 255, 0.12);
+  /* --journal-viewall-bg-hover: rgba(230, 214, 180, 0.1); */
+  --journal-viewall-bg-hover: rgba(255, 255, 255, 0.06);
   --advice-title-color: var(--kendo-color-on-app-surface);
-  --advice-text-color: rgba(254, 242, 215, 0.9);
-  --advice-overlay-bg: rgba(14,27,36,0.82);
+  /* --advice-text-color: rgba(254, 242, 215, 0.9); */
+  --advice-text-color: rgba(245, 245, 247, 0.9);
+  /* --advice-overlay-bg: rgba(14,27,36,0.82); */
+  --advice-overlay-bg: rgba(31, 31, 35, 0.82);
   --advice-overlay-border: var(--kendo-color-border);
   --advice-check-bg: var(--kendo-color-primary);
-  --how-subtitle-color: rgba(230, 214, 180, 0.85);
-  --how-comma-color: rgba(230, 214, 180, 0.6);
+  /* --how-subtitle-color: rgba(230, 214, 180, 0.85); */
+  --how-subtitle-color: rgba(245, 245, 247, 0.85);
+  /* --how-comma-color: rgba(230, 214, 180, 0.6); */
+  --how-comma-color: rgba(245, 245, 247, 0.6);
   --how-media-overlay-opacity: 0.95;
-  --how-glow-strong: rgba(201, 71, 45, 0.6);
-  --how-glow-soft: rgba(201, 71, 45, 0.4);
+  /* --how-glow-strong: rgba(201, 71, 45, 0.6); */
+  --how-glow-strong: rgba(229, 72, 63, 0.6);
+  /* --how-glow-soft: rgba(201, 71, 45, 0.4); */
+  --how-glow-soft: rgba(229, 72, 63, 0.4);
   --how-media-aspect: 16 / 9;
-  --dating-card-bg: rgba(14,27,36,0.7);
-  --dating-card-border: rgba(230,214,180,0.15);
-  --dating-card-border-hover: rgba(230,214,180,0.35);
-  --dating-lead-color: rgba(230,214,180,0.9);
+  /* --dating-card-bg: rgba(14,27,36,0.7); */
+  --dating-card-bg: rgba(31, 31, 35, 0.7);
+  /* --dating-card-border: rgba(230,214,180,0.15); */
+  --dating-card-border: var(--kendo-color-border);
+  /* --dating-card-border-hover: rgba(230,214,180,0.35); */
+  --dating-card-border-hover: var(--kendo-color-border-alt);
+  /* --dating-lead-color: rgba(230,214,180,0.9); */
+  --dating-lead-color: rgba(245, 245, 247, 0.9);
   --dating-icon-bg: var(--kendo-color-primary);
-  --dating-icon-shadow: 0 6px 16px rgba(201,71,45,0.35);
-  --dating-intro-bg: rgba(14,27,36,0.9);
-  --dating-intro-border: rgba(230,214,180,0.15);
+  /* --dating-icon-shadow: 0 6px 16px rgba(201,71,45,0.35); */
+  --dating-icon-shadow: 0 6px 16px rgba(229, 72, 63, 0.35);
+  /* --dating-intro-bg: rgba(14,27,36,0.9); */
+  --dating-intro-bg: rgba(31, 31, 35, 0.9);
+  /* --dating-intro-border: rgba(230,214,180,0.15); */
+  --dating-intro-border: var(--kendo-color-border);
   --dating-intro-shadow: 0 16px 48px rgba(0,0,0,0.6);
   --dating-intro-text: var(--kendo-color-on-app-surface);
-  --advice-check-shadow: 0 6px 20px rgba(201,71,45,0.35);
+  /* --advice-check-shadow: 0 6px 20px rgba(201,71,45,0.35); */
+  --advice-check-shadow: 0 6px 20px rgba(229, 72, 63, 0.35);
   --advice-img-filter: linear-gradient(0deg, rgba(0,0,0,0.10), rgba(0,0,0,0.10));
   --advice-overlay-shadow: 0 16px 48px rgba(0,0,0,0.45);
   --journal-card-hover-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-  --stats-marker-shadow: 0 0 0 3px rgba(201, 71, 45, 0.25);
-  --road-glow-color: rgba(230, 214, 180, 1);
-  --progress-glow-color: rgba(201, 71, 45, 1);
-  --road-stroke-color: rgba(230, 214, 180, 0.18);
-  --road-glow-stroke-color: rgba(230, 214, 180, 0.9);
-  --progress-glow-stroke-color: rgba(201, 71, 45, 0.95);
+  /* --stats-marker-shadow: 0 0 0 3px rgba(201, 71, 45, 0.25); */
+  --stats-marker-shadow: 0 0 0 3px rgba(229, 72, 63, 0.25);
+  /* --road-glow-color: rgba(230, 214, 180, 1); */
+  --road-glow-color: rgba(245, 245, 247, 1);
+  /* --progress-glow-color: rgba(201, 71, 45, 1); */
+  --progress-glow-color: rgba(229, 72, 63, 1);
+  /* --road-stroke-color: rgba(230, 214, 180, 0.18); */
+  --road-stroke-color: rgba(255, 255, 255, 0.14);
+  /* --road-glow-stroke-color: rgba(230, 214, 180, 0.9); */
+  --road-glow-stroke-color: rgba(245, 245, 247, 0.85);
+  /* --progress-glow-stroke-color: rgba(201, 71, 45, 0.95); */
+  --progress-glow-stroke-color: rgba(229, 72, 63, 0.95);
 }
 
 html[data-theme="light"] {
-  --kendo-color-app-surface: #F4F5F7;
+  /* DO NOT DELETE COMMENTED COLORS */
+  /* НЕ УДАЛЯТЬ ЗАКОММЕНТИРОВАННЫЕ Цвета */
+  /* --kendo-color-app-surface: #F4F5F7; */
+  --kendo-color-app-surface: #F5F6F8;
+  /* --kendo-color-surface: #FFFFFF; */
   --kendo-color-surface: #FFFFFF;
-  --kendo-color-surface-alt: #E4E8F0;
-  --kendo-color-on-app-surface: #1A252F;
-  --kendo-color-subtle: #6C6C6C;
-  --kendo-color-border: rgba(10, 20, 30, 0.08);
-  --kendo-color-border-alt: rgba(10, 20, 30, 0.16);
-  --app-background-body-grid-color: rgba(26, 37, 47, 0.08);
+  /* --kendo-color-surface-alt: #E4E8F0; */
+  --kendo-color-surface-alt: #F0F2F5;
+  /* --kendo-color-on-app-surface: #1A252F; */
+  --kendo-color-on-app-surface: #111214;
+  /* --kendo-color-subtle: #6C6C6C; */
+  --kendo-color-subtle: #5C616A;
+  /* --kendo-color-border: rgba(10, 20, 30, 0.08); */
+  --kendo-color-border: rgba(0, 0, 0, 0.08);
+  /* --kendo-color-border-alt: rgba(10, 20, 30, 0.16); */
+  --kendo-color-border-alt: rgba(0, 0, 0, 0.16);
+  /* --app-background-body-grid-color: rgba(26, 37, 47, 0.08); */
+  --app-background-body-grid-color: rgba(17, 18, 20, 0.08);
   --app-background-body-accent-a: rgba(47, 126, 207, 0.16);
   --app-background-body-accent-b: rgba(201, 71, 45, 0.08);
-  --app-accent-strong: #2F7ECF;
-  --app-accent-strong-soft: rgba(47, 126, 207, 0.13);
+  /* --app-accent-strong: #2F7ECF; */
+  --app-accent-strong: var(--kendo-color-primary);
+  /* --app-accent-strong-soft: rgba(47, 126, 207, 0.13); */
+  --app-accent-strong-soft: rgba(229, 72, 63, 0.13);
   --app-header-background: rgba(255, 255, 255, 0.9);
   --app-header-background-scrolled: rgba(255, 255, 255, 0.98);
   --app-header-mobile-drawer-bg: #FFFFFF;
   --app-header-backdrop: rgba(10, 20, 30, 0.2);
-  --app-footer-background: #F4F5F7;
-  --app-footer-text-main: rgba(26, 37, 47, 0.9);
-  --app-footer-text-muted: rgba(26, 37, 47, 0.8);
-  --app-footer-nav-title: rgba(26, 37, 47, 0.65);
-  --app-footer-link: rgba(26, 37, 47, 0.9);
-  --app-footer-social: rgba(26, 37, 47, 0.8);
-  --app-footer-bottom: rgba(26, 37, 47, 0.6);
-  --app-footer-divider: rgba(26, 37, 47, 0.08);
+  /* --app-footer-background: #F4F5F7; */
+  --app-footer-background: var(--kendo-color-app-surface);
+  /* --app-footer-text-main: rgba(26, 37, 47, 0.9); */
+  --app-footer-text-main: rgba(17, 18, 20, 0.9);
+  /* --app-footer-text-muted: rgba(26, 37, 47, 0.8); */
+  --app-footer-text-muted: rgba(17, 18, 20, 0.8);
+  /* --app-footer-nav-title: rgba(26, 37, 47, 0.65); */
+  --app-footer-nav-title: rgba(17, 18, 20, 0.65);
+  /* --app-footer-link: rgba(26, 37, 47, 0.9); */
+  --app-footer-link: rgba(17, 18, 20, 0.9);
+  /* --app-footer-social: rgba(26, 37, 47, 0.8); */
+  --app-footer-social: rgba(17, 18, 20, 0.8);
+  /* --app-footer-bottom: rgba(26, 37, 47, 0.6); */
+  --app-footer-bottom: rgba(17, 18, 20, 0.6);
+  /* --app-footer-divider: rgba(26, 37, 47, 0.08); */
+  --app-footer-divider: rgba(0, 0, 0, 0.08);
   --app-footer-logo-background: transparent;
   --advice-img-filter: none;
   --advice-overlay-shadow: 0 16px 40px rgba(47, 126, 207, 0.15);
@@ -342,12 +427,14 @@ html[data-theme="light"] {
   --stats-metric-label-color: rgba(26, 37, 47, 0.75);
   --stats-timeline-line: rgba(26, 37, 47, 0.12);
   --stats-timeline-tick: rgba(26, 37, 47, 0.24);
-  --stats-donut-a: #C9472D;
+  /* --stats-donut-a: #C9472D; */
+  --stats-donut-a: var(--kendo-color-primary);
   --stats-donut-b: #2F7ECF;
   --stats-donut-c: #4C6984;
   --stats-donut-d: #7C93A8;
   --stats-donut-e: #A9B9C8;
-  --stats-timeline-label: #2F7ECF;
+  /* --stats-timeline-label: #2F7ECF; */
+  --stats-timeline-label: var(--kendo-color-primary);
   --stats-timeline-tick: rgba(26, 37, 47, 0.32);
   --journal-title-color: rgba(26, 37, 47, 0.95);
   --journal-label-color: var(--kendo-color-primary);
@@ -368,43 +455,58 @@ html[data-theme="light"] {
   --how-subtitle-color: rgba(26, 37, 47, 0.75);
   --how-comma-color: rgba(26, 37, 47, 0.5);
   --how-media-overlay-opacity: 0.2;
-  --how-glow-strong: rgba(47, 126, 207, 0.25);
-  --how-glow-soft: rgba(47, 126, 207, 0.08);
+  /* --how-glow-strong: rgba(47, 126, 207, 0.25); */
+  --how-glow-strong: rgba(229, 72, 63, 0.25);
+  /* --how-glow-soft: rgba(47, 126, 207, 0.08); */
+  --how-glow-soft: rgba(229, 72, 63, 0.08);
   --how-media-aspect: 3 / 2;
   --dating-card-bg: var(--kendo-color-surface);
   --dating-card-border: var(--kendo-color-border);
   --dating-card-border-hover: var(--kendo-color-border-alt);
   --dating-lead-color: rgba(26, 37, 47, 0.75);
   --dating-icon-bg: var(--app-accent-strong-soft);
-  --dating-icon-shadow: 0 4px 14px rgba(47, 126, 207, 0.15);
+  /* --dating-icon-shadow: 0 4px 14px rgba(47, 126, 207, 0.15); */
+  --dating-icon-shadow: 0 4px 14px rgba(229, 72, 63, 0.15);
   --dating-intro-bg: rgba(255,255,255,0.92);
   --dating-intro-border: var(--kendo-color-border);
-  --dating-intro-shadow: 0 12px 32px rgba(47, 126, 207, 0.15);
+  /* --dating-intro-shadow: 0 12px 32px rgba(47, 126, 207, 0.15); */
+  --dating-intro-shadow: 0 12px 32px rgba(229, 72, 63, 0.15);
   --dating-intro-text: var(--kendo-color-on-app-surface);
-  --advice-check-shadow: 0 6px 20px rgba(47, 126, 207, 0.25);
-  --journal-card-hover-shadow: 0 20px 40px rgba(47, 126, 207, 0.15);
-  --stats-marker-shadow: 0 0 0 3px rgba(47, 126, 207, 0.25);
-  --road-glow-color: rgba(47, 126, 207, 0.6);
-  --progress-glow-color: rgba(201, 71, 45, 1);
+  /* --advice-check-shadow: 0 6px 20px rgba(47, 126, 207, 0.25); */
+  --advice-check-shadow: 0 6px 20px rgba(229, 72, 63, 0.25);
+  /* --journal-card-hover-shadow: 0 20px 40px rgba(47, 126, 207, 0.15); */
+  --journal-card-hover-shadow: 0 20px 40px rgba(229, 72, 63, 0.15);
+  /* --stats-marker-shadow: 0 0 0 3px rgba(47, 126, 207, 0.25); */
+  --stats-marker-shadow: 0 0 0 3px rgba(229, 72, 63, 0.25);
+  /* --road-glow-color: rgba(47, 126, 207, 0.6); */
+  --road-glow-color: rgba(229, 72, 63, 0.6);
+  /* --progress-glow-color: rgba(201, 71, 45, 1); */
+  --progress-glow-color: rgba(229, 72, 63, 1);
   --road-stroke-color: rgba(26, 37, 47, 0.35);
-  --road-glow-stroke-color: rgba(47, 126, 207, 0.5);
-  --progress-glow-stroke-color: rgba(201, 71, 45, 0.95);
+  /* --road-glow-stroke-color: rgba(47, 126, 207, 0.5); */
+  --road-glow-stroke-color: rgba(229, 72, 63, 0.5);
+  /* --progress-glow-stroke-color: rgba(201, 71, 45, 0.95); */
+  --progress-glow-stroke-color: rgba(229, 72, 63, 0.95);
 
   --kendo-color-primary-subtle: #FBE4DD;
   --kendo-color-primary-subtle-hover: #F6D1C5;
   --kendo-color-primary-subtle-active: #F0BEAD;
-  --kendo-color-primary: #C9472D;
+  /* --kendo-color-primary: #C9472D; */
+  --kendo-color-primary: #E5483F;
   --kendo-color-primary-hover: #B93F28;
   --kendo-color-primary-active: #A33823;
   --kendo-color-primary-emphasis: #7C2717;
   --kendo-color-on-primary: #FFFFFF;
-  --kendo-color-primary-on-surface: #C9472D;
-  --kendo-color-primary-on-subtle: #C9472D;
+  /* --kendo-color-primary-on-surface: #C9472D; */
+  --kendo-color-primary-on-surface: #E5483F;
+  /* --kendo-color-primary-on-subtle: #C9472D; */
+  --kendo-color-primary-on-subtle: #E5483F;
 
   --kendo-color-secondary-subtle: #F3F3F3;
   --kendo-color-secondary-subtle-hover: #E5E5E5;
   --kendo-color-secondary-subtle-active: #D7D7D7;
-  --kendo-color-secondary: #D0D0D0;
+  /* --kendo-color-secondary: #D0D0D0; */
+  --kendo-color-secondary: #E3E5E8;
   --kendo-color-secondary-hover: #C4C4C4;
   --kendo-color-secondary-active: #B8B8B8;
   --kendo-color-secondary-emphasis: #8C8D96;

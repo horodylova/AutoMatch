@@ -67,8 +67,8 @@ import { setQuestionAnswer } from '../../utils/storage';
              <div className={styles.stops}>
                {[0,1,2,3].map(i => {
                  const active = typeof index === 'number' ? i === index : false;
-                 const fill = active ? 'var(--kendo-color-primary)' : 'rgba(14,27,36,0.65)';
-                 const stroke = active ? 'rgba(201,71,45,0.95)' : 'rgba(14,27,36,0.8)';
+                 const fill = active ? 'var(--kendo-color-primary)' : 'var(--kendo-color-surface-alt)';
+                 const stroke = active ? 'rgba(229,72,63,0.95)' : 'var(--kendo-color-border-alt)';
                  const scale = 0.9 + i * 0.1;
                  return (
                    <div

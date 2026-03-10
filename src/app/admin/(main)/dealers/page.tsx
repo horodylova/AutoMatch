@@ -112,7 +112,7 @@ export default function DealersPage() {
                       )}
                     </td>
                     <td>
-                      <span className={styles.badge} style={{ background: 'rgba(230, 214, 180, 0.1)', color: 'var(--kendo-color-on-app-surface)' }}>
+                      <span className={styles.badge} style={{ background: 'rgba(255, 255, 255, 0.06)', color: 'var(--kendo-color-on-app-surface)' }}>
                         {dealer._count.cars} cars
                       </span>
                     </td>

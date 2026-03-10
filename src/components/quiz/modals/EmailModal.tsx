@@ -98,7 +98,7 @@ export default function EmailModal({ onClose, results }: EmailModalProps) {
                 fontWeight: 700,
                 cursor: "pointer",
                 transition: "transform 0.1s ease",
-                boxShadow: "0 4px 12px rgba(201,71,45,0.25)"
+                boxShadow: "0 4px 12px rgba(229,72,63,0.25)"
               }}
             >
               Awesome, thanks!
@@ -180,7 +180,7 @@ export default function EmailModal({ onClose, results }: EmailModalProps) {
                   cursor: status === "loading" ? "not-allowed" : "pointer",
                   opacity: status === "loading" ? 0.7 : 1,
                   transition: "transform 0.1s ease",
-                  boxShadow: "0 4px 12px rgba(201,71,45,0.25)"
+                  boxShadow: "0 4px 12px rgba(229,72,63,0.25)"
                 }}
               >
                 {status === "loading" ? "Sending..." : "Send Quiz Results"}

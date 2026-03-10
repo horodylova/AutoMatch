@@ -13,7 +13,7 @@
 }
 
 .modalContent {
-  background-color: var(--kendo-color-surface, #1e1e1e);
+  background-color: var(--kendo-color-surface);
   border-radius: 12px;
   width: 100%;
   max-width: 800px;
@@ -21,7 +21,7 @@
   display: flex;
   flex-direction: column;
   color: var(--kendo-color-on-app-surface);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--kendo-color-border);
   box-shadow: 0 20px 50px rgba(0,0,0,0.5);
 }
 
@@ -89,7 +89,7 @@
 
 .carCard:hover {
   transform: scale(1.02);
-  border-color: rgb(230, 214, 180);
+  border-color: var(--kendo-color-primary);
 }
 
 .carImage {

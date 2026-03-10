@@ -16,14 +16,14 @@
   max-width: 400px;
   padding: 16px;
   border-radius: 12px;
-  background: var(--kendo-color-surface, #15202B);
-  border: 1px solid var(--kendo-color-border, rgba(230, 214, 180, 0.18));
+  background: var(--kendo-color-surface);
+  border: 1px solid var(--kendo-color-border);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
   display: flex;
   align-items: flex-start;
   gap: 12px;
   animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  color: var(--kendo-color-on-app-surface, #E6D6B4);
+  color: var(--kendo-color-on-app-surface);
   backdrop-filter: blur(8px);
 }
 
@@ -82,7 +82,7 @@
 }
 
 .closeButton:hover {
-  color: var(--kendo-color-on-app-surface, #E6D6B4);
+  color: var(--kendo-color-on-app-surface);
   background: rgba(255, 255, 255, 0.05);
 }
 

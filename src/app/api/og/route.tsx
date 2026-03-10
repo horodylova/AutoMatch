@@ -14,7 +14,7 @@ export async function GET(request: Request) {
             display: 'flex',
             height: '100%',
             width: '100%',
-            background: '#121212',
+            background: '#1F1F23',
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
@@ -32,7 +32,7 @@ export async function GET(request: Request) {
               textAlign: 'center',
             }}
           >
-            <div style={{ fontSize: 30, color: 'rgb(230, 214, 180)', marginBottom: '20px', textTransform: 'uppercase' }}>
+            <div style={{ fontSize: 30, color: '#B8BCC6', marginBottom: '20px', textTransform: 'uppercase' }}>
               My Perfect Match
             </div>
             <div style={{ fontSize: 60, fontWeight: 'bold', color: 'white', lineHeight: 1.2, marginBottom: '30px' }}>
@@ -40,8 +40,8 @@ export async function GET(request: Request) {
             </div>
             <div
               style={{
-                background: 'rgb(230, 214, 180)',
-                color: '#000',
+                background: '#E5483F',
+                color: '#F5F5F7',
                 padding: '15px 40px',
                 borderRadius: '40px',
                 fontSize: 28,

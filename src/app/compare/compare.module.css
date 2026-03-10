@@ -19,7 +19,7 @@
   font-weight: 800;
   text-align: center;
   margin-bottom: 12px;
-  background: linear-gradient(135deg, var(--kendo-color-primary) 0%, #E6D6B4 100%);
+  background: linear-gradient(135deg, var(--kendo-color-primary) 0%, var(--kendo-color-on-app-surface) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -29,7 +29,7 @@
 
 .subtitle {
   text-align: center;
-  color: rgba(230, 214, 180, 0.7);
+  color: var(--kendo-color-subtle);
   max-width: 600px;
   margin: 0 auto 48px;
   line-height: 1.6;
@@ -51,7 +51,7 @@
 }
 
 .selectionCard {
-  background: rgba(230, 214, 180, 0.03);
+  background: rgba(255, 255, 255, 0.02);
   border: 1px solid var(--kendo-color-border);
   border-radius: 24px;
   padding: 24px;
@@ -65,15 +65,15 @@
 }
 
 .selectionCard:hover {
-  border-color: rgba(230, 214, 180, 0.3);
-  background: rgba(230, 214, 180, 0.05);
+  border-color: var(--kendo-color-border-alt);
+  background: rgba(255, 255, 255, 0.04);
 }
 
 .cardTitle {
   font-size: 14px;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: rgba(230, 214, 180, 0.5);
+  color: rgba(245, 245, 247, 0.55);
   text-align: center;
   margin-bottom: 8px;
 }
@@ -112,12 +112,12 @@
 }
 
 .searchField::placeholder {
-  color: rgba(230, 214, 180, 0.4);
+  color: rgba(245, 245, 247, 0.5);
 }
 
 .searchField:focus {
   border-color: var(--kendo-color-primary);
-  box-shadow: 0 0 0 2px rgba(201, 71, 45, 0.2);
+  box-shadow: 0 0 0 2px rgba(229, 72, 63, 0.2);
 }
 
 .suggestList {
@@ -150,8 +150,8 @@
 }
 
 .suggestItem:hover {
-  background: rgba(230, 214, 180, 0.08);
-  border-color: rgba(230, 214, 180, 0.1);
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 .selectedCar {
@@ -178,14 +178,14 @@
 
 .carTrim {
   font-size: 14px;
-  color: rgba(230, 214, 180, 0.6);
+  color: rgba(245, 245, 247, 0.6);
   margin-bottom: 16px;
 }
 
 .changeButton {
   background: transparent;
   border: 1px solid var(--kendo-color-border);
-  color: rgba(230, 214, 180, 0.6);
+  color: rgba(245, 245, 247, 0.6);
   padding: 8px 16px;
   border-radius: 999px;
   cursor: pointer;
@@ -208,7 +208,7 @@
 .stickyHeader {
   position: sticky;
   top: 70px; /* Default top offset */
-  background: linear-gradient(to bottom, var(--kendo-color-surface) 0%, rgba(14, 27, 36, 0.95) 100%);
+  background: linear-gradient(to bottom, var(--kendo-color-surface) 0%, rgba(31, 31, 35, 0.95) 100%);
   z-index: 90;
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -230,7 +230,7 @@
   text-align: center;
   font-size: 14px;
   font-weight: 800;
-  color: #E6D6B4;
+  color: var(--kendo-color-on-app-surface);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -245,7 +245,7 @@
   font-size: 11px;
   font-weight: 600;
   opacity: 0.9;
-  color: rgba(230, 214, 180, 0.7);
+  color: rgba(245, 245, 247, 0.7);
   text-transform: none;
   letter-spacing: 0;
   text-shadow: none;
@@ -267,7 +267,7 @@
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 8px 24px rgba(201, 71, 45, 0.3);
+  box-shadow: 0 8px 24px rgba(229, 72, 63, 0.3);
   outline: none;
 }
 
@@ -277,7 +277,7 @@
 
 .compareButton:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 32px rgba(201, 71, 45, 0.4);
+  box-shadow: 0 12px 32px rgba(229, 72, 63, 0.4);
   background: var(--kendo-color-primary-hover);
 }
 
@@ -316,7 +316,7 @@
   grid-template-columns: 1fr 1fr;
   gap: 16px;
   padding: 12px 0;
-  border-bottom: 1px solid rgba(230, 214, 180, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .rowLabel {
@@ -325,7 +325,7 @@
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: rgba(230, 214, 180, 0.5);
+  color: rgba(245, 245, 247, 0.55);
   margin-bottom: 4px;
   text-align: center;
 }
@@ -428,7 +428,7 @@
 .loadingImage {
   width: 100%;
   height: 180px;
-  background: rgba(230, 214, 180, 0.05);
+  background: rgba(255, 255, 255, 0.04);
   border-radius: 12px;
   margin-bottom: 16px;
   display: flex;
@@ -439,13 +439,13 @@
 .loadingIcon {
   width: 40px;
   height: 40px;
-  color: rgba(230, 214, 180, 0.2);
+  color: rgba(245, 245, 247, 0.25);
   animation: spin 1s linear infinite;
 }
 
 .loadingLine {
   height: 20px;
-  background: rgba(230, 214, 180, 0.05);
+  background: rgba(255, 255, 255, 0.04);
   border-radius: 4px;
   margin-bottom: 8px;
   width: 60%;
@@ -484,7 +484,7 @@
 :global(html[data-theme="light"]) .title {
   background: none;
   -webkit-text-fill-color: initial;
-  color: #C9472D;
+  color: var(--kendo-color-primary);
 }
 
 :global(html[data-theme="light"]) .subtitle {
@@ -498,8 +498,8 @@
 }
 
 :global(html[data-theme="light"]) .selectionCard:hover {
-  border-color: #C9472D;
-  background: rgba(201, 71, 45, 0.02);
+  border-color: var(--kendo-color-primary);
+  background: rgba(229, 72, 63, 0.02);
 }
 
 :global(html[data-theme="light"]) .cardTitle {
@@ -518,8 +518,8 @@
 }
 
 :global(html[data-theme="light"]) .searchField:focus {
-  border-color: #C9472D;
-  box-shadow: 0 0 0 2px rgba(201, 71, 45, 0.1);
+  border-color: var(--kendo-color-primary);
+  box-shadow: 0 0 0 2px rgba(229, 72, 63, 0.1);
 }
 
 :global(html[data-theme="light"]) .suggestList {
@@ -533,8 +533,8 @@
 }
 
 :global(html[data-theme="light"]) .suggestItem:hover {
-  background: rgba(201, 71, 45, 0.05);
-  border-color: rgba(201, 71, 45, 0.1);
+  background: rgba(229, 72, 63, 0.05);
+  border-color: rgba(229, 72, 63, 0.1);
 }
 
 :global(html[data-theme="light"]) .carTrim {
@@ -547,23 +547,23 @@
 }
 
 :global(html[data-theme="light"]) .changeButton:hover {
-  border-color: #C9472D;
-  color: #C9472D;
+  border-color: var(--kendo-color-primary);
+  color: var(--kendo-color-primary);
 }
 
 :global(html[data-theme="light"]) .compareButton {
-  background: #C9472D;
-  box-shadow: 0 8px 24px rgba(201, 71, 45, 0.25);
+  background: var(--kendo-color-primary);
+  box-shadow: 0 8px 24px rgba(229, 72, 63, 0.25);
 }
 
 :global(html[data-theme="light"]) .compareButton:hover {
-  background: #b53c24;
-  box-shadow: 0 12px 32px rgba(201, 71, 45, 0.35);
+  background: var(--kendo-color-primary-hover);
+  box-shadow: 0 12px 32px rgba(229, 72, 63, 0.35);
 }
 
 :global(html[data-theme="light"]) .stickyHeader {
   background: rgba(255, 255, 255, 0.9);
-  border-bottom-color: #C9472D;
+  border-bottom-color: var(--kendo-color-primary);
 }
 
 :global(html[data-theme="light"]) .stickyCol {
@@ -584,13 +584,13 @@
 }
 
 :global(html[data-theme="light"]) .rowValue.highlight {
-  color: #C9472D;
+  color: var(--kendo-color-primary);
 }
 
 :global(html[data-theme="light"]) .vsBadge {
   background: #fff;
   border-color: rgba(0, 0, 0, 0.1);
-  color: #2F7ECF;
+  color: var(--kendo-color-primary);
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 

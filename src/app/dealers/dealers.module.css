@@ -224,7 +224,7 @@
   padding: 1.5rem;
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  border: 1px solid var(--kendo-color-border, rgba(230, 214, 180, 0.18));
+  border: 1px solid var(--kendo-color-border, rgba(255, 255, 255, 0.08));
   width: 100%;
   box-sizing: border-box;
 }
@@ -239,7 +239,7 @@
   font-size: 1.25rem;
   font-weight: 600;
   margin-bottom: 1.5rem;
-  color: var(--kendo-color-on-app-surface, #E6D6B4);
+  color: var(--kendo-color-on-app-surface, #F5F5F7);
 }
 
 .formGroup {
@@ -251,7 +251,7 @@
   font-size: 0.9rem;
   font-weight: 500;
   margin-bottom: 0.5rem;
-  color: var(--kendo-color-on-app-surface, #E6D6B4);
+  color: var(--kendo-color-on-app-surface, #F5F5F7);
   opacity: 0.9;
 }
 
@@ -262,18 +262,18 @@
   box-sizing: border-box;
   padding: 12px 16px;
   border-radius: 8px;
-  border: 1px solid var(--kendo-color-border, rgba(230, 214, 180, 0.18));
+  border: 1px solid var(--kendo-color-border, rgba(255, 255, 255, 0.08));
   font-family: inherit;
   font-size: 1rem;
   transition: all 0.2s ease;
   background: var(--kendo-color-surface, #15202B);
-  color: var(--kendo-color-on-app-surface, #E6D6B4);
+  color: var(--kendo-color-on-app-surface, #F5F5F7);
 }
 
 .select {
   appearance: none;
   cursor: pointer;
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23E6D6B4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23F5F5F7' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
   background-repeat: no-repeat;
   background-position: right 1rem center;
   background-size: 1em;
@@ -283,7 +283,7 @@
 
 .select option {
   background-color: var(--kendo-color-surface, #15202B);
-  color: var(--kendo-color-on-app-surface, #E6D6B4);
+  color: var(--kendo-color-on-app-surface, #F5F5F7);
   padding: 10px;
 }
 
@@ -296,22 +296,22 @@
 .select:-webkit-autofill,
 .select:-webkit-autofill:hover,
 .select:-webkit-autofill:focus {
-  -webkit-text-fill-color: var(--kendo-color-on-app-surface, #E6D6B4);
+  -webkit-text-fill-color: var(--kendo-color-on-app-surface, #F5F5F7);
   -webkit-box-shadow: 0 0 0px 1000px var(--kendo-color-surface, #15202B) inset;
   transition: background-color 5000s ease-in-out 0s;
 }
 
 .input::placeholder,
 .textarea::placeholder {
-  color: rgba(230, 214, 180, 0.5);
+  color: rgba(245, 245, 247, 0.55);
 }
 
 .input:focus,
 .textarea:focus,
 .select:focus {
   outline: none;
-  border-color: var(--kendo-color-primary, #C9472D);
-  box-shadow: 0 0 0 3px rgba(201, 71, 45, 0.15);
+  border-color: var(--kendo-color-primary, #E5483F);
+  box-shadow: 0 0 0 3px rgba(229, 72, 63, 0.15);
   background: var(--kendo-color-surface, #15202B);
 }
 
@@ -356,7 +356,7 @@
 }
 
 .disclaimer a {
-  color: var(--kendo-color-primary, #C9472D);
+  color: var(--kendo-color-primary, #E5483F);
   text-decoration: none;
   transition: opacity 0.2s ease;
 }
@@ -384,10 +384,10 @@
   font-weight: 600;
   color: var(--kendo-color-on-app-surface);
   max-width: 600px;
-  background: rgba(230, 214, 180, 0.05);
+  background: rgba(255, 255, 255, 0.04);
   padding: 1.5rem 2rem;
   border-radius: 12px;
-  border: 1px solid rgba(230, 214, 180, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .certaintyCue {
@@ -413,41 +413,41 @@
 
 /* Light Theme Overrides */
 :global(html[data-theme="light"]) .container {
-  color: #1A252F;
+  color: var(--kendo-color-on-app-surface);
 }
 
 :global(html[data-theme="light"]) .title {
   background: none;
   -webkit-text-fill-color: initial;
-  color: #1A252F;
+  color: var(--kendo-color-on-app-surface);
 }
 
 :global(html[data-theme="light"]) .subtitle {
-  color: rgba(26, 37, 47, 0.7);
+  color: rgba(17, 18, 20, 0.7);
 }
 
 :global(html[data-theme="light"]) .bodyText,
 :global(html[data-theme="light"]) .stepDescription,
 :global(html[data-theme="light"]) .featureItem {
-  color: rgba(26, 37, 47, 0.8);
+  color: rgba(17, 18, 20, 0.8);
 }
 
 :global(html[data-theme="light"]) .howItWorksTitle,
 :global(html[data-theme="light"]) .formTitle {
-  color: #1A252F;
+  color: var(--kendo-color-on-app-surface);
 }
 
 :global(html[data-theme="light"]) .stepTitle {
-  color: #2F7ECF;
+  color: var(--kendo-color-primary);
 }
 
 :global(html[data-theme="light"]) .trustSignal {
-  color: rgba(26, 37, 47, 0.7);
-  border-left-color: #2F7ECF;
+  color: rgba(17, 18, 20, 0.7);
+  border-left-color: var(--kendo-color-primary);
 }
 
 :global(html[data-theme="light"]) .featureIcon {
-  color: #2F7ECF;
+  color: var(--kendo-color-primary);
 }
 
 :global(html[data-theme="light"]) .formCard {
@@ -457,7 +457,7 @@
 }
 
 :global(html[data-theme="light"]) .label {
-  color: rgba(26, 37, 47, 0.8);
+  color: rgba(17, 18, 20, 0.8);
 }
 
 :global(html[data-theme="light"]) .input,
@@ -465,19 +465,19 @@
 :global(html[data-theme="light"]) .select {
   background: #FFFFFF;
   border-color: rgba(0, 0, 0, 0.15);
-  color: #1A252F;
+  color: var(--kendo-color-on-app-surface);
 }
 
 :global(html[data-theme="light"]) .input::placeholder,
 :global(html[data-theme="light"]) .textarea::placeholder {
-  color: rgba(26, 37, 47, 0.4);
+  color: rgba(17, 18, 20, 0.4);
 }
 
 :global(html[data-theme="light"]) .input:focus,
 :global(html[data-theme="light"]) .textarea:focus,
 :global(html[data-theme="light"]) .select:focus {
-  border-color: #C9472D;
-  box-shadow: 0 0 0 3px rgba(201, 71, 45, 0.1);
+  border-color: var(--kendo-color-primary);
+  box-shadow: 0 0 0 3px rgba(229, 72, 63, 0.1);
 }
 
 /* Fix select arrow for light theme - need a dark SVG or filter */
@@ -490,7 +490,7 @@
 
 :global(html[data-theme="light"]) .select option {
   background-color: #FFFFFF;
-  color: #1A252F;
+  color: var(--kendo-color-on-app-surface);
 }
 
 /* Autofill fixes for light theme */
@@ -503,20 +503,20 @@
 :global(html[data-theme="light"]) .select:-webkit-autofill,
 :global(html[data-theme="light"]) .select:-webkit-autofill:hover,
 :global(html[data-theme="light"]) .select:-webkit-autofill:focus {
-  -webkit-text-fill-color: #1A252F;
+  -webkit-text-fill-color: var(--kendo-color-on-app-surface);
   -webkit-box-shadow: 0 0 0px 1000px #FFFFFF inset;
 }
 
 :global(html[data-theme="light"]) .pricingTeaser {
-  background: rgba(47, 126, 207, 0.05);
-  border-color: rgba(47, 126, 207, 0.1);
-  color: #1A252F;
+  background: rgba(229, 72, 63, 0.05);
+  border-color: rgba(229, 72, 63, 0.1);
+  color: var(--kendo-color-on-app-surface);
 }
 
 :global(html[data-theme="light"]) .certaintyCue p {
-  color: rgba(26, 37, 47, 0.6);
+  color: rgba(17, 18, 20, 0.6);
 }
 
 :global(html[data-theme="light"]) .certaintyCue strong {
-  color: #C9472D;
+  color: var(--kendo-color-primary);
 }

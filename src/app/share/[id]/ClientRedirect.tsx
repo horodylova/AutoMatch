@@ -19,12 +19,12 @@ export default function ClientRedirect() {
       flexDirection: 'column',
       alignItems: 'center', 
       justifyContent: 'center',
-      background: '#111',
-      color: '#fff',
+      background: 'var(--kendo-color-app-surface)',
+      color: 'var(--kendo-color-on-app-surface)',
       fontFamily: 'sans-serif'
     }}>
       <p style={{ marginBottom: '1rem' }}>Redirecting to CarCupid...</p>
-      <Link href="/" style={{ color: 'rgb(230, 214, 180)', textDecoration: 'underline' }}>
+      <Link href="/" style={{ color: 'var(--kendo-color-primary)', textDecoration: 'underline' }}>
         Click here if you are not redirected
       </Link>
     </div>
