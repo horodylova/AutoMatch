@@ -20,22 +20,68 @@
   justify-content: center;
   text-align: center;
   padding: 8px 6px;
-  background: var(--kendo-color-surface-alt);
-  border: 1px solid var(--kendo-color-border);
+  background: var(--kendo-color-surface);
+  border: 1px solid var(--kendo-color-border-alt);
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
   min-height: 48px;
   color: var(--kendo-color-on-app-surface);
   font-weight: 500;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.18);
 }
 
 .cell:hover {
-  background: var(--kendo-color-surface);
+  background: var(--kendo-color-base-subtle-hover);
   border-color: var(--kendo-color-primary);
   transform: translateY(-2px) scale(1.02);
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
   z-index: 1;
+}
+
+:global(html[data-theme="light"]) .cell:hover {
+  background: var(--kendo-color-tertiary-subtle-hover);
+  color: #111214;
+}
+
+:global(html[data-theme="dark"]) .card {
+  background: #FFFFFF;
+  border-color: rgba(0, 0, 0, 0.10);
+  color: #111214;
+  box-shadow: 0 10px 28px rgba(0,0,0,0.22);
+}
+
+:global(html[data-theme="dark"]) .title {
+  color: #111214;
+}
+
+:global(html[data-theme="dark"]) .tipBar {
+  color: rgba(17, 18, 20, 0.72);
+}
+
+:global(html[data-theme="dark"]) .cell {
+  background: #FFFFFF;
+  border-color: rgba(0, 0, 0, 0.14);
+  color: #111214;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.10);
+}
+
+:global(html[data-theme="dark"]) .cell:hover {
+  background: #F5F5F5;
+  color: #111214;
+  border-color: rgba(229, 72, 63, 0.55);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+}
+
+:global(html[data-theme="dark"]) .cellActive {
+  background: rgba(229, 72, 63, 0.06);
+  color: #111214;
+  border-color: rgba(229, 72, 63, 0.75);
+  box-shadow: 0 8px 18px rgba(229, 72, 63, 0.14);
+}
+
+:global(html[data-theme="dark"]) .counter {
+  color: rgba(17, 18, 20, 0.70);
 }
 
 .cellActive {
