@@ -8,7 +8,7 @@
 .answerActive::before { opacity: 1; animation: optionGlow 1.6s ease-in-out infinite; }
 .answer:hover { transform: translateY(-1px); background: rgba(229, 72, 63, 0.06); color: #111214; box-shadow: 0 10px 24px rgba(0,0,0,0.14); border-color: rgba(229, 72, 63, 0.45); }
 .answerActive { background: #FFFFFF; color: #111214; border-color: rgba(229, 72, 63, 0.7); box-shadow: 0 10px 26px rgba(229,72,63,0.18), inset 0 0 0 1px rgba(229,72,63,0.10); }
-.dot { width: 16px; height: 16px; border-radius: 999px; border: 2px solid rgba(0, 0, 0, 0.18); background: #FFFFFF; box-shadow: inset 0 0 0 2px rgba(0,0,0,0.03); }
+.dot { width: 16px; height: 16px; border-radius: 999px; border: 2px solid rgba(0, 0, 0, 0.18); background: #FFFFFF; box-shadow: inset 0 0 0 2px rgba(0,0,0,0.03); display: inline-grid; place-items: center; }
 .answerActive .dot { border-color: var(--kendo-color-primary); background: radial-gradient(closest-side, var(--kendo-color-primary) 0%, rgba(229,72,63,0.15) 60%, rgba(229,72,63,0) 100%); }
 .answerText { font-size: clamp(16px, 2.6vw, 18px); line-height: 1.55; }
 .actions { display: flex; justify-content: flex-end; margin-top: 16px; }
@@ -131,4 +131,12 @@
 :global(html[data-theme="light"]) .dot {
   background: #FFFFFF;
   border-color: rgba(0, 0, 0, 0.18);
+}
+
+:global(html[data-theme="light"]) .answerActive .dot::after {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--kendo-color-primary);
 }
