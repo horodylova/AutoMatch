@@ -43,7 +43,7 @@ export default function ChoiceQuestion({ questionId, title, tip, options, select
   };
   return (
     <div className={formStyles.frame}>
-      <div className={formStyles.card}>
+      <div className={formStyles.card} data-question-id={questionId}>
         <div className={styles.head}>
           <div className={styles.title}>{title}</div>
           {tip && (
