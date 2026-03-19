@@ -261,15 +261,31 @@ export default function Page() {
         <p className={styles.conclusionText}>
           What we ended up with is not a filter and not a leaderboard. It’s a decision model. Enthusiasts see driver-focused cars. Families never see two-seat sports cars. Professionals get tools, not compromises.
         </p>
-        <p className={styles.conclusionText}>
-          Ready to see it in action? Start the <Link href="/quiz" className={styles.inlineLink} onClick={() => {
-            trackQuizStart();
-            event("StartQuiz");
-          }}>car match quiz</Link>, explore the <Link href="/cars" className={styles.inlineLink}>car database</Link>, and <Link href="/compare" className={styles.inlineLink}>compare cars side by side</Link>.
-        </p>
-        <div className={styles.finalNote}>
-          We stopped trying to find the best car. We started matching the right life.
+
+        <div className={styles.conclusionActions}>
+          <Link
+            href="/quiz"
+            className={styles.conclusionPrimary}
+            onClick={() => {
+              trackQuizStart();
+              event("StartQuiz");
+            }}
+          >
+            Start the quiz
+          </Link>
+
+          <Link href="/cars" className={styles.conclusionSecondary}>
+            Explore cars
+          </Link>
         </div>
+
+        <div className={styles.conclusionLinks}>
+          <Link href="/compare" className={styles.conclusionTertiary}>
+            Compare side by side
+          </Link>
+        </div>
+
+        <div className={styles.finalNote}>We stopped trying to find the best car. We started matching the right life.</div>
       </div>
     </div>
   );
