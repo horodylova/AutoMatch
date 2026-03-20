@@ -1,13 +1,17 @@
+/* ── Original HowItWorks ─────────────────────────────────────────────── */
+
 .section {
   position: relative;
   background-color: transparent;
   background-image: none;
-  background-repeat: no-repeat;
-  background-position: right center;
-  background-size: 520px auto;
   padding: 96px 24px 56px;
   scroll-margin-top: 80px;
   margin: 24px 0;
+}
+
+.hidden {
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .hero {
@@ -45,19 +49,18 @@
 
 .heroWord {
   color: var(--kendo-color-on-app-surface);
-  text-shadow: 0 0 0 var(--how-glow-soft);
   animation: wordGlow 3s ease-in-out infinite;
 }
 
-.heroWord:nth-child(1) { animation-delay: 0s, 0s; }
-.heroWord:nth-child(3) { animation-delay: 0.2s, 0.2s; }
-.heroWord:nth-child(5) { animation-delay: 0.4s, 0.4s; }
+.heroWord:nth-child(1) { animation-delay: 0s; }
+.heroWord:nth-child(3) { animation-delay: 0.2s; }
+.heroWord:nth-child(5) { animation-delay: 0.4s; }
 
 .heroComma { color: var(--how-comma-color); }
 
 @keyframes wordGlow {
-  0% { transform: translateY(0) scale(0.98); opacity: 0.9; text-shadow: 0 0 0 var(--how-glow-soft); }
-  50% { transform: translateY(-1px) scale(1.06); opacity: 1; text-shadow: 0 0 18px var(--how-glow-strong), 0 0 8px var(--how-glow-soft); }
+  0%   { transform: translateY(0) scale(0.98); opacity: 0.9; text-shadow: 0 0 0 var(--how-glow-soft); }
+  50%  { transform: translateY(-1px) scale(1.06); opacity: 1; text-shadow: 0 0 18px var(--how-glow-strong), 0 0 8px var(--how-glow-soft); }
   100% { transform: translateY(0) scale(0.98); opacity: 0.95; text-shadow: 0 0 2px var(--how-glow-soft); }
 }
 
@@ -106,39 +109,18 @@
   inset: 0;
   pointer-events: none;
   background:
-    linear-gradient(to left, var(--kendo-color-app-surface) 0%, rgba(31, 31, 35, 0) 60%),
-    linear-gradient(to right, var(--kendo-color-app-surface) 0%, rgba(31, 31, 35, 0) 60%),
-    linear-gradient(to top, var(--kendo-color-app-surface) 0%, rgba(31, 31, 35, 0) 50%),
-    linear-gradient(to bottom, var(--kendo-color-app-surface) 0%, rgba(31, 31, 35, 0) 50%);
+    linear-gradient(to left, var(--kendo-color-app-surface) 0%, rgba(31,31,35,0) 60%),
+    linear-gradient(to right, var(--kendo-color-app-surface) 0%, rgba(31,31,35,0) 60%),
+    linear-gradient(to top, var(--kendo-color-app-surface) 0%, rgba(31,31,35,0) 50%),
+    linear-gradient(to bottom, var(--kendo-color-app-surface) 0%, rgba(31,31,35,0) 50%);
   opacity: var(--how-media-overlay-opacity);
 }
 
-.mediaImg {
-  object-fit: cover;
-  object-position: center;
-}
+.mediaImg { object-fit: cover; object-position: center; }
 
-:global(html[data-theme="light"]) .mediaImg {
-  object-position: center;
-}
-:global(html[data-theme="light"]) .mediaFrame {
-  padding: 0;
-  background: none;
-  border: 0;
-  border-radius: 22px;
-}
-:global(html[data-theme="light"]) .media {
-  background-color: transparent;
-}
-
-.sectionTitle {
-  font-size: clamp(28px, 4.5vw, 42px);
-  line-height: 1.2;
-  font-weight: 800;
-  margin: 0 0 14px 0;
-  color: var(--kendo-color-on-app-surface);
-  text-shadow: 0 2px 12px rgba(0,0,0,0.35);
-}
+:global(html[data-theme="light"]) .mediaImg { object-position: center; }
+:global(html[data-theme="light"]) .mediaFrame { padding: 0; background: none; border: 0; border-radius: 22px; }
+:global(html[data-theme="light"]) .media { background-color: transparent; }
 
 .subtitle {
   font-size: clamp(22px, 3.5vw, 28px);
@@ -168,19 +150,6 @@
   line-height: 1.6;
 }
 
-.title {
-  font-size: var(--kendo-h3-font-size);
-  line-height: var(--kendo-h3-line-height);
-  font-weight: var(--kendo-h3-font-weight);
-  margin: 0 0 16px 0;
-}
-
-.lead {
-  font-size: 18px;
-  line-height: 1.6;
-  margin: 0 0 12px 0;
-}
-
 .paragraph {
   font-size: 16px;
   line-height: 1.6;
@@ -188,25 +157,319 @@
 }
 
 @media (max-width: 992px) {
-  .section {
-    background-position: right 40px;
-    background-size: 380px auto;
-    padding: 88px 16px 48px;
+  .section { padding: 88px 16px 48px; }
+  .hero { margin-bottom: 16px; }
+  .inner { grid-template-columns: 1fr; }
+  .mediaFrame { display: none; }
+  .content { max-width: 100%; grid-column: 1; }
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════
+   K9Cupid — luxury, restrained, transparent container
+══════════════════════════════════════════════════════════════════════ */
+
+.k9Section {
+  padding: 0 24px;
+  margin: 24px 0;
+  scroll-margin-top: 80px;
+}
+
+/*
+  Card:
+  - transparent background (no fill, no radial gradients)
+  - thin elegant border
+  - image column bleeds to the right edge via overflow:hidden + border-radius
+*/
+.k9Card {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 560px;
+  border-radius: 24px;
+  overflow: hidden;
+  border: 1px solid var(--kendo-color-border-alt);
+  background: transparent;
+}
+
+/* ── Content column ── */
+.k9Content {
+  padding: 52px 48px 52px 52px;
+  display: grid;
+  gap: 24px;
+  align-content: center;
+}
+
+/* brand */
+.k9BrandRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Logo — no frame, no border, just the image */
+.k9Logo {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.k9BrandText {
+  display: grid;
+  gap: 4px;
+}
+
+.k9BrandNameRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.k9Kicker {
+  font-size: 11px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--kendo-color-subtle);
+  line-height: 1.2;
+}
+
+.k9BrandName {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--kendo-color-on-app-surface);
+  line-height: 1;
+  letter-spacing: 0.2px;
+}
+
+.k9Badge {
+  font-size: 10px;
+  letter-spacing: 0.20em;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--kendo-color-border-alt);
+  color: var(--kendo-color-subtle);
+}
+
+/* headline — clean, no color tricks */
+.k9Headline {
+  margin: 0;
+  font-size: clamp(28px, 3vw, 44px);
+  font-weight: 800;
+  line-height: 1.12;
+  color: var(--kendo-color-on-app-surface);
+  letter-spacing: -0.5px;
+}
+
+/* body */
+.k9Lead {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.80;
+  color: var(--kendo-color-subtle);
+  max-width: 50ch;
+}
+
+:global(html[data-theme="light"]) .k9Kicker {
+  color: var(--kendo-color-on-app-surface);
+  opacity: 0.72;
+}
+
+:global(html[data-theme="light"]) .k9Lead {
+  color: var(--kendo-color-on-app-surface);
+  opacity: 0.84;
+}
+
+:global(html[data-theme="light"]) .k9Tag {
+  color: var(--kendo-color-on-app-surface);
+  opacity: 0.86;
+}
+
+:global(html[data-theme="light"]) .k9Badge {
+  color: var(--kendo-color-on-app-surface);
+  opacity: 0.74;
+}
+
+:global(html[data-theme="light"]) .k9Footnote {
+  color: var(--kendo-color-on-app-surface);
+  opacity: 0.78;
+}
+
+/* thin red divider — single design accent */
+.k9Divider {
+  height: 1px;
+  width: 48px;
+  background: var(--kendo-color-primary);
+  opacity: 0.7;
+}
+
+/* tags — minimal, no colored backgrounds */
+.k9Tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.k9Tag {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--kendo-color-border-alt);
+  color: var(--kendo-color-subtle);
+  background: transparent;
+}
+
+/* CTAs */
+.k9Actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.k9Primary,
+.k9Secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 14px 28px;
+  letter-spacing: 0.02em;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, opacity 0.15s ease;
+}
+
+.k9Primary {
+  background: var(--kendo-color-primary);
+  color: var(--kendo-color-on-primary);
+  border: 1px solid var(--kendo-color-primary);
+}
+
+.k9Primary:hover {
+  transform: translateY(-1px);
+  opacity: 0.92;
+  box-shadow: 0 12px 32px rgba(229, 72, 63, 0.30);
+}
+
+.k9Secondary {
+  background: transparent;
+  color: var(--kendo-color-on-app-surface);
+  border: 1px solid var(--kendo-color-border-alt);
+}
+
+.k9Secondary:hover {
+  transform: translateY(-1px);
+  border-color: var(--kendo-color-on-app-surface);
+}
+
+/* footnote */
+.k9Footnote {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--kendo-color-subtle);
+  opacity: 0.7;
+  margin: 0;
+  letter-spacing: 0.02em;
+}
+
+/* ── Image column ── */
+.k9ImageCol {
+  position: relative;
+  display: flex;
+  padding: 22px;
+}
+
+.k9ImageInner {
+  position: relative;
+  flex: 1 1 auto;
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+.k9Img {
+  object-fit: cover;
+  /*
+    The photo is vertical (portrait).
+    center 8% keeps the dog's face near the top of the frame.
+  */
+  object-position: center 8%;
+}
+
+/*
+  Fade: starts at ~35% from left so the transition is gradual, not abrupt.
+  Single direction only — left edge blending into transparent card background.
+*/
+.k9ImgFade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to right,
+    var(--kendo-color-app-surface) 0%,
+    var(--kendo-color-app-surface) 2%,
+    transparent 10%
+  );
+}
+
+:global(html[data-theme="light"]) .k9ImgFade {
+  background: linear-gradient(
+    to right,
+    var(--kendo-color-app-surface) 0%,
+    var(--kendo-color-app-surface) 2%,
+    transparent 10%
+  );
+}
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .k9Card {
+    grid-template-columns: 1fr 420px;
   }
-  .hero {
-    margin-bottom: 16px;
-  }
-  .inner {
+}
+
+@media (max-width: 768px) {
+  .k9Card {
     grid-template-columns: 1fr;
   }
-  .mediaFrame {
-    max-width: 720px;
-    margin: 0 auto;
-    grid-column: 1;
-    display: none;
+
+  .k9ImageCol {
+    order: -1;
+    height: 340px;
+    padding: 12px 12px 8px 12px;
   }
-  .content {
-    max-width: 100%;
-    grid-column: 1;
+
+  /* on mobile fade goes bottom */
+  .k9ImgFade {
+    background: linear-gradient(
+      to bottom,
+      transparent 94%,
+      var(--kendo-color-app-surface) 98%,
+      var(--kendo-color-app-surface) 100%
+    );
   }
+
+  :global(html[data-theme="light"]) .k9ImgFade {
+    background: linear-gradient(
+      to bottom,
+      transparent 94%,
+      var(--kendo-color-app-surface) 98%,
+      var(--kendo-color-app-surface) 100%
+    );
+  }
+
+  .k9Content {
+    padding: 20px 16px 28px;
+  }
+}
+
+@media (max-width: 480px) {
+  .k9Section { padding: 0 16px; }
+  .k9ImageCol { height: 300px; padding: 10px 12px 6px 12px; }
+  .k9Content { padding: 18px 16px 24px; gap: 18px; }
 }
