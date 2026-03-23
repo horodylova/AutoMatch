@@ -335,6 +335,43 @@
   border: none;
 }
 
+.wishBtn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--kendo-color-on-app-surface);
+  border: 1px solid var(--kendo-color-border);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.22);
+  backdrop-filter: blur(6px);
+  z-index: 3;
+  transition: transform 0.12s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+.wishBtn:hover {
+  transform: translateY(-1px);
+  border-color: var(--kendo-color-border-alt);
+  box-shadow: 0 8px 22px rgba(0,0,0,0.28);
+}
+.wishBtn:active {
+  transform: translateY(0) scale(0.98);
+}
+.wishBtn svg {
+  width: 18px;
+  height: 18px;
+  color: var(--kendo-color-primary);
+}
+:global(html[data-theme="light"]) .wishBtn {
+  background: #ffffff;
+  border-color: rgba(0,0,0,0.12);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+}
+
 .actionsSection {
   margin-block: 2rem;
   padding-bottom: 3rem;

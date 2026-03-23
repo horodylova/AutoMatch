@@ -1,10 +1,12 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import styles from './ResultsGallery.module.css';
 import { saveResults } from '../utils/storage';
 import EmailModal from './quiz/modals/EmailModal';
 import ShareModal, { ShareNetwork } from './ShareModal';
+import { FaHeart, FaRegHeart } from "react-icons/fa6";
+import { addWishlistItem, isWishlisted, removeWishlistItem, WISHLIST_UPDATED_EVENT, WishlistItem } from "../utils/storage";
 
 export interface CarResult {
   id: string;
@@ -23,6 +25,34 @@ interface ResultsGalleryProps {
 
 function ResultCard({ car, index }: { car: CarResult; index: number }) {
   const [imgSrc, setImgSrc] = useState(car.image);
+  const [saved, setSaved] = useState<boolean>(false);
+
+  useEffect(() => {
+    setSaved(isWishlisted(car.id));
+    const handler = () => setSaved(isWishlisted(car.id));
+    window.addEventListener(WISHLIST_UPDATED_EVENT, handler);
+    window.addEventListener("storage", handler);
+    return () => {
+      window.removeEventListener(WISHLIST_UPDATED_EVENT, handler);
+      window.removeEventListener("storage", handler);
+    };
+  }, [car.id]);
+
+  const toggleWishlist: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (saved) {
+      removeWishlistItem(car.id);
+    } else {
+      const item: WishlistItem = {
+        id: car.id,
+        image: car.image,
+        title: `${car.year} ${car.make} ${car.model}`,
+        subtitle: car.price || "",
+      };
+      addWishlistItem(item);
+    }
+  };
 
   return (
     <Link href={`/cars/${car.id}`} target="_blank" rel="noopener noreferrer" className={styles.cardLink}>
@@ -37,6 +67,9 @@ function ResultCard({ car, index }: { car: CarResult; index: number }) {
         priority={index < 2}
         onError={() => setImgSrc("/no-image-available.jpg")}
       />
+      <button type="button" className={styles.wishBtn} aria-label="Add to wishlist" onClick={toggleWishlist}>
+        {saved ? <FaHeart /> : <FaRegHeart />}
+      </button>
       <div className={styles.overlay}>
         <div className={styles.carName}>{car.make}</div>
         <div className={styles.carDetails}>{car.model} • {car.year}</div>
