@@ -79,7 +79,7 @@ export default function HowItWorks() {
           </div>
 
           <h2 className={styles.k9Headline}>
-            Your next best friend<br />is waiting
+            Found your perfect car?<br />Now find your perfect dog
           </h2>
 
           <p className={styles.k9Lead}>
