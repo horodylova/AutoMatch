@@ -148,6 +148,10 @@ export default function Header() {
 
      
         <div className={styles.mobileMenu}>
+          <Link href="/wishlist" className={styles.wishlistIconBtn} aria-label="Open wishlist">
+            <FaHeart />
+            <span className={styles.wishlistBadge}>{wishlistCount}</span>
+          </Link>
           <button
             className={styles.hamburger}
             onClick={() => setIsDrawerOpen(true)}

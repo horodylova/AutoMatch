@@ -38,9 +38,9 @@
   overflow: hidden;
 }
 .itemLink { display: grid; grid-template-rows: 180px auto; text-decoration: none; color: inherit; }
-.itemImageWrap { position: relative; width: 100%; height: 180px; background: #111; }
+.itemImageWrap { position: relative; z-index: 0; width: 100%; height: 180px; background: #111; }
 .itemImage { object-fit: cover; }
-.itemBody { display: grid; gap: 6px; padding: 12px; }
+.itemBody { position: relative; z-index: 1; display: grid; gap: 6px; padding: 12px; background: var(--kendo-color-surface); }
 .itemTitle { font-size: 16px; font-weight: 800; }
 .itemSubtitle { font-size: 13px; color: var(--kendo-color-subtle); }
 .removeBtn {
@@ -76,6 +76,7 @@
 }
 @media (max-width: 700px) {
   .itemLink { grid-template-rows: 160px auto; }
+  .itemImageWrap { height: 160px; }
 }
 
 /* ── Header ── */
