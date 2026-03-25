@@ -576,6 +576,273 @@
   border-top-color: var(--kendo-color-primary);
 }
 
+/* ─── K9Cupid Promo Banner ─────────────────────────────────────────────── */
+
+@keyframes promoPawFloat {
+  0%, 100% { transform: translateY(0) rotate(-8deg); opacity: 0.13; }
+  50%       { transform: translateY(-6px) rotate(-4deg); opacity: 0.2; }
+}
+@keyframes promoHeartPulse {
+  0%, 100% { transform: scale(1); opacity: 0.15; }
+  50%       { transform: scale(1.18); opacity: 0.25; }
+}
+
+@keyframes promoEyebrowRing {
+  0%   { opacity: 0.6; transform: scale(0.95); box-shadow: 0 0 0 0 rgba(229, 72, 63, 0.45); }
+  70%  { opacity: 0;   transform: scale(1.6);  box-shadow: 0 0 0 10px rgba(229, 72, 63, 0); }
+  100% { opacity: 0;   transform: scale(1.6);  box-shadow: 0 0 0 10px rgba(229, 72, 63, 0); }
+}
+@keyframes promoCtaPulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 8px 22px rgba(229, 72, 63, 0.35), inset 0 1px 0 rgba(255,255,255,0.18); filter: brightness(1); }
+  50%      { transform: scale(1.05); box-shadow: 0 14px 34px rgba(229, 72, 63, 0.55), inset 0 1px 0 rgba(255,255,255,0.22); filter: brightness(1.08); }
+}
+@keyframes promoCtaRing {
+  0%   { opacity: 0.6; transform: scale(0.96); box-shadow: 0 0 0 0 rgba(229, 72, 63, 0.45); }
+  70%  { opacity: 0;   transform: scale(1.15); box-shadow: 0 0 0 12px rgba(229, 72, 63, 0); }
+  100% { opacity: 0;   transform: scale(1.15); box-shadow: 0 0 0 12px rgba(229, 72, 63, 0); }
+}
+.promoBanner {
+  grid-column: span 2;
+  display: grid;
+  grid-template-columns: minmax(200px, 0.75fr) 1fr;
+  align-items: stretch;
+  border: 1px solid rgba(180, 120, 60, 0.22);
+  border-radius: 20px;
+  overflow: hidden;
+  text-decoration: none;
+  background: linear-gradient(125deg, #F7EDD8 0%, #EDD8B4 45%, #F2E4C8 100%);
+  box-shadow: 0 10px 36px rgba(120, 70, 20, 0.14), inset 0 1px 0 rgba(255,255,255,0.55);
+  position: relative;
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.28s ease;
+  min-height: 280px;
+}
+
+.promoBanner::before {
+  content: "🐾";
+  position: absolute;
+  top: 10%;
+  left: 2%;
+  font-size: 36px;
+  opacity: 0.14;
+  pointer-events: none;
+  animation: promoPawFloat 4s ease-in-out infinite;
+}
+.promoBanner::after {
+  content: "🐾";
+  position: absolute;
+  bottom: 10%;
+  right: 2%;
+  font-size: 26px;
+  opacity: 0.12;
+  pointer-events: none;
+  animation: promoPawFloat 5.2s ease-in-out infinite reverse;
+}
+
+.promoBanner:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 48px rgba(120, 70, 20, 0.2), inset 0 1px 0 rgba(255,255,255,0.55);
+}
+.promoBanner:active {
+  transform: translateY(-1px);
+}
+
+/* ── Media (video) side ── */
+.promoMedia {
+  position: relative;
+  width: 100%;
+  min-height: 280px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.promoMedia::after {
+  content: "";
+  position: absolute;
+  bottom: 26px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 46%;
+  height: 12px;
+  background: radial-gradient(ellipse at center, rgba(100,60,10,0.26) 0%, transparent 70%);
+  pointer-events: none;
+  border-radius: 50%;
+}
+
+.promoVideo {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+  object-fit: contain;
+  object-position: center 60%;
+  mix-blend-mode: multiply;
+  filter: none;
+}
+
+.promoPoster {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+  object-fit: contain;
+  object-position: center 60%;
+  mix-blend-mode: multiply;
+  filter: none;
+}
+
+/* ── Content side ── */
+.promoContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 14px;
+  padding: 36px 32px 36px 20px;
+}
+
+.promoEyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: rgba(110, 60, 10, 0.65);
+}
+
+.promoEyebrowDot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--kendo-color-primary);
+  box-shadow: 0 0 0 5px rgba(229, 72, 63, 0.35);
+  flex-shrink: 0;
+  position: relative;
+  animation: none;
+}
+.promoEyebrowDot::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: promoEyebrowRing 2.4s ease-out infinite;
+}
+
+.promoTitle {
+  font-size: 42px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -1px;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.promoSubtitle {
+  font-size: 15px;
+  line-height: 1.6;
+  color: rgba(40, 25, 8, 0.72);
+  margin: 0;
+  max-width: 100%;
+}
+
+/* Feature chips */
+.promoFeatures {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.promoFeature {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(180, 120, 40, 0.2);
+  font-size: 13px;
+  font-weight: 700;
+  color: rgba(60, 35, 8, 0.85);
+  backdrop-filter: blur(4px);
+  white-space: nowrap;
+}
+
+.promoCta {
+  margin-top: 6px;
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  padding: 14px 26px;
+  border-radius: 14px;
+  background: var(--kendo-color-primary);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  box-shadow: 0 8px 22px rgba(229, 72, 63, 0.35), inset 0 1px 0 rgba(255,255,255,0.18);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+}
+.promoBanner:hover .promoCta {
+  transform: translateX(4px);
+  filter: brightness(1.06);
+  box-shadow: 0 12px 28px rgba(229, 72, 63, 0.42), inset 0 1px 0 rgba(255,255,255,0.18);
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .promoBanner { grid-template-columns: 1fr 1fr; min-height: 260px; }
+  .promoFeatures { gap: 6px; }
+  .promoFeature { padding: 6px 10px; font-size: 12px; }
+}
+@media (max-width: 1050px) {
+  .promoFeature { padding: 5px 9px; font-size: 11px; }
+}
+@media (max-width: 900px) {
+  .promoBanner {
+    grid-column: 1 / -1;
+    grid-template-columns: 1fr;
+    grid-template-rows: 240px auto;
+  }
+  .promoMedia { min-height: 260px; }
+  .promoMedia::after { bottom: 18px; }
+  .promoFeatures { flex-wrap: wrap; }
+  .promoContent {
+    padding: 20px 20px 28px 20px;
+    justify-content: flex-start;
+  }
+  .promoTitle { font-size: 32px; }
+}
+@media (max-width: 700px) {
+  .promoBanner { grid-column: 1 / -1; }
+  .promoMedia { min-height: 220px; }
+  .promoMedia::after { bottom: 18px; }
+  .promoFeatures { flex-wrap: wrap; gap: 8px; }
+  .promoTitle { font-size: 26px; }
+  .promoSubtitle { font-size: 13px; }
+  .promoContent { padding: 16px 16px 24px 16px; gap: 10px; }
+  .promoCta { padding: 12px 20px; font-size: 13px; }
+}
+
+/* Light theme */
+:global(html[data-theme="light"]) .promoBanner {
+  background: linear-gradient(125deg, #F7EDD8 0%, #EDD8B4 45%, #F2E4C8 100%);
+  border-color: rgba(180, 120, 60, 0.25);
+  box-shadow: 0 8px 28px rgba(120, 70, 20, 0.1), inset 0 1px 0 rgba(255,255,255,0.7);
+}
+:global(html[data-theme="light"]) .promoTitle { color: #1a1a1a; }
+:global(html[data-theme="light"]) .promoFeature {
+  background: rgba(255, 255, 255, 0.75);
+  border-color: rgba(180, 120, 40, 0.18);
+  color: rgba(60, 35, 8, 0.9);
+}
+
+/* ─── End Promo Banner ─────────────────────────────────────────────────── */
+
 :global(html[data-theme="light"]) .actionPrimary {
   background: var(--kendo-color-primary) !important;
   border-color: var(--kendo-color-primary);
