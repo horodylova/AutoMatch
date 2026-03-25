@@ -71,7 +71,7 @@ function PromoBannerK9() {
           <span className={styles.promoFeature}>🐕 Breed match</span>
           <span className={styles.promoFeature}>📰 Articles</span>
         </div>
-        <span className={styles.promoCta}>Find Your Dog Match →</span>
+        <span className={styles.promoCta}>Find Your K9 Companion →</span>
       </div>
     </Link>
   );
