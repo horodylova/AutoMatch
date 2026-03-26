@@ -11,6 +11,7 @@ import Link from "next/link";
 import { getQuizAnswers } from "@/utils/storage";
 import { event } from "@/lib/pixel";
 import { trackQuizStart } from "@/lib/gtag";
+import Image from "next/image";
 
 function num(v: unknown): number {
   const raw = String(v ?? "").trim();
@@ -57,7 +58,16 @@ function PromoBannerK9() {
         >
           <source src="/banner%20video/K9Cupid%205%20Sec%20Video-Picsart-BackgroundRemover.mp4" type="video/mp4" />
         </video>
-        {fallback && <img src="/no-image-available.jpg" alt="K9Cupid" className={styles.promoPoster} />}
+        {fallback && (
+          <Image
+            src="/no-image-available.jpg"
+            alt="K9Cupid"
+            className={styles.promoPoster}
+            fill
+            sizes="(max-width: 900px) 100vw, 50vw"
+            priority={false}
+          />
+        )}
       </div>
       <div className={styles.promoContent}>
         <div className={styles.promoEyebrow}>

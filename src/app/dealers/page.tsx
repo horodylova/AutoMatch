@@ -81,6 +81,11 @@ export default function PartnersPage() {
     setIsSubmitting(false);
   };
 
+  const scrollToForm = () => {
+    const el = document.getElementById("dealerForm");
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   return (
     <div className={styles.container}>
       {toast && (
@@ -156,9 +161,23 @@ export default function PartnersPage() {
               <span className={styles.mobileOnly}>Direct support. No call centers.</span>
             </li>
           </ul>
+
+          <div className={styles.orderCard} id="order">
+            <h3 className={styles.orderTitle}>Add Your Inventory to CarCupid</h3>
+            <p className={styles.orderText}>
+              Connect your feed and activate placement for 1, 3, 6, or 12 months. We’ll match real buyers directly to your cars.
+            </p>
+            <div className={styles.orderActions}>
+              <Link href="/dealers/order" className={styles.orderButton}>
+                Add Your Inventory
+              </Link>
+              <button type="button" className={styles.orderSecondary} onClick={scrollToForm}>Talk to a Manager</button>
+              <span className={styles.orderNote}>Questions first? Use the form on the right.</span>
+            </div>
+          </div>
         </div>
 
-        <div className={styles.formSection}>
+        <div className={styles.formSection} id="dealerForm">
           <div className={styles.formCard}>
             <h2 className={styles.formTitle}>Get Matched Buyers (No Listings, No Leads)</h2>
             <form onSubmit={handleSubmit}>
