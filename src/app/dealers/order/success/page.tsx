@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import styles from "../../dealers.module.css";
 
-export default function SuccessPage() {
+function SuccessContent() {
   const params = useSearchParams();
   const sid = params.get("sid") || "";
   const [logoSrc, setLogoSrc] = useState<string>("/logos/logo.svg");
@@ -37,5 +37,20 @@ export default function SuccessPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function SuccessPage() {
+  return (
+    <Suspense fallback={
+      <div className={styles.successWrap}>
+        <div className={styles.successCard}>
+          <div className={styles.successTitle}>Payment Successful</div>
+          <div className={styles.successSubtitle}>Thank you. Your payment was processed successfully.</div>
+        </div>
+      </div>
+    }>
+      <SuccessContent />
+    </Suspense>
   );
 }
