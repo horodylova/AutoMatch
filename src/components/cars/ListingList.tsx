@@ -11,6 +11,7 @@ import Link from "next/link";
 import { getQuizAnswers } from "@/utils/storage";
 import { event } from "@/lib/pixel";
 import { trackQuizStart } from "@/lib/gtag";
+import Image from "next/image";
 
 function num(v: unknown): number {
   const raw = String(v ?? "").trim();
@@ -21,6 +22,69 @@ function num(v: unknown): number {
 
 function fmtUSD(n: number): string {
   return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(n);
+}
+
+function PromoBannerK9() {
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const [fallback, setFallback] = useState(false);
+  useEffect(() => {
+    const el = videoRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      entries => {
+        const e = entries[0];
+        if (!e) return;
+        if (e.isIntersecting) el.play().catch(() => {});
+        else el.pause();
+      },
+      { threshold: 0.25 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+  return (
+    <Link href="https://k9cupid.fit/" className={styles.promoBanner} target="_blank" rel="noopener noreferrer" prefetch={false} aria-label="Explore K9Cupid">
+      <div className={styles.promoMedia}>
+        <video
+          ref={videoRef}
+          playsInline
+          muted
+          loop
+          autoPlay
+          preload="auto"
+          onError={() => setFallback(true)}
+          className={styles.promoVideo}
+          style={{ display: fallback ? "none" : "block" }}
+        >
+          <source src="/banner%20video/K9Cupid%205%20Sec%20Video-Picsart-BackgroundRemover.mp4" type="video/mp4" />
+        </video>
+        {fallback && (
+          <Image
+            src="/no-image-available.jpg"
+            alt="K9Cupid"
+            className={styles.promoPoster}
+            fill
+            sizes="(max-width: 900px) 100vw, 50vw"
+            priority={false}
+          />
+        )}
+      </div>
+      <div className={styles.promoContent}>
+        <div className={styles.promoEyebrow}>
+          <span className={styles.promoEyebrowDot} />
+          Partner
+        </div>
+        <h3 className={styles.promoTitle}>K9Cupid</h3>
+        <p className={styles.promoSubtitle}>Love cars. Love dogs. Meet K9Cupid — find the breed that fits your life.</p>
+        <div className={styles.promoFeatures}>
+          <span className={styles.promoFeature}>⏱ 5-min quiz</span>
+          <span className={styles.promoFeature}>🐕 Breed match</span>
+          <span className={styles.promoFeature}>📰 Articles</span>
+        </div>
+        <span className={styles.promoCta}>Find Your K9 Companion →</span>
+      </div>
+    </Link>
+  );
 }
 
 export default function ListingList({ filters }: { filters?: FiltersData }) {
@@ -356,10 +420,17 @@ export default function ListingList({ filters }: { filters?: FiltersData }) {
         {(() => {
           return view === "grid" ? (
             <div className={styles.listGrid}>
-              {pageRows.map(r => toItem(r)).map((item, i) => {
-                const key = item.id || `g-${start + i}`;
-                return <ListingItem key={key} item={item} />;
-              })}
+              {(() => {
+                const items = pageRows.map(r => toItem(r));
+                const nodes: React.ReactNode[] = [];
+                const insertAt = 6;
+                items.forEach((item, i) => {
+                  if (i === insertAt) nodes.push(<PromoBannerK9 key="promo-k9" />);
+                  const key = item.id || `g-${start + i}`;
+                  nodes.push(<ListingItem key={key} item={item} />);
+                });
+                return nodes;
+              })()}
             </div>
           ) : (
             <div style={{ display: "grid", gap: 12 }}>

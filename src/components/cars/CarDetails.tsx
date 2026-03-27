@@ -247,7 +247,7 @@ export default function CarDetails({ id, initialRow, initialIdx }: Props) {
 
       <div className={`${styles.detailsLayout} ${!hasRealImage ? styles.detailsLayoutNoImage : ""}`}>
         <div className={styles.detailsColLeft}>
-          <DetailsGallery images={images} title={title} compact={!hasRealImage} />
+          <DetailsGallery id={id} images={images} title={title} compact={!hasRealImage} />
           <DetailsReview paragraphs={reviewParas} />
           <DetailsProsCons pros={pros} cons={cons} />
           {showLeftInfo ? (

@@ -11,7 +11,7 @@
 .desc { font-size: 13px; line-height: 1.5; text-align: center; color: rgba(245, 245, 247, 0.85); max-width: 92%; }
  .check { position: absolute; top: 10px; right: 10px; width: 26px; height: 26px; border-radius: 999px; background: rgba(245, 245, 247, 0.92); display: grid; place-items: center; opacity: 0; }
  .checkOn { opacity: 1; }
- .check::after { content: ""; width: 10px; height: 6px; border-left: 2px solid var(--kendo-color-on-app-surface); border-bottom: 2px solid var(--kendo-color-on-app-surface); transform: rotate(-45deg); }
+ .check::after { content: ""; width: 10px; height: 6px; border-left: 2px solid #111214; border-bottom: 2px solid #111214; transform: rotate(-45deg); }
 
 
 

@@ -4,16 +4,18 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import styles from "./Header.module.css";
-import { RESULTS_UPDATED_EVENT, RESULTS_STORE_KEY } from "../utils/storage";
+import { RESULTS_UPDATED_EVENT, RESULTS_STORE_KEY, WISHLIST_UPDATED_EVENT, getWishlistCount } from "../utils/storage";
 import { event } from "@/lib/pixel";
 import { trackQuizStart } from "@/lib/gtag";
 import ThemeToggle from "./ThemeToggle";
+import { FaHeart } from "react-icons/fa6";
 
 export default function Header() {
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
   const [scrolled, setScrolled] = useState<boolean>(false);
   const [hasSavedResults, setHasSavedResults] = useState<boolean>(false);
   const [logoSrc, setLogoSrc] = useState<string>("/logos/logo.svg");
+  const [wishlistCount, setWishlistCount] = useState<number>(0);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -49,17 +51,23 @@ export default function Header() {
     };
 
     updateLogo();
+    setWishlistCount(getWishlistCount());
 
     const observer = new MutationObserver(updateLogo);
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
     
     window.addEventListener(RESULTS_UPDATED_EVENT, checkSavedResults);
     window.addEventListener("storage", checkSavedResults);
+    const handleWishlist = () => setWishlistCount(getWishlistCount());
+    window.addEventListener(WISHLIST_UPDATED_EVENT, handleWishlist);
+    window.addEventListener("storage", handleWishlist);
 
     return () => {
         window.removeEventListener("scroll", handleScroll);
         window.removeEventListener(RESULTS_UPDATED_EVENT, checkSavedResults);
         window.removeEventListener("storage", checkSavedResults);
+        window.removeEventListener(WISHLIST_UPDATED_EVENT, handleWishlist);
+        window.removeEventListener("storage", handleWishlist);
         observer.disconnect();
     };
   }, []);
@@ -122,6 +130,10 @@ export default function Header() {
         </div>
 
         <div className={styles.headerRight}>
+          <Link href="/wishlist" className={styles.wishlistIconBtn} aria-label="Open wishlist">
+            <FaHeart />
+            <span className={styles.wishlistBadge}>{wishlistCount}</span>
+          </Link>
           <div className={styles.themeToggleWrapper}>
             <ThemeToggle />
           </div>
@@ -136,6 +148,10 @@ export default function Header() {
 
      
         <div className={styles.mobileMenu}>
+          <Link href="/wishlist" className={styles.wishlistIconBtn} aria-label="Open wishlist">
+            <FaHeart />
+            <span className={styles.wishlistBadge}>{wishlistCount}</span>
+          </Link>
           <button
             className={styles.hamburger}
             onClick={() => setIsDrawerOpen(true)}
@@ -226,6 +242,13 @@ export default function Header() {
                 )
               ))}
 
+              <Link
+                href="/wishlist"
+                className={styles.drawerItem}
+                onClick={() => setIsDrawerOpen(false)}
+              >
+                Wishlist
+              </Link>
               <Link
                 href="/quiz"
                 className={styles.drawerContactButton}

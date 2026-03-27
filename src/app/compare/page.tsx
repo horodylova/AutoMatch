@@ -8,6 +8,8 @@ import { CarSpecs, parseCarData } from "@/utils/carScoring";
 import CompareSearch from "@/components/compare/CompareSearch";
 import CompareView from "@/components/compare/CompareView";
 import { event } from "@/lib/pixel";
+import { FaHeart, FaRegHeart } from "react-icons/fa6";
+import { addWishlistItem, isWishlisted, removeWishlistItem, WISHLIST_UPDATED_EVENT } from "@/utils/storage";
 
 export default function ComparePage() {
   const [dataset, setDataset] = useState<Dataset | null>(null);
@@ -15,6 +17,8 @@ export default function ComparePage() {
   const [car2, setCar2] = useState<CarSpecs | null>(null);
   const [isComparing, setIsComparing] = useState(false);
   const [isLoadingSharedCar, setIsLoadingSharedCar] = useState(false);
+  const [w1, setW1] = useState<boolean>(false);
+  const [w2, setW2] = useState<boolean>(false);
 
   useEffect(() => {
     event("CompareCarsView");
@@ -52,6 +56,60 @@ export default function ComparePage() {
     });
   }, []);
 
+  useEffect(() => {
+    const handler = () => {
+      setW1(isWishlisted(car1?.id || null));
+      setW2(isWishlisted(car2?.id || null));
+    };
+    window.addEventListener(WISHLIST_UPDATED_EVENT, handler);
+    window.addEventListener("storage", handler);
+    return () => {
+      window.removeEventListener(WISHLIST_UPDATED_EVENT, handler);
+      window.removeEventListener("storage", handler);
+    };
+  }, [car1?.id, car2?.id]);
+
+  useEffect(() => {
+    setW1(isWishlisted(car1?.id || null));
+  }, [car1?.id]);
+  useEffect(() => {
+    setW2(isWishlisted(car2?.id || null));
+  }, [car2?.id]);
+
+  const toggleW1 = () => {
+    if (!car1) return;
+    if (w1) {
+      removeWishlistItem(car1.id);
+    } else {
+      addWishlistItem({
+        id: car1.id,
+        year: car1.year,
+        make: car1.make,
+        model: car1.model,
+        trim: car1.trim,
+        image: car1.image,
+        title: `${car1.year} ${car1.make} ${car1.model}`,
+        subtitle: car1.trim,
+      });
+    }
+  };
+  const toggleW2 = () => {
+    if (!car2) return;
+    if (w2) {
+      removeWishlistItem(car2.id);
+    } else {
+      addWishlistItem({
+        id: car2.id,
+        year: car2.year,
+        make: car2.make,
+        model: car2.model,
+        trim: car2.trim,
+        image: car2.image,
+        title: `${car2.year} ${car2.make} ${car2.model}`,
+        subtitle: car2.trim,
+      });
+    }
+  };
   const handleSelect1 = (car: CarSpecs) => {
     setCar1(car);
   };
@@ -113,7 +171,12 @@ export default function ComparePage() {
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
               </div>
-              <div className={styles.carName}>{car1.year} {car1.make} {car1.model}</div>
+              <div className={styles.carHeader}>
+                <div className={styles.carName}>{car1.year} {car1.make} {car1.model}</div>
+                <button type="button" className={styles.wishInlineBtn} aria-label="Add to wishlist" onClick={toggleW1}>
+                  {w1 ? <FaHeart /> : <FaRegHeart />}
+                </button>
+              </div>
               <div className={styles.carTrim}>{car1.trim}</div>
               <button className={styles.changeButton} onClick={() => clearSelection(1)}>
                 Change Vehicle
@@ -145,7 +208,12 @@ export default function ComparePage() {
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
               </div>
-              <div className={styles.carName}>{car2.year} {car2.make} {car2.model}</div>
+              <div className={styles.carHeader}>
+                <div className={styles.carName}>{car2.year} {car2.make} {car2.model}</div>
+                <button type="button" className={styles.wishInlineBtn} aria-label="Add to wishlist" onClick={toggleW2}>
+                  {w2 ? <FaHeart /> : <FaRegHeart />}
+                </button>
+              </div>
               <div className={styles.carTrim}>{car2.trim}</div>
               <button className={styles.changeButton} onClick={() => clearSelection(2)}>
                 Change Vehicle

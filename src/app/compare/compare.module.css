@@ -158,6 +158,12 @@
   text-align: center;
 }
 
+.carHeader {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .imageWrapper {
   width: 100%;
   height: 180px;
@@ -165,10 +171,100 @@
   margin-bottom: 16px;
 }
 
+.wishBtn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--kendo-color-on-app-surface);
+  border: 1px solid var(--kendo-color-border);
+  box-shadow: 0 10px 26px rgba(0,0,0,0.28);
+  backdrop-filter: blur(8px);
+  z-index: 3;
+  transition: transform 0.12s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+.wishBtn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.08) inset;
+  pointer-events: none;
+}
+.wishBtn:hover {
+  transform: translateY(-1px);
+  border-color: var(--kendo-color-border-alt);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.32);
+}
+.wishBtn:active {
+  transform: translateY(0) scale(0.98);
+}
+.wishBtn svg {
+  width: 19px;
+  height: 19px;
+  color: var(--kendo-color-primary);
+}
+:global(html[data-theme="light"]) .wishBtn {
+  background: #ffffff;
+  border-color: rgba(0,0,0,0.14);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+
 .carImage {
   object-fit: contain;
   border-radius: 12px;
 }
+
+.wishInlineBtn {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: var(--kendo-color-on-app-surface);
+  border: 1px solid var(--kendo-color-border);
+  box-shadow: none;
+  transition: transform 0.12s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+  outline: none;
+  vertical-align: middle;
+}
+.wishInlineBtn:hover {
+  transform: translateY(-1px);
+  border-color: var(--kendo-color-border-alt);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+  background: rgba(255, 255, 255, 0.06);
+}
+.wishInlineBtn:active {
+  transform: translateY(0) scale(0.98);
+}
+.wishInlineBtn:focus-visible {
+  box-shadow: 0 0 0 3px rgba(229, 72, 63, 0.28);
+  border-color: var(--kendo-color-primary);
+}
+.wishInlineBtn svg {
+  width: 14px;
+  height: 14px;
+  color: var(--kendo-color-primary);
+}
+:global(html[data-theme="light"]) .wishInlineBtn {
+  background: transparent;
+  border-color: rgba(0,0,0,0.16);
+  box-shadow: none;
+}
+:global(html[data-theme="light"]) .wishInlineBtn:hover {
+  background: #ffffff;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+  border-color: rgba(0,0,0,0.2);
+}
+
 
 .carName {
   font-size: 20px;

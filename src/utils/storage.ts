@@ -100,3 +100,73 @@ export function clearSavedResults(): void {
   window.localStorage.removeItem(RESULTS_STORE_KEY);
   window.dispatchEvent(new Event(RESULTS_UPDATED_EVENT));
 }
+
+export type WishlistItem = {
+  id: string;
+  year?: number;
+  make?: string;
+  model?: string;
+  trim?: string;
+  image?: string;
+  title?: string;
+  subtitle?: string;
+};
+
+export const WISHLIST_STORE_KEY = "autoMatch_wishlist";
+export const WISHLIST_UPDATED_EVENT = "autoMatch_wishlist_updated";
+
+export function getWishlist(): { items: WishlistItem[]; timestamp: number; expiresAt: number } | null {
+  if (!canUseStorage()) return null;
+  const raw = window.localStorage.getItem(WISHLIST_STORE_KEY);
+  if (!raw) return null;
+  try {
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed.expiresAt !== "number") return null;
+    if (Date.now() > parsed.expiresAt) {
+      window.localStorage.removeItem(WISHLIST_STORE_KEY);
+      window.dispatchEvent(new Event(WISHLIST_UPDATED_EVENT));
+      return null;
+    }
+    return parsed;
+  } catch {
+    return null;
+  }
+}
+
+export function setWishlist(items: WishlistItem[]): void {
+  if (!canUseStorage()) return;
+  const payload = {
+    items,
+    timestamp: Date.now(),
+    expiresAt: Date.now() + 24 * 60 * 60 * 1000
+  };
+  window.localStorage.setItem(WISHLIST_STORE_KEY, JSON.stringify(payload));
+  window.dispatchEvent(new Event(WISHLIST_UPDATED_EVENT));
+}
+
+export function addWishlistItem(item: WishlistItem): void {
+  const current = getWishlist();
+  const items = current?.items || [];
+  const exists = items.some(i => i.id === item.id);
+  const next = exists ? items : [item, ...items];
+  setWishlist(next);
+}
+
+export function removeWishlistItem(id: string): void {
+  const current = getWishlist();
+  const items = current?.items || [];
+  const next = items.filter(i => i.id !== id);
+  setWishlist(next);
+}
+
+export function isWishlisted(id?: string | null): boolean {
+  if (!id) return false;
+  const current = getWishlist();
+  const items = current?.items || [];
+  return items.some(i => i.id === id);
+}
+
+export function getWishlistCount(): number {
+  const current = getWishlist();
+  return (current?.items || []).length;
+}

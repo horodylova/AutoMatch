@@ -7,9 +7,12 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import Image from "next/image";
 import styles from "./cars.module.css";
+import { FaHeart, FaRegHeart } from "react-icons/fa6";
+import { addWishlistItem, isWishlisted, removeWishlistItem, WISHLIST_UPDATED_EVENT } from "@/utils/storage";
 
-export default function DetailsGallery({ images, title, compact = false }: { images: string[]; title: string; compact?: boolean }) {
+export default function DetailsGallery({ id, images, title, compact = false }: { id?: string; images: string[]; title: string; compact?: boolean }) {
   const [readyImages, setReadyImages] = useState<string[]>([]);
+  const [saved, setSaved] = useState<boolean>(false);
   useEffect(() => {
     let active = true;
     const run = async () => {
@@ -32,7 +35,31 @@ export default function DetailsGallery({ images, title, compact = false }: { ima
     return () => { active = false; };
   }, [images]);
 
+  useEffect(() => {
+    if (!id) return;
+    setSaved(isWishlisted(id));
+    const handler = () => setSaved(isWishlisted(id));
+    window.addEventListener(WISHLIST_UPDATED_EVENT, handler);
+    window.addEventListener("storage", handler);
+    return () => {
+      window.removeEventListener(WISHLIST_UPDATED_EVENT, handler);
+      window.removeEventListener("storage", handler);
+    };
+  }, [id]);
+
   const show = readyImages.length > 0 ? readyImages : images.slice(0, 1);
+  const toggleWishlist = () => {
+    if (!id) return;
+    if (saved) {
+      removeWishlistItem(id);
+    } else {
+      addWishlistItem({
+        id,
+        title,
+        image: images[0],
+      });
+    }
+  };
 
   return (
     <div className={`${styles.detailsGallery} ${compact ? styles.detailsGalleryCompact : ""}`}>
@@ -41,6 +68,9 @@ export default function DetailsGallery({ images, title, compact = false }: { ima
           <SwiperSlide key={`${src}-${i}`}>
             <div className={styles.gallerySlide}>
               <Image src={src} alt={title || "car"} fill className={styles.galleryImg} sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 820px" quality={95} priority={i === 0} unoptimized />
+              <button type="button" className={styles.wishBtn} aria-label="Add to wishlist" onClick={toggleWishlist}>
+                {saved ? <FaHeart /> : <FaRegHeart />}
+              </button>
             </div>
           </SwiperSlide>
         ))}
