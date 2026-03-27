@@ -157,7 +157,7 @@ import DatePicker from "@/components/DatePicker";
                  <div className={styles.orderGroup}>
                    <div className={styles.orderLabel}>Contact</div>
                    <div className={styles.orderCols}>
-                     <input className={styles.input} type="text" placeholder="Contact name" value={contactName} onChange={(e)=>setContactName(e.target.value)} />
+                    <input className={styles.input} type="text" placeholder="Contact name" value={contactName} onChange={(e)=>setContactName(e.target.value)} spellCheck={false} autoCapitalize="words" />
                      <input className={styles.input} type="email" placeholder="Email" value={contactEmail} onChange={(e)=>setContactEmail(e.target.value)} />
                      <input className={styles.input} type="tel" placeholder="Phone (optional)" value={contactPhone} onChange={(e)=>setContactPhone(e.target.value)} />
                    </div>

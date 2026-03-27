@@ -268,6 +268,8 @@
   transition: all 0.2s ease;
   background: var(--kendo-color-surface, #15202B);
   color: var(--kendo-color-on-app-surface, #F5F5F7);
+  -webkit-text-fill-color: var(--kendo-color-on-app-surface, #F5F5F7);
+  caret-color: var(--kendo-color-on-app-surface, #F5F5F7);
 }
 
 .select {
