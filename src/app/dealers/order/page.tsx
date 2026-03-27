@@ -4,6 +4,7 @@
  import Link from "next/link";
  import styles from "../dealers.module.css";
  import Toast, { ToastType } from "@/components/Toast";
+import DatePicker from "@/components/DatePicker";
  
  type Term = 1 | 3 | 6 | 12;
  
@@ -14,8 +15,6 @@
  export default function DealerOrderPage() {
    const [toast, setToast] = useState<{ message: string; type: ToastType; title?: string } | null>(null);
    const [termMonths, setTermMonths] = useState<Term>(1);
-   const [isHomeNet, setIsHomeNet] = useState(false);
-   const [homeNetId, setHomeNetId] = useState("");
   const minStart = new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString().split("T")[0];
    const [startDate, setStartDate] = useState(minStart);
     const [paymentPref, setPaymentPref] = useState<"CHECKOUT" | "INVOICE">("CHECKOUT");
@@ -28,22 +27,46 @@
  
   const handleSubmit = async (e: React.FormEvent) => {
      e.preventDefault();
-     if (!isHomeNet || !homeNetId.trim()) {
-       setToast({ type: "error", title: "HomeNet Required", message: "We currently onboard via HomeNet only. Please contact our manager via the form." });
-       window.location.assign("/dealers#dealerForm");
+   if (paymentPref === "INVOICE") {
+     if (!contactEmail || !contactName) {
+       setToast({ type: "error", title: "Missing details", message: "Please fill contact name and email." });
        return;
      }
-    if (paymentPref === "INVOICE") {
-      setToast({ type: "success", title: "Invoice request", message: "Please complete the manager form and we will send an invoice." });
-      window.location.assign("/dealers#dealerForm");
-      return;
-    }
-    if (homeNetId.trim() === "00000" && paymentPref === "CHECKOUT") {
+     try {
+       const res = await fetch("/api/dealers/invoice", {
+         method: "POST",
+         headers: { "Content-Type": "application/json" },
+         body: JSON.stringify({
+           termMonths,
+           startDate,
+           name: contactName,
+           email: contactEmail,
+           phone: contactPhone,
+           website: companySite,
+         }),
+       });
+       if (!res.ok) {
+         setToast({ type: "error", title: "Invoice error", message: "Unable to create invoice." });
+         return;
+       }
+       const data = await res.json();
+       if (data?.url) {
+         window.location.assign(data.url);
+         setToast({ type: "success", title: "Invoice sent", message: "We emailed your invoice and opened it in a new tab." });
+         return;
+       }
+       setToast({ type: "success", title: "Invoice created", message: "Invoice created. Check your email." });
+     } catch {
+       setToast({ type: "error", title: "Invoice error", message: "Network error while creating invoice." });
+     }
+     return;
+   }
+    if (paymentPref === "CHECKOUT") {
       try {
         const res = await fetch("/api/dealers/checkout", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ homeNetDealerId: homeNetId.trim(), termMonths, startDate }),
+          body: JSON.stringify({ homeNetDealerId: "00000", termMonths, startDate }),
         });
         if (!res.ok) {
           setToast({ type: "error", title: "Stripe error", message: "Unable to create session." });
@@ -51,7 +74,7 @@
         }
         const data = await res.json();
         if (data?.url) {
-          window.open(data.url, "_blank", "noopener");
+          window.location.assign(data.url);
           return;
         }
         setToast({ type: "error", title: "Stripe error", message: "Missing session URL." });
@@ -97,54 +120,39 @@
                  </div>
                  <div className={styles.orderGroup}>
                    <div className={styles.orderLabel}>Start Date (optional)</div>
-                   <input className={styles.input} type="date" min={minStart} value={startDate} onChange={(e)=>setStartDate(e.target.value)} />
+                  <DatePicker value={startDate} min={minStart} onChange={setStartDate} className={styles.datePickerWrap} />
                    <div className={styles.orderHint}>We may take up to 48 hours to activate your inventory (verification and setup), but we aim to be faster.</div>
                  </div>
                 <div className={styles.orderGroup}>
                   <div className={styles.orderLabel}>Payment</div>
                   <div className={styles.radioRow}>
                     <label className={styles.radioItem}>
-                      <input type="radio" name="paymentPref" checked={paymentPref==="CHECKOUT"} onChange={()=>setPaymentPref("CHECKOUT")} />
+                      <input
+                        type="radio"
+                        name="paymentPref"
+                        value="CHECKOUT"
+                        checked={paymentPref==="CHECKOUT"}
+                        onChange={(e)=>setPaymentPref(e.target.value as "CHECKOUT" | "INVOICE")}
+                      />
                       Card or ACH (via Stripe)
                     </label>
                     <label className={styles.radioItem}>
-                      <input type="radio" name="paymentPref" checked={paymentPref==="INVOICE"} onChange={()=>setPaymentPref("INVOICE")} />
+                      <input
+                        type="radio"
+                        name="paymentPref"
+                        value="INVOICE"
+                        checked={paymentPref==="INVOICE"}
+                        onChange={(e)=>setPaymentPref(e.target.value as "CHECKOUT" | "INVOICE")}
+                      />
                       Request Invoice
                     </label>
                   </div>
-                  {paymentPref==="INVOICE" && (
+                  <div className={`${styles.hintSlot} ${paymentPref==="INVOICE" ? styles.open : ""}`}>
                     <div className={styles.orderHint}>We will invoice your dealership by email. Our manager will confirm details via the form.</div>
-                  )}
+                  </div>
                 </div>
                  <div className={styles.orderGroup}>
-                   <div className={styles.orderNotice}>
-                     Don&apos;t have HomeNet? <Link href="/dealers#dealerForm" className={styles.orderLink}>Contact our manager via the form</Link>.
-                   </div>
-                 </div>
-                 <div className={styles.orderGroup}>
-                   <label className={styles.checkWrap}>
-                     <input
-                       type="checkbox"
-                       checked={isHomeNet}
-                       onChange={(e)=>setIsHomeNet(e.target.checked)}
-                       required
-                       className={styles.checkbox}
-                     />
-                     <span className={styles.checkboxUi} aria-hidden="true" />
-                     <span className={styles.checkLabel}>Our dealership is on HomeNet</span>
-                   </label>
-                 </div>
-                 <div className={styles.orderGroup}>
-                   <div className={`${styles.collapseSlot} ${isHomeNet ? styles.open : ""}`}>
-                     <input
-                       className={styles.input}
-                       type="text"
-                       placeholder="Enter your HomeNet Dealer ID"
-                       value={homeNetId}
-                       onChange={(e)=>setHomeNetId(e.target.value)}
-                       required={isHomeNet}
-                     />
-                   </div>
+                  <div className={styles.orderHint}>Our manager will help you onboard and set up the inventory feed.</div>
                  </div>
                  <div className={styles.orderGroup}>
                    <div className={styles.orderLabel}>Contact</div>
@@ -162,8 +170,7 @@
               <div className={styles.orderActions}>
                 <button
                   type="submit"
-                  className={`${styles.orderButton} ${(isHomeNet && homeNetId.trim()) ? styles.orderButtonActive : ""}`}
-                  disabled={!(isHomeNet && homeNetId.trim())}
+                  className={`${styles.orderButton} ${styles.orderButtonActive}`}
                 >
                   Continue
                 </button>

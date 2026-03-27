@@ -40,8 +40,8 @@ export async function POST(request: Request) {
           quantity: termMonths > 0 ? termMonths : 1,
         },
       ],
-      success_url: `${origin}/dealers/order?status=success&sid={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${origin}/dealers/order?status=cancel`,
+      success_url: `${origin}/dealers/order/success?sid={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${origin}/dealers/order/cancel`,
       metadata: {
         homeNetDealerId,
         termMonths: String(termMonths),
