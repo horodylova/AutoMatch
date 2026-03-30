@@ -189,10 +189,65 @@ export async function POST(request: Request) {
         console.log("payment.recorded", { dealerId: dealer.id, source: "session" });
         break;
       }
+      case "checkout.session.async_payment_succeeded": {
+        const sessObj = event.data.object as Stripe.Checkout.Session;
+        const session = await stripe.checkout.sessions.retrieve(sessObj.id, { expand: ["payment_intent"] });
+        const meta = session.metadata || {};
+        const piId = typeof session.payment_intent === "string" ? session.payment_intent : undefined;
+        const already =
+          (piId
+            ? await paymentClient.findUnique({ where: { stripePaymentIntentId: piId } }).catch(() => null)
+            : null) ||
+          (await paymentClient.findUnique({ where: { stripeSessionId: session.id } }).catch(() => null));
+        if (already) break;
+        const stripeCustomerId = typeof session.customer === "string" ? session.customer : session.customer?.id || "";
+        const termMonths = Number(meta.termMonths || 1) || 1;
+        const now = new Date();
+        const dealer = await ensureDealer({
+          dealerId: meta.dealerId || "",
+          email: (meta.email as string) || (session.customer_email as string) || "",
+          name: (meta.name as string) || "",
+          stripeCustomerId,
+        });
+        const anchor = dealer.termEndAt && dealer.termEndAt > now ? dealer.termEndAt : now;
+        const startDate = meta.startDate ? new Date(String(meta.startDate)) : anchor;
+        const endDate = addMonths(anchor, termMonths);
+        await dealerClient.update({
+          where: { id: dealer.id },
+          data: {
+            stripeCustomerId: stripeCustomerId || dealer.stripeCustomerId || null,
+            billingStatus: "active",
+            termStartAt: dealer.termStartAt ?? startDate,
+            termEndAt: endDate,
+          },
+        } as unknown);
+        const amountSubtotal = typeof session.amount_subtotal === "number" ? session.amount_subtotal : 0;
+        const amountTotal = typeof session.amount_total === "number" ? session.amount_total : amountSubtotal;
+        const currency = (session.currency || "usd").toLowerCase();
+        await paymentClient.create({
+          data: {
+            dealerId: dealer.id,
+            amount: amountTotal,
+            currency,
+            status: "succeeded",
+            method: "us_bank_account",
+            provider: "stripe",
+            stripePaymentIntentId: piId,
+            stripeSessionId: session.id,
+            stripeCustomerId,
+            termMonths,
+            startDate,
+            endDate,
+          },
+        });
+        console.log("payment.recorded", { dealerId: dealer.id, source: "async_session" });
+        break;
+      }
       default:
         break;
     }
-  } catch {
+  } catch (err) {
+    console.error(err);
     return new Response("error", { status: 500 });
   }
   return new Response("ok", { status: 200 });
@@ -227,7 +282,7 @@ type DealerRecord = {
 
 async function ensureDealer(params: { dealerId?: string; email?: string; name?: string; stripeCustomerId?: string }): Promise<DealerRecord> {
   const { dealerId = "", email = "", name = "", stripeCustomerId = "" } = params;
-  const dealerClient = (prisma as unknown as {
+  const dc = (prisma as unknown as {
     dealer: {
       findUnique: (args: unknown) => Promise<unknown>;
       findFirst: (args: unknown) => Promise<unknown>;
@@ -235,26 +290,26 @@ async function ensureDealer(params: { dealerId?: string; email?: string; name?: 
     };
   }).dealer;
   if (dealerId) {
-    const d = (await dealerClient.findUnique({ where: { id: dealerId } })) as unknown as DealerRecord | null;
+    const d = (await dc.findUnique({ where: { id: dealerId } })) as unknown as DealerRecord | null;
     if (d) return d;
   }
   if (email) {
-    const d = (await dealerClient.findFirst({ where: { contactEmail: email } as unknown })) as unknown as DealerRecord | null;
+    const d = (await dc.findFirst({ where: { contactEmail: email } })) as unknown as DealerRecord | null;
     if (d) return d;
   }
   if (stripeCustomerId) {
-    const d = (await dealerClient.findFirst({ where: { stripeCustomerId } as unknown })) as unknown as DealerRecord | null;
+    const d = (await dc.findFirst({ where: { stripeCustomerId } })) as unknown as DealerRecord | null;
     if (d) return d;
   }
   const base = toSlugBase(name || email.split("@")[0] || "dealer");
   const slug = `${base}-${Math.random().toString(36).slice(2, 7)}`;
-  const created = (await dealerClient.create({
+  const created = (await dc.create({
     data: {
       name: name || (email ? email.split("@")[0] : "Dealer"),
       slug,
       contactEmail: email || null,
       billingStatus: "active",
     },
-  } as unknown)) as unknown as DealerRecord;
+  })) as unknown as DealerRecord;
   return created;
 }
