@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "prebuild": "prisma db push",
+    "prebuild": "prisma db push && prisma generate",
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "postinstall": "prisma generate",
