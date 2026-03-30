@@ -113,6 +113,74 @@ export async function POST(request: Request) {
         },
       }),
     ]);
+    const apiKey = process.env.BREVO_API_KEY || "";
+    if (apiKey && email) {
+      const amountUsd = (amountTotal / 100).toFixed(2);
+      const serviceName = "CarCupid Inventory Placement";
+      const htmlContent = `
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <style>
+              body { margin:0; padding:0; background:#f9f9f9; color:#1a1a1a; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+              .container { max-width: 640px; margin: 0 auto; background:#ffffff; border-radius:12px; overflow:hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+              .header { background:#1F1F23; padding:28px 24px; color:#F5F5F7; }
+              .title { margin:0; font-size:22px; font-weight:800; }
+              .subtitle { margin:6px 0 0 0; opacity:0.9; }
+              .content { padding:24px; }
+              .row { margin-bottom:12px; display:flex; justify-content:space-between; }
+              .label { color:#666; }
+              .value { font-weight:700; }
+              .badge { display:inline-block; background:#1a1a1a; color:#fff; padding:8px 14px; border-radius:999px; font-size:13px; font-weight:700; }
+              .footer { text-align:center; padding:18px; font-size:12px; color:#777; }
+            </style>
+          </head>
+          <body>
+            <div style="padding:20px;">
+              <div class="container">
+                <div class="header">
+                  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                    <tr>
+                      <td width="120" align="left" valign="middle">
+                        <img src="https://carcupid.fit/cupids/carcupid-keys.png" alt="CarCupid" width="100" style="display:block;border:0;max-width:100px;height:auto;" />
+                      </td>
+                      <td align="left" valign="middle">
+                        <h1 class="title">Payment Receipt</h1>
+                        <p class="subtitle">Thank you for your purchase.</p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <div class="content">
+                  <div class="row"><span class="label">Service</span><span class="value">${serviceName}</span></div>
+                  <div class="row"><span class="label">Amount</span><span class="value">$${amountUsd} USD</span></div>
+                  <div class="row"><span class="label">Term</span><span class="value">${termMonths} month(s)</span></div>
+                  <div class="row"><span class="label">Start</span><span class="value">${startDate.toISOString().slice(0,10)}</span></div>
+                  <div class="row"><span class="label">End</span><span class="value">${endDate.toISOString().slice(0,10)}</span></div>
+                  <div style="margin-top:18px;">
+                    <span class="badge">Order Confirmed</span>
+                  </div>
+                </div>
+                <div class="footer">
+                  <div>© ${new Date().getFullYear()} CarCupid</div>
+                </div>
+              </div>
+            </div>
+          </body>
+        </html>
+      `;
+      await fetch("https://api.brevo.com/v3/smtp/email", {
+        method: "POST",
+        headers: { accept: "application/json", "api-key": apiKey, "content-type": "application/json" },
+        body: JSON.stringify({
+          sender: { name: "CarCupid", email: "noreply@carcupid.fit" },
+          to: [{ email }],
+          subject: "Payment Receipt – CarCupid",
+          htmlContent,
+        }),
+      }).catch(() => {});
+    }
     return NextResponse.json({ ok: true }, { status: 200 });
   } catch (err) {
     console.error(err);
