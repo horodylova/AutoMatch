@@ -20,20 +20,6 @@ export async function POST(request: Request) {
     return new Response("Invalid signature", { status: 400 });
   }
   try {
-    const paymentClient = (prisma as unknown as {
-      payment: {
-        findUnique: (args: unknown) => Promise<unknown>;
-        create: (args: unknown) => Promise<unknown>;
-      };
-    }).payment;
-    const dealerClient = (prisma as unknown as {
-      dealer: {
-        findUnique: (args: unknown) => Promise<unknown>;
-        findFirst: (args: unknown) => Promise<unknown>;
-        update: (args: unknown) => Promise<unknown>;
-        create: (args: unknown) => Promise<unknown>;
-      };
-    }).dealer;
     console.log("stripe.webhook", event.type);
     switch (event.type) {
       case "payment_intent.succeeded": {
@@ -48,14 +34,14 @@ export async function POST(request: Request) {
           name: (meta.name as string) || "",
           stripeCustomerId,
         });
-        const existing = await paymentClient.findUnique({
+        const existing = await prisma.payment.findUnique({
           where: { stripePaymentIntentId: pi.id },
         }).catch(() => null);
         if (!existing) {
           const anchor = dealer.termEndAt && dealer.termEndAt > now ? dealer.termEndAt : now;
           const startDate = meta.startDate ? new Date(String(meta.startDate)) : anchor;
           const endDate = addMonths(anchor, termMonths);
-          await dealerClient.update({
+          await prisma.dealer.update({
             where: { id: dealer.id },
             data: {
               stripeCustomerId: stripeCustomerId || dealer.stripeCustomerId || null,
@@ -63,11 +49,11 @@ export async function POST(request: Request) {
               termStartAt: dealer.termStartAt ?? startDate,
               termEndAt: endDate,
             },
-          } as unknown);
+          });
           const method = resolveMethodFromPI(pi);
           const amount = typeof pi.amount_received === "number" ? pi.amount_received : 0;
           const currency = (pi.currency || "usd").toLowerCase();
-          await paymentClient.create({
+          await prisma.payment.create({
             data: {
               dealerId: dealer.id,
               amount,
@@ -98,14 +84,14 @@ export async function POST(request: Request) {
           name: (meta.name as string) || "",
           stripeCustomerId,
         });
-        const existing = await paymentClient.findUnique({
+        const existing = await prisma.payment.findUnique({
           where: { stripeInvoiceId: invoice.id },
         }).catch(() => null);
         if (!existing) {
           const anchor = dealer.termEndAt && dealer.termEndAt > now ? dealer.termEndAt : now;
           const startDate = meta.startDate ? new Date(String(meta.startDate)) : anchor;
           const endDate = addMonths(anchor, termMonths);
-          await dealerClient.update({
+          await prisma.dealer.update({
             where: { id: dealer.id },
             data: {
               stripeCustomerId: stripeCustomerId || dealer.stripeCustomerId || null,
@@ -113,10 +99,10 @@ export async function POST(request: Request) {
               termStartAt: dealer.termStartAt ?? startDate,
               termEndAt: endDate,
             },
-          } as unknown);
+          });
           const amount = typeof invoice.total === "number" ? invoice.total : 0;
           const currency = (invoice.currency || "usd").toLowerCase();
-          await paymentClient.create({
+          await prisma.payment.create({
             data: {
               dealerId: dealer.id,
               amount,
@@ -143,9 +129,9 @@ export async function POST(request: Request) {
         const piId = typeof session.payment_intent === "string" ? session.payment_intent : undefined;
         const already =
           (piId
-            ? await paymentClient.findUnique({ where: { stripePaymentIntentId: piId } }).catch(() => null)
+            ? await prisma.payment.findUnique({ where: { stripePaymentIntentId: piId } }).catch(() => null)
             : null) ||
-          (await paymentClient.findUnique({ where: { stripeSessionId: session.id } }).catch(() => null));
+          (await prisma.payment.findUnique({ where: { stripeSessionId: session.id } }).catch(() => null));
         if (already) break;
         const stripeCustomerId = typeof session.customer === "string" ? session.customer : session.customer?.id || "";
         const termMonths = Number(meta.termMonths || 1) || 1;
@@ -159,7 +145,7 @@ export async function POST(request: Request) {
         const anchor = dealer.termEndAt && dealer.termEndAt > now ? dealer.termEndAt : now;
         const startDate = meta.startDate ? new Date(String(meta.startDate)) : anchor;
         const endDate = addMonths(anchor, termMonths);
-        await dealerClient.update({
+        await prisma.dealer.update({
           where: { id: dealer.id },
           data: {
             stripeCustomerId: stripeCustomerId || dealer.stripeCustomerId || null,
@@ -167,11 +153,11 @@ export async function POST(request: Request) {
             termStartAt: dealer.termStartAt ?? startDate,
             termEndAt: endDate,
           },
-        } as unknown);
+        });
         const amountSubtotal = typeof session.amount_subtotal === "number" ? session.amount_subtotal : 0;
         const amountTotal = typeof session.amount_total === "number" ? session.amount_total : amountSubtotal;
         const currency = (session.currency || "usd").toLowerCase();
-        await paymentClient.create({
+        await prisma.payment.create({
           data: {
             dealerId: dealer.id,
             amount: amountTotal,
@@ -197,9 +183,9 @@ export async function POST(request: Request) {
         const piId = typeof session.payment_intent === "string" ? session.payment_intent : undefined;
         const already =
           (piId
-            ? await paymentClient.findUnique({ where: { stripePaymentIntentId: piId } }).catch(() => null)
+            ? await prisma.payment.findUnique({ where: { stripePaymentIntentId: piId } }).catch(() => null)
             : null) ||
-          (await paymentClient.findUnique({ where: { stripeSessionId: session.id } }).catch(() => null));
+          (await prisma.payment.findUnique({ where: { stripeSessionId: session.id } }).catch(() => null));
         if (already) break;
         const stripeCustomerId = typeof session.customer === "string" ? session.customer : session.customer?.id || "";
         const termMonths = Number(meta.termMonths || 1) || 1;
@@ -213,7 +199,7 @@ export async function POST(request: Request) {
         const anchor = dealer.termEndAt && dealer.termEndAt > now ? dealer.termEndAt : now;
         const startDate = meta.startDate ? new Date(String(meta.startDate)) : anchor;
         const endDate = addMonths(anchor, termMonths);
-        await dealerClient.update({
+        await prisma.dealer.update({
           where: { id: dealer.id },
           data: {
             stripeCustomerId: stripeCustomerId || dealer.stripeCustomerId || null,
@@ -221,11 +207,11 @@ export async function POST(request: Request) {
             termStartAt: dealer.termStartAt ?? startDate,
             termEndAt: endDate,
           },
-        } as unknown);
+        });
         const amountSubtotal = typeof session.amount_subtotal === "number" ? session.amount_subtotal : 0;
         const amountTotal = typeof session.amount_total === "number" ? session.amount_total : amountSubtotal;
         const currency = (session.currency || "usd").toLowerCase();
-        await paymentClient.create({
+        await prisma.payment.create({
           data: {
             dealerId: dealer.id,
             amount: amountTotal,
