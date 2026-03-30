@@ -27,7 +27,6 @@ export default function PartnersPage() {
     const form = e.currentTarget;
     const formData = new FormData(form);
     
-    // Validate required fields
     const company = formData.get('company')?.toString().trim();
     const name = formData.get('name')?.toString().trim();
     const email = formData.get('email')?.toString().trim();
@@ -110,19 +109,29 @@ export default function PartnersPage() {
                 unoptimized
               />
             </div>
-            
             <h1 className={styles.title}>Send High-Intent Buyers Directly to Your Inventory</h1>
           </div>
+
           <p className={styles.subtitle}>
             CarCupid matches serious buyers directly to your actual inventory — without selling listings or auctioning leads.
           </p>
+
+          {/* Primary CTA — one place, premium */}
           <div className={styles.ctaHero}>
-            <div className={styles.priceBadge}>$150/mo • Cancel anytime</div>
-            <div className={styles.ctaRow}>
-              <Link href="/dealers/order" className={`${styles.orderButton} ${styles.orderButtonXL} ${styles.orderButtonActive}`}>
-                Add Your Inventory
-              </Link>
-              <button type="button" className={styles.orderSecondary} onClick={scrollToForm}>Talk to a Manager</button>
+            <div className={styles.ctaHeroInner}>
+              <div className={styles.priceBadge}>$150 / month &nbsp;·&nbsp; Flat fee &nbsp;·&nbsp; Cancel anytime</div>
+              <div className={styles.ctaRow}>
+                <Link
+                  href="/dealers/order"
+                  className={`${styles.orderButton} ${styles.orderButtonXL} ${styles.orderButtonActive}`}
+                >
+                  Add Your Inventory
+                </Link>
+                <button type="button" className={styles.orderSecondary} onClick={scrollToForm}>
+                  Talk to a Manager
+                </button>
+              </div>
+              <p className={styles.ctaNote}>No per-lead fees. No commissions. Activate in under a week.</p>
             </div>
           </div>
 
@@ -170,20 +179,6 @@ export default function PartnersPage() {
               <span className={styles.mobileOnly}>Direct support. No call centers.</span>
             </li>
           </ul>
-
-          <div className={styles.orderCard} id="order">
-            <h3 className={styles.orderTitle}>Add Your Inventory to CarCupid</h3>
-            <p className={styles.orderText}>
-              Activate monthly placement for $150/mo. Cancel anytime. We’ll match real buyers directly to your cars.
-            </p>
-            <div className={styles.orderActions}>
-              <Link href="/dealers/order" className={`${styles.orderButton} ${styles.orderButtonXL}`}>
-                Add Your Inventory
-              </Link>
-              <button type="button" className={styles.orderSecondary} onClick={scrollToForm}>Talk to a Manager</button>
-              <span className={styles.orderNote}>Questions first? Use the form on the right.</span>
-            </div>
-          </div>
         </div>
 
         <div className={styles.formSection} id="dealerForm">
@@ -239,7 +234,7 @@ export default function PartnersPage() {
 
       <div className={styles.certaintyCue}>
         <p>
-          <strong>CarCupid doesn’t sell listings or leads.</strong>
+          <strong>CarCupid doesn&apos;t sell listings or leads.</strong>
           We match serious buyers to the dealer that actually has the right car.
         </p>
       </div>

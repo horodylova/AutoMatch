@@ -26,7 +26,7 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .logoWrapper {
@@ -136,7 +136,7 @@
   font-size: 1.1rem;
   color: var(--kendo-color-subtle, #666);
   font-weight: 300;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   line-height: 1.6;
 }
 
@@ -146,6 +146,111 @@
   margin-bottom: 2rem;
   line-height: 1.6;
 }
+
+/* ─── Premium CTA Hero ─── */
+.ctaHero {
+  margin: 0 0 2.5rem;
+  position: relative;
+}
+
+.ctaHeroInner {
+  display: grid;
+  gap: 14px;
+  padding: 22px 24px;
+  border-radius: 16px;
+  border: 1px solid rgba(229, 72, 63, 0.22);
+  background: linear-gradient(
+    135deg,
+    rgba(229, 72, 63, 0.07) 0%,
+    rgba(229, 72, 63, 0.03) 60%,
+    transparent 100%
+  );
+  box-shadow:
+    0 0 0 1px rgba(229, 72, 63, 0.08),
+    0 8px 32px rgba(229, 72, 63, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+/* subtle top shine line */
+.ctaHeroInner::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(229, 72, 63, 0.45) 40%,
+    rgba(229, 72, 63, 0.45) 60%,
+    transparent 100%
+  );
+}
+
+.priceBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(229, 72, 63, 0.10);
+  color: var(--kendo-color-primary);
+  border: 1px solid rgba(229, 72, 63, 0.25);
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+  width: fit-content;
+}
+
+.ctaRow {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.ctaNote {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--kendo-color-subtle);
+  letter-spacing: 0.01em;
+}
+
+/* Light theme overrides for ctaHero */
+:global(html[data-theme="light"]) .ctaHeroInner {
+  background: linear-gradient(
+    135deg,
+    rgba(229, 72, 63, 0.06) 0%,
+    rgba(229, 72, 63, 0.02) 60%,
+    transparent 100%
+  );
+  border-color: rgba(229, 72, 63, 0.18);
+  box-shadow:
+    0 0 0 1px rgba(229, 72, 63, 0.07),
+    0 6px 24px rgba(229, 72, 63, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+:global(html[data-theme="light"]) .ctaHeroInner::before {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(229, 72, 63, 0.30) 40%,
+    rgba(229, 72, 63, 0.30) 60%,
+    transparent 100%
+  );
+}
+
+:global(html[data-theme="light"]) .priceBadge {
+  background: rgba(229, 72, 63, 0.08);
+  border-color: rgba(229, 72, 63, 0.20);
+  color: #C9472D;
+}
+
+/* ─────────────────────── */
 
 .howItWorksSection {
   margin-bottom: 3rem;
@@ -279,8 +384,8 @@
   background-repeat: no-repeat;
   background-position: right 1rem center;
   background-size: 1em;
-  padding-right: 2.5rem; /* Make room for arrow */
-  color-scheme: dark; /* Force dark native picker on supported browsers */
+  padding-right: 2.5rem;
+  color-scheme: dark;
 }
 
 .select option {
@@ -482,7 +587,6 @@
   box-shadow: 0 0 0 3px rgba(229, 72, 63, 0.1);
 }
 
-/* Fix select arrow for light theme - need a dark SVG or filter */
 :global(html[data-theme="light"]) .select {
   background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231A252F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
   background-repeat: no-repeat;
@@ -495,7 +599,6 @@
   color: var(--kendo-color-on-app-surface);
 }
 
-/* Autofill fixes for light theme */
 :global(html[data-theme="light"]) .input:-webkit-autofill,
 :global(html[data-theme="light"]) .input:-webkit-autofill:hover, 
 :global(html[data-theme="light"]) .input:-webkit-autofill:focus, 
@@ -523,7 +626,7 @@
   color: var(--kendo-color-primary);
 }
 
-/* Order CTA */
+/* ─── Order Card (used on /dealers/order page) ─── */
 .orderCard {
   margin-top: 2rem;
   padding: 16px;
@@ -562,6 +665,7 @@
   box-shadow: 0 8px 22px rgba(229, 72, 63, 0.28);
   text-decoration: none;
   font-weight: 800;
+  cursor: pointer;
 }
 .orderButtonActive {
   background: linear-gradient(180deg, var(--kendo-color-primary) 0%, rgba(229,72,63,0.95) 100%);
@@ -593,28 +697,6 @@
 .orderNote {
   font-size: 0.9rem;
   color: var(--kendo-color-subtle);
-}
-
-.ctaHero {
-  display: grid;
-  gap: 10px;
-  margin: 12px 0 20px;
-}
-.priceBadge {
-  display: inline-block;
-  padding: 8px 12px;
-  border-radius: 999px;
-  background: rgba(229,72,63,0.12);
-  color: var(--kendo-color-on-app-surface);
-  border: 1px solid var(--kendo-color-border);
-  font-weight: 700;
-  width: fit-content;
-}
-.ctaRow {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  align-items: center;
 }
 
 .orderForm {
@@ -686,7 +768,7 @@
   font-weight: 600;
 }
 .collapseSlot {
-  height: 52px; /* reserve space to avoid layout shift */
+  height: 52px;
   display: grid;
   align-items: center;
   overflow: hidden;
@@ -905,6 +987,7 @@
   border: 1px solid var(--kendo-color-border);
   text-decoration: none;
   font-weight: 600;
+  cursor: pointer;
 }
 
 .orderSummary {
