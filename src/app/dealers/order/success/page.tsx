@@ -12,6 +12,17 @@ function SuccessContent() {
   const [logoSrc, setLogoSrc] = useState<string>("/logos/logo.svg");
 
   useEffect(() => {
+    if (sid) {
+      const k = `confirm:${sid}`;
+      const done = typeof window !== "undefined" ? window.sessionStorage.getItem(k) : null;
+      if (!done) {
+        fetch(`/api/payments/confirm?sid=${encodeURIComponent(sid)}`, { method: "POST" }).finally(() => {
+          try {
+            window.sessionStorage.setItem(k, "1");
+          } catch {}
+        });
+      }
+    }
     const updateLogo = () => {
       const theme = document.documentElement.getAttribute("data-theme");
       setLogoSrc(theme === "light" ? "/cropped logo.png" : "/logos/logo.svg");
@@ -20,7 +31,7 @@ function SuccessContent() {
     const observer = new MutationObserver(updateLogo);
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
     return () => observer.disconnect();
-  }, []);
+  }, [sid]);
 
   return (
     <div className={styles.successWrap}>
