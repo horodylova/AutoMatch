@@ -21,10 +21,22 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "session not found" }, { status: 404 });
     }
     const meta = session.metadata || {};
-    const piId = typeof session.payment_intent === "string" ? session.payment_intent : undefined;
-    const existing =
-      (piId ? await prisma.payment.findUnique({ where: { stripePaymentIntentId: piId } }).catch(() => null) : null) ||
-      (await prisma.payment.findUnique({ where: { stripeSessionId: session.id } }).catch(() => null));
+    let piId: string | undefined;
+    if (typeof session.payment_intent === "string") {
+      piId = session.payment_intent;
+    } else if (session.payment_intent && typeof (session.payment_intent as Stripe.PaymentIntent).id === "string") {
+      piId = (session.payment_intent as Stripe.PaymentIntent).id;
+    }
+    const existing = await prisma.payment
+      .findFirst({
+        where: {
+          OR: [
+            ...(piId ? [{ stripePaymentIntentId: piId }] as const : []),
+            { stripeSessionId: session.id },
+          ],
+        },
+      })
+      .catch(() => null);
     if (existing) {
       return NextResponse.json({ ok: true, id: existing.id }, { status: 200 });
     }
@@ -69,34 +81,38 @@ export async function POST(request: Request) {
     const anchor = dealer.termEndAt && dealer.termEndAt > now ? dealer.termEndAt : now;
     const startDate = meta.startDate ? new Date(String(meta.startDate)) : anchor;
     const endDate = addMonths(anchor, termMonths);
-    await prisma.dealer.update({
-      where: { id: dealer.id },
-      data: {
-        stripeCustomerId: stripeCustomerId || dealer.stripeCustomerId || null,
-        billingStatus: "active",
-        termStartAt: dealer.termStartAt ?? startDate,
-        termEndAt: endDate,
-      },
-    });
     const amountSubtotal = typeof session.amount_subtotal === "number" ? session.amount_subtotal : 0;
     const amountTotal = typeof session.amount_total === "number" ? session.amount_total : amountSubtotal;
     const currency = (session.currency || "usd").toLowerCase();
-    await prisma.payment.create({
-      data: {
-        dealerId: dealer.id,
-        amount: amountTotal,
-        currency,
-        status: "succeeded",
-        method: "card",
-        provider: "stripe",
-        stripePaymentIntentId: piId,
-        stripeSessionId: session.id,
-        stripeCustomerId,
-        termMonths,
-        startDate,
-        endDate,
-      },
-    });
+    await prisma.$transaction([
+      prisma.dealer.update({
+        where: { id: dealer.id },
+        data: {
+          stripeCustomerId: stripeCustomerId || dealer.stripeCustomerId || null,
+          billingStatus: "active",
+          termStartAt: dealer.termStartAt ?? startDate,
+          termEndAt: endDate,
+        },
+      }),
+      prisma.payment.upsert({
+        where: { stripeSessionId: session.id },
+        update: {},
+        create: {
+          dealerId: dealer.id,
+          amount: amountTotal,
+          currency,
+          status: "succeeded",
+          method: "card",
+          provider: "stripe",
+          stripePaymentIntentId: piId,
+          stripeSessionId: session.id,
+          stripeCustomerId,
+          termMonths,
+          startDate,
+          endDate,
+        },
+      }),
+    ]);
     return NextResponse.json({ ok: true }, { status: 200 });
   } catch (err) {
     console.error(err);
