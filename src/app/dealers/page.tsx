@@ -116,6 +116,15 @@ export default function PartnersPage() {
           <p className={styles.subtitle}>
             CarCupid matches serious buyers directly to your actual inventory — without selling listings or auctioning leads.
           </p>
+          <div className={styles.ctaHero}>
+            <div className={styles.priceBadge}>$150/mo • Cancel anytime</div>
+            <div className={styles.ctaRow}>
+              <Link href="/dealers/order" className={`${styles.orderButton} ${styles.orderButtonXL} ${styles.orderButtonActive}`}>
+                Add Your Inventory
+              </Link>
+              <button type="button" className={styles.orderSecondary} onClick={scrollToForm}>Talk to a Manager</button>
+            </div>
+          </div>
 
           <div className={styles.howItWorksSection}>
             <h3 className={styles.howItWorksTitle}>How CarCupid Works</h3>
@@ -165,10 +174,10 @@ export default function PartnersPage() {
           <div className={styles.orderCard} id="order">
             <h3 className={styles.orderTitle}>Add Your Inventory to CarCupid</h3>
             <p className={styles.orderText}>
-              Connect your feed and activate placement for 1, 3, 6, or 12 months. We’ll match real buyers directly to your cars.
+              Activate monthly placement for $150/mo. Cancel anytime. We’ll match real buyers directly to your cars.
             </p>
             <div className={styles.orderActions}>
-              <Link href="/dealers/order" className={styles.orderButton}>
+              <Link href="/dealers/order" className={`${styles.orderButton} ${styles.orderButtonXL}`}>
                 Add Your Inventory
               </Link>
               <button type="button" className={styles.orderSecondary} onClick={scrollToForm}>Talk to a Manager</button>

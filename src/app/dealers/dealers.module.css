@@ -568,6 +568,11 @@
   transform: translateY(-1px);
   box-shadow: 0 12px 28px rgba(229, 72, 63, 0.38);
 }
+.orderButtonXL {
+  padding: 14px 22px;
+  font-size: 1.05rem;
+  border-radius: 12px;
+}
 .orderButton:hover {
   filter: brightness(1.06);
   box-shadow: 0 10px 28px rgba(229, 72, 63, 0.32);
@@ -588,6 +593,28 @@
 .orderNote {
   font-size: 0.9rem;
   color: var(--kendo-color-subtle);
+}
+
+.ctaHero {
+  display: grid;
+  gap: 10px;
+  margin: 12px 0 20px;
+}
+.priceBadge {
+  display: inline-block;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(229,72,63,0.12);
+  color: var(--kendo-color-on-app-surface);
+  border: 1px solid var(--kendo-color-border);
+  font-weight: 700;
+  width: fit-content;
+}
+.ctaRow {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
 .orderForm {

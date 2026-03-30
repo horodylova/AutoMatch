@@ -7,6 +7,7 @@
 import DatePicker from "@/components/DatePicker";
  
  type Term = 1 | 3 | 6 | 12;
+type PaymentPref = "CHECKOUT" | "SUBSCRIPTION";
  
  function calculatePrice(term: Term) {
    return 150 * term;
@@ -17,7 +18,7 @@ import DatePicker from "@/components/DatePicker";
    const [termMonths, setTermMonths] = useState<Term>(1);
   const minStart = new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString().split("T")[0];
    const [startDate, setStartDate] = useState(minStart);
-    const [paymentPref, setPaymentPref] = useState<"CHECKOUT" | "INVOICE">("CHECKOUT");
+   const [paymentPref, setPaymentPref] = useState<PaymentPref>("SUBSCRIPTION");
    const [contactName, setContactName] = useState("");
    const [contactEmail, setContactEmail] = useState("");
    const [contactPhone, setContactPhone] = useState("");
@@ -31,38 +32,8 @@ import DatePicker from "@/components/DatePicker";
      setToast({ type: "error", title: "Missing phone", message: "Please enter your phone number." });
      return;
    }
-   if (paymentPref === "INVOICE") {
-     if (!contactEmail || !contactName) {
-       setToast({ type: "error", title: "Missing details", message: "Please fill contact name and email." });
-       return;
-     }
-     try {
-       const res = await fetch("/api/dealers/invoice", {
-         method: "POST",
-         headers: { "Content-Type": "application/json" },
-         body: JSON.stringify({
-           termMonths,
-           startDate,
-           name: contactName,
-           email: contactEmail,
-           phone: contactPhone,
-           website: companySite,
-         }),
-       });
-       if (!res.ok) {
-         setToast({ type: "error", title: "Invoice error", message: "Unable to create invoice." });
-         return;
-       }
-       const data = await res.json();
-       if (data?.url) {
-         window.location.assign(data.url);
-         setToast({ type: "success", title: "Invoice sent", message: "We emailed your invoice and opened it in a new tab." });
-         return;
-       }
-       setToast({ type: "success", title: "Invoice created", message: "Invoice created. Check your email." });
-     } catch {
-       setToast({ type: "error", title: "Invoice error", message: "Network error while creating invoice." });
-     }
+   if (paymentPref === "SUBSCRIPTION") {
+     setToast({ type: "success", title: "Subscription", message: "Monthly subscription UI is active. Billing integration is coming soon." });
      return;
    }
     if (paymentPref === "CHECKOUT") {
@@ -113,8 +84,8 @@ import DatePicker from "@/components/DatePicker";
        <div className={styles.contentWrapper}>
          <div className={styles.infoSection}>
            <div className={styles.orderCard}>
-             <h1 className={styles.orderTitle}>Add Your Inventory to CarCupid</h1>
-             <p className={styles.orderText}>Monthly placement is $150 per month. We currently integrate via HomeNet.</p>
+            <h1 className={styles.orderTitle}>Add Your Inventory to CarCupid</h1>
+            <p className={styles.orderText}>Monthly subscription is $150/mo. Cancel anytime. HomeNet integration supported.</p>
              <div className={styles.orderSummary}>
                <div className={styles.orderSummaryLabel}>Total</div>
                <div className={styles.orderTotal}>${total.toFixed(2)}</div>
@@ -136,31 +107,31 @@ import DatePicker from "@/components/DatePicker";
                    <div className={styles.orderHint}>We may take up to 48 hours to activate your inventory (verification and setup), but we aim to be faster.</div>
                  </div>
                 <div className={styles.orderGroup}>
-                  <div className={styles.orderLabel}>Payment</div>
+                 <div className={styles.orderLabel}>Payment</div>
                   <div className={styles.radioRow}>
+                    <label className={styles.radioItem}>
+                      <input
+                        type="radio"
+                        name="paymentPref"
+                        value="SUBSCRIPTION"
+                        checked={paymentPref==="SUBSCRIPTION"}
+                        onChange={(e)=>setPaymentPref(e.target.value as PaymentPref)}
+                      />
+                      Monthly Subscription ($150/mo)
+                    </label>
                     <label className={styles.radioItem}>
                       <input
                         type="radio"
                         name="paymentPref"
                         value="CHECKOUT"
                         checked={paymentPref==="CHECKOUT"}
-                        onChange={(e)=>setPaymentPref(e.target.value as "CHECKOUT" | "INVOICE")}
+                        onChange={(e)=>setPaymentPref(e.target.value as PaymentPref)}
                       />
-                      Card or ACH (via Stripe)
-                    </label>
-                    <label className={styles.radioItem}>
-                      <input
-                        type="radio"
-                        name="paymentPref"
-                        value="INVOICE"
-                        checked={paymentPref==="INVOICE"}
-                        onChange={(e)=>setPaymentPref(e.target.value as "CHECKOUT" | "INVOICE")}
-                      />
-                      Request Invoice
+                      Pay Once (Card/ACH)
                     </label>
                   </div>
-                  <div className={`${styles.hintSlot} ${paymentPref==="INVOICE" ? styles.open : ""}`}>
-                    <div className={styles.orderHint}>We will invoice your dealership by email. Our manager will confirm details via the form.</div>
+                  <div className={`${styles.hintSlot} ${paymentPref==="SUBSCRIPTION" ? styles.open : ""}`}>
+                    <div className={styles.orderHint}>Monthly subscription UI only for now. Billing integration coming soon.</div>
                   </div>
                 </div>
                  <div className={styles.orderGroup}>
