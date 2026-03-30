@@ -1,4 +1,5 @@
 import Stripe from "stripe";
+import type { Dealer } from "@prisma/client";
 import prisma from "@/lib/prisma";
 
 export const runtime = "nodejs";
@@ -273,36 +274,29 @@ function toSlugBase(input: string) {
     .replace(/-+/g, "-");
 }
 
-type DealerRecord = {
-  id: string;
-  termEndAt: Date | null;
-  termStartAt: Date | null;
-  stripeCustomerId: string | null;
-};
-
-async function ensureDealer(params: { dealerId?: string; email?: string; name?: string; stripeCustomerId?: string }): Promise<DealerRecord> {
+async function ensureDealer(params: { dealerId?: string; email?: string; name?: string; stripeCustomerId?: string }): Promise<Dealer> {
   const { dealerId = "", email = "", name = "", stripeCustomerId = "" } = params;
   if (dealerId) {
-    const d = (await prisma.dealer.findUnique({ where: { id: dealerId } })) as unknown as DealerRecord | null;
+    const d = await prisma.dealer.findUnique({ where: { id: dealerId } });
     if (d) return d;
   }
   if (email) {
-    const d = (await prisma.dealer.findFirst({ where: { contactEmail: email } })) as unknown as DealerRecord | null;
+    const d = await prisma.dealer.findFirst({ where: { contactEmail: email } });
     if (d) return d;
   }
   if (stripeCustomerId) {
-    const d = (await prisma.dealer.findFirst({ where: { stripeCustomerId } })) as unknown as DealerRecord | null;
+    const d = await prisma.dealer.findFirst({ where: { stripeCustomerId } });
     if (d) return d;
   }
   const base = toSlugBase(name || email.split("@")[0] || "dealer");
   const slug = `${base}-${Math.random().toString(36).slice(2, 7)}`;
-  const created = (await prisma.dealer.create({
+  const created = await prisma.dealer.create({
     data: {
       name: name || (email ? email.split("@")[0] : "Dealer"),
       slug,
       contactEmail: email || null,
       billingStatus: "active",
     },
-  })) as unknown as DealerRecord;
+  });
   return created;
 }
