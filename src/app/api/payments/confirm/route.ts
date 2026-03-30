@@ -118,6 +118,39 @@ export async function POST(request: Request) {
       const amountUsd = (amountTotal / 100).toFixed(2);
       const serviceName = "CarCupid Inventory Placement";
       const orderId = session.id ? session.id.slice(-6).toUpperCase() : "";
+      let receiptUrl: string | undefined;
+      try {
+        if (typeof session.payment_intent !== "string" && session.payment_intent) {
+          const pi = session.payment_intent as Stripe.PaymentIntent;
+          if (typeof pi.latest_charge === "string") {
+            const charge = await stripe.charges.retrieve(pi.latest_charge);
+            if (charge && typeof charge.receipt_url === "string") {
+              receiptUrl = charge.receipt_url;
+            }
+          }
+        }
+      } catch {
+        receiptUrl = undefined;
+      }
+      let invoicePdfB64: string | undefined;
+      let invoicePdfName: string | undefined;
+      let hostedInvoiceUrl: string | undefined;
+      try {
+        if (typeof session.invoice === "string") {
+          const invoice = await stripe.invoices.retrieve(session.invoice);
+          hostedInvoiceUrl = invoice.hosted_invoice_url || undefined;
+          if (invoice.invoice_pdf) {
+            const resp = await fetch(invoice.invoice_pdf);
+            if (resp.ok) {
+              const arr = await resp.arrayBuffer();
+              invoicePdfB64 = Buffer.from(arr).toString("base64");
+              invoicePdfName = `invoice_${orderId || invoice.id}.pdf`;
+            }
+          }
+        }
+      } catch {
+        invoicePdfB64 = undefined;
+      }
       const htmlContent = `
         <!DOCTYPE html>
         <html>
@@ -183,6 +216,12 @@ export async function POST(request: Request) {
                       <div style="text-align:center;margin-top:22px;">
                         <a href="https://carcupid.fit" style="display:inline-block;background:#1A1A1A;color:#FFFFFF;text-decoration:none;padding:10px 18px;border-radius:999px;font-weight:700;">Order Confirmed</a>
                       </div>
+                      ${receiptUrl ? `<div style="text-align:center;margin-top:10px;">
+                        <a href="${receiptUrl}" style="color:#1A1A1A;text-decoration:underline;font-weight:700;">View Stripe Receipt</a>
+                      </div>` : ""}
+                      ${hostedInvoiceUrl ? `<div style="text-align:center;margin-top:6px;">
+                        <a href="${hostedInvoiceUrl}" style="color:#1A1A1A;text-decoration:underline;">View Invoice</a>
+                      </div>` : ""}
                       <div style="text-align:center;margin-top:12px;font-size:13px;color:#666;">
                         Questions? Contact <a href="mailto:admin@carcupid.fit" style="color:#1A1A1A;text-decoration:underline;">admin@carcupid.fit</a>
                       </div>
@@ -197,15 +236,27 @@ export async function POST(request: Request) {
           </body>
         </html>
       `;
+      type BrevoAttachment = { content: string; name: string };
+      type BrevoPayload = {
+        sender: { name: string; email: string };
+        to: Array<{ email: string }>;
+        subject: string;
+        htmlContent: string;
+        attachment?: BrevoAttachment[];
+      };
+      const brevoPayload: BrevoPayload = {
+        sender: { name: "CarCupid", email: "noreply@carcupid.fit" },
+        to: [{ email }],
+        subject: "Payment Receipt – CarCupid",
+        htmlContent,
+      };
+      if (invoicePdfB64 && invoicePdfName) {
+        brevoPayload.attachment = [{ content: invoicePdfB64, name: invoicePdfName }];
+      }
       await fetch("https://api.brevo.com/v3/smtp/email", {
         method: "POST",
         headers: { accept: "application/json", "api-key": apiKey, "content-type": "application/json" },
-        body: JSON.stringify({
-          sender: { name: "CarCupid", email: "noreply@carcupid.fit" },
-          to: [{ email }],
-          subject: "Payment Receipt – CarCupid",
-          htmlContent,
-        }),
+        body: JSON.stringify(brevoPayload),
       }).catch(() => {});
     }
     return NextResponse.json({ ok: true }, { status: 200 });
