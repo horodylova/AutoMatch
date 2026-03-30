@@ -35,6 +35,18 @@ export async function POST(request: Request) {
         },
       },
       payment_method_configuration: process.env.STRIPE_PMC_ID || undefined,
+      payment_intent_data: {
+        metadata: {
+          homeNetDealerId,
+          termMonths: String(termMonths),
+          startDate,
+          name: contactName,
+          email: contactEmail,
+          phone: contactPhone,
+          website,
+          dealerId,
+        },
+      },
       line_items: [
         {
           price_data: {

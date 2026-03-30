@@ -33,6 +33,7 @@ export async function POST(request: Request) {
         create: (args: unknown) => Promise<unknown>;
       };
     }).dealer;
+    console.log("stripe.webhook", event.type);
     switch (event.type) {
       case "payment_intent.succeeded": {
         const pi = event.data.object as Stripe.PaymentIntent;
@@ -80,6 +81,7 @@ export async function POST(request: Request) {
               endDate,
             },
           });
+          console.log("payment.recorded", { dealerId: dealer.id, source: "pi" });
         }
         break;
       }
@@ -128,11 +130,13 @@ export async function POST(request: Request) {
               endDate,
             },
           });
+          console.log("payment.recorded", { dealerId: dealer.id, source: "invoice" });
         }
         break;
       }
       case "checkout.session.completed": {
-        const session = event.data.object as Stripe.Checkout.Session;
+        const sessObj = event.data.object as Stripe.Checkout.Session;
+        const session = await stripe.checkout.sessions.retrieve(sessObj.id, { expand: ["payment_intent"] });
         if (session.payment_status !== "paid") break;
         const meta = session.metadata || {};
         const piId = typeof session.payment_intent === "string" ? session.payment_intent : undefined;
@@ -182,6 +186,7 @@ export async function POST(request: Request) {
             endDate,
           },
         });
+        console.log("payment.recorded", { dealerId: dealer.id, source: "session" });
         break;
       }
       default:
