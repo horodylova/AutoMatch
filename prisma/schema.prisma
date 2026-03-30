@@ -20,6 +20,18 @@ enum BillingStatus {
   past_due
 }
 
+enum PaymentStatus {
+  succeeded
+  failed
+  processing
+}
+
+enum PaymentMethod {
+  card
+  us_bank_account
+  invoice
+}
+
 model Dealer {
   id          String   @id @default(uuid())
   name        String
@@ -35,6 +47,7 @@ model Dealer {
   stripeCustomerId String?
   lastReminderStage Int?
   cars        Car[]
+  payments    Payment[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -78,4 +91,28 @@ model DealerContactRequest {
   status         String   @default("new")
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
+}
+
+model Payment {
+  id                 String   @id @default(uuid())
+  dealerId           String
+  dealer             Dealer   @relation(fields: [dealerId], references: [id])
+  amount             Int
+  currency           String
+  provider           String   @default("stripe")
+  status             PaymentStatus
+  method             PaymentMethod
+  stripePaymentIntentId String?
+  stripeInvoiceId    String?
+  stripeSessionId    String?
+  stripeCustomerId   String?
+  termMonths         Int
+  startDate          DateTime
+  endDate            DateTime
+  createdAt          DateTime @default(now())
+
+  @@index([dealerId, createdAt])
+  @@unique([stripePaymentIntentId])
+  @@unique([stripeInvoiceId])
+  @@unique([stripeSessionId])
 }

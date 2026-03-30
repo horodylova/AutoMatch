@@ -8,6 +8,11 @@ export async function POST(request: Request) {
     const homeNetDealerId = String(body?.homeNetDealerId || "");
     const termMonths = Number(body?.termMonths || 1);
     const startDate = String(body?.startDate || "");
+    const contactName = String(body?.name || "");
+    const contactEmail = String(body?.email || "");
+    const contactPhone = String(body?.phone || "");
+    const website = String(body?.website || "");
+    const dealerId = body?.dealerId ? String(body.dealerId) : "";
 
     if (homeNetDealerId !== "00000") {
       return new Response(JSON.stringify({ error: "HomeNet onboarding required" }), { status: 403, headers: { "Content-Type": "application/json" } });
@@ -46,7 +51,13 @@ export async function POST(request: Request) {
         homeNetDealerId,
         termMonths: String(termMonths),
         startDate,
+        name: contactName,
+        email: contactEmail,
+        phone: contactPhone,
+        website,
+        dealerId,
       },
+      customer_email: contactEmail || undefined,
     };
 
     const session = await stripe.checkout.sessions.create(params);

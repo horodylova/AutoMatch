@@ -27,6 +27,10 @@ import DatePicker from "@/components/DatePicker";
  
   const handleSubmit = async (e: React.FormEvent) => {
      e.preventDefault();
+   if (!contactPhone.trim()) {
+     setToast({ type: "error", title: "Missing phone", message: "Please enter your phone number." });
+     return;
+   }
    if (paymentPref === "INVOICE") {
      if (!contactEmail || !contactName) {
        setToast({ type: "error", title: "Missing details", message: "Please fill contact name and email." });
@@ -66,7 +70,15 @@ import DatePicker from "@/components/DatePicker";
         const res = await fetch("/api/dealers/checkout", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ homeNetDealerId: "00000", termMonths, startDate }),
+          body: JSON.stringify({
+            homeNetDealerId: "00000",
+            termMonths,
+            startDate,
+            name: contactName,
+            email: contactEmail,
+            phone: contactPhone,
+            website: companySite,
+          }),
         });
         if (!res.ok) {
           setToast({ type: "error", title: "Stripe error", message: "Unable to create session." });
@@ -159,7 +171,7 @@ import DatePicker from "@/components/DatePicker";
                    <div className={styles.orderCols}>
                     <input className={styles.input} type="text" placeholder="Contact name" value={contactName} onChange={(e)=>setContactName(e.target.value)} spellCheck={false} autoCapitalize="words" />
                      <input className={styles.input} type="email" placeholder="Email" value={contactEmail} onChange={(e)=>setContactEmail(e.target.value)} />
-                     <input className={styles.input} type="tel" placeholder="Phone (optional)" value={contactPhone} onChange={(e)=>setContactPhone(e.target.value)} />
+                    <input className={styles.input} type="tel" placeholder="Phone" value={contactPhone} onChange={(e)=>setContactPhone(e.target.value)} required />
                    </div>
                  </div>
                  <div className={styles.orderGroup}>
