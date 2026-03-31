@@ -5,14 +5,13 @@ import { syncDealerInventory } from '@/lib/dealers-sync';
 
 const prisma = new PrismaClient();
 
-export const dynamic = 'force-dynamic';
-
 // GET /api/admin/dealers - List all dealers
 export async function GET() {
   try {
-    // Allow listing in dev to verify data flow even if session is missing.
-    // In production, admin session should be present via cookie.
     const session = await getSession();
+    if (!session) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
 
     const dealers = await prisma.dealer.findMany({
       include: {
