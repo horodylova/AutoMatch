@@ -40,7 +40,7 @@ export default function DealersPage() {
 
   const fetchDealers = async () => {
     try {
-      const res = await fetch('/api/admin/dealers', { credentials: 'include' });
+      const res = await fetch('/api/admin/dealers', { credentials: 'include', cache: 'no-store' });
       if (res.ok) {
         const data = await res.json();
         setDealers(Array.isArray(data) ? data : []);
