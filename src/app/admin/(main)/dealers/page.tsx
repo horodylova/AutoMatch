@@ -105,11 +105,9 @@ export default function DealersPage() {
             <table className={styles.table}>
               <thead>
                 <tr>
+                  <th>ID</th>
+                  <th>Contact</th>
                   <th>Dealer</th>
-                  <th>Contact Name</th>
-                  <th>Email</th>
-                  <th>Phone</th>
-                  <th>Website</th>
                   <th>Feed URL</th>
                   <th>Billing</th>
                   <th>Activation</th>
@@ -121,17 +119,21 @@ export default function DealersPage() {
               <tbody>
                 {dealers.map((dealer) => (
                   <tr key={dealer.id}>
-                    <td style={{ fontWeight: 600 }}>{dealer.name}</td>
-                    <td style={{ fontWeight: 500 }}>{dealer.contactName || '—'}</td>
-                    <td>{dealer.contactEmail || '—'}</td>
-                    <td>{dealer.contactPhone || '—'}</td>
-                    <td>
-                      {dealer.website ? (
-                        <a href={dealer.website} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--kendo-color-primary)', textDecoration: 'none' }}>
-                          {dealer.website}
-                        </a>
-                      ) : '—'}
+                    <td style={{ fontSize: 12, color: 'var(--kendo-color-subtle)' }}>{dealer.id}</td>
+                    <td style={{ minWidth: 220 }}>
+                      <div style={{ fontWeight: 500 }}>{dealer.contactName || '—'}</div>
+                      <div style={{ fontSize: 12, color: 'var(--kendo-color-subtle)' }}>
+                        {dealer.contactEmail || '—'}{dealer.contactPhone ? ` • ${dealer.contactPhone}` : ''}
+                      </div>
+                      {dealer.website && (
+                        <div style={{ fontSize: 12 }}>
+                          <a href={dealer.website} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--kendo-color-primary)', textDecoration: 'none' }}>
+                            {dealer.website}
+                          </a>
+                        </div>
+                      )}
                     </td>
+                    <td style={{ fontWeight: 600 }}>{dealer.name}</td>
                     <td style={{ maxWidth: 300, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                       {dealer.feedUrl ? (
                         <a href={dealer.feedUrl} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--kendo-color-primary)', textDecoration: 'none' }}>
