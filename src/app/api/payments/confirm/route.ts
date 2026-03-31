@@ -134,7 +134,7 @@ export async function POST(request: Request) {
           amount: amountTotal,
           currency,
           status: "succeeded",
-          method: detectedMethod,
+          method: isSubscription ? "invoice" : detectedMethod,
           provider: "stripe",
           stripePaymentIntentId: piId,
           stripeSessionId: session.id,

@@ -21,7 +21,7 @@ interface Dealer {
     cars: number;
   };
   payments?: {
-    method: 'card' | 'us_bank_account';
+    method: 'card' | 'us_bank_account' | 'invoice';
     termMonths: number;
     startDate: string;
     endDate: string;
@@ -149,10 +149,10 @@ export default function DealersPage() {
                       {dealer.payments && dealer.payments.length > 0 ? (
                         <div>
                           <div style={{ fontWeight: 500 }}>
-                            One-time
+                            {dealer.payments[0].method === 'invoice' ? 'Subscription' : 'One-time'}
                           </div>
                           <div style={{ fontSize: 12, color: 'var(--kendo-color-subtle)' }}>
-                            {dealer.payments[0].method === 'us_bank_account' ? 'ACH' : 'Card'}
+                            {dealer.payments[0].method === 'invoice' ? 'Subscription' : dealer.payments[0].method === 'us_bank_account' ? 'ACH' : 'Card'}
                           </div>
                         </div>
                       ) : (
