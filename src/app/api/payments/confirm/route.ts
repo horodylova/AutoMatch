@@ -43,7 +43,8 @@ export async function POST(request: Request) {
     const stripeCustomerId = typeof session.customer === "string" ? session.customer : session.customer?.id || "";
     const termMonths = Number(meta.termMonths || 1) || 1;
     const email = (meta.email as string) || (session.customer_email as string) || "";
-    const name = (meta.name as string) || "";
+    const dealerNameMeta = (meta.dealerName as string) || "";
+    const contactName = (meta.contactName as string) || (meta.name as string) || "";
     const phone = (meta.phone as string) || "";
     const website = (meta.website as string) || "";
     const now = new Date();
@@ -68,19 +69,27 @@ export async function POST(request: Request) {
       }
     }
     if (!dealer) {
-      const base = (name || email.split("@")[0] || "dealer").toLowerCase().replace(/[^a-z0-9\s-]/g, "").trim().replace(/\s+/g, "-").replace(/-+/g, "-");
+      const base = (contactName || email.split("@")[0] || "dealer").toLowerCase().replace(/[^a-z0-9\s-]/g, "").trim().replace(/\s+/g, "-").replace(/-+/g, "-");
       const slug = `${base}-${Math.random().toString(36).slice(2, 7)}`;
+      let derivedCompany = dealerNameMeta || "";
+      if (!derivedCompany) {
+        try {
+          const u = new URL(website.startsWith("http") ? website : `https://${website}`);
+          const host = u.hostname.replace(/^www\./, "");
+          derivedCompany = host.split(".")[0] || "";
+        } catch {
+          derivedCompany = "";
+        }
+      }
       const created = await prisma.dealer.create({
         data: {
-          name: name || (email ? email.split("@")[0] : "Dealer"),
+          name: derivedCompany || contactName || (email ? email.split("@")[0] : "Dealer"),
           slug,
           contactEmail: email || null,
-          contactName: name || null,
-          contactPhone: phone || null,
-          website: website || null,
           billingStatus: "active",
         },
       });
+      await prisma.$executeRaw`UPDATE "Dealer" SET "contactName"=${contactName || null}, "contactPhone"=${phone || null}, "website"=${website || null} WHERE "id"=${created.id}`;
       dealer = { id: created.id, termEndAt: created.termEndAt ?? null, termStartAt: created.termStartAt ?? null, stripeCustomerId: created.stripeCustomerId ?? null };
     }
     const anchor = dealer.termEndAt && dealer.termEndAt > now ? dealer.termEndAt : now;
@@ -112,11 +121,10 @@ export async function POST(request: Request) {
           termStartAt: dealer.termStartAt ?? startDate,
           termEndAt: endDate,
           contactEmail: email || undefined,
-          contactName: name || undefined,
-          contactPhone: phone || undefined,
-          website: website || undefined,
+          name: dealerNameMeta || undefined,
         },
       }),
+        prisma.$executeRaw`UPDATE "Dealer" SET "contactName"=${contactName || null}, "contactPhone"=${phone || null}, "website"=${website || null} WHERE "id"=${dealer.id}`,
       prisma.payment.upsert({
         where: { stripeSessionId: session.id },
         update: {},

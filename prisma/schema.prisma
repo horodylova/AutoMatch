@@ -42,13 +42,11 @@ model Dealer {
   contactPhone String?
   website     String?
   feedType    FeedType?
-  homeNetDealerId String? @unique
   syncEnabled Boolean  @default(true)
   billingStatus BillingStatus @default(active)
   termStartAt DateTime?
   termEndAt   DateTime?
   stripeCustomerId String?
-  lastReminderStage Int?
   cars        Car[]
   payments    Payment[]
   createdAt   DateTime @default(now())

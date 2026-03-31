@@ -5,18 +5,14 @@ export const runtime = "nodejs";
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const homeNetDealerId = String(body?.homeNetDealerId || "");
     const termMonths = Number(body?.termMonths || 1);
     const startDate = String(body?.startDate || "");
-    const contactName = String(body?.name || "");
+    const contactName = String(body?.contactName || body?.name || "");
+    const dealerName = String(body?.dealerName || body?.company || body?.dealer || "");
     const contactEmail = String(body?.email || "");
     const contactPhone = String(body?.phone || "");
     const website = String(body?.website || "");
     const dealerId = body?.dealerId ? String(body.dealerId) : "";
-
-    if (homeNetDealerId !== "00000") {
-      return new Response(JSON.stringify({ error: "HomeNet onboarding required" }), { status: 403, headers: { "Content-Type": "application/json" } });
-    }
 
     const key = process.env.STRIPE_SECRET_KEY || "";
     if (!key) {
@@ -35,12 +31,13 @@ export async function POST(request: Request) {
         },
       },
       payment_method_configuration: process.env.STRIPE_PMC_ID || undefined,
+      customer_creation: "always",
       payment_intent_data: {
         metadata: {
-          homeNetDealerId,
           termMonths: String(termMonths),
           startDate,
-          name: contactName,
+          dealerName,
+          contactName,
           email: contactEmail,
           phone: contactPhone,
           website,
@@ -60,10 +57,10 @@ export async function POST(request: Request) {
       success_url: `${origin}/dealers/order/success?sid={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/dealers/order/cancel`,
       metadata: {
-        homeNetDealerId,
         termMonths: String(termMonths),
         startDate,
-        name: contactName,
+        dealerName,
+        contactName,
         email: contactEmail,
         phone: contactPhone,
         website,

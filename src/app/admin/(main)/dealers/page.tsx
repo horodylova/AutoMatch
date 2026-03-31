@@ -21,7 +21,7 @@ interface Dealer {
     cars: number;
   };
   payments?: {
-    method: 'card' | 'us_bank_account' | 'invoice';
+    method: 'card' | 'us_bank_account';
     termMonths: number;
     startDate: string;
     endDate: string;
@@ -120,14 +120,14 @@ export default function DealersPage() {
                 {dealers.map((dealer) => (
                   <tr key={dealer.id}>
                     <td style={{ fontSize: 12, color: 'var(--kendo-color-subtle)' }}>{dealer.id}</td>
-                    <td style={{ minWidth: 220 }}>
-                      <div style={{ fontWeight: 500 }}>{dealer.contactName || '—'}</div>
-                      <div style={{ fontSize: 12, color: 'var(--kendo-color-subtle)' }}>
+                    <td className={styles.contactCell}>
+                      <div className={styles.contactName}>{dealer.contactName || '—'}</div>
+                      <div className={styles.contactMeta}>
                         {dealer.contactEmail || '—'}{dealer.contactPhone ? ` • ${dealer.contactPhone}` : ''}
                       </div>
                       {dealer.website && (
-                        <div style={{ fontSize: 12 }}>
-                          <a href={dealer.website} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--kendo-color-primary)', textDecoration: 'none' }}>
+                        <div className={styles.contactWebsite}>
+                          <a href={dealer.website} target="_blank" rel="noopener noreferrer">
                             {dealer.website}
                           </a>
                         </div>

@@ -19,11 +19,19 @@ type PaymentPref = "CHECKOUT" | "SUBSCRIPTION";
   const minStart = new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString().split("T")[0];
    const [startDate, setStartDate] = useState(minStart);
    const [paymentPref, setPaymentPref] = useState<PaymentPref>("SUBSCRIPTION");
+  const [dealerName, setDealerName] = useState("");
    const [contactName, setContactName] = useState("");
    const [contactEmail, setContactEmail] = useState("");
    const [contactPhone, setContactPhone] = useState("");
    const [companySite, setCompanySite] = useState("");
  
+  const normalizeWebsite = (site: string) => {
+    const s = site.trim();
+    if (!s) return "";
+    if (/^https?:\/\//i.test(s)) return s;
+    return `https://${s}`;
+  };
+
    const total = calculatePrice(termMonths);
   const monthlyPrice = 150;
   const isSubscription = paymentPref === "SUBSCRIPTION";
@@ -47,10 +55,11 @@ type PaymentPref = "CHECKOUT" | "SUBSCRIPTION";
             homeNetDealerId: "00000",
             termMonths,
             startDate,
+            dealerName,
             name: contactName,
             email: contactEmail,
             phone: contactPhone,
-            website: companySite,
+            website: normalizeWebsite(companySite),
           }),
         });
         if (!res.ok) {
@@ -94,6 +103,10 @@ type PaymentPref = "CHECKOUT" | "SUBSCRIPTION";
              </div>
             <form onSubmit={handleSubmit} className={styles.orderForm} autoComplete="on">
                <div className={styles.orderGrid}>
+                <div className={styles.orderGroup}>
+                  <div className={styles.orderLabel}>Dealership Name</div>
+                  <input className={styles.input} type="text" name="dealerName" placeholder="e.g. Best Cars Ltd." value={dealerName} onChange={(e)=>setDealerName(e.target.value)} required />
+                </div>
                 {!isSubscription && (
                   <div className={styles.orderGroup}>
                     <div className={styles.orderLabel}>Term</div>
@@ -148,7 +161,7 @@ type PaymentPref = "CHECKOUT" | "SUBSCRIPTION";
                  </div>
                   <div className={styles.orderGroup}>
                    <div className={styles.orderLabel}>Website</div>
-                   <input className={styles.input} type="url" name="url" autoComplete="url" placeholder="e.g. dealership.com" value={companySite} onChange={(e)=>setCompanySite(e.target.value)} required />
+                  <input className={styles.input} type="text" inputMode="url" name="url" autoComplete="url" placeholder="e.g. dealership.com" value={companySite} onChange={(e)=>setCompanySite(e.target.value)} required />
                  </div>
                </div>
               <div className={styles.orderActions}>

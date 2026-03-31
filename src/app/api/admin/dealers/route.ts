@@ -15,9 +15,7 @@ export async function GET() {
 
     const dealers = await prisma.dealer.findMany({
       include: {
-        _count: {
-          select: { cars: true },
-        },
+        _count: { select: { cars: true } },
         payments: {
           orderBy: { createdAt: 'desc' },
           take: 1,
@@ -53,12 +51,13 @@ export async function GET() {
       }
     }
     const enriched: DealerPayload[] = dealers.map(d => {
+      const base = d as unknown as Partial<{ contactName: string | null; contactPhone: string | null; website: string | null }>;
       const derived = d.contactEmail ? contactByEmail[d.contactEmail] : undefined;
       return {
         ...d,
-        contactName: derived?.contactName ?? null,
-        contactPhone: derived?.phone ?? null,
-        website: derived?.website ?? null,
+        contactName: base.contactName ?? derived?.contactName ?? null,
+        contactPhone: base.contactPhone ?? derived?.phone ?? null,
+        website: base.website ?? derived?.website ?? null,
       };
     });
 

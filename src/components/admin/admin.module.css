@@ -161,6 +161,31 @@
   background-color: rgba(255, 255, 255, 0.02);
 }
 
+.contactCell {
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: 6px;
+  min-width: 260px;
+}
+
+.contactName {
+  font-weight: 600;
+  color: #fff;
+}
+
+.contactMeta {
+  font-size: 12px;
+  color: var(--kendo-color-subtle);
+  line-height: 1.4;
+}
+
+.contactWebsite a {
+  color: var(--kendo-color-primary);
+  text-decoration: none;
+  font-size: 12px;
+  word-break: break-all;
+}
+
 .statusBadge {
   display: inline-block;
   padding: 4px 12px;
