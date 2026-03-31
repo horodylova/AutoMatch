@@ -37,7 +37,10 @@ model Dealer {
   name        String
   slug        String   @unique
   feedUrl     String?
+  contactName String?
   contactEmail String?
+  contactPhone String?
+  website     String?
   feedType    FeedType?
   homeNetDealerId String? @unique
   syncEnabled Boolean  @default(true)

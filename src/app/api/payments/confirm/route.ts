@@ -44,6 +44,8 @@ export async function POST(request: Request) {
     const termMonths = Number(meta.termMonths || 1) || 1;
     const email = (meta.email as string) || (session.customer_email as string) || "";
     const name = (meta.name as string) || "";
+    const phone = (meta.phone as string) || "";
+    const website = (meta.website as string) || "";
     const now = new Date();
     let dealer = null as null | { id: string; termEndAt: Date | null; termStartAt: Date | null; stripeCustomerId: string | null };
     const metaDealerId = meta.dealerId ? String(meta.dealerId) : "";
@@ -73,6 +75,9 @@ export async function POST(request: Request) {
           name: name || (email ? email.split("@")[0] : "Dealer"),
           slug,
           contactEmail: email || null,
+          contactName: name || null,
+          contactPhone: phone || null,
+          website: website || null,
           billingStatus: "active",
         },
       });
@@ -84,6 +89,20 @@ export async function POST(request: Request) {
     const amountSubtotal = typeof session.amount_subtotal === "number" ? session.amount_subtotal : 0;
     const amountTotal = typeof session.amount_total === "number" ? session.amount_total : amountSubtotal;
     const currency = (session.currency || "usd").toLowerCase();
+    let detectedMethod: "card" | "us_bank_account" = "card";
+    try {
+      if (typeof session.payment_intent !== "string" && session.payment_intent) {
+        const pi = session.payment_intent as Stripe.PaymentIntent;
+        if (typeof pi.latest_charge === "string") {
+          const charge = await stripe.charges.retrieve(pi.latest_charge);
+          if (charge?.payment_method_details?.type === "us_bank_account") {
+            detectedMethod = "us_bank_account";
+          } else if (charge?.payment_method_details?.type === "card") {
+            detectedMethod = "card";
+          }
+        }
+      }
+    } catch {}
     await prisma.$transaction([
       prisma.dealer.update({
         where: { id: dealer.id },
@@ -92,6 +111,10 @@ export async function POST(request: Request) {
           billingStatus: "active",
           termStartAt: dealer.termStartAt ?? startDate,
           termEndAt: endDate,
+          contactEmail: email || undefined,
+          contactName: name || undefined,
+          contactPhone: phone || undefined,
+          website: website || undefined,
         },
       }),
       prisma.payment.upsert({
@@ -102,7 +125,7 @@ export async function POST(request: Request) {
           amount: amountTotal,
           currency,
           status: "succeeded",
-          method: "card",
+          method: detectedMethod,
           provider: "stripe",
           stripePaymentIntentId: piId,
           stripeSessionId: session.id,

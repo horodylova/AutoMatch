@@ -12,6 +12,10 @@ interface AddDealerModalProps {
 export default function AddDealerModal({ isOpen, onClose, onSuccess }: AddDealerModalProps) {
   const [name, setName] = useState('');
   const [feedUrl, setFeedUrl] = useState('');
+  const [contactName, setContactName] = useState('');
+  const [contactEmail, setContactEmail] = useState('');
+  const [contactPhone, setContactPhone] = useState('');
+  const [website, setWebsite] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -26,7 +30,7 @@ export default function AddDealerModal({ isOpen, onClose, onSuccess }: AddDealer
       const res = await fetch('/api/admin/dealers', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, feedUrl }),
+        body: JSON.stringify({ name, feedUrl, contactName, contactEmail, contactPhone, website }),
       });
 
       const data = await res.json();
@@ -40,6 +44,10 @@ export default function AddDealerModal({ isOpen, onClose, onSuccess }: AddDealer
       onClose();
       setName('');
       setFeedUrl('');
+      setContactName('');
+      setContactEmail('');
+      setContactPhone('');
+      setWebsite('');
     } catch (err) {
         if (err instanceof Error) {
             setError(err.message);
@@ -69,6 +77,54 @@ export default function AddDealerModal({ isOpen, onClose, onSuccess }: AddDealer
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="e.g. Toy Barn Dealership"
+              required
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label className={styles.label}>Contact Name</label>
+            <input
+              type="text"
+              className={styles.input}
+              value={contactName}
+              onChange={(e) => setContactName(e.target.value)}
+              placeholder="e.g. John Manager"
+              required
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label className={styles.label}>Email</label>
+            <input
+              type="email"
+              className={styles.input}
+              value={contactEmail}
+              onChange={(e) => setContactEmail(e.target.value)}
+              placeholder="name@dealership.com"
+              required
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label className={styles.label}>Phone</label>
+            <input
+              type="tel"
+              className={styles.input}
+              value={contactPhone}
+              onChange={(e) => setContactPhone(e.target.value)}
+              placeholder="+1 555 000 1234"
+              required
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label className={styles.label}>Website</label>
+            <input
+              type="url"
+              className={styles.input}
+              value={website}
+              onChange={(e) => setWebsite(e.target.value)}
+              placeholder="https://dealership.com"
               required
             />
           </div>

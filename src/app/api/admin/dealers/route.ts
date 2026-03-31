@@ -18,11 +18,51 @@ export async function GET() {
         _count: {
           select: { cars: true },
         },
+        payments: {
+          orderBy: { createdAt: 'desc' },
+          take: 1,
+          select: {
+            method: true,
+            termMonths: true,
+            startDate: true,
+            endDate: true,
+            status: true,
+          },
+        },
       },
       orderBy: { createdAt: 'desc' },
     });
 
-    return NextResponse.json(dealers);
+    type DealerRecord = (typeof dealers)[number];
+    type DealerPayload = DealerRecord & { contactName: string | null; contactPhone: string | null; website: string | null };
+    const emails = dealers.map(d => d.contactEmail).filter((e): e is string => typeof e === 'string' && e.length > 0);
+    const contactByEmail: Record<string, { contactName?: string; phone?: string; website?: string }> = {};
+    if (emails.length > 0) {
+      const requests = await prisma.dealerContactRequest.findMany({
+        where: { email: { in: emails } },
+        orderBy: { createdAt: 'desc' },
+      });
+      for (const r of requests) {
+        if (!contactByEmail[r.email]) {
+          let website: string | undefined;
+          if (typeof r.interest === 'string' && r.interest.startsWith('website:')) {
+            website = r.interest.slice('website:'.length);
+          }
+          contactByEmail[r.email] = { contactName: r.contactName || undefined, phone: r.phone || undefined, website };
+        }
+      }
+    }
+    const enriched: DealerPayload[] = dealers.map(d => {
+      const derived = d.contactEmail ? contactByEmail[d.contactEmail] : undefined;
+      return {
+        ...d,
+        contactName: derived?.contactName ?? null,
+        contactPhone: derived?.phone ?? null,
+        website: derived?.website ?? null,
+      };
+    });
+
+    return NextResponse.json(enriched);
   } catch (error) {
     console.error('Fetch dealers error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
@@ -37,7 +77,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { name, feedUrl } = await request.json();
+    const { name, feedUrl, contactName, contactEmail, contactPhone, website } = await request.json();
 
     if (!name) {
       return NextResponse.json({ error: 'Name is required' }, { status: 400 });
@@ -59,8 +99,25 @@ export async function POST(request: NextRequest) {
         name,
         slug,
         feedUrl,
+        contactEmail: contactEmail || undefined,
       },
     });
+
+    // Store contact info for admin visibility
+    if (contactEmail || contactName || contactPhone || website) {
+      try {
+        await prisma.dealerContactRequest.create({
+          data: {
+            dealershipName: name,
+            contactName: contactName || name,
+            email: contactEmail || '',
+            phone: contactPhone || undefined,
+            interest: website ? `website:${website}` : undefined,
+            status: "new",
+          },
+        });
+      } catch {}
+    }
 
     // Immediately trigger sync if feedUrl is provided
     if (feedUrl) {

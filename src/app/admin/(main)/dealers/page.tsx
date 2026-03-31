@@ -9,10 +9,24 @@ interface Dealer {
   name: string;
   feedUrl: string | null;
   slug: string;
+  contactName?: string | null;
+  contactEmail?: string | null;
+  contactPhone?: string | null;
+  website?: string | null;
+  billingStatus?: string;
+  termStartAt?: string | null;
+  termEndAt?: string | null;
   createdAt: string;
   _count: {
     cars: number;
   };
+  payments?: {
+    method: 'card' | 'us_bank_account' | 'invoice';
+    termMonths: number;
+    startDate: string;
+    endDate: string;
+    status: 'succeeded' | 'failed' | 'processing';
+  }[];
 }
 
 export default function DealersPage() {
@@ -92,7 +106,10 @@ export default function DealersPage() {
               <thead>
                 <tr>
                   <th>Name</th>
+                  <th>Contact</th>
                   <th>Feed URL</th>
+                  <th>Billing</th>
+                  <th>Activation</th>
                   <th>Cars</th>
                   <th>Added</th>
                   <th>Actions</th>
@@ -102,6 +119,19 @@ export default function DealersPage() {
                 {dealers.map((dealer) => (
                   <tr key={dealer.id}>
                     <td style={{ fontWeight: 500 }}>{dealer.name}</td>
+                    <td style={{ minWidth: 220 }}>
+                      <div style={{ fontWeight: 500 }}>{dealer.contactName || '—'}</div>
+                      <div style={{ fontSize: 12, color: 'var(--kendo-color-subtle)' }}>
+                        {dealer.contactEmail || '—'}{dealer.contactPhone ? ` • ${dealer.contactPhone}` : ''}
+                      </div>
+                      {dealer.website && (
+                        <div style={{ fontSize: 12 }}>
+                          <a href={dealer.website} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--kendo-color-primary)', textDecoration: 'none' }}>
+                            {dealer.website}
+                          </a>
+                        </div>
+                      )}
+                    </td>
                     <td style={{ maxWidth: 300, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                       {dealer.feedUrl ? (
                         <a href={dealer.feedUrl} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--kendo-color-primary)', textDecoration: 'none' }}>
@@ -110,6 +140,30 @@ export default function DealersPage() {
                       ) : (
                         <span style={{ color: 'var(--kendo-color-subtle)', fontStyle: 'italic' }}>No feed configured</span>
                       )}
+                    </td>
+                    <td style={{ minWidth: 160 }}>
+                      {dealer.payments && dealer.payments.length > 0 ? (
+                        <div>
+                          <div style={{ fontWeight: 500 }}>
+                            One-time
+                          </div>
+                          <div style={{ fontSize: 12, color: 'var(--kendo-color-subtle)' }}>
+                            {dealer.payments[0].method === 'us_bank_account' ? 'ACH' : 'Card'}
+                          </div>
+                        </div>
+                      ) : (
+                        <span style={{ color: 'var(--kendo-color-subtle)' }}>—</span>
+                      )}
+                    </td>
+                    <td style={{ minWidth: 180 }}>
+                      <div>
+                        <span style={{ color: 'var(--kendo-color-subtle)', fontSize: 12 }}>Start</span>{' '}
+                        <span>{dealer.termStartAt ? new Date(dealer.termStartAt).toLocaleDateString() : '—'}</span>
+                      </div>
+                      <div>
+                        <span style={{ color: 'var(--kendo-color-subtle)', fontSize: 12 }}>End</span>{' '}
+                        <span>{dealer.termEndAt ? new Date(dealer.termEndAt).toLocaleDateString() : '—'}</span>
+                      </div>
                     </td>
                     <td>
                       <span className={styles.badge} style={{ background: 'rgba(255, 255, 255, 0.06)', color: 'var(--kendo-color-on-app-surface)' }}>
