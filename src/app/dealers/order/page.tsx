@@ -44,6 +44,36 @@ type PaymentPref = "CHECKOUT" | "SUBSCRIPTION";
      return;
    }
     if (isSubscription) {
+      try {
+        const res = await fetch("/api/dealers/subscribe", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            dealerName,
+            contactName,
+            email: contactEmail,
+            phone: contactPhone,
+            website: normalizeWebsite(companySite),
+          }),
+        });
+        if (!res.ok) {
+          let msg = "Unable to create subscription session.";
+          try {
+            const j = await res.json();
+            if (j?.error && typeof j.error === "string") msg = j.error;
+          } catch {}
+        setToast({ type: "error", title: "Stripe error", message: msg });
+          return;
+        }
+        const data = await res.json();
+        if (data?.url) {
+          window.location.assign(data.url);
+          return;
+        }
+        setToast({ type: "error", title: "Stripe error", message: "Missing session URL." });
+      } catch {
+        setToast({ type: "error", title: "Stripe error", message: "Network error while creating session." });
+      }
       return;
     }
     if (paymentPref === "CHECKOUT") {
@@ -168,7 +198,7 @@ type PaymentPref = "CHECKOUT" | "SUBSCRIPTION";
                 <button
                   type="submit"
                   className={`${styles.orderButton} ${styles.orderButtonActive}`}
-                  disabled={isSubscription}
+                  disabled={false}
                 >
                   Continue
                 </button>

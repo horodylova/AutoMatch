@@ -25,11 +25,12 @@ export default function CancelPage() {
         <div className={styles.successLogo}>
           <Image src={logoSrc} alt="CarCupid" fill priority />
         </div>
-        <div className={styles.successTitle}>Payment Canceled</div>
-        <div className={styles.successSubtitle}>Your payment was canceled. You can return to the order page to try again.</div>
+        <div className={styles.successTitle}>Canceled</div>
+        <div className={styles.successSubtitle}>Your order was canceled. If you need help or want to cancel a subscription, contact a manager.</div>
         <div className={styles.successActions}>
           <Link className={styles.successPrimary} href="/dealers/order">Return to Order</Link>
           <Link className={styles.successSecondary} href="/dealers">Back to Dealers</Link>
+          <Link className={styles.successPrimary} href="/dealers#dealerForm">Contact a Manager</Link>
         </div>
       </div>
     </div>
