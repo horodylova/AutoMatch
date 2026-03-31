@@ -410,7 +410,8 @@
 
 .input::placeholder,
 .textarea::placeholder {
-  color: rgba(245, 245, 247, 0.55);
+  color: rgba(245, 245, 247, 0.42);
+  font-style: italic;
 }
 
 .input:focus,
@@ -577,7 +578,8 @@
 
 :global(html[data-theme="light"]) .input::placeholder,
 :global(html[data-theme="light"]) .textarea::placeholder {
-  color: rgba(17, 18, 20, 0.4);
+  color: rgba(17, 18, 20, 0.35);
+  font-style: italic;
 }
 
 :global(html[data-theme="light"]) .input:focus,

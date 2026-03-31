@@ -25,6 +25,9 @@ type PaymentPref = "CHECKOUT" | "SUBSCRIPTION";
    const [companySite, setCompanySite] = useState("");
  
    const total = calculatePrice(termMonths);
+  const monthlyPrice = 150;
+  const isSubscription = paymentPref === "SUBSCRIPTION";
+  const displayAmount = isSubscription ? monthlyPrice : total;
  
   const handleSubmit = async (e: React.FormEvent) => {
      e.preventDefault();
@@ -32,10 +35,9 @@ type PaymentPref = "CHECKOUT" | "SUBSCRIPTION";
      setToast({ type: "error", title: "Missing phone", message: "Please enter your phone number." });
      return;
    }
-   if (paymentPref === "SUBSCRIPTION") {
-     setToast({ type: "success", title: "Subscription", message: "Monthly subscription UI is active. Billing integration is coming soon." });
-     return;
-   }
+    if (isSubscription) {
+      return;
+    }
     if (paymentPref === "CHECKOUT") {
       try {
         const res = await fetch("/api/dealers/checkout", {
@@ -87,20 +89,22 @@ type PaymentPref = "CHECKOUT" | "SUBSCRIPTION";
             <h1 className={styles.orderTitle}>Add Your Inventory to CarCupid</h1>
             <p className={styles.orderText}>Monthly subscription is $150/mo. Cancel anytime. HomeNet integration supported.</p>
              <div className={styles.orderSummary}>
-               <div className={styles.orderSummaryLabel}>Total</div>
-               <div className={styles.orderTotal}>${total.toFixed(2)}</div>
+              <div className={styles.orderSummaryLabel}>{isSubscription ? "Monthly" : "Total"}</div>
+              <div className={styles.orderTotal}>${displayAmount.toFixed(2)}{isSubscription ? "/mo" : ""}</div>
              </div>
-             <form onSubmit={handleSubmit} className={styles.orderForm}>
+            <form onSubmit={handleSubmit} className={styles.orderForm} autoComplete="on">
                <div className={styles.orderGrid}>
-                 <div className={styles.orderGroup}>
-                   <div className={styles.orderLabel}>Term</div>
-                   <div className={styles.pillRow}>
-                     <button type="button" className={termMonths===1?styles.pillActive:styles.pill} onClick={()=>setTermMonths(1)}>1 mo</button>
-                     <button type="button" className={termMonths===3?styles.pillActive:styles.pill} onClick={()=>setTermMonths(3)}>3 mo</button>
-                     <button type="button" className={termMonths===6?styles.pillActive:styles.pill} onClick={()=>setTermMonths(6)}>6 mo</button>
-                     <button type="button" className={termMonths===12?styles.pillActive:styles.pill} onClick={()=>setTermMonths(12)}>12 mo</button>
-                   </div>
-                 </div>
+                {!isSubscription && (
+                  <div className={styles.orderGroup}>
+                    <div className={styles.orderLabel}>Term</div>
+                    <div className={styles.pillRow}>
+                      <button type="button" className={termMonths===1?styles.pillActive:styles.pill} onClick={()=>setTermMonths(1)}>1 mo</button>
+                      <button type="button" className={termMonths===3?styles.pillActive:styles.pill} onClick={()=>setTermMonths(3)}>3 mo</button>
+                      <button type="button" className={termMonths===6?styles.pillActive:styles.pill} onClick={()=>setTermMonths(6)}>6 mo</button>
+                      <button type="button" className={termMonths===12?styles.pillActive:styles.pill} onClick={()=>setTermMonths(12)}>12 mo</button>
+                    </div>
+                  </div>
+                )}
                  <div className={styles.orderGroup}>
                    <div className={styles.orderLabel}>Start Date (optional)</div>
                   <DatePicker value={startDate} min={minStart} onChange={setStartDate} className={styles.datePickerWrap} />
@@ -114,7 +118,7 @@ type PaymentPref = "CHECKOUT" | "SUBSCRIPTION";
                         type="radio"
                         name="paymentPref"
                         value="SUBSCRIPTION"
-                        checked={paymentPref==="SUBSCRIPTION"}
+                        checked={isSubscription}
                         onChange={(e)=>setPaymentPref(e.target.value as PaymentPref)}
                       />
                       Monthly Subscription ($150/mo)
@@ -124,14 +128,11 @@ type PaymentPref = "CHECKOUT" | "SUBSCRIPTION";
                         type="radio"
                         name="paymentPref"
                         value="CHECKOUT"
-                        checked={paymentPref==="CHECKOUT"}
+                        checked={!isSubscription}
                         onChange={(e)=>setPaymentPref(e.target.value as PaymentPref)}
                       />
                       Pay Once (Card/ACH)
                     </label>
-                  </div>
-                  <div className={`${styles.hintSlot} ${paymentPref==="SUBSCRIPTION" ? styles.open : ""}`}>
-                    <div className={styles.orderHint}>Monthly subscription UI only for now. Billing integration coming soon.</div>
                   </div>
                 </div>
                  <div className={styles.orderGroup}>
@@ -140,25 +141,26 @@ type PaymentPref = "CHECKOUT" | "SUBSCRIPTION";
                  <div className={styles.orderGroup}>
                    <div className={styles.orderLabel}>Contact</div>
                    <div className={styles.orderCols}>
-                    <input className={styles.input} type="text" placeholder="Contact name" value={contactName} onChange={(e)=>setContactName(e.target.value)} spellCheck={false} autoCapitalize="words" />
-                     <input className={styles.input} type="email" placeholder="Email" value={contactEmail} onChange={(e)=>setContactEmail(e.target.value)} />
-                    <input className={styles.input} type="tel" placeholder="Phone" value={contactPhone} onChange={(e)=>setContactPhone(e.target.value)} required />
+                    <input className={styles.input} type="text" name="name" autoComplete="name" placeholder="Contact name" value={contactName} onChange={(e)=>setContactName(e.target.value)} spellCheck={false} autoCapitalize="words" />
+                     <input className={styles.input} type="email" name="email" autoComplete="email" placeholder="Email" value={contactEmail} onChange={(e)=>setContactEmail(e.target.value)} />
+                    <input className={styles.input} type="tel" name="phone" autoComplete="tel" placeholder="Phone" value={contactPhone} onChange={(e)=>setContactPhone(e.target.value)} required />
                    </div>
                  </div>
-                 <div className={styles.orderGroup}>
-                   <div className={styles.orderLabel}>Website (optional)</div>
-                   <input className={styles.input} type="url" placeholder="https://dealership.com" value={companySite} onChange={(e)=>setCompanySite(e.target.value)} />
+                  <div className={styles.orderGroup}>
+                   <div className={styles.orderLabel}>Website</div>
+                   <input className={styles.input} type="url" name="url" autoComplete="url" placeholder="e.g. dealership.com" value={companySite} onChange={(e)=>setCompanySite(e.target.value)} required />
                  </div>
                </div>
               <div className={styles.orderActions}>
                 <button
                   type="submit"
                   className={`${styles.orderButton} ${styles.orderButtonActive}`}
+                  disabled={isSubscription}
                 >
                   Continue
                 </button>
                  <Link className={styles.orderSecondary} href="/dealers#dealerForm">Talk to a Manager</Link>
-                 <span className={styles.orderNote}>Total: ${total.toFixed(2)}</span>
+                 {!isSubscription && <span className={styles.orderNote}>{`Total: $${displayAmount.toFixed(2)}`}</span>}
                </div>
              </form>
            </div>
