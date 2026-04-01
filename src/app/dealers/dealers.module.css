@@ -1032,17 +1032,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: calc(100vh - 80px);
-  padding: 48px 16px;
+  padding: 96px 16px 40px;
 }
 .successCard {
   width: 100%;
   max-width: 640px;
   margin: 0 auto;
   border-radius: 16px;
-  background: var(--kendo-color-surface);
-  border: 1px solid var(--kendo-color-border);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+  background: var(--kendo-color-surface-alt);
+  border: 1px solid var(--kendo-color-border-alt);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
   text-align: center;
   padding: 32px;
 }
@@ -1130,6 +1129,18 @@
   margin-top: 16px;
   font-size: 14px;
   color: var(--kendo-color-subtle);
+}
+
+/* Theme-specific tuning for better integration */
+:root[data-theme="dark"] .successCard {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--kendo-color-border);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+}
+:root[data-theme="light"] .successCard {
+  background: #f8fafc;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
 }
 
 @media (max-width: 640px) {
