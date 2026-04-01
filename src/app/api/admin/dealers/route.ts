@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 import { getSession } from '@/lib/auth';
 import { syncDealerInventory } from '@/lib/dealers-sync';
+import Stripe from 'stripe';
 
 const prisma = new PrismaClient();
 
@@ -50,16 +51,26 @@ export async function GET() {
         }
       }
     }
-    const enriched: DealerPayload[] = dealers.map(d => {
+    const key = process.env.STRIPE_SECRET_KEY || "";
+    const stripe = key ? new Stripe(key, {}) : null;
+    const enriched: DealerPayload[] = await Promise.all(dealers.map(async d => {
       const base = d as unknown as Partial<{ contactName: string | null; contactPhone: string | null; website: string | null }>;
       const derived = d.contactEmail ? contactByEmail[d.contactEmail] : undefined;
-      return {
+      let cancelAtPeriodEnd = false;
+      if (stripe && d.stripeCustomerId) {
+        try {
+          const subs = await stripe.subscriptions.list({ customer: d.stripeCustomerId, status: "active", limit: 3 });
+          cancelAtPeriodEnd = subs.data.some(s => !!s.cancel_at_period_end);
+        } catch {}
+      }
+      const payload = {
         ...d,
         contactName: base.contactName ?? derived?.contactName ?? null,
         contactPhone: base.contactPhone ?? derived?.phone ?? null,
         website: base.website ?? derived?.website ?? null,
       };
-    });
+      return Object.assign(payload, { cancelAtPeriodEnd });
+    }));
 
     return NextResponse.json(enriched);
   } catch (error) {

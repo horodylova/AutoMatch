@@ -27,12 +27,14 @@ interface Dealer {
     endDate: string;
     status: 'succeeded' | 'failed' | 'processing';
   }[];
+  cancelAtPeriodEnd?: boolean;
 }
 
 export default function DealersPage() {
   const [dealers, setDealers] = useState<Dealer[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [confirmId, setConfirmId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchDealers();
@@ -55,12 +57,12 @@ export default function DealersPage() {
   };
 
   const handleUnsubscribe = async (id: string) => {
-    if (!window.confirm('Are you sure you want to unsubscribe this dealer? This will cancel billing and deactivate the dealer.')) return;
     try {
       const res = await fetch(`/api/admin/dealers/${id}/unsubscribe`, {
         method: 'POST',
       });
       if (res.ok) {
+        setConfirmId(null);
         fetchDealers();
       } else {
         alert('Failed to unsubscribe dealer');
@@ -185,6 +187,11 @@ export default function DealersPage() {
                         <span style={{ color: 'var(--kendo-color-subtle)', fontSize: 12 }}>End</span>{' '}
                         <span>{dealer.termEndAt ? new Date(dealer.termEndAt).toLocaleDateString() : '—'}</span>
                       </div>
+                      {dealer.cancelAtPeriodEnd && (
+                        <div style={{ marginTop: 6, fontSize: 12, color: 'var(--kendo-color-primary)' }}>
+                          Scheduled to cancel at period end
+                        </div>
+                      )}
                     </td>
                     <td>
                       <span className={styles.badge} style={{ background: 'rgba(255, 255, 255, 0.06)', color: 'var(--kendo-color-on-app-surface)' }}>
@@ -194,12 +201,22 @@ export default function DealersPage() {
                     <td>{new Date(dealer.createdAt).toLocaleDateString()}</td>
                     <td>
                       <div className={styles.actions}>
-                        <button
-                          onClick={() => handleUnsubscribe(dealer.id)}
-                          className={`${styles.btn} ${styles.btnSecondary} ${styles.btnSm}`}
-                        >
-                          Unsubscribe
-                        </button>
+                        {dealer.cancelAtPeriodEnd ? (
+                          <button
+                            type="button"
+                            className={`${styles.btn} ${styles.btnSecondary} ${styles.btnSm}`}
+                            disabled
+                          >
+                            Unsubscribed
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => setConfirmId(dealer.id)}
+                            className={`${styles.btn} ${styles.btnSecondary} ${styles.btnSm}`}
+                          >
+                            Unsubscribe
+                          </button>
+                        )}
                         <button
                           onClick={() => handleDelete(dealer.id)}
                           className={`${styles.btn} ${styles.btnDanger} ${styles.btnSm}`}
@@ -221,6 +238,30 @@ export default function DealersPage() {
         onClose={() => setIsModalOpen(false)}
         onSuccess={fetchDealers}
       />
+      {confirmId && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
+          <div className={styles.card} style={{ maxWidth: 520, width: '90%' }}>
+            <h2 className={styles.title} style={{ fontSize: 22 }}>Confirm Unsubscribe</h2>
+            <p className={styles.subtitle} style={{ marginTop: 12 }}>
+              This will stop auto-renewal and keep access until the end of the current billing period. No further invoices will be generated.
+            </p>
+            <div style={{ display: 'flex', gap: 8, marginTop: 16 }}>
+              <button
+                className={`${styles.btn} ${styles.btnDanger}`}
+                onClick={() => handleUnsubscribe(confirmId)}
+              >
+                Confirm
+              </button>
+              <button
+                className={`${styles.btn} ${styles.btnSecondary}`}
+                onClick={() => setConfirmId(null)}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

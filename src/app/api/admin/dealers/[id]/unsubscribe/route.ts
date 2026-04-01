@@ -30,14 +30,13 @@ export async function POST(
           limit: 3,
         });
         for (const s of subs.data) {
-          await stripe.subscriptions.cancel(s.id);
+          await stripe.subscriptions.update(s.id, { cancel_at_period_end: true });
         }
       } catch {}
     }
-    const now = new Date();
     await prisma.dealer.update({
       where: { id: dealer.id },
-      data: { billingStatus: "expired", termEndAt: now },
+      data: { billingStatus: "active" },
     });
     if (apiKey && dealer.contactEmail) {
       const htmlContent = `
@@ -46,8 +45,8 @@ export async function POST(
         <body style="margin:0;padding:0;background:#F5F7FB;color:#1A1A1A;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
           <div style="max-width:640px;margin:20px auto;background:#FFFFFF;border-radius:12px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,0.06);">
             <div style="padding:24px;">
-              <div style="font-size:22px;font-weight:800;margin-bottom:8px;">Subscription Canceled</div>
-              <div style="color:#666;margin-bottom:16px;">Your CarCupid subscription has been deactivated. You will not be billed further.</div>
+              <div style="font-size:22px;font-weight:800;margin-bottom:8px;">Subscription Will End</div>
+              <div style="color:#666;margin-bottom:16px;">Your CarCupid subscription will remain active until the end of the current billing period. It will not renew afterwards.</div>
               <div style="font-size:13px;color:#666;">If this was a mistake or you want to reactivate, please contact our manager.</div>
               <div style="text-align:center;margin-top:16px;">
                 <a href="https://carcupid.fit/dealers#dealerForm" style="display:inline-block;background:#1A1A1A;color:#FFFFFF;text-decoration:none;padding:10px 18px;border-radius:999px;font-weight:700;">Contact a Manager</a>
@@ -60,7 +59,7 @@ export async function POST(
       const payload = {
         sender: { name: "CarCupid", email: "noreply@carcupid.fit" },
         to: [{ email: dealer.contactEmail }],
-        subject: "Subscription Canceled – CarCupid",
+        subject: "Subscription Cancellation Scheduled – CarCupid",
         htmlContent,
       };
       await fetch("https://api.brevo.com/v3/smtp/email", {

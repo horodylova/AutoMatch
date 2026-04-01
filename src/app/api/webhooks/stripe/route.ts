@@ -108,7 +108,6 @@ export async function POST(request: Request) {
       const currency = (invoice.currency || "usd").toLowerCase();
       const email = typeof invoice.customer_email === "string" ? invoice.customer_email : "";
       const invoiceId = invoice.id;
-      const hostedUrl = typeof invoice.hosted_invoice_url === "string" ? invoice.hosted_invoice_url : undefined;
       const now = new Date();
       let dealer = await prisma.dealer.findFirst({ where: { stripeCustomerId } });
       if (!dealer && email) {
