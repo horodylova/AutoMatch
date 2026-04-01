@@ -54,6 +54,23 @@ export default function DealersPage() {
     }
   };
 
+  const handleUnsubscribe = async (id: string) => {
+    if (!window.confirm('Are you sure you want to unsubscribe this dealer? This will cancel billing and deactivate the dealer.')) return;
+    try {
+      const res = await fetch(`/api/admin/dealers/${id}/unsubscribe`, {
+        method: 'POST',
+      });
+      if (res.ok) {
+        fetchDealers();
+      } else {
+        alert('Failed to unsubscribe dealer');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('An error occurred');
+    }
+  };
+
   const handleDelete = async (id: string) => {
     if (!window.confirm('Are you sure you want to delete this dealer? This will also delete all their cars.')) return;
 
@@ -177,6 +194,12 @@ export default function DealersPage() {
                     <td>{new Date(dealer.createdAt).toLocaleDateString()}</td>
                     <td>
                       <div className={styles.actions}>
+                        <button
+                          onClick={() => handleUnsubscribe(dealer.id)}
+                          className={`${styles.btn} ${styles.btnSecondary} ${styles.btnSm}`}
+                        >
+                          Unsubscribe
+                        </button>
                         <button
                           onClick={() => handleDelete(dealer.id)}
                           className={`${styles.btn} ${styles.btnDanger} ${styles.btnSm}`}
