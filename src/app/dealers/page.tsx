@@ -87,11 +87,6 @@ export default function PartnersPage() {
     setIsSubmitting(false);
   };
 
-  const scrollToForm = () => {
-    const el = document.getElementById("dealerForm");
-    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
-
   return (
     <div className={styles.container}>
       {toast && (
@@ -153,18 +148,19 @@ export default function PartnersPage() {
           {/* CTA hero */}
           <div className={styles.ctaHero}>
             <div className={styles.ctaHeroInner}>
-              <div className={styles.ctaRow}>
-                <Link
-                  href="/dealers/order"
-                  className={`${styles.orderButton} ${styles.orderButtonXL} ${styles.orderButtonActive}`}
-                >
-                  Add Your Inventory
-                </Link>
-                <button type="button" className={styles.orderSecondary} onClick={scrollToForm}>
-                  Talk to a Manager
-                </button>
+              <div className={styles.ctaPriceRow}>
+                <span className={styles.ctaPrice}>$150</span>
+                <span className={styles.ctaPriceSub}>/ month · flat rate · cancel anytime</span>
               </div>
-              <p className={styles.ctaNote}>Cancel anytime. No commissions. No hidden fees.</p>
+              <Link
+                href="/dealers/order"
+                className={`${styles.orderButton} ${styles.orderButtonXL} ${styles.orderButtonActive}`}
+              >
+                Add Your Inventory
+              </Link>
+              <p className={styles.ctaNote}>
+                Full visibility into every match, view, and buyer intent signal. No black boxes.
+              </p>
             </div>
           </div>
 
@@ -304,20 +300,11 @@ export default function PartnersPage() {
 
           {/* Reassurance block below form */}
           <div className={styles.formReassurance}>
-            <div className={styles.reassuranceItem}>
-              <span className={styles.reassuranceIcon}>🔒</span>
-              <span>No spam. Ever.</span>
-            </div>
+            <div className={styles.reassuranceItem}>No spam. Ever.</div>
             <div className={styles.reassuranceDot} />
-            <div className={styles.reassuranceItem}>
-              <span className={styles.reassuranceIcon}>⚡</span>
-              <span>Reply within 1 business day</span>
-            </div>
+            <div className={styles.reassuranceItem}>Reply within 1 business day</div>
             <div className={styles.reassuranceDot} />
-            <div className={styles.reassuranceItem}>
-              <span className={styles.reassuranceIcon}>🚫</span>
-              <span>No commitment required</span>
-            </div>
+            <div className={styles.reassuranceItem}>No commitment required</div>
           </div>
         </div>
       </div>

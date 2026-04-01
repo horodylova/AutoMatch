@@ -44,10 +44,7 @@
   font-size: 2rem;
   font-weight: 800;
   line-height: 1.1;
-  background: linear-gradient(135deg, var(--kendo-color-primary) 0%, var(--kendo-color-on-app-surface) 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--kendo-color-on-app-surface);
   margin: 0;
 }
 
@@ -265,6 +262,29 @@
   gap: 12px;
   flex-wrap: wrap;
   align-items: center;
+}
+
+/* Price line inside ctaHero */
+.ctaPriceRow {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.ctaPrice {
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--kendo-color-on-app-surface);
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.ctaPriceSub {
+  font-size: 0.85rem;
+  color: var(--kendo-color-subtle);
+  font-weight: 500;
+  letter-spacing: 0.01em;
 }
 
 .ctaNote {
@@ -595,18 +615,10 @@
 }
 
 .reassuranceItem {
-  display: flex;
-  align-items: center;
-  gap: 5px;
   font-size: 0.78rem;
   color: var(--kendo-color-subtle);
   font-weight: 500;
   white-space: nowrap;
-}
-
-.reassuranceIcon {
-  font-size: 0.85rem;
-  line-height: 1;
 }
 
 .reassuranceDot {
@@ -671,8 +683,6 @@
 }
 
 :global(html[data-theme="light"]) .title {
-  background: none;
-  -webkit-text-fill-color: initial;
   color: var(--kendo-color-on-app-surface);
 }
 
