@@ -1104,3 +1104,9 @@
   font-weight: 700;
   text-decoration: none;
 }
+
+.successNote {
+  margin-top: 16px;
+  font-size: 14px;
+  color: var(--kendo-color-subtle);
+}
