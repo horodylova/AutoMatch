@@ -33,3 +33,25 @@ jobs:
             echo "Sync failed with status $http_code"
             exit 1
           fi
+      - name: Reconcile Subscriptions
+        run: |
+          if [ -z "${{ secrets.APP_URL }}" ]; then
+            echo "Error: APP_URL secret is not set"
+            exit 1
+          fi
+          
+          echo "Reconciling subscriptions at ${{ secrets.APP_URL }}..."
+          
+          response=$(curl -s -w "\n%{http_code}" -X GET "${{ secrets.APP_URL }}/api/cron/subscriptions-reconcile" \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}")
+          
+          http_code=$(echo "$response" | tail -n1)
+          content=$(echo "$response" | sed '$d')
+          
+          echo "Response code: $http_code"
+          echo "Response body: $content"
+          
+          if [ "$http_code" -ne 200 ]; then
+            echo "Reconcile failed with status $http_code"
+            exit 1
+          fi
