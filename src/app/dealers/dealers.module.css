@@ -765,10 +765,6 @@
   border-right: 0;
   transform: translate(3px, 4px) rotate(-45deg);
 }
-.checkLabel {
-  color: var(--kendo-color-on-app-surface);
-  font-weight: 600;
-}
 .collapseSlot {
   height: 52px;
   display: grid;
@@ -876,6 +872,10 @@
   display: grid;
   grid-template-rows: repeat(6, auto);
   gap: 3px;
+}
+:global(.dpRow) {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
 }
 :global(.dpRow) {
   display: grid;
@@ -1027,146 +1027,188 @@
   background-color: #FFFFFF;
 }
 
-/* Success/Cancel pages */
+/* ─── Success / Cancel pages ─── */
+
 .successWrap {
   display: flex;
   align-items: center;
   justify-content: center;
+  min-height: 100vh;
   padding: 96px 16px 40px;
 }
+
 .successCard {
   width: 100%;
-  max-width: 640px;
+  max-width: 520px;
   margin: 0 auto;
-  border-radius: 16px;
+  border-radius: 20px;
   background: var(--kendo-color-surface-alt);
   border: 1px solid var(--kendo-color-border-alt);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.22);
   text-align: center;
-  padding: 32px;
+  padding: 40px 36px 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
-.successLogo {
+
+/* ── Success icon ring ── */
+.successIconRing {
   width: 72px;
   height: 72px;
-  margin: 0 auto 16px;
-  position: relative;
-}
-.successTitle {
-  font-size: 34px;
-  font-weight: 800;
-  letter-spacing: 0.2px;
-  margin: 0 0 10px 0;
-  color: var(--kendo-color-on-app-surface);
-}
-.successSubtitle {
-  font-size: 16px;
-  line-height: 1.6;
-  color: var(--kendo-color-subtle);
-  margin: 0 auto 24px auto;
-  max-width: 520px;
-}
-.sessionBox {
-  display: inline-block;
-  font-size: 12px;
-  color: var(--kendo-color-subtle);
-  border: 1px dashed var(--kendo-color-border);
-  border-radius: 10px;
-  padding: 8px 12px;
-  margin: 6px 0 24px 0;
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.successActions {
+  border-radius: 50%;
+  background: rgba(34, 197, 94, 0.12);
+  border: 1.5px solid rgba(34, 197, 94, 0.30);
   display: flex;
-  gap: 12px;
   align-items: center;
   justify-content: center;
-  flex-wrap: wrap;
+  margin: 0 auto 20px;
+  flex-shrink: 0;
 }
+
+.successIconRing svg {
+  width: 32px;
+  height: 32px;
+  color: #22c55e;
+  stroke: #22c55e;
+}
+
+.successLogo {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 20px;
+  position: relative;
+}
+
+.successTitle {
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  margin: 0 0 10px;
+  color: var(--kendo-color-on-app-surface);
+}
+
+.successSubtitle {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: var(--kendo-color-subtle);
+  margin: 0 auto 28px;
+  max-width: 400px;
+}
+
+/* ── Button stack ── */
+.successActions {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+/* Primary — full-width, brand fill */
 .successPrimary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
+  height: 50px;
+  padding: 0 24px;
+  border-radius: 12px;
   background: var(--kendo-color-primary);
-  color: var(--kendo-color-on-primary);
+  color: #fff;
   border: none;
-  border-radius: 10px;
-  min-width: 160px;
-  height: 44px;
-  padding: 0 18px;
   font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.01em;
   text-decoration: none;
-  transition: all 0.2s ease;
+  box-shadow: 0 4px 16px rgba(229, 72, 63, 0.38);
+  transition: filter 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
 }
+
 .successPrimary:hover {
-  background: var(--kendo-color-primary-hover);
+  filter: brightness(1.08);
   transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(229, 72, 63, 0.46);
 }
+
+/* Secondary row — two ghost buttons side by side */
+.successActionsRow {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
 .successSecondary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  flex: 1;
+  height: 44px;
+  padding: 0 12px;
+  border-radius: 10px;
   background: transparent;
   color: var(--kendo-color-on-app-surface);
   border: 1px solid var(--kendo-color-border);
-  border-radius: 10px;
-  min-width: 160px;
-  height: 44px;
-  padding: 0 18px;
-  font-weight: 700;
+  font-weight: 600;
+  font-size: 0.875rem;
   text-decoration: none;
-  transition: all 0.2s ease;
+  transition: border-color 0.18s ease, color 0.18s ease, background 0.18s ease;
+  white-space: nowrap;
 }
+
 .successSecondary:hover {
-  border-color: var(--kendo-color-subtle);
-  background: rgba(255, 255, 255, 0.04);
-  transform: translateY(-1px);
+  border-color: var(--kendo-color-primary);
+  color: var(--kendo-color-primary);
+  background: rgba(229, 72, 63, 0.06);
 }
 
 .successNote {
-  margin-top: 16px;
-  font-size: 14px;
+  margin-top: 20px;
+  font-size: 0.8rem;
   color: var(--kendo-color-subtle);
+  opacity: 0.75;
+  line-height: 1.5;
 }
 
-/* Theme-specific tuning for better integration */
+/* ── Theme tuning ── */
 :root[data-theme="dark"] .successCard {
   background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--kendo-color-border);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
-}
-:root[data-theme="light"] .successCard {
-  background: #f8fafc;
-  border: 1px solid rgba(0, 0, 0, 0.06);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.36);
 }
 
-@media (max-width: 640px) {
+:root[data-theme="light"] .successCard {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
+}
+
+:root[data-theme="light"] .successSecondary {
+  border-color: rgba(0, 0, 0, 0.14);
+}
+
+:root[data-theme="light"] .successSecondary:hover {
+  border-color: var(--kendo-color-primary);
+  color: #C9472D;
+  background: rgba(229, 72, 63, 0.05);
+}
+
+@media (max-width: 480px) {
   .successCard {
-    padding: 24px;
-    border-radius: 14px;
+    padding: 32px 20px 28px;
+    border-radius: 16px;
   }
-  .successLogo {
-    width: 64px;
-    height: 64px;
-    margin-bottom: 14px;
-  }
+
   .successTitle {
-    font-size: 28px;
-    margin-bottom: 8px;
+    font-size: 1.5rem;
   }
-  .successSubtitle {
-    font-size: 15px;
-    margin-bottom: 20px;
-    max-width: 100%;
+
+  .successActionsRow {
+    flex-direction: column;
   }
-  .successPrimary, .successSecondary {
-    min-width: 100%;
-    height: 44px;
-  }
-  .successActions {
-    gap: 10px;
+
+  .successSecondary {
+    flex: unset;
+    width: 100%;
   }
 }

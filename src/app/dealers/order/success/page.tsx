@@ -36,17 +36,42 @@ function SuccessContent() {
   return (
     <div className={styles.successWrap}>
       <div className={styles.successCard}>
+
+        {/* Green checkmark ring */}
+        <div className={styles.successIconRing}>
+          <svg viewBox="0 0 24 24" fill="none" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+        </div>
+
         <div className={styles.successLogo}>
           <Image src={logoSrc} alt="CarCupid" fill priority />
         </div>
-        <div className={styles.successTitle}>Thank you</div>
-        <div className={styles.successSubtitle}>Your order is confirmed. We sent a receipt and details to your email. If this is a subscription, you can contact a manager to cancel anytime.</div>
-        <div className={styles.successActions}>
-          <Link className={styles.successPrimary} href="/dealers">Back to Dealers</Link>
-          <Link className={styles.successSecondary} href="/cars">Browse Cars</Link>
-          <Link className={styles.successPrimary} href="/dealers#dealerForm">Contact a Manager</Link>
+
+        <div className={styles.successTitle}>You&rsquo;re all set</div>
+        <div className={styles.successSubtitle}>
+          Your order is confirmed. We&rsquo;ve sent a receipt and full details to your email.
+          If this is a subscription, contact a manager to cancel anytime.
         </div>
-        <div className={styles.successNote}>Please check your inbox. If you do not see the email, check the spam folder.</div>
+
+        {/* Button hierarchy: primary full-width → two ghost buttons in a row */}
+        <div className={styles.successActions}>
+          <Link className={styles.successPrimary} href="/cars">
+            Browse Cars
+          </Link>
+          <div className={styles.successActionsRow}>
+            <Link className={styles.successSecondary} href="/dealers">
+              Back to Dealers
+            </Link>
+            <Link className={styles.successSecondary} href="/dealers#dealerForm">
+              Contact a Manager
+            </Link>
+          </div>
+        </div>
+
+        <div className={styles.successNote}>
+          Can&rsquo;t find the email? Check your spam folder.
+        </div>
       </div>
     </div>
   );
@@ -57,8 +82,10 @@ export default function SuccessPage() {
     <Suspense fallback={
       <div className={styles.successWrap}>
         <div className={styles.successCard}>
-          <div className={styles.successTitle}>Thank you</div>
-          <div className={styles.successSubtitle}>Your order is confirmed. We sent a receipt and details to your email.</div>
+          <div className={styles.successTitle}>You&rsquo;re all set</div>
+          <div className={styles.successSubtitle}>
+            Your order is confirmed. We&rsquo;ve sent a receipt and details to your email.
+          </div>
         </div>
       </div>
     }>
