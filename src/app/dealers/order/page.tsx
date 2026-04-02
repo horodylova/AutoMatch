@@ -2,7 +2,7 @@
 
  import { useState } from "react";
  import Link from "next/link";
- import styles from "../dealers.module.css";
+ import styles from "../styles";
  import Toast, { ToastType } from "@/components/Toast";
 import DatePicker from "@/components/DatePicker";
  

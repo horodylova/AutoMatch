@@ -4,7 +4,7 @@ import { Suspense, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import styles from "../../dealers.module.css";
+import styles from "../../styles";
 
 function SuccessContent() {
   const params = useSearchParams();

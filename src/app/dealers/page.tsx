@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import styles from "./dealers.module.css";
+import styles from "./styles";
 import { submitForm } from "../../utils/formSubmission";
 import Toast, { ToastType } from "../../components/Toast";
 import { event } from "@/lib/pixel";

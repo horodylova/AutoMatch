@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import styles from "../../dealers.module.css";
+import styles from "../../styles";
 
 export default function CancelPage() {
   const [logoSrc, setLogoSrc] = useState<string>("/logos/logo.svg");
