@@ -1,110 +1,75 @@
-# 🛡️ Admin Area & Database Management
+# Admin Area
 
-This document details the architecture of the **Admin Panel** (`/admin`) and the underlying **Database** structure managed via Prisma.
+This document reflects the current implementation of the Admin Panel (`/admin`) based on the repository code.
 
-## 🏗 Architecture Overview
+## Overview
+- Route: `/admin` protected by layout [layout.tsx](file:///Users/svetlanagorodilova/w/AutoMatch/src/app/admin/(main)/layout.tsx)
+- Auth: Custom JWT session in [auth.ts](file:///Users/svetlanagorodilova/w/AutoMatch/src/lib/auth.ts) using HS256; cookie name `admin_session`; 24h expiry
+- Database: Prisma (PostgreSQL)
+- Inventory Sync: CSV feed parsing and upsert logic in [dealers-sync.ts](file:///Users/svetlanagorodilova/w/AutoMatch/src/lib/dealers-sync.ts)
 
-The Admin Area is a protected section of the Next.js application designed for managing dealers, inventory, and user access.
+## Authentication
+- Login: [login route](file:///Users/svetlanagorodilova/w/AutoMatch/src/app/api/admin/login/route.ts) POST `{ email, password }` → sets `admin_session`
+- Me: [me route](file:///Users/svetlanagorodilova/w/AutoMatch/src/app/api/admin/me/route.ts) GET → returns `id, email, role` if session valid
+- Logout: [logout route](file:///Users/svetlanagorodilova/w/AutoMatch/src/app/api/admin/logout/route.ts) POST → clears cookie
+- Secret: `JWT_SECRET` required for token signing
 
-*   **Route**: `/admin` (Protected by `AdminLayout`).
-*   **Authentication**: Custom JWT-based session management (`src/lib/auth.ts`).
-*   **Database**: PostgreSQL (hosted on Vercel/Neon), managed via Prisma ORM.
-*   **Sync Engine**: Automated inventory synchronization from Dealer CSV feeds.
+## Dealers Management (UI)
+- Page: [admin dealers](file:///Users/svetlanagorodilova/w/AutoMatch/src/app/admin/(main)/dealers/page.tsx)
+- Lists dealers via `/api/admin/dealers` with:
+  - `_count.cars` (inventory size)
+  - last payment info (method/status)
+  - derived contact data from `DealerContactRequest` by email
+  - `cancelAtPeriodEnd` computed via Stripe subscriptions, when available
+- Actions:
+  - Add Dealer: opens [AddDealerModal](file:///Users/svetlanagorodilova/w/AutoMatch/src/components/admin/AddDealerModal.tsx) → POST `/api/admin/dealers`
+  - Unsubscribe: POST `/api/admin/dealers/[id]/unsubscribe` (schedules cancel at period end in Stripe; sends Brevo email)
+  - Delete: DELETE `/api/admin/dealers/[id]` (removes cars, then dealer)
 
----
+## Dealers API
+- List/Create: [route.ts](file:///Users/svetlanagorodilova/w/AutoMatch/src/app/api/admin/dealers/route.ts)
+  - GET: requires valid admin session; returns enriched array with `cancelAtPeriodEnd`
+  - POST: body `{ name, feedUrl, contactName, contactEmail, contactPhone, website }`
+    - Generates slug from `name`
+    - Dedup slug; returns 400 if exists
+    - Creates `Dealer`
+    - Stores `DealerContactRequest` (for admin visibility) if contact provided
+    - Immediate inventory sync triggered if `feedUrl` present via `syncDealerInventory(dealer.id)`
+- Update/Delete: [id/route.ts](file:///Users/svetlanagorodilova/w/AutoMatch/src/app/api/admin/dealers/[id]/route.ts)
+  - PATCH: `{ name?, feedUrl? }` (re-slugs when name changes)
+  - DELETE: deletes all `Car` by dealerId, then the `Dealer`
+- Unsubscribe: [unsubscribe route](file:///Users/svetlanagorodilova/w/AutoMatch/src/app/api/admin/dealers/[id]/unsubscribe/route.ts)
+  - Sets Stripe subscriptions `cancel_at_period_end: true` for active subs
+  - Updates dealer `billingStatus: "active"` (access remains until term end)
+  - Sends Brevo email if `BREVO_API_KEY` and contact email are available
 
-## 🗄 Database Schema (Prisma)
+## Inventory Sync Engine
+- Source: [dealers-sync.ts](file:///Users/svetlanagorodilova/w/AutoMatch/src/lib/dealers-sync.ts)
+- Steps:
+  - Fetch dealer `feedUrl` (CSV)
+  - Parse with `papaparse` (headers trimmed)
+  - Validate required fields: VIN, Make, Model, Year, Price
+  - Upsert `Car` via composite key `(dealerId, vin)`; update price/mileage/image/features
+  - Delete cars not present in current feed VINs
+- Features parsing: supports `Features` header with `|` or `,` separator
 
-The database schema is defined in `prisma/schema.prisma`. It consists of four main models:
+## Cron Sync
+- Endpoint: [sync-dealers](file:///Users/svetlanagorodilova/w/AutoMatch/src/app/api/cron/sync-dealers/route.ts)
+- Auth:
+  - Header `Authorization: Bearer <CRON_SECRET>`
+  - Or query `?key=<CRON_SECRET>`
+  - Or dev mode (no secret)
+- Finds dealers with non-null `feedUrl` and iterates sequentially calling `syncDealerInventory`
+- Exports `maxDuration = 60` and `dynamic = "force-dynamic"`
+- Required env: `CRON_SECRET`; optional `NEXT_PUBLIC_APP_URL`
 
-### 1. Dealer
-Represents a car dealership partner.
-*   `id` (UUID): Unique identifier.
-*   `name` (String): Display name.
-*   `slug` (String, Unique): URL-friendly identifier.
-*   `feedUrl` (String, Optional): The URL to the dealer's CSV inventory feed.
-*   `cars` (Relation): One-to-many relationship with `Car`.
+## Environment Variables
+- `JWT_SECRET` — Admin auth token signing
+- `STRIPE_SECRET_KEY` — Stripe API key (admin enrichment/unsubscribe and payments)
+- `BREVO_API_KEY` — Transactional emails for admin unsubscribe/payment notifications
+- `CRON_SECRET` — Protects cron sync endpoint
 
-### 2. Car
-Represents a specific vehicle in a dealer's inventory.
-*   **Composite Unique Key**: `[dealerId, vin]` ensures a VIN is unique *per dealer*.
-*   `vin` (String): Vehicle Identification Number.
-*   `make`, `model`, `year` (String/Int): Core specs.
-*   `price` (Decimal): Listing price.
-*   `mileage` (Int): Odometer reading.
-*   `imageUrl` (String): Primary photo URL.
-*   `features` (JSON): Flexible storage for options/packages.
-*   `dealerId` (FK): Links to `Dealer`.
-
-### 3. Admin
-Represents a dashboard user.
-*   `email` (String, Unique): Login credential.
-*   `passwordHash` (String): Bcrypt-hashed password.
-*   `role` (String): Defaults to "ADMIN".
-
-### 4. DealerContactRequest
-Stores leads from the "For Dealers" landing page.
-*   `dealershipName`, `contactName`, `email`, `phone`: Contact details.
-*   `status` (String): Workflow status (default: "new").
-
----
-
-## 🔐 Authentication & Security
-
-The Admin Panel uses a custom, lightweight authentication system rather than NextAuth.js.
-
-### Implementation Details
-*   **Library**: `jose` (JSON Object Signing and Encryption).
-*   **Token**: JWT (HS256 algorithm).
-*   **Storage**: HTTP-Only Cookie named `admin_session`.
-*   **Expiry**: 24 hours.
-
-### Key Files
-*   `src/lib/auth.ts`: Handles token signing (`signSession`), verification (`verifySession`), and cookie retrieval (`getSession`).
-*   `src/app/api/admin/login/route.ts`: Validates credentials and sets the cookie.
-*   `src/app/admin/(main)/layout.tsx`: Server Component that checks for a valid session via `getSession()`. Redirects unauthenticated users to `/admin/login`.
-
----
-
-## 🔄 Inventory Synchronization
-
-The system features an automated engine to keep dealer inventory up-to-date without manual entry.
-
-### Logic Flow (`src/lib/dealers-sync.ts`)
-1.  **Trigger**: Can be triggered manually via API or potentially via Cron (see `src/app/api/cron/sync-dealers` if implemented).
-2.  **Fetch**: Retrieves the CSV file from the Dealer's `feedUrl`.
-3.  **Parse**: Uses `papaparse` to convert CSV text to JSON objects.
-4.  **Validation**: Skips rows missing critical data (VIN, Make, Model, Year, Price).
-5.  **Upsert**: Uses `prisma.car.upsert()`:
-    *   **Update**: If `(dealerId, vin)` exists, updates price, mileage, etc.
-    *   **Create**: If not found, creates a new record.
-
-### CSV Format Requirements
-The sync engine expects headers similar to:
-*   `VIN`
-*   `Make`
-*   `Model`
-*   `Year`
-*   `Price`
-*   `Mileage` (Optional)
-*   `ImageURL` or `Image` (Optional)
-*   `Features` (Optional, pipe `|` or comma separated)
-
----
-
-## 🛠 API Routes
-
-The Admin frontend interacts with a set of dedicated API endpoints in `src/app/api/admin`:
-
-*   **Auth**:
-    *   `/api/admin/login`: POST (Email/Password).
-    *   `/api/admin/logout`: POST (Clears cookie).
-    *   `/api/admin/me`: GET (Current user info).
-    *   `/api/admin/change-password`: POST.
-    *   `/api/admin/invite`: POST (Create new admin).
-
-*   **Management**:
-    *   `/api/admin/dealers`: GET (List), POST (Create).
-    *   `/api/admin/dealers/[id]`: PUT (Update), DELETE.
-    *   `/api/admin/users`: User management.
-    *   `/api/admin/requests`: Lead management.
+## Admin UI Files
+- Layout and pages: [admin/(main)](file:///Users/svetlanagorodilova/w/AutoMatch/src/app/admin/(main))
+- Login page: [admin/login/page.tsx](file:///Users/svetlanagorodilova/w/AutoMatch/src/app/admin/login/page.tsx)
+- Styles: [admin.module.css](file:///Users/svetlanagorodilova/w/AutoMatch/src/components/admin/admin.module.css)
