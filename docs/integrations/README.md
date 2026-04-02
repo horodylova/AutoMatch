@@ -90,3 +90,19 @@ The project utilizes **KendoReact** for complex UI components.
 
 -   **Meta Pixel:** `src/lib/pixel.ts` handles standard pageviews and custom events (e.g., `StartQuiz`, `CompletedQuiz`, `LeadSubmitted`).
 -   **Google Analytics:** `src/lib/gtag.ts` handles GA4 integration.
+
+---
+
+## 7. Payments (Stripe)
+
+Stripe is used for dealer onboarding payments:
+
+-   **Checkout Sessions:**
+    -   Subscription: `/api/dealers/subscribe` (mode: subscription)
+    -   One-time: `/api/dealers/checkout` (mode: payment, card/ACH)
+-   **Webhooks:** `/api/webhooks/stripe`
+    -   Handles `invoice.payment_succeeded` and `invoice.payment_failed`
+    -   Updates dealer billing state and records subscription payments
+-   **Environment:**
+    -   `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_SUBSCRIPTION_MONTHLY`, `STRIPE_PMC_ID` (optional), `NEXT_PUBLIC_APP_URL`
+-   **Details:** See [docs/payments/README.md](file:///Users/svetlanagorodilova/w/AutoMatch/docs/payments/README.md) for full flow, events, and DB updates.
