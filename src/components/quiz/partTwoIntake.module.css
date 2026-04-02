@@ -1,0 +1,223 @@
+/* ─── Wrapper ────────────────────────────────────────────────────────────── */
+
+.wrap {
+  display: grid;
+  gap: 28px;
+  padding: 0 0 8px;
+}
+
+/* ─── Header ─────────────────────────────────────────────────────────────── */
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 24px;
+  border-radius: 16px;
+  background: var(--kendo-color-surface);
+  border: 1px solid var(--kendo-color-border);
+}
+
+.logoBox {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+}
+
+.logoImg {
+  object-fit: contain;
+}
+
+.headerText {
+  display: grid;
+  gap: 3px;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--kendo-color-on-app-surface);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.lead {
+  font-size: 13px;
+  color: var(--kendo-color-subtle);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ─── Form grid ──────────────────────────────────────────────────────────── */
+
+.formGrid {
+  display: grid;
+  gap: 4px;
+}
+
+/* ─── Field ──────────────────────────────────────────────────────────────── */
+
+.field {
+  display: grid;
+  gap: 12px;
+  padding: 18px 20px;
+  border-radius: 14px;
+  background: var(--kendo-color-surface);
+  border: 1px solid var(--kendo-color-border);
+  transition: border-color 0.2s ease;
+}
+
+.field:focus-within {
+  border-color: var(--kendo-color-border-alt);
+}
+
+.label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--kendo-color-on-app-surface);
+  opacity: 0.45;
+  cursor: default;
+}
+
+/* ─── Options (chip row) ─────────────────────────────────────────────────── */
+
+.options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.option input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+/* ── Dark theme chips (default) ── */
+.option {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 18px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(245, 245, 247, 0.90);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.option:hover {
+  background: rgba(229, 142, 60, 0.14);
+  border-color: rgba(229, 142, 60, 0.45);
+  color: #F0C08A;
+}
+
+.option:has(input:checked) {
+  background: rgba(229, 72, 63, 0.16);
+  border-color: var(--kendo-color-primary);
+  color: var(--kendo-color-primary);
+  box-shadow: 0 0 0 1px var(--kendo-color-primary) inset;
+  font-weight: 600;
+}
+
+/* ─── Help text ──────────────────────────────────────────────────────────── */
+
+.help {
+  font-size: 12px;
+  color: var(--kendo-color-subtle);
+  margin: 0;
+  opacity: 0.65;
+  line-height: 1.5;
+  border-top: 1px solid var(--kendo-color-border);
+  padding-top: 10px;
+}
+
+/* ─── Light theme ────────────────────────────────────────────────────────── */
+
+:global(html[data-theme="light"]) .header,
+:global(html[data-theme="light"]) .field {
+  background: #fff;
+  border-color: rgba(0, 0, 0, 0.10);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Light chips: white bg + visible grey border — clearly legible */
+:global(html[data-theme="light"]) .option {
+  color: rgba(17, 18, 20, 0.80);
+  background: #fff;
+  border: 1.5px solid rgba(0, 0, 0, 0.18);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+/* Warm amber hover — stands out on light bg */
+:global(html[data-theme="light"]) .option:hover {
+  background: #FFF4E8;
+  border-color: #E8924A;
+  color: #B5600F;
+  box-shadow: 0 1px 4px rgba(232, 146, 74, 0.20);
+}
+
+/* Selected: primary red */
+:global(html[data-theme="light"]) .option:has(input:checked) {
+  background: rgba(229, 72, 63, 0.08);
+  border-color: var(--kendo-color-primary);
+  color: var(--kendo-color-primary);
+  box-shadow: 0 0 0 1px var(--kendo-color-primary) inset;
+  font-weight: 600;
+}
+
+:global(html[data-theme="light"]) .label {
+  opacity: 0.40;
+  color: #111214;
+}
+
+:global(html[data-theme="light"]) .help {
+  opacity: 0.55;
+  border-top-color: rgba(0, 0, 0, 0.08);
+}
+
+/* ─── Responsive ─────────────────────────────────────────────────────────── */
+
+@media (min-width: 640px) {
+  .wrap { gap: 32px; }
+
+  .header { padding: 22px 28px; gap: 20px; }
+  .logoBox { width: 56px; height: 56px; }
+  .title { font-size: 20px; }
+  .lead  { font-size: 14px; }
+
+  .formGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .field:first-child {
+    grid-column: span 2;
+  }
+
+  .field { padding: 20px 22px; gap: 14px; }
+
+  .option {
+    font-size: 14px;
+    padding: 8px 20px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .field { padding: 22px 24px; }
+}

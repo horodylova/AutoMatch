@@ -23,26 +23,30 @@ export default function PartnersPage() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+
     const form = e.currentTarget;
     const formData = new FormData(form);
-    
-    // Validate required fields
-    const company = formData.get('company')?.toString().trim();
-    const name = formData.get('name')?.toString().trim();
-    const email = formData.get('email')?.toString().trim();
+
+    const company = formData.get("company")?.toString().trim();
+    const name = formData.get("name")?.toString().trim();
+    const email = formData.get("email")?.toString().trim();
 
     if (!company || !name || !email) {
-      showToast('Please fill in all required fields.', 'error', 'Validation Error');
+      showToast("Please fill in all required fields.", "error", "Validation Error");
       return;
     }
 
     setIsSubmitting(true);
 
-    const endpoint = process.env.NEXT_PUBLIC_FORMSPREE_ENDPOINT || "https://formspree.io/f/mqebkzdj";
-    
+    const endpoint =
+      process.env.NEXT_PUBLIC_FORMSPREE_ENDPOINT || "https://formspree.io/f/mqebkzdj";
+
     if (!endpoint) {
-      showToast('Form submission is not configured (missing endpoint).', 'error', 'Configuration Error');
+      showToast(
+        "Form submission is not configured (missing endpoint).",
+        "error",
+        "Configuration Error"
+      );
       setIsSubmitting(false);
       return;
     }
@@ -50,7 +54,7 @@ export default function PartnersPage() {
     const result = await submitForm(endpoint, formData);
 
     if (result.ok) {
-      showToast('Your message has been sent successfully!', 'success', 'Success!');
+      showToast("Your message has been sent successfully!", "success", "Success!");
       event("ForDealersRequest");
 
       try {
@@ -58,15 +62,13 @@ export default function PartnersPage() {
           company,
           name,
           email,
-          interest: formData.get('interest')?.toString() || "",
-          phone: formData.get('phone')?.toString() || "",
+          interest: formData.get("interest")?.toString() || "",
+          phone: formData.get("phone")?.toString() || "",
         };
 
         await fetch("/api/dealers/contact", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
         });
       } catch (error) {
@@ -75,9 +77,13 @@ export default function PartnersPage() {
 
       form.reset();
     } else {
-      showToast(result.error || 'There was an error sending your message. Please try again later.', 'error', 'Submission Failed');
+      showToast(
+        result.error || "There was an error sending your message. Please try again later.",
+        "error",
+        "Submission Failed"
+      );
     }
-    
+
     setIsSubmitting(false);
   };
 
@@ -93,11 +99,15 @@ export default function PartnersPage() {
           />
         </div>
       )}
+
       <div className={styles.contentWrapper}>
+        {/* ── LEFT: Info ── */}
         <div className={styles.infoSection}>
+
+          {/* Header */}
           <div className={styles.headerRow}>
             <div className={styles.logoWrapper}>
-              <Image 
+              <Image
                 src="/cupids/Helmet%20and%20Keys.png"
                 alt="CarCupid Dealer Logo"
                 fill
@@ -105,88 +115,171 @@ export default function PartnersPage() {
                 unoptimized
               />
             </div>
-            
-            <h1 className={styles.title}>Send High-Intent Buyers Directly to Your Inventory</h1>
+            <h1 className={styles.title}>
+              <span className={styles.mobileOnly}>High-Intent Buyers. Your Inventory.</span>
+              <span className={styles.desktopOnly}>
+                High-Intent Buyers<br />Sent Straight to Your Inventory
+              </span>
+            </h1>
           </div>
+
           <p className={styles.subtitle}>
-            CarCupid matches serious buyers directly to your actual inventory — without selling listings or auctioning leads.
+            CarCupid matches serious buyers to your actual stock — no listings marketplace, no lead auctions, no wasted spend.
           </p>
 
+          {/* Stats strip */}
+          <div className={styles.statRow}>
+            <div className={styles.statItem}>
+              <span className={styles.statNumber}>$150</span>
+              <span className={styles.statLabel}>flat / month</span>
+            </div>
+            <div className={styles.statDivider} />
+            <div className={styles.statItem}>
+              <span className={styles.statNumber}>$0</span>
+              <span className={styles.statLabel}>per-lead fees</span>
+            </div>
+            <div className={styles.statDivider} />
+            <div className={styles.statItem}>
+              <span className={styles.statNumber}>&lt;3</span>
+              <span className={styles.statLabel}>days to activate</span>
+            </div>
+          </div>
+
+          {/* CTA hero */}
+          <div className={styles.ctaHero}>
+            <div className={styles.ctaHeroInner}>
+              <div className={styles.ctaPriceRow}>
+                <span className={styles.ctaPrice}>$150</span>
+                <span className={styles.ctaPriceSub}>/ month · flat rate · cancel anytime</span>
+              </div>
+              <Link
+                href="/dealers/order"
+                className={`${styles.orderButton} ${styles.orderButtonXL} ${styles.orderButtonActive}`}
+              >
+                Add Your Inventory
+              </Link>
+              <p className={styles.ctaNote}>
+                Full visibility into every match, view, and buyer intent signal. No black boxes.
+              </p>
+            </div>
+          </div>
+
+          {/* How it works */}
           <div className={styles.howItWorksSection}>
-            <h3 className={styles.howItWorksTitle}>How CarCupid Works</h3>
+            <h3 className={styles.howItWorksTitle}>How It Works</h3>
             <div className={styles.stepsList}>
               <div className={styles.stepItem}>
-                <div className={styles.stepTitle}>1. Connect your inventory</div>
-                <p className={styles.stepDescription}>We connect to your existing inventory feed (Cox, your website, or custom).</p>
+                <div className={styles.stepNumBadge}>1</div>
+                <div className={styles.stepBody}>
+                  <div className={styles.stepTitle}>Connect your inventory</div>
+                  <p className={styles.stepDescription}>
+                    We hook into your existing feed — Cox Automotive, your website export, or a custom source.
+                  </p>
+                </div>
               </div>
               <div className={styles.stepItem}>
-                <div className={styles.stepTitle}>2. Buyers declare real intent</div>
-                <p className={styles.stepDescription}>Shoppers tell CarCupid exactly what they want — budget, specs, timing.</p>
+                <div className={styles.stepNumBadge}>2</div>
+                <div className={styles.stepBody}>
+                  <div className={styles.stepTitle}>Buyers declare real intent</div>
+                  <p className={styles.stepDescription}>
+                    Shoppers tell CarCupid their exact budget, specs, and timeline — before they ever see a car.
+                  </p>
+                </div>
               </div>
               <div className={styles.stepItem}>
-                <div className={styles.stepTitle}>3. Matched buyers land on your cars</div>
-                <p className={styles.stepDescription}>High-intent buyers are routed directly to the dealer that actually has the right vehicle.</p>
+                <div className={styles.stepNumBadge}>3</div>
+                <div className={styles.stepBody}>
+                  <div className={styles.stepTitle}>We route them to you</div>
+                  <p className={styles.stepDescription}>
+                    Matched buyers land directly on your inventory — already pre-qualified, already motivated.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
 
-          <div className={styles.trustSignal}>
-            Built for dealers tired of paying for unqualified leads
-          </div>
-
+          {/* Feature list */}
           <ul className={styles.featuresList}>
             <li className={styles.featureItem}>
               <span className={styles.featureIcon}>✓</span>
-              <span className={styles.desktopOnly}>Buyers matched to your actual inventory (not generic leads)</span>
-              <span className={styles.mobileOnly}>Matches to actual inventory (no generic leads)</span>
+              <span>Matched to your actual stock — not generic lead pools</span>
             </li>
             <li className={styles.featureItem}>
               <span className={styles.featureIcon}>✓</span>
-              <span className={styles.desktopOnly}>Inventory feed integration (Cox, website feed, or custom)</span>
-              <span className={styles.mobileOnly}>Easy feed integration (Cox, website, custom)</span>
+              <span>Feed integration in days (Cox, site feed, or custom)</span>
             </li>
             <li className={styles.featureItem}>
               <span className={styles.featureIcon}>✓</span>
-              <span className={styles.desktopOnly}>Transparent performance visibility (matches, views, buyer intent)</span>
-              <span className={styles.mobileOnly}>Full transparency on matches & intent</span>
+              <span>Full visibility — matches, views, and buyer intent signals</span>
             </li>
             <li className={styles.featureItem}>
               <span className={styles.featureIcon}>✓</span>
-              <span className={styles.desktopOnly}>Direct dealer support — no outsourced call centers</span>
-              <span className={styles.mobileOnly}>Direct support. No call centers.</span>
+              <span>Direct dealer support. No outsourced call centers.</span>
             </li>
           </ul>
+
+          <div className={styles.trustSignal}>
+            Built for dealers who are done paying for tyrekickers
+          </div>
+
         </div>
 
-        <div className={styles.formSection}>
+        {/* ── RIGHT: Form ── */}
+        <div className={styles.formSection} id="dealerForm">
           <div className={styles.formCard}>
-            <h2 className={styles.formTitle}>Get Matched Buyers (No Listings, No Leads)</h2>
+            <h2 className={styles.formTitle}>Request a Dealer Walkthrough</h2>
+            <p className={styles.formSubnote}>
+              We&rsquo;ll show you exactly how CarCupid matches buyers to your inventory.
+            </p>
             <form onSubmit={handleSubmit}>
               <div className={styles.formGroup}>
                 <label htmlFor="company" className={styles.label}>Dealership Name</label>
-                <input type="text" id="company" name="company" className={styles.input} placeholder="e.g. Best Cars Ltd." required />
+                <input
+                  type="text"
+                  id="company"
+                  name="company"
+                  className={styles.input}
+                  placeholder="e.g. Best Cars Ltd."
+                  required
+                />
               </div>
 
               <div className={styles.formGroup}>
-                <label htmlFor="contact" className={styles.label}>Contact Name</label>
-                <input type="text" id="contact" name="name" className={styles.input} placeholder="Your Name" required />
+                <label htmlFor="contact" className={styles.label}>Your Name</label>
+                <input
+                  type="text"
+                  id="contact"
+                  name="name"
+                  className={styles.input}
+                  placeholder="First and last name"
+                  required
+                />
               </div>
 
               <div className={styles.formGroup}>
-                <label htmlFor="email" className={styles.label}>Email</label>
-                <input type="email" id="email" name="email" className={styles.input} placeholder="name@dealership.com" required />
+                <label htmlFor="email" className={styles.label}>Work Email</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  className={styles.input}
+                  placeholder="name@dealership.com"
+                  required
+                />
               </div>
 
               <div className={styles.formGroup}>
-                <label htmlFor="interest" className={styles.label}>What best describes your interest? (optional)</label>
-                <select 
-                  id="interest" 
+                <label htmlFor="interest" className={styles.label}>
+                  What best describes you? <span className={styles.labelOptional}>(optional)</span>
+                </label>
+                <select
+                  id="interest"
                   name="interest"
                   className={styles.select}
                   defaultValue=""
                 >
                   <option value="" disabled>Select an option</option>
-                  <option value="learn_more">See how CarCupid matches buyers to inventory</option>
+                  <option value="learn_more">See how buyer matching works</option>
                   <option value="inventory_integration">Connect my inventory feed</option>
                   <option value="partnership_pricing">Evaluate pricing options</option>
                   <option value="other">Just exploring</option>
@@ -194,26 +287,26 @@ export default function PartnersPage() {
               </div>
 
               <button type="submit" className={styles.submitButton} disabled={isSubmitting}>
-                {isSubmitting ? 'Sending...' : '👉 Request a Dealer Walkthrough'}
+                {isSubmitting ? "Sending…" : "Request a Walkthrough →"}
               </button>
 
               <p className={styles.disclaimer}>
-                By submitting this form, you agree to our <Link href="/terms">dealer terms</Link> and <Link href="/privacy">privacy policy</Link>.
+                By submitting, you agree to our{" "}
+                <Link href="/terms">dealer terms</Link> and{" "}
+                <Link href="/privacy">privacy policy</Link>.
               </p>
             </form>
           </div>
+
+          {/* Reassurance block below form */}
+          <div className={styles.formReassurance}>
+            <div className={styles.reassuranceItem}>No spam. Ever.</div>
+            <div className={styles.reassuranceDot} />
+            <div className={styles.reassuranceItem}>Reply within 1 business day</div>
+            <div className={styles.reassuranceDot} />
+            <div className={styles.reassuranceItem}>No commitment required</div>
+          </div>
         </div>
-      </div>
-
-      <div className={styles.pricingTeaser}>
-        Most dealers activate CarCupid in under a week. Flat monthly pricing. No per-lead fees. No commissions.
-      </div>
-
-      <div className={styles.certaintyCue}>
-        <p>
-          <strong>CarCupid doesn’t sell listings or leads.</strong>
-          We match serious buyers to the dealer that actually has the right car.
-        </p>
       </div>
     </div>
   );

@@ -16,8 +16,9 @@ export type ListingItemData = {
   specs: string[];
 };
 
-export default function ListingItem({ item }: { item: ListingItemData }) {
+export default function ListingItem({ item, openInNewTab }: { item: ListingItemData; openInNewTab?: boolean }) {
   const [saved, setSaved] = useState<boolean>(false);
+  const [imgSrc, setImgSrc] = useState<string>(item.imageUrl || "/no-image-available.jpg");
 
   useEffect(() => {
     setSaved(isWishlisted(item.id));
@@ -29,6 +30,10 @@ export default function ListingItem({ item }: { item: ListingItemData }) {
       window.removeEventListener("storage", handler);
     };
   }, [item.id]);
+
+  useEffect(() => {
+    setImgSrc(item.imageUrl || "/no-image-available.jpg");
+  }, [item.imageUrl]);
 
   const toggleWishlist = () => {
     if (saved) {
@@ -46,7 +51,7 @@ export default function ListingItem({ item }: { item: ListingItemData }) {
   return (
     <div className={styles.card} data-id={item.id}>
       <div className={styles.imgWrap}>
-        <Image src={item.imageUrl} alt={item.title} fill unoptimized className={styles.cardImg} />
+        <Image src={imgSrc} alt={item.title} fill unoptimized className={styles.cardImg} onError={() => setImgSrc("/no-image-available.jpg")} />
         <button type="button" className={styles.wishBtn} aria-label="Add to wishlist" onClick={toggleWishlist}>
           {saved ? <FaHeart /> : <FaRegHeart />}
         </button>
@@ -66,7 +71,11 @@ export default function ListingItem({ item }: { item: ListingItemData }) {
         </div>
         <div className={styles.priceRow}>
           <div className={styles.price}>{item.price}</div>
-          <Link href={`/cars/${encodeURIComponent(item.id)}`}>
+          <Link 
+            href={`/cars/${encodeURIComponent(item.id)}`} 
+            target={openInNewTab ? "_blank" : undefined}
+            rel={openInNewTab ? "noopener noreferrer" : undefined}
+          >
             <Button themeColor="primary" className={styles.detailsBtn}>Details</Button>
           </Link>
         </div>

@@ -18,6 +18,10 @@ import ResumeModal from "../../components/quiz/modals/ResumeModal";
 import FeedbackModal from "../../components/quiz/modals/FeedbackModal";
 import QuizControls from "../../components/quiz/QuizControls";
 import QuizHeader from "../../components/quiz/QuizHeader";
+import PartTwoPreview from "../../components/quiz/PartTwoPreview";
+import IntakeForm from "../../components/quiz/IntakeForm";
+import InterimCandidates from "../../components/quiz/InterimCandidates";
+import { BudgetBand } from "@/utils/initialCandidates";
 import { QUIZ_QUESTIONS } from "../../constants/quizQuestions";
 import { parseCarData, matchCars, Row, ScoredCar, QuizFilters } from "../../utils/carScoring";
 import { Categories, CategoryValue } from "../../constants/categories";
@@ -30,6 +34,12 @@ export default function Page() {
   const quiz = useQuiz();
   const [exitDestination, setExitDestination] = useState("/");
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+  const [showPartTwoStart, setShowPartTwoStart] = useState(false);
+  const [showIntakeStart, setShowIntakeStart] = useState(false);
+  const [showInterim, setShowInterim] = useState(false);
+  const [intakeComplete, setIntakeComplete] = useState(false);
+  const [intakeBudget, setIntakeBudget] = useState<BudgetBand>("no_strict");
+  const [intakeIncludeUpcoming, setIntakeIncludeUpcoming] = useState<boolean>(true);
   
   const [rows, setRows] = useState<Row[]>([]);
   const [idx, setIdx] = useState<Record<string, number>>({});
@@ -47,6 +57,13 @@ export default function Page() {
     }
     load();
   }, []);
+
+  useEffect(() => {
+    if (!quiz.showIntro && !quiz.showHalfway && !quiz.showFinal && quiz.current === 0) {
+      setShowPartTwoStart(true);
+    setShowIntakeStart(false);
+    }
+  }, [quiz.showIntro]);
 
   useEffect(() => {
     if (quiz.showFinal && rows.length > 0 && Object.keys(idx).length > 0) {
@@ -501,21 +518,66 @@ export default function Page() {
             />
             
             <div style={{ paddingRight: 4 }}>
-              {renderQuestion()}
+              {quiz.showHalfway ? (
+                <PartTwoPreview />
+              ) : showPartTwoStart ? (
+                <PartTwoPreview />
+              ) : showIntakeStart ? (
+                <IntakeForm 
+                  onCompletionChange={setIntakeComplete} 
+                  onValuesChange={(v) => {
+                    setIntakeBudget((v.budget || "no_strict") as BudgetBand);
+                    setIntakeIncludeUpcoming(!!v.includeUpcoming);
+                  }}
+                />
+              ) : showInterim ? (
+                <InterimCandidates 
+                  rows={rows} 
+                  idx={idx} 
+                  budget={intakeBudget} 
+                  includeUpcoming={intakeIncludeUpcoming} 
+                />
+              ) : (
+                renderQuestion()
+              )}
             </div>
 
             <QuizControls 
               showFinal={quiz.showFinal}
               showIntro={quiz.showIntro}
               showHalfway={quiz.showHalfway}
+              nextLabel={showPartTwoStart ? "Continue to begin Part 1" : showInterim ? "Continue to Part 2" : undefined}
+              leftNote={showInterim ? "We saved this list for you — you can revisit it later." : undefined}
               handleNext={() => {
+                if (showPartTwoStart) {
+                  setShowPartTwoStart(false);
+                  setShowIntakeStart(true);
+                  return;
+                }
+                if (showIntakeStart) {
+                  if (!intakeComplete) {
+                    return;
+                  }
+                  setShowIntakeStart(false);
+                  setShowInterim(true);
+                  return;
+                }
+                if (showInterim) {
+                  setShowInterim(false);
+                  return;
+                }
                 if (quiz.showIntro) {
                   trackQuizStart();
                   event("StartQuiz");
                 }
                 quiz.handleNext();
               }}
-              isNextDisabled={quiz.isNextDisabled}
+              isNextDisabled={() => {
+                if (showPartTwoStart) return false;
+                if (showIntakeStart) return !intakeComplete;
+                if (showInterim) return false;
+                return quiz.isNextDisabled();
+              }}
             />
           </div>
         </>
