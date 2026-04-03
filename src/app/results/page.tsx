@@ -7,9 +7,12 @@ import ExitModal from "../../components/quiz/modals/ExitModal";
 import FeedbackModal from "../../components/quiz/modals/FeedbackModal";
 import Loader from "../../components/Loader";
 import { useRouter } from "next/navigation";
+import { getPreliminarySnapshot } from "../../utils/storage";
 
 export default function ResultsPage() {
   const [results, setResults] = useState<CarResult[]>([]);
+  const [prelim, setPrelim] = useState<CarResult[]>([]);
+  const [showPrelim, setShowPrelim] = useState(false);
   const [loading, setLoading] = useState(true);
   const [showExitModal, setShowExitModal] = useState(false);
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
@@ -18,10 +21,29 @@ export default function ResultsPage() {
   useEffect(() => {
     try {
       const savedData = localStorage.getItem('autoMatch_savedResults');
+      const prelimData = getPreliminarySnapshot();
+      if (prelimData?.items?.length) {
+        const map = (t: { id: string; title: string; image: string; price?: string }): CarResult => {
+          let make = t.title || "";
+          let model = "";
+          let year = "";
+          const m = t.title.match(/(.*)\s(\d{4})$/);
+          if (m) {
+            year = m[2];
+            const head = m[1].trim();
+            const parts = head.split(/\s+/);
+            make = parts[0] || head;
+            model = parts.slice(1).join(" ");
+          }
+          return { id: t.id, image: t.image, make, model, year, price: t.price };
+        };
+        setPrelim(prelimData.items.map(map));
+      }
       if (savedData) {
         const parsed = JSON.parse(savedData);
         if (parsed.expiresAt && parsed.expiresAt > new Date().getTime() && Array.isArray(parsed.results) && parsed.results.length > 0) {
           setResults(parsed.results);
+          setShowPrelim(false);
           return;
         }
         // Expired or invalid
@@ -49,10 +71,18 @@ export default function ResultsPage() {
     <div style={{ paddingTop: "80px", minHeight: "100vh", background: "var(--kendo-color-app-surface)" }}>
       <QuizHeader onExit={() => setShowExitModal(true)} />
       
-      <ResultsGallery 
-        results={results} 
-        onSaveProgress={() => router.push('/cars')}
-      />
+      {showPrelim && prelim.length > 0 ? (
+        <ResultsGallery 
+          results={prelim}
+          onSaveProgress={() => router.push('/cars')}
+        />
+      ) : (
+        <ResultsGallery 
+          results={results} 
+          onBack={prelim.length > 0 ? () => setShowPrelim(true) : undefined}
+          onSaveProgress={() => router.push('/cars')}
+        />
+      )}
 
       {showExitModal && (
         <ExitModal 
