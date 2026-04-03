@@ -74,12 +74,13 @@ export default function Page() {
     load();
   }, []);
 
+  const { showIntro: qShowIntro, showHalfway: qShowHalfway, showFinal: qShowFinal, current: qCurrent } = quiz;
   useEffect(() => {
-    if (!quiz.showIntro && !quiz.showHalfway && !quiz.showFinal && quiz.current === 0) {
+    if (!qShowIntro && !qShowHalfway && !qShowFinal && qCurrent === 0) {
       setShowPartTwoStart(true);
-    setShowIntakeStart(false);
+      setShowIntakeStart(false);
     }
-  }, [quiz.showIntro]);
+  }, [qShowIntro, qShowHalfway, qShowFinal, qCurrent]);
 
   useEffect(() => {
     if (quiz.showFinal && rows.length > 0 && Object.keys(idx).length > 0) {
