@@ -197,7 +197,7 @@ export default function ResultsGallery({ results = [], onSaveProgress, onBack }:
               <div className={styles.headerText}>
                 <h1 className={styles.title}>Your Matches Are Ready</h1>
                 <p className={`${styles.description} ${styles.mobileTextHidden}`}>
-                  We found cars that match your lifestyle. Browse your matches and tap for details.
+                  Matches are built from your Part 1 list first. When needed, we expand to our full catalog and label additions.
                 </p>
                 {onBack && (
                   <button className={styles.backLink} onClick={onBack}>Back to preliminary list</button>

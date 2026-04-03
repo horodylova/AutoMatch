@@ -45,6 +45,7 @@ export default function Page() {
   const [idx, setIdx] = useState<Record<string, number>>({});
   const [topMatches, setTopMatches] = useState<ScoredCar[]>([]);
   const [lastFilters, setLastFilters] = useState<QuizFilters | null>(null);
+  const [interimFromResults, setInterimFromResults] = useState(false);
 
   const isPreferenceCar = (c: ReturnType<typeof parseCarData>, f: QuizFilters): boolean => {
     const body = (c.bodyType || "").toLowerCase();
@@ -81,6 +82,20 @@ export default function Page() {
       setShowIntakeStart(false);
     }
   }, [qShowIntro, qShowHalfway, qShowFinal, qCurrent]);
+
+  const { setShowIntro: setQuizIntro } = quiz;
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const flag = window.localStorage.getItem("autoMatch_openInterim");
+    if (flag) {
+      window.localStorage.removeItem("autoMatch_openInterim");
+      setInterimFromResults(flag === "results");
+      setQuizIntro(false);
+      setShowPartTwoStart(false);
+      setShowIntakeStart(false);
+      setShowInterim(true);
+    }
+  }, [setQuizIntro]);
 
   useEffect(() => {
     if (quiz.showFinal && rows.length > 0 && Object.keys(idx).length > 0) {
@@ -529,7 +544,9 @@ export default function Page() {
             const prelimIds = (prelim?.ids || []).filter(Boolean);
             const inPrelim = prelimIds.includes(m.car.id);
             const badges: string[] = [];
-            if (!inPrelim) {
+            if (inPrelim) {
+              badges.push("From initial list");
+            } else {
               if (lastFilters && isPreferenceCar(m.car, lastFilters)) {
                 badges.push("Added for your preference");
               } else {
@@ -548,6 +565,7 @@ export default function Page() {
           })}
           onBack={() => {
             quiz.setShowGallery(false);
+            setInterimFromResults(true);
             setShowInterim(true);
           }}
           onSaveProgress={() => { setExitDestination("/cars"); quiz.setShowExitModal(true); }} 
@@ -587,6 +605,7 @@ export default function Page() {
                   onContinue={() => {
                     setShowInterim(false);
                   }}
+                  context={interimFromResults ? "results" : "quiz"}
                 />
               ) : quiz.showHalfway ? (
                 null

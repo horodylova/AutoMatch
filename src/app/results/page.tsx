@@ -7,7 +7,7 @@ import ExitModal from "../../components/quiz/modals/ExitModal";
 import FeedbackModal from "../../components/quiz/modals/FeedbackModal";
 import Loader from "../../components/Loader";
 import { useRouter } from "next/navigation";
-import { getPreliminarySnapshot } from "../../utils/storage";
+import { getPreliminarySnapshot, getPreliminaryCandidates } from "../../utils/storage";
 
 export default function ResultsPage() {
   const [results, setResults] = useState<CarResult[]>([]);
@@ -42,7 +42,13 @@ export default function ResultsPage() {
       if (savedData) {
         const parsed = JSON.parse(savedData);
         if (parsed.expiresAt && parsed.expiresAt > new Date().getTime() && Array.isArray(parsed.results) && parsed.results.length > 0) {
-          setResults(parsed.results);
+          const prelimIds = (getPreliminaryCandidates()?.ids || []) as string[];
+          const prelimSet = new Set(prelimIds);
+          const enriched: CarResult[] = parsed.results.map((r: CarResult) => {
+            const badges = prelimSet.has(r.id) ? ["From initial list"] : ["Outside initial list"];
+            return { ...r, badges };
+          });
+          setResults(enriched);
           setShowPrelim(false);
           return;
         }
@@ -79,7 +85,14 @@ export default function ResultsPage() {
       ) : (
         <ResultsGallery 
           results={results} 
-          onBack={prelim.length > 0 ? () => setShowPrelim(true) : undefined}
+          onBack={() => {
+            try {
+              if (typeof window !== "undefined") {
+                window.localStorage.setItem("autoMatch_openInterim", "results");
+              }
+            } catch {}
+            router.push('/quiz');
+          }}
           onSaveProgress={() => router.push('/cars')}
         />
       )}
