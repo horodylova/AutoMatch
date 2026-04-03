@@ -196,7 +196,7 @@ export default function ResultsGallery({ results = [], onSaveProgress, onBack }:
               </div>
               <div className={styles.headerText}>
                 <h1 className={styles.title}>Your Matches Are Ready</h1>
-                <p className={`${styles.description} ${styles.mobileTextHidden}`}>
+                <p className={styles.description}>
                   Matches are built from your Part 1 list first. When needed, we expand to our full catalog and label additions.
                 </p>
                 {onBack && (
