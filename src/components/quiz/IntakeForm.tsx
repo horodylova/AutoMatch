@@ -5,7 +5,7 @@ import styles from "./partTwoIntake.module.css";
 
 type Props = {
   onCompletionChange?: (complete: boolean) => void;
-  onValuesChange?: (v: { budget: string; includeUpcoming: boolean }) => void;
+  onValuesChange?: (v: { budget: string; includeUpcoming?: boolean }) => void;
 };
 
 export default function IntakeForm({ onCompletionChange, onValuesChange }: Props) {
@@ -14,16 +14,15 @@ export default function IntakeForm({ onCompletionChange, onValuesChange }: Props
   const [financing, setFinancing] = useState<string>("");
   const [tradein, setTradein] = useState<string>("");
   const [readiness, setReadiness] = useState<string>("");
-  const [includeUpcoming, setIncludeUpcoming] = useState<boolean>(true);
 
   useEffect(() => {
-    const complete = !!budget && typeof includeUpcoming === "boolean";
+    const complete = !!budget && !!timeframe && !!financing && !!tradein && !!readiness;
     onCompletionChange?.(complete);
-  }, [budget, includeUpcoming, onCompletionChange]);
+  }, [budget, timeframe, financing, tradein, readiness, onCompletionChange]);
 
   useEffect(() => {
-    onValuesChange?.({ budget, includeUpcoming });
-  }, [budget, includeUpcoming, onValuesChange]);
+    onValuesChange?.({ budget });
+  }, [budget, onValuesChange]);
 
   return (
     <section className={styles.wrap}>
@@ -50,15 +49,6 @@ export default function IntakeForm({ onCompletionChange, onValuesChange }: Props
             <label className={styles.option}><input type="radio" name="budget" value="no_strict" checked={budget==="no_strict"} onChange={(e) => setBudget(e.target.value)} /> No strict budget</label>
           </div>
           <p className={styles.help}>Reflects real market distribution where most new vehicles are above $60k, preventing empty matches while keeping lower tiers available.</p>
-        </div>
-
-        <div className={styles.field}>
-          <label className={styles.label}>Model year</label>
-          <div className={styles.options}>
-            <label className={styles.option}><input type="radio" name="yearpref" value="include" checked={includeUpcoming===true} onChange={() => setIncludeUpcoming(true)} /> Include new models (2025+)</label>
-            <label className={styles.option}><input type="radio" name="yearpref" value="upto_2024" checked={includeUpcoming===false} onChange={() => setIncludeUpcoming(false)} /> Only until 2024</label>
-          </div>
-          <p className={styles.help}>Select whether we include upcoming model years or limit the list to 2024 and earlier.</p>
         </div>
 
         <div className={styles.field}>
@@ -100,7 +90,7 @@ export default function IntakeForm({ onCompletionChange, onValuesChange }: Props
             <label className={styles.option}><input type="radio" name="readiness" value="building" checked={readiness==="building"} onChange={(e) => setReadiness(e.target.value)} /> Building</label>
             <label className={styles.option}><input type="radio" name="readiness" value="buying" checked={readiness==="buying"} onChange={(e) => setReadiness(e.target.value)} /> Buying</label>
           </div>
-          <p className={styles.help}>Sets the tone for how deep we go now vs. what we save for later refinement.</p>
+          <p className={styles.help}>Your stage: Exploring = browsing, Building = comparing, Buying = ready soon.</p>
         </div>
       </div>
     </section>

@@ -15,6 +15,7 @@ export interface CarResult {
   model: string;
   year: string;
   price?: string;
+  badges?: string[];
 }
 
 interface ResultsGalleryProps {
@@ -56,6 +57,13 @@ function ResultCard({ car, index }: { car: CarResult; index: number }) {
 
   return (
     <Link href={`/cars/${car.id}`} target="_blank" rel="noopener noreferrer" className={styles.cardLink}>
+      {car.badges && car.badges.length > 0 && (
+        <div className={styles.badgeBar}>
+          {car.badges.map((b, i) => (
+            <span key={`${car.id}-badge-${i}`} className={styles.badge}>{b}</span>
+          ))}
+        </div>
+      )}
       <Image 
         src={imgSrc} 
         alt={`${car.make} ${car.model}`} 
@@ -78,7 +86,7 @@ function ResultCard({ car, index }: { car: CarResult; index: number }) {
   );
 }
 
-export default function ResultsGallery({ results = [], onSaveProgress }: ResultsGalleryProps) {
+export default function ResultsGallery({ results = [], onSaveProgress, onBack }: ResultsGalleryProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [isSaved, setIsSaved] = useState(false);
   const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
@@ -191,6 +199,9 @@ export default function ResultsGallery({ results = [], onSaveProgress }: Results
                 <p className={`${styles.description} ${styles.mobileTextHidden}`}>
                   We found cars that match your lifestyle. Browse your matches and tap for details.
                 </p>
+                {onBack && (
+                  <button className={styles.backLink} onClick={onBack}>Back to preliminary list</button>
+                )}
               </div>
             </div>
           </div>

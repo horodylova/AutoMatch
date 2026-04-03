@@ -26,7 +26,7 @@ import { QUIZ_QUESTIONS } from "../../constants/quizQuestions";
 import { parseCarData, matchCars, Row, ScoredCar, QuizFilters } from "../../utils/carScoring";
 import { Categories, CategoryValue } from "../../constants/categories";
 import { fetchDataset } from "../../lib/dataset";
-import { saveResults } from "../../utils/storage";
+import { saveResults, getPreliminaryCandidates } from "../../utils/storage";
 import { trackQuizComplete, trackQuizStart } from "@/lib/gtag";
 import { event } from "@/lib/pixel";
 
@@ -44,6 +44,22 @@ export default function Page() {
   const [rows, setRows] = useState<Row[]>([]);
   const [idx, setIdx] = useState<Record<string, number>>({});
   const [topMatches, setTopMatches] = useState<ScoredCar[]>([]);
+  const [lastFilters, setLastFilters] = useState<QuizFilters | null>(null);
+
+  const isPreferenceCar = (c: ReturnType<typeof parseCarData>, f: QuizFilters): boolean => {
+    const body = (c.bodyType || "").toLowerCase();
+    const drive = (c.driveType || "").toLowerCase();
+    const hp = c.horsepower || 0;
+    if (f.minSeats && (c.totalSeating || 0) >= f.minSeats) return true;
+    if (f.forceUtility && (body.includes("van") || body.includes("truck") || (c.maxTowingCapacity || 0) > 5000 || Math.max(c.cargoCapacity || 0, c.maxCargoCapacity || 0) > 60)) return true;
+    if (f.forceSport && (hp >= 300 || body.includes("coupe") || body.includes("convertible") || body.includes("sport"))) return true;
+    if (f.forceLuxury && (c.baseMsrp || 0) >= 75000) return true;
+    if (f.awdPreferred && (drive.includes("awd") || drive.includes("4wd") || drive.includes("four"))) return true;
+    if (f.transmissionPreference === "manual" && (c.transmission || "").toLowerCase().includes("manual")) return true;
+    if (f.transmissionPreference === "automatic" && (c.transmission || "").toLowerCase().includes("auto")) return true;
+    if (f.isFamily && (body.includes("minivan") || body.includes("suv") || (c.totalSeating || 0) >= 5)) return true;
+    return false;
+  };
 
   useEffect(() => {
     event("StartQuizView");
@@ -311,7 +327,19 @@ export default function Page() {
          filters.forceLuxury = true;
       }
 
-      const matches = matchCars(validCars, prefs, filters);
+      const prelim = getPreliminaryCandidates();
+      const prelimIds = (prelim?.ids || []).filter(Boolean);
+      const prelimSet = new Set(prelimIds);
+      const primaryPool = prelimIds.length > 0 ? validCars.filter(c => prelimSet.has(c.id)) : validCars;
+
+      const matchesPrimary = matchCars(primaryPool, prefs, filters);
+      let matches = matchesPrimary;
+      if (matchesPrimary.length < 12) {
+        const allMatches = matchCars(validCars, prefs, filters);
+        const seenIds = new Set(matchesPrimary.map(m => m.car.id));
+        const merged = [...matchesPrimary, ...allMatches.filter(m => !seenIds.has(m.car.id))];
+        matches = merged;
+      }
 
       const uniqueMatches: ScoredCar[] = [];
       const seenMakes = new Set<string>();
@@ -328,6 +356,7 @@ export default function Page() {
       }
 
       setTopMatches(uniqueMatches);
+      setLastFilters(filters);
       trackQuizComplete(uniqueMatches.length);
       event("CompletedQuiz", { matches_count: uniqueMatches.length });
     }
@@ -494,14 +523,32 @@ export default function Page() {
 
       {quiz.showGallery ? (
         <ResultsGallery 
-          results={topMatches.map(m => ({
-            id: m.car.id,
-            image: m.car.image,
-            make: m.car.make,
-            model: m.car.model,
-            year: String(m.car.year),
-            price: `$${m.car.baseMsrp.toLocaleString()}`
-          }))}
+          results={topMatches.map(m => {
+            const prelim = getPreliminaryCandidates();
+            const prelimIds = (prelim?.ids || []).filter(Boolean);
+            const inPrelim = prelimIds.includes(m.car.id);
+            const badges: string[] = [];
+            if (!inPrelim) {
+              if (lastFilters && isPreferenceCar(m.car, lastFilters)) {
+                badges.push("Added for your preference");
+              } else {
+                badges.push("Outside initial list");
+              }
+            }
+            return {
+              id: m.car.id,
+              image: m.car.image,
+              make: m.car.make,
+              model: m.car.model,
+              year: String(m.car.year),
+              price: `$${m.car.baseMsrp.toLocaleString()}`,
+              badges
+            };
+          })}
+          onBack={() => {
+            quiz.setShowGallery(false);
+            setShowInterim(true);
+          }}
           onSaveProgress={() => { setExitDestination("/cars"); quiz.setShowExitModal(true); }} 
         />
       ) : (
@@ -518,16 +565,16 @@ export default function Page() {
             />
             
             <div style={{ paddingRight: 4 }}>
-              {quiz.showHalfway ? (
-                <PartTwoPreview />
-              ) : showPartTwoStart ? (
+              {showPartTwoStart ? (
                 <PartTwoPreview />
               ) : showIntakeStart ? (
                 <IntakeForm 
                   onCompletionChange={setIntakeComplete} 
                   onValuesChange={(v) => {
                     setIntakeBudget((v.budget || "no_strict") as BudgetBand);
-                    setIntakeIncludeUpcoming(!!v.includeUpcoming);
+                    if (typeof v.includeUpcoming === "boolean") {
+                      setIntakeIncludeUpcoming(v.includeUpcoming);
+                    }
                   }}
                 />
               ) : showInterim ? (
@@ -535,8 +582,13 @@ export default function Page() {
                   rows={rows} 
                   idx={idx} 
                   budget={intakeBudget} 
-                  includeUpcoming={intakeIncludeUpcoming} 
+                  includeUpcoming={intakeIncludeUpcoming}
+                  onContinue={() => {
+                    setShowInterim(false);
+                  }}
                 />
+              ) : quiz.showHalfway ? (
+                null
               ) : (
                 renderQuestion()
               )}
