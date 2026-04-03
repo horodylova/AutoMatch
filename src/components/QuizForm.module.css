@@ -18,6 +18,9 @@
 
 .floatingBar { position: fixed; left: 0; right: 0; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); z-index: 20; background: none; border: none; pointer-events: none; }
 .barInner { max-width: 1000px; margin: 0 auto; padding: calc(12px + env(safe-area-inset-bottom, 0px)) 16px; display: flex; justify-content: flex-end; }
+.barInnerSpread { max-width: 1000px; margin: 0 auto; padding: calc(12px + env(safe-area-inset-bottom, 0px)) 16px; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.noteLeft { display: inline-flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 12px; background: var(--kendo-color-surface); border: 1px solid var(--kendo-color-border); color: var(--kendo-color-subtle); font-size: 15px; font-weight: 700; letter-spacing: 0.02em; }
+.noteLeft::before { content: ""; width: 8px; height: 8px; border-radius: 999px; background: var(--kendo-color-primary); box-shadow: 0 0 0 2px rgba(229,72,63,0.15); }
 
 @media (max-width: 768px) {
   .card { padding: 16px; }
@@ -60,6 +63,13 @@
     max-width: none;
     justify-content: flex-end;
   }
+  .barInnerSpread {
+    padding: 0;
+    max-width: none;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .noteLeft { font-size: 14px; padding: 8px 12px; border-radius: 10px; }
   .next {
     padding: 20px 64px;
     font-size: 1.4rem;
@@ -93,6 +103,11 @@
   color: #1A252F;
   border-color: rgba(229, 72, 63, 0.7);
   box-shadow: 0 10px 24px rgba(0,0,0,0.12), inset 0 0 0 1px rgba(229,72,63,0.10);
+}
+:global(html[data-theme="light"]) .noteLeft {
+  background: #FFFFFF;
+  border-color: rgba(0, 0, 0, 0.10);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
 }
 
 :global(html[data-theme="light"]) .answerActive .answerText {

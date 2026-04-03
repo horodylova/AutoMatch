@@ -1,0 +1,213 @@
+/* ─── Mobile first: stacked layout ──────────────────────────────────────── */
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 18px;
+  border: 1px solid var(--kendo-color-border);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.22);
+}
+
+/* Image block — natural flow on mobile */
+.media {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  flex-shrink: 0;
+}
+
+.img {
+  object-fit: cover;
+  object-position: 60% center;
+}
+
+.overlay {
+  display: none;
+}
+
+/* Text block — solid bg on mobile, fully readable */
+.content {
+  display: grid;
+  gap: 12px;
+  padding: 24px 20px;
+  background: var(--kendo-color-surface);
+  color: var(--kendo-color-on-app-surface);
+  animation: fadeUp 0.35s ease-out both;
+}
+
+.title {
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  color: var(--kendo-color-on-app-surface);
+  margin: 0;
+}
+
+.lead {
+  font-size: 14px;
+  color: var(--kendo-color-subtle);
+  margin: 0;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--kendo-color-border);
+}
+
+.points {
+  display: grid;
+  gap: 0;
+}
+
+.points p {
+  display: grid;
+  grid-template-columns: 14px 1fr;
+  gap: 10px;
+  align-items: baseline;
+  font-size: 13px;
+  color: var(--kendo-color-on-app-surface);
+  line-height: 1.6;
+  margin: 0;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--kendo-color-border);
+  opacity: 0.88;
+}
+
+.points p:last-child {
+  border-bottom: none;
+}
+
+.points p::before {
+  content: "";
+  display: block;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--kendo-color-primary);
+  margin-top: 8px;
+  justify-self: center;
+  box-shadow: 0 0 5px rgba(229, 72, 63, 0.5);
+}
+
+.note {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--kendo-color-primary);
+  margin: 0;
+}
+
+/* ─── Desktop: side-by-side with frosted glass ───────────────────────────── */
+
+@media (min-width: 640px) {
+  .hero {
+    flex-direction: row;
+    min-height: 360px;
+    position: relative;
+  }
+
+  /* Image goes back to absolute — fills entire card */
+  .media {
+    position: absolute;
+    inset: 0;
+    width: auto;
+    height: auto;
+  }
+
+  /* Text panel: frosted glass, left 50% */
+  .content {
+    position: relative;
+    z-index: 1;
+    width: 50%;
+    gap: 14px;
+    padding: 28px 32px;
+    /* Dark frosted glass — works for both themes over the photo */
+    background: rgba(18, 20, 26, 0.78);
+    backdrop-filter: blur(20px) saturate(1.3);
+    -webkit-backdrop-filter: blur(20px) saturate(1.3);
+    border-right: 1px solid rgba(255, 255, 255, 0.07);
+    color: #fff;
+    animation: none;
+  }
+
+  .title {
+    font-size: clamp(20px, 3vw, 28px);
+    color: #fff;
+  }
+
+  .lead {
+    color: rgba(245, 245, 247, 0.60);
+    border-bottom-color: rgba(255, 255, 255, 0.09);
+  }
+
+  .points p {
+    font-size: 14px;
+    color: rgba(245, 245, 247, 0.85);
+    border-bottom-color: rgba(255, 255, 255, 0.06);
+    opacity: 1;
+  }
+}
+
+@media (min-width: 640px) and (min-height: 0px) {
+  /* Light theme: switch frosted panel to white glass */
+  :global(html[data-theme="light"]) .hero {
+    border-color: rgba(0, 0, 0, 0.08);
+    box-shadow:
+      0 4px 12px rgba(0, 0, 0, 0.06),
+      0 16px 40px rgba(0, 0, 0, 0.10);
+  }
+
+  :global(html[data-theme="light"]) .content {
+    background: rgba(248, 249, 251, 0.88);
+    backdrop-filter: blur(24px) saturate(1.5);
+    -webkit-backdrop-filter: blur(24px) saturate(1.5);
+    border-right: 1px solid rgba(0, 0, 0, 0.06);
+    color: var(--kendo-color-on-app-surface);
+  }
+
+  :global(html[data-theme="light"]) .title {
+    color: var(--kendo-color-on-app-surface);
+  }
+
+  :global(html[data-theme="light"]) .lead {
+    color: var(--kendo-color-subtle);
+    border-bottom-color: rgba(0, 0, 0, 0.08);
+  }
+
+  :global(html[data-theme="light"]) .points p {
+    color: var(--kendo-color-on-app-surface);
+    border-bottom-color: rgba(0, 0, 0, 0.06);
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero {
+    min-height: 420px;
+  }
+
+  .content {
+    width: 46%;
+    padding: 36px 40px;
+    gap: 16px;
+  }
+
+  .title {
+    font-size: 28px;
+  }
+
+  .lead {
+    font-size: 15px;
+  }
+
+  .points p {
+    font-size: 14px;
+  }
+}
+
+/* ─── Animation ─────────────────────────────────────────────────────────── */
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

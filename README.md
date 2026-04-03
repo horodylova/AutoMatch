@@ -27,3 +27,5 @@ Next.js application that scores and filters vehicles from a Google Sheets datase
 
 ## Recent Updates
 - Improved light theme support for car listings and dealer search modal.
+- Wishlist: 24h TTL storage, mobile wishlist access, and visibility tweaks.
+- Deployment ping: 2026-03-24
