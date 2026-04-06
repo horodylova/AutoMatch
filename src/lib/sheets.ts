@@ -112,13 +112,24 @@ export async function getPollTotals(pollId: string): Promise<{ c1: number; c2: n
   const range = `${TAB}!A:E`
   const res = await sheets.spreadsheets.values.get({ spreadsheetId: SHEET_ID, range })
   const rows = res.data.values || []
-  for (let i = 1; i < rows.length; i++) {
-    if (rows[i][0] === pollId) {
-      const c1 = parseInt(rows[i][2] || '0', 10) || 0
-      const c2 = parseInt(rows[i][3] || '0', 10) || 0
-      const total = parseInt(rows[i][4] || '0', 10) || c1 + c2
-      return { c1, c2, total }
+  const findById = (id: string) => {
+    for (let i = 1; i < rows.length; i++) {
+      if (rows[i][0] === id) {
+        const c1 = parseInt(rows[i][2] || '0', 10) || 0
+        const c2 = parseInt(rows[i][3] || '0', 10) || 0
+        const total = parseInt(rows[i][4] || '0', 10) || c1 + c2
+        return { c1, c2, total }
+      }
     }
+    return null
+  }
+  // Try exact ID first
+  const direct = findById(pollId)
+  if (direct) return direct
+  // Backward compatibility: if id is "slug:base", try legacy "base"
+  if (pollId.includes(':')) {
+    const legacy = findById(pollId.split(':').slice(1).join(':'))
+    if (legacy) return legacy
   }
   return null
 }

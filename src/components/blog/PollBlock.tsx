@@ -15,15 +15,15 @@ export default function PollBlock({ id, question, optionA, optionB }: Props) {
   const displayBase = 128;
 
   useEffect(() => {
+    fetch(`/api/polls/stats?id=${encodeURIComponent(id)}`)
+      .then(r => r.json())
+      .then(data => setRealTotal(data?.totals?.total || 0))
+      .catch(() => {});
     fetch("/api/polls/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id, question }),
     }).catch(() => {});
-    fetch(`/api/polls/stats?id=${encodeURIComponent(id)}`)
-      .then(r => r.json())
-      .then(data => setRealTotal(data?.totals?.total || 0))
-      .catch(() => {});
   }, [id, question]);
 
   const vote = async (opt: "A" | "B") => {
