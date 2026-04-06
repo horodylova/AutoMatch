@@ -87,7 +87,7 @@ export default function PromoModal() {
           <video
             ref={videoRef}
             className={styles.video}
-            src="/banner%20video/banner.mp4"
+            src="/banner%20video/dream-garage-banner.mp4"
             playsInline
             muted={false}
             onEnded={handleVideoEnded}

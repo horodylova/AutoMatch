@@ -36,7 +36,7 @@ export default function ClientLayout({
       inset: 0,
       overflow: "hidden"
     }}>
-      {false && <PromoModal />}
+      {!isResults && <PromoModal />}
       <StyledComponentsRegistry>
         <HeaderVisibility />
         <main style={{ 
