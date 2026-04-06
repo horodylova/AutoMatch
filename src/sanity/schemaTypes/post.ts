@@ -73,6 +73,9 @@ export const post = defineType({
           type: 'block',
         },
         {
+          type: 'poll',
+        },
+        {
           type: 'image',
           options: { hotspot: true },
           fields: [
