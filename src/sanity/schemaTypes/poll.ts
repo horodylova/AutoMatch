@@ -23,13 +23,6 @@ export const poll = defineType({
       type: 'string',
       validation: (Rule) => Rule.required(),
     }),
-    defineField({
-      name: 'pollKey',
-      title: 'Poll Key',
-      type: 'slug',
-      options: { source: 'question', maxLength: 60 },
-      description: 'Stable key for analytics/votes (optional).',
-    }),
   ],
   preview: {
     select: { q: 'question', a: 'optionA', b: 'optionB' },
@@ -41,4 +34,3 @@ export const poll = defineType({
     },
   },
 })
-

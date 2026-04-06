@@ -132,8 +132,8 @@ async function getRelatedPosts(slug: string, publishedAt: string): Promise<Post[
 
 const components = {
   types: {
-    poll: ({ value }: { value: { question: string; optionA: string; optionB: string; pollKey?: { current: string }; _key?: string } }) => {
-      const id = value.pollKey?.current || value._key || (value.question || "").slice(0, 24);
+    poll: ({ value }: { value: { question: string; optionA: string; optionB: string; _key?: string } }) => {
+      const id = value._key || (value.question || "").slice(0, 24);
       return <PollBlock id={id} question={value.question} optionA={value.optionA} optionB={value.optionB} />;
     },
     image: ({ value }: { value: PortableTextImage }) => {
@@ -288,8 +288,8 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           ...components,
           types: {
             ...components.types,
-            poll: ({ value }: { value: { question: string; optionA: string; optionB: string; pollKey?: { current: string }; _key?: string } }) => {
-              const idBase = value.pollKey?.current || value._key || (value.question || "").slice(0, 24);
+            poll: ({ value }: { value: { question: string; optionA: string; optionB: string; _key?: string } }) => {
+              const idBase = value._key || (value.question || "").slice(0, 24);
               const id = `${slug}:${idBase}`;
               return <PollBlock id={id} question={value.question} optionA={value.optionA} optionB={value.optionB} />;
             },
