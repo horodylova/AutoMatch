@@ -283,9 +283,24 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
         title={post.title} 
       />
 
-      <div className={styles.body}>
-        {post.body && <PortableText value={post.body} components={components} />}
-      </div>
+      {(() => {
+        const localComponents = {
+          ...components,
+          types: {
+            ...components.types,
+            poll: ({ value }: { value: { question: string; optionA: string; optionB: string; pollKey?: { current: string }; _key?: string } }) => {
+              const idBase = value.pollKey?.current || value._key || (value.question || "").slice(0, 24);
+              const id = `${slug}:${idBase}`;
+              return <PollBlock id={id} question={value.question} optionA={value.optionA} optionB={value.optionB} />;
+            },
+          },
+        };
+        return (
+          <div className={styles.body}>
+            {post.body && <PortableText value={post.body} components={localComponents} />}
+          </div>
+        );
+      })()}
 
       {post.tags && post.tags.length > 0 && (
         <div className={styles.tags}>
