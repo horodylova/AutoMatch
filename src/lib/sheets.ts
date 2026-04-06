@@ -1,11 +1,24 @@
 import { google } from 'googleapis'
 
-const SHEET_ID = process.env.GOOGLE_SHEETS_ID || ''
+const SHEET_ID =
+  process.env.GOOGLE_SHEETS_SPREADSHEET_ID ||
+  process.env.GOOGLE_SHEETS_ID ||
+  ''
 const TAB = process.env.GOOGLE_SHEETS_SURVEY_TAB || 'survey in articles'
 
 function getAuth() {
-  const clientEmail = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL
-  let privateKey = process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY
+  let clientEmail = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL || ''
+  let privateKey = process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY || ''
+  const b64 = process.env.GOOGLE_SERVICE_ACCOUNT_B64
+  if (b64) {
+    try {
+      const json = JSON.parse(Buffer.from(b64, 'base64').toString('utf8'))
+      clientEmail = json.client_email || clientEmail
+      privateKey = json.private_key || privateKey
+    } catch {
+      // ignore decode errors, fallback to individual vars
+    }
+  }
   if (!clientEmail || !privateKey) {
     throw new Error('Missing Google service account envs')
   }
@@ -22,6 +35,16 @@ async function getSheets() {
   const auth = getAuth()
   const sheets = google.sheets({ version: 'v4', auth })
   return sheets
+}
+
+export function sheetsConfigured(): boolean {
+  const hasId =
+    !!(process.env.GOOGLE_SHEETS_SPREADSHEET_ID || process.env.GOOGLE_SHEETS_ID)
+  const hasB64 = !!process.env.GOOGLE_SERVICE_ACCOUNT_B64
+  const hasPair =
+    !!process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL &&
+    !!process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY
+  return hasId && (hasB64 || hasPair)
 }
 
 export async function ensurePollRow(pollId: string, question: string) {
