@@ -9,6 +9,10 @@
  .btn:disabled { cursor: default; pointer-events: none; }
  .btn:disabled:hover { background: var(--kendo-color-surface); border-color: #E6DCC8; }
  .btnActive { border-color: var(--kendo-color-primary); background: var(--kendo-color-primary); color: var(--kendo-color-on-primary); box-shadow: none; }
+ .btnActive:disabled,
+ .btnActive:disabled:hover { background: var(--kendo-color-primary); border-color: var(--kendo-color-primary); color: var(--kendo-color-on-primary); }
  :global(html[data-theme="light"]) .btn { border-color: #D8CBB6; }
  :global(html[data-theme="light"]) .btn:hover { background: rgba(0,0,0,0.04); border-color: #C9B9A1; }
- :global(html[data-theme="light"]) .btnActive { box-shadow: 0 6px 16px rgba(229,72,63,0.28); }
+ :global(html[data-theme="light"]) .btnActive { box-shadow: 0 6px 16px rgba(229,72,63,0.28); background: var(--kendo-color-primary); color: var(--kendo-color-on-primary); }
+ :global(html[data-theme="light"]) .btnActive:disabled,
+ :global(html[data-theme="light"]) .btnActive:disabled:hover { background: var(--kendo-color-primary); color: var(--kendo-color-on-primary); border-color: var(--kendo-color-primary); }
