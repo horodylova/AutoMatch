@@ -7,7 +7,8 @@ let datasetPromise: Promise<Dataset> | null = null;
 export async function fetchDataset(): Promise<Dataset> {
   const sheetId = process.env.NEXT_PUBLIC_SHEET_ID || process.env.GOOGLE_SHEETS_SPREADSHEET_ID || "";
   const range = process.env.NEXT_PUBLIC_SHEET_RANGE || process.env.SHEET_NAME || "DATABASE";
-  const cacheKey = `dataset:${sheetId}:${range}:v4`;
+  const src = process.env.CARS_SOURCE || "";
+  const cacheKey = src === "neon" ? `dataset:neon:v1` : `dataset:${sheetId}:${range}:v4`;
 
   try {
     if (typeof window !== "undefined") {
@@ -24,20 +25,31 @@ export async function fetchDataset(): Promise<Dataset> {
 
   if (datasetPromise) return datasetPromise;
   datasetPromise = (async () => {
-    const res = await fetch(`/api/sheet-data?id=${encodeURIComponent(sheetId)}&range=${encodeURIComponent(range)}`, { cache: 'no-store' });
-    const data = await res.json();
-    const values = ((data?.data?.values || []) as Cell[][]);
-    const headers = (values[1] || []).map(v => String(v ?? "").trim());
-    const idx: Record<string, number> = {};
-    headers.forEach((h, i) => { idx[h.toLowerCase()] = i; });
-    const rows = values.slice(4);
-    const out: Dataset = { headers, rows, idx };
+    let out: Dataset;
+    if (src === "neon") {
+      const res = await fetch(`/api/cars-dataset`, { cache: 'no-store' });
+      const payload = await res.json();
+      const headers = ((payload?.data?.headers || []) as unknown[]).map(v => String(v ?? "").trim());
+      const rows = (payload?.data?.rows || []) as Cell[][];
+      const idx: Record<string, number> = {};
+      headers.forEach((h, i) => { idx[h.toLowerCase()] = i; });
+      out = { headers, rows, idx };
+    } else {
+      const res = await fetch(`/api/sheet-data?id=${encodeURIComponent(sheetId)}&range=${encodeURIComponent(range)}`, { cache: 'no-store' });
+      const data = await res.json();
+      const values = ((data?.data?.values || []) as Cell[][]);
+      const headers = (values[1] || []).map(v => String(v ?? "").trim());
+      const idx: Record<string, number> = {};
+      headers.forEach((h, i) => { idx[h.toLowerCase()] = i; });
+      const rows = values.slice(4);
+      out = { headers, rows, idx };
+    }
 
     try {
       if (typeof window !== "undefined") {
         const ttl = 3 * 60 * 60 * 1000; // 3 hours
-        const payload = { data: out, expiresAt: Date.now() + ttl };
-        window.localStorage.setItem(cacheKey, JSON.stringify(payload));
+        const payloadToCache = { data: out, expiresAt: Date.now() + ttl };
+        window.localStorage.setItem(cacheKey, JSON.stringify(payloadToCache));
       }
     } catch {}
 
