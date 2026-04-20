@@ -7,6 +7,7 @@ const SHEET_ID =
   "";
 
 const TAB = "quiz_part1_aggregates";
+const DAILY_TAB = "quiz_part1_daily";
 
 function sheetsConfigured(): boolean {
   const hasId = !!SHEET_ID;
@@ -46,6 +47,13 @@ function colLetter(n: number): string {
     x = Math.floor((x - 1) / 26);
   }
   return s;
+}
+
+function isoDate(d: Date) {
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const dd = String(d.getDate()).padStart(2, "0");
+  return `${yyyy}-${mm}-${dd}`;
 }
 
 const mapBudget: Record<string, string> = {
@@ -159,10 +167,68 @@ export async function POST(req: Request) {
       requestBody: { values: [nextRow] },
     });
 
+    try {
+      const today = isoDate(new Date());
+      const dailyHeaderRes = await sheets.spreadsheets.values.get({
+        spreadsheetId: SHEET_ID,
+        range: `${DAILY_TAB}!1:1`,
+      });
+      const dailyHeaders = (dailyHeaderRes.data.values?.[0] || []).map(v => String(v ?? "").trim());
+      if (dailyHeaders.length > 0) {
+        const dateIdx = dailyHeaders.findIndex(h => h.toLowerCase() === "date");
+        if (dateIdx >= 0) {
+          const dailyRes = await sheets.spreadsheets.values.get({
+            spreadsheetId: SHEET_ID,
+            range: `${DAILY_TAB}!A:ZZ`,
+          });
+          const values = dailyRes.data.values || [];
+          const idxDaily = new Map(dailyHeaders.map((h, i) => [h, i]));
+          let rowIndex = -1;
+          for (let r = 1; r < values.length; r++) {
+            const d = String((values[r] || [])[dateIdx] ?? "").trim();
+            if (d === today) {
+              rowIndex = r + 1;
+              break;
+            }
+          }
+          const baseRow: Array<string | number> = new Array(dailyHeaders.length).fill(0);
+          if (rowIndex !== -1) {
+            const existing = values[rowIndex - 1] || [];
+            for (let i = 0; i < dailyHeaders.length; i++) baseRow[i] = existing[i] ?? 0;
+          } else {
+            baseRow[dateIdx] = today;
+          }
+          const inc = (colName: string) => {
+            const i = idxDaily.get(colName);
+            if (typeof i !== "number") return;
+            const n = parseInt(String(baseRow[i] ?? "0"), 10);
+            baseRow[i] = (Number.isFinite(n) ? n : 0) + 1;
+          };
+          inc("Total answers");
+          for (const col of targetCols) inc(col);
+          const endDailyCol = colLetter(dailyHeaders.length);
+          if (rowIndex !== -1) {
+            await sheets.spreadsheets.values.update({
+              spreadsheetId: SHEET_ID,
+              range: `${DAILY_TAB}!A${rowIndex}:${endDailyCol}${rowIndex}`,
+              valueInputOption: "USER_ENTERED",
+              requestBody: { values: [baseRow] },
+            });
+          } else {
+            await sheets.spreadsheets.values.append({
+              spreadsheetId: SHEET_ID,
+              range: `${DAILY_TAB}!A:${endDailyCol}`,
+              valueInputOption: "USER_ENTERED",
+              requestBody: { values: [baseRow] },
+            });
+          }
+        }
+      }
+    } catch {}
+
     return NextResponse.json({ ok: true });
   } catch (e) {
     const msg = e instanceof Error ? e.message : "error";
     return NextResponse.json({ error: msg }, { status: 500 });
   }
 }
-

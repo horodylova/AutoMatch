@@ -46,6 +46,12 @@ export default function AdminSidebar() {
         >
           Team
         </Link>
+        <Link 
+          href="/admin/analytics" 
+          className={`${styles.navItem} ${isActive('/admin/analytics') ? styles.navItemActive : ''}`}
+        >
+          Analytics
+        </Link>
       </nav>
 
       <div className={styles.nav}>
