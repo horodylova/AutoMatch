@@ -18,11 +18,15 @@ import ResumeModal from "../../components/quiz/modals/ResumeModal";
 import FeedbackModal from "../../components/quiz/modals/FeedbackModal";
 import QuizControls from "../../components/quiz/QuizControls";
 import QuizHeader from "../../components/quiz/QuizHeader";
+import PartTwoPreview from "../../components/quiz/PartTwoPreview";
+import IntakeForm from "../../components/quiz/IntakeForm";
+import InterimCandidates from "../../components/quiz/InterimCandidates";
+import { BudgetBand } from "@/utils/initialCandidates";
 import { QUIZ_QUESTIONS } from "../../constants/quizQuestions";
 import { parseCarData, matchCars, Row, ScoredCar, QuizFilters } from "../../utils/carScoring";
 import { Categories, CategoryValue } from "../../constants/categories";
 import { fetchDataset } from "../../lib/dataset";
-import { saveResults } from "../../utils/storage";
+import { saveResults, getPreliminaryCandidates } from "../../utils/storage";
 import { trackQuizComplete, trackQuizStart } from "@/lib/gtag";
 import { event } from "@/lib/pixel";
 
@@ -30,10 +34,33 @@ export default function Page() {
   const quiz = useQuiz();
   const [exitDestination, setExitDestination] = useState("/");
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+  const [showPartTwoStart, setShowPartTwoStart] = useState(false);
+  const [showIntakeStart, setShowIntakeStart] = useState(false);
+  const [showInterim, setShowInterim] = useState(false);
+  const [intakeComplete, setIntakeComplete] = useState(false);
+  const [intakeBudget, setIntakeBudget] = useState<BudgetBand>("no_strict");
+  const [intakeIncludeUpcoming, setIntakeIncludeUpcoming] = useState<boolean>(true);
   
   const [rows, setRows] = useState<Row[]>([]);
   const [idx, setIdx] = useState<Record<string, number>>({});
   const [topMatches, setTopMatches] = useState<ScoredCar[]>([]);
+  const [lastFilters, setLastFilters] = useState<QuizFilters | null>(null);
+  const [interimFromResults, setInterimFromResults] = useState(false);
+
+  const isPreferenceCar = (c: ReturnType<typeof parseCarData>, f: QuizFilters): boolean => {
+    const body = (c.bodyType || "").toLowerCase();
+    const drive = (c.driveType || "").toLowerCase();
+    const hp = c.horsepower || 0;
+    if (f.minSeats && (c.totalSeating || 0) >= f.minSeats) return true;
+    if (f.forceUtility && (body.includes("van") || body.includes("truck") || (c.maxTowingCapacity || 0) > 5000 || Math.max(c.cargoCapacity || 0, c.maxCargoCapacity || 0) > 60)) return true;
+    if (f.forceSport && (hp >= 300 || body.includes("coupe") || body.includes("convertible") || body.includes("sport"))) return true;
+    if (f.forceLuxury && (c.baseMsrp || 0) >= 75000) return true;
+    if (f.awdPreferred && (drive.includes("awd") || drive.includes("4wd") || drive.includes("four"))) return true;
+    if (f.transmissionPreference === "manual" && (c.transmission || "").toLowerCase().includes("manual")) return true;
+    if (f.transmissionPreference === "automatic" && (c.transmission || "").toLowerCase().includes("auto")) return true;
+    if (f.isFamily && (body.includes("minivan") || body.includes("suv") || (c.totalSeating || 0) >= 5)) return true;
+    return false;
+  };
 
   useEffect(() => {
     event("StartQuizView");
@@ -47,6 +74,28 @@ export default function Page() {
     }
     load();
   }, []);
+
+  const { showIntro: qShowIntro, showHalfway: qShowHalfway, showFinal: qShowFinal, current: qCurrent } = quiz;
+  useEffect(() => {
+    if (!qShowIntro && !qShowHalfway && !qShowFinal && qCurrent === 0) {
+      setShowPartTwoStart(true);
+      setShowIntakeStart(false);
+    }
+  }, [qShowIntro, qShowHalfway, qShowFinal, qCurrent]);
+
+  const { setShowIntro: setQuizIntro } = quiz;
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const flag = window.localStorage.getItem("autoMatch_openInterim");
+    if (flag) {
+      window.localStorage.removeItem("autoMatch_openInterim");
+      setInterimFromResults(flag === "results");
+      setQuizIntro(false);
+      setShowPartTwoStart(false);
+      setShowIntakeStart(false);
+      setShowInterim(true);
+    }
+  }, [setQuizIntro]);
 
   useEffect(() => {
     if (quiz.showFinal && rows.length > 0 && Object.keys(idx).length > 0) {
@@ -294,7 +343,19 @@ export default function Page() {
          filters.forceLuxury = true;
       }
 
-      const matches = matchCars(validCars, prefs, filters);
+      const prelim = getPreliminaryCandidates();
+      const prelimIds = (prelim?.ids || []).filter(Boolean);
+      const prelimSet = new Set(prelimIds);
+      const primaryPool = prelimIds.length > 0 ? validCars.filter(c => prelimSet.has(c.id)) : validCars;
+
+      const matchesPrimary = matchCars(primaryPool, prefs, filters);
+      let matches = matchesPrimary;
+      if (matchesPrimary.length < 12) {
+        const allMatches = matchCars(validCars, prefs, filters);
+        const seenIds = new Set(matchesPrimary.map(m => m.car.id));
+        const merged = [...matchesPrimary, ...allMatches.filter(m => !seenIds.has(m.car.id))];
+        matches = merged;
+      }
 
       const uniqueMatches: ScoredCar[] = [];
       const seenMakes = new Set<string>();
@@ -311,6 +372,7 @@ export default function Page() {
       }
 
       setTopMatches(uniqueMatches);
+      setLastFilters(filters);
       trackQuizComplete(uniqueMatches.length);
       event("CompletedQuiz", { matches_count: uniqueMatches.length });
     }
@@ -477,14 +539,35 @@ export default function Page() {
 
       {quiz.showGallery ? (
         <ResultsGallery 
-          results={topMatches.map(m => ({
-            id: m.car.id,
-            image: m.car.image,
-            make: m.car.make,
-            model: m.car.model,
-            year: String(m.car.year),
-            price: `$${m.car.baseMsrp.toLocaleString()}`
-          }))}
+          results={topMatches.map(m => {
+            const prelim = getPreliminaryCandidates();
+            const prelimIds = (prelim?.ids || []).filter(Boolean);
+            const inPrelim = prelimIds.includes(m.car.id);
+            const badges: string[] = [];
+            if (inPrelim) {
+              badges.push("From initial list");
+            } else {
+              if (lastFilters && isPreferenceCar(m.car, lastFilters)) {
+                badges.push("Added for your preference");
+              } else {
+                badges.push("Outside initial list");
+              }
+            }
+            return {
+              id: m.car.id,
+              image: m.car.image,
+              make: m.car.make,
+              model: m.car.model,
+              year: String(m.car.year),
+              price: `$${m.car.baseMsrp.toLocaleString()}`,
+              badges
+            };
+          })}
+          onBack={() => {
+            quiz.setShowGallery(false);
+            setInterimFromResults(true);
+            setShowInterim(true);
+          }}
           onSaveProgress={() => { setExitDestination("/cars"); quiz.setShowExitModal(true); }} 
         />
       ) : (
@@ -501,21 +584,72 @@ export default function Page() {
             />
             
             <div style={{ paddingRight: 4 }}>
-              {renderQuestion()}
+              {showPartTwoStart ? (
+                <PartTwoPreview />
+              ) : showIntakeStart ? (
+                <IntakeForm 
+                  onCompletionChange={setIntakeComplete} 
+                  onValuesChange={(v) => {
+                    setIntakeBudget((v.budget || "no_strict") as BudgetBand);
+                    if (typeof v.includeUpcoming === "boolean") {
+                      setIntakeIncludeUpcoming(v.includeUpcoming);
+                    }
+                  }}
+                />
+              ) : showInterim ? (
+                <InterimCandidates 
+                  rows={rows} 
+                  idx={idx} 
+                  budget={intakeBudget} 
+                  includeUpcoming={intakeIncludeUpcoming}
+                  onContinue={() => {
+                    setShowInterim(false);
+                  }}
+                  context={interimFromResults ? "results" : "quiz"}
+                />
+              ) : quiz.showHalfway ? (
+                null
+              ) : (
+                renderQuestion()
+              )}
             </div>
 
             <QuizControls 
               showFinal={quiz.showFinal}
               showIntro={quiz.showIntro}
               showHalfway={quiz.showHalfway}
+              nextLabel={showPartTwoStart ? "Continue to begin Part 1" : showInterim ? "Continue to Part 2" : undefined}
+              leftNote={showInterim ? "We saved this list for you — you can revisit it later." : undefined}
               handleNext={() => {
+                if (showPartTwoStart) {
+                  setShowPartTwoStart(false);
+                  setShowIntakeStart(true);
+                  return;
+                }
+                if (showIntakeStart) {
+                  if (!intakeComplete) {
+                    return;
+                  }
+                  setShowIntakeStart(false);
+                  setShowInterim(true);
+                  return;
+                }
+                if (showInterim) {
+                  setShowInterim(false);
+                  return;
+                }
                 if (quiz.showIntro) {
                   trackQuizStart();
                   event("StartQuiz");
                 }
                 quiz.handleNext();
               }}
-              isNextDisabled={quiz.isNextDisabled}
+              isNextDisabled={() => {
+                if (showPartTwoStart) return false;
+                if (showIntakeStart) return !intakeComplete;
+                if (showInterim) return false;
+                return quiz.isNextDisabled();
+              }}
             />
           </div>
         </>

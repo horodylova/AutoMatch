@@ -170,3 +170,85 @@ export function getWishlistCount(): number {
   const current = getWishlist();
   return (current?.items || []).length;
 }
+
+export const PRELIM_STORE_KEY = "autoMatch_preliminary_candidates";
+export const PRELIM_UPDATED_EVENT = "autoMatch_prelim_updated";
+export const PRELIM_SNAPSHOT_KEY = "autoMatch_preliminary_snapshot";
+export const PRELIM_SNAPSHOT_UPDATED_EVENT = "autoMatch_prelim_snapshot_updated";
+
+export type PrelimSnapshotItem = {
+  id: string;
+  title: string;
+  image: string;
+  price?: string;
+};
+
+export function getPreliminaryCandidates(): { ids: string[]; timestamp: number; expiresAt: number } | null {
+  if (!canUseStorage()) return null;
+  const raw = window.localStorage.getItem(PRELIM_STORE_KEY);
+  if (!raw) return null;
+  try {
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed.expiresAt !== "number") return null;
+    if (Date.now() > parsed.expiresAt) {
+      window.localStorage.removeItem(PRELIM_STORE_KEY);
+      window.dispatchEvent(new Event(PRELIM_UPDATED_EVENT));
+      return null;
+    }
+    return parsed;
+  } catch {
+    return null;
+  }
+}
+
+export function setPreliminaryCandidates(ids: string[]): void {
+  if (!canUseStorage()) return;
+  const payload = {
+    ids,
+    timestamp: Date.now(),
+    expiresAt: Date.now() + 24 * 60 * 60 * 1000
+  };
+  window.localStorage.setItem(PRELIM_STORE_KEY, JSON.stringify(payload));
+  window.dispatchEvent(new Event(PRELIM_UPDATED_EVENT));
+}
+
+export function clearPreliminaryCandidates(): void {
+  if (!canUseStorage()) return;
+  window.localStorage.removeItem(PRELIM_STORE_KEY);
+  window.dispatchEvent(new Event(PRELIM_UPDATED_EVENT));
+}
+
+export function getPreliminarySnapshot(): { items: PrelimSnapshotItem[]; timestamp: number; expiresAt: number } | null {
+  if (!canUseStorage()) return null;
+  const raw = window.localStorage.getItem(PRELIM_SNAPSHOT_KEY);
+  if (!raw) return null;
+  try {
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed.expiresAt !== "number") return null;
+    if (Date.now() > parsed.expiresAt) {
+      window.localStorage.removeItem(PRELIM_SNAPSHOT_KEY);
+      window.dispatchEvent(new Event(PRELIM_SNAPSHOT_UPDATED_EVENT));
+      return null;
+    }
+    return parsed;
+  } catch {
+    return null;
+  }
+}
+
+export function setPreliminarySnapshot(items: PrelimSnapshotItem[]): void {
+  if (!canUseStorage()) return;
+  const payload = {
+    items,
+    timestamp: Date.now(),
+    expiresAt: Date.now() + 24 * 60 * 60 * 1000
+  };
+  window.localStorage.setItem(PRELIM_SNAPSHOT_KEY, JSON.stringify(payload));
+  window.dispatchEvent(new Event(PRELIM_SNAPSHOT_UPDATED_EVENT));
+}
+
+export function clearPreliminarySnapshot(): void {
+  if (!canUseStorage()) return;
+  window.localStorage.removeItem(PRELIM_SNAPSHOT_KEY);
+  window.dispatchEvent(new Event(PRELIM_SNAPSHOT_UPDATED_EVENT));
+}

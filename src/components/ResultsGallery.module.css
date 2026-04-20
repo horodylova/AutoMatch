@@ -110,6 +110,44 @@
   width: 100%;
 }
 
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 0.5rem;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--kendo-color-primary);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.backLink::before {
+  content: "←";
+  font-size: 0.9em;
+  transition: transform 0.15s ease;
+}
+
+.backLink:hover {
+  color: var(--kendo-color-primary);
+  text-decoration: none;
+}
+
+.backLink:hover::before {
+  transform: translateX(-3px);
+}
+
+:global(html[data-theme="light"]) .backLink { color: var(--kendo-color-primary); }
+
+:global(html[data-theme="light"]) .backLink:hover {
+  color: var(--kendo-color-primary);
+}
+
 @media (min-width: 769px) {
   /* Only apply left alignment to the header section container */
   :global(html[data-theme="light"]) .sectionFirst .containerSlim {
@@ -378,6 +416,33 @@
   background: #ffffff;
   border-color: rgba(0,0,0,0.14);
   box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+
+.badgeBar {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  display: flex;
+  gap: 6px;
+  z-index: 3;
+}
+.badge {
+  padding: 4px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.58);
+  color: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.32);
+}
+:global(html[data-theme="light"]) .badge {
+  background: #ffffff;
+  color: #1A252F;
+  border-color: rgba(0, 0, 0, 0.14);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
 .actionsSection {
