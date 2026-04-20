@@ -135,7 +135,7 @@ export default function RequestsPage() {
               {requests.map((req) => (
                 <tr key={req.id}>
                   <td>
-                    <div style={{ fontWeight: 600, color: '#fff' }}>{req.contactName}</div>
+                    <div className={styles.contactName}>{req.contactName}</div>
                   </td>
                   <td>{req.dealershipName}</td>
                   <td>
