@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
 import QuizProgress from "../../components/QuizProgress";
 import { 
   PhotoQuestion, 
@@ -40,6 +40,11 @@ export default function Page() {
   const [intakeComplete, setIntakeComplete] = useState(false);
   const [intakeBudget, setIntakeBudget] = useState<BudgetBand>("no_strict");
   const [intakeIncludeUpcoming, setIntakeIncludeUpcoming] = useState<boolean>(true);
+  const [intakeTimeframe, setIntakeTimeframe] = useState<string>("");
+  const [intakeFinancing, setIntakeFinancing] = useState<string>("");
+  const [intakeTradein, setIntakeTradein] = useState<string>("");
+  const [intakeReadiness, setIntakeReadiness] = useState<string>("");
+  const part1TrackedRef = useRef(false);
   
   const [rows, setRows] = useState<Row[]>([]);
   const [idx, setIdx] = useState<Record<string, number>>({});
@@ -591,6 +596,10 @@ export default function Page() {
                   onCompletionChange={setIntakeComplete} 
                   onValuesChange={(v) => {
                     setIntakeBudget((v.budget || "no_strict") as BudgetBand);
+                    setIntakeTimeframe(v.timeframe || "");
+                    setIntakeFinancing(v.financing || "");
+                    setIntakeTradein(v.tradein || "");
+                    setIntakeReadiness(v.readiness || "");
                     if (typeof v.includeUpcoming === "boolean") {
                       setIntakeIncludeUpcoming(v.includeUpcoming);
                     }
@@ -629,6 +638,20 @@ export default function Page() {
                 if (showIntakeStart) {
                   if (!intakeComplete) {
                     return;
+                  }
+                  if (!part1TrackedRef.current) {
+                    part1TrackedRef.current = true;
+                    fetch("/api/quiz/part1-aggregates", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({
+                        budget: intakeBudget,
+                        timeframe: intakeTimeframe,
+                        financing: intakeFinancing,
+                        tradein: intakeTradein,
+                        readiness: intakeReadiness,
+                      }),
+                    }).catch(() => {});
                   }
                   setShowIntakeStart(false);
                   setShowInterim(true);
