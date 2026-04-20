@@ -5,7 +5,7 @@ import styles from "./partTwoIntake.module.css";
 
 type Props = {
   onCompletionChange?: (complete: boolean) => void;
-  onValuesChange?: (v: { budget: string; includeUpcoming?: boolean }) => void;
+  onValuesChange?: (v: { budget: string; timeframe: string; financing: string; tradein: string; readiness: string; includeUpcoming?: boolean }) => void;
 };
 
 export default function IntakeForm({ onCompletionChange, onValuesChange }: Props) {
@@ -21,8 +21,8 @@ export default function IntakeForm({ onCompletionChange, onValuesChange }: Props
   }, [budget, timeframe, financing, tradein, readiness, onCompletionChange]);
 
   useEffect(() => {
-    onValuesChange?.({ budget });
-  }, [budget, onValuesChange]);
+    onValuesChange?.({ budget, timeframe, financing, tradein, readiness });
+  }, [budget, timeframe, financing, tradein, readiness, onValuesChange]);
 
   return (
     <section className={styles.wrap}>
