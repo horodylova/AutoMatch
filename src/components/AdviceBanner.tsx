@@ -14,7 +14,7 @@ export default function AdviceBanner() {
   return (
     <section id="before-you-buy" className={styles.section}>
       <div className={styles.image}>
-        <Image src="/banner.jpg" alt="Lifestyle" fill priority sizes="(max-width: 992px) 100vw, 90vw" className={styles.img} />
+        <Image src="/banner.jpg" alt="Lifestyle" fill priority sizes="(max-width: 992px) 100vw, 90vw" className={styles.img} unoptimized />
         <div className={styles.imgFilter}></div>
         <div className={styles.overlay}>
           <h3 className={styles.title}>Make smarter, <br/>confident car decisions</h3>

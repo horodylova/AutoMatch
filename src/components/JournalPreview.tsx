@@ -63,6 +63,7 @@ export default function JournalPreview() {
                     alt={post.title}
                     fill
                     className={styles.image}
+                    unoptimized
                   />
                 )}
               </div>

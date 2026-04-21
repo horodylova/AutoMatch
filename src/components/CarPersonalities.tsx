@@ -33,7 +33,7 @@ function Row({ logos }: { logos: string[] }) {
     <div className={styles.track}>
       {sequence.map((src, i) => (
         <div key={`${src}:${i}`} className={styles.logoWrap}>
-          <Image src={src} alt="brand" width={160} height={56} className={styles.logoImg} />
+          <Image src={src} alt="brand" width={160} height={56} className={styles.logoImg} unoptimized />
         </div>
       ))}
     </div>

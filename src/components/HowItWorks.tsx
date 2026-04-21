@@ -68,6 +68,7 @@ export default function HowItWorks() {
               width={80}
               height={80}
               className={styles.k9Logo}
+              unoptimized
             />
             <div className={styles.k9BrandText}>
               <span className={styles.k9Kicker}>Partner project</span>
@@ -121,6 +122,7 @@ export default function HowItWorks() {
                 className={styles.k9Img}
                 sizes="(max-width: 768px) 100vw, (max-width: 1024px) 420px, 560px"
                 priority
+                unoptimized
               />
             </picture>
             <div className={styles.k9ImgFade} />
