@@ -160,6 +160,7 @@ const components = {
           width={width}
           height={Math.round(width * 0.75)} // Default aspect ratio fallback
           className={styles.image}
+          unoptimized
           style={{
             width: '100%',
             height: 'auto',
@@ -274,6 +275,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             fill
             className={styles.image}
             priority
+            unoptimized
           />
         </div>
       )}
@@ -325,6 +327,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                       alt={relatedPost.title}
                       fill
                       className={styles.readAlsoImage}
+                      unoptimized
                     />
                   )}
                 </div>

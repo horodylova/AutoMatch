@@ -332,21 +332,18 @@
 
   .nav {
     flex-direction: row;
-    overflow-x: auto;
-    gap: 12px;
-    padding-bottom: 4px;
+    flex-wrap: wrap;
+    overflow-x: visible;
+    gap: 10px;
+    padding-bottom: 0;
     margin-bottom: 8px;
-    /* Hide scrollbar for cleaner look */
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  
-  .nav::-webkit-scrollbar {
-    display: none;
   }
 
   .navItem {
-    white-space: nowrap;
+    flex: 1 1 calc(50% - 10px);
+    justify-content: center;
+    text-align: center;
+    white-space: normal;
     padding: 8px 12px;
     font-size: 14px;
     background-color: rgba(255, 255, 255, 0.03);

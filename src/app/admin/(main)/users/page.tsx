@@ -208,15 +208,7 @@ export default function AdminUsersPage() {
                 <div style={{ background: 'rgba(76, 175, 80, 0.1)', padding: 16, borderRadius: 8, marginBottom: 24, border: '1px solid rgba(76, 175, 80, 0.2)' }}>
                   <div style={{ color: '#4caf50', fontWeight: 600, marginBottom: 8 }}>User created successfully!</div>
                   <div style={{ fontSize: 14, color: 'var(--kendo-color-subtle)', marginBottom: 8 }}>
-                    The user can now log in with the default password:
-                  </div>
-                  <div style={{ 
-                    background: '#000', padding: 12, borderRadius: 4, 
-                    fontFamily: 'monospace', fontSize: 16, fontWeight: 'bold',
-                    border: '1px solid var(--kendo-color-border)',
-                    textAlign: 'center', color: '#fff'
-                  }}>
-                    00000
+                    The user can now log in with the default password configured on the server.
                   </div>
                 </div>
                 <button 

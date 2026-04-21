@@ -28,8 +28,11 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Admin with this email already exists' }, { status: 400 });
     }
 
-    // Hash default password '00000'
-    const passwordHash = await bcrypt.hash('00000', 10);
+    const defaultPassword = process.env.ADMIN_INVITE_DEFAULT_PASSWORD || '';
+    if (!defaultPassword) {
+      return NextResponse.json({ error: 'Missing default password configuration' }, { status: 500 });
+    }
+    const passwordHash = await bcrypt.hash(defaultPassword, 10);
 
     await prisma.admin.create({
       data: {
