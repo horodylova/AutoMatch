@@ -182,6 +182,7 @@ export default function ResultsGallery({ results = [], onSaveProgress, onBack }:
                   alt="CarCupid Logo"
                   width={150}
                   height={150}
+                  unoptimized
                   className={`${styles.desktopLogo} ${styles.darkLogo}`}
                   priority
                 />
@@ -190,6 +191,7 @@ export default function ResultsGallery({ results = [], onSaveProgress, onBack }:
                   alt="CarCupid Logo"
                   width={150}
                   height={150}
+                  unoptimized
                   className={`${styles.desktopLogo} ${styles.lightLogo}`}
                   priority
                 />

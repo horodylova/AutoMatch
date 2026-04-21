@@ -72,6 +72,7 @@ export default function ShareButtons({ url, title }: ShareButtonsProps) {
           src="/cropped logo.png"
           alt="CarCupid"
           fill
+          unoptimized
           className={styles.logo}
         />
       </div>
