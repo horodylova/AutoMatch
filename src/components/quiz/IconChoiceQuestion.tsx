@@ -63,6 +63,7 @@ export default function IconChoiceQuestion({ questionId, title, tip, options, se
                   className={styles.icon} 
                   width={58} 
                   height={58} 
+                  unoptimized
                 />
               )}
               <div className={isMobile ? styles.mobileTitle : styles.title}>{opt.title}</div>

@@ -6,7 +6,7 @@ export default function PartTwoPreview() {
   return (
     <section className={styles.hero}>
       <div className={styles.media}>
-        <Image src="/lamborgini.jpg" alt="Preview" fill priority className={styles.img} />
+        <Image src="/lamborgini.jpg" alt="Preview" fill priority className={styles.img} unoptimized />
         <div className={styles.overlay} />
       </div>
       <div className={styles.content}>

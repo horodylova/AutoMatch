@@ -55,7 +55,7 @@ export default function PhotoQuadQuestion({ questionId, title, tip, options, sel
                 }}
               >
                 <span className={`${styles.check} ${active ? styles.checkOn : ''}`} />
-                <Image src={imageBasePath ? `${imageBasePath}/${i + 1}${isMobile ? mobileSuffix : ''}.jpeg` : `/CardImage3.png`} alt={label} fill className={styles.img} sizes="(max-width: 900px) 50vw, 220px" />
+                <Image src={imageBasePath ? `${imageBasePath}/${i + 1}${isMobile ? mobileSuffix : ''}.jpeg` : `/CardImage3.png`} alt={label} fill className={styles.img} sizes="(max-width: 900px) 50vw, 220px" unoptimized />
                 <div className={styles.labelPill}>{label}</div>
               </button>
             );

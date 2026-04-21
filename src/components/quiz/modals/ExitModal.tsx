@@ -43,6 +43,7 @@ export default function ExitModal({ onCancel, destination = "/", onConfirm }: Ex
             width={120}
             height={120}
             style={{ objectFit: "contain" }}
+            unoptimized
           />
         </div>
         <h3 style={{

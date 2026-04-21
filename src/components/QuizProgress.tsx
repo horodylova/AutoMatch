@@ -86,7 +86,7 @@ export default function QuizProgress({ current, total, showIntro = false, showHa
           </div>
           <div className={styles.introContent} style={{ alignItems: 'start', gap: isMobile ? 16 : 18 }}>
             <div className={styles.introMedia} style={{ aspectRatio: isMobile ? '16/9' : '1/1', maxHeight: isMobile ? '200px' : 'none' }}>
-              <Image src="/final.jpg" alt="Final Results" fill sizes="(max-width: 768px) 100vw, 50vw" className={styles.introImg} style={{ objectFit: 'cover' }} />
+              <Image src="/final.jpg" alt="Final Results" fill sizes="(max-width: 768px) 100vw, 50vw" className={styles.introImg} style={{ objectFit: 'cover' }} unoptimized />
             </div>
             <div className={styles.introList}>
               <div className={styles.introItem} style={{ marginBottom: isMobile ? 16 : 32, padding: isMobile ? '12px 16px' : undefined }}>
@@ -172,7 +172,7 @@ export default function QuizProgress({ current, total, showIntro = false, showHa
           <div className={styles.introContent} style={{ alignItems: 'start' }}>
             {!isMobile && (
               <div className={styles.introMedia}>
-                <Image src={introImageSrc || "/before-you-begin.jpg"} alt="intro" fill sizes="(max-width: 768px) 100vw, 50vw" className={styles.introImg} style={{ objectFit: 'cover' }} />
+                <Image src={introImageSrc || "/before-you-begin.jpg"} alt="intro" fill sizes="(max-width: 768px) 100vw, 50vw" className={styles.introImg} style={{ objectFit: 'cover' }} unoptimized />
               </div>
             )}
             <div className={styles.introList}>
@@ -206,7 +206,7 @@ export default function QuizProgress({ current, total, showIntro = false, showHa
           </div>
           <div className={styles.introContent} style={{ alignItems: 'start' }}>
             <div className={styles.introMedia}>
-              <Image src="/middle.jpg" alt="halfway" fill sizes="(max-width: 768px) 100vw, 50vw" className={styles.introImg} style={{ objectFit: 'cover' }} />
+              <Image src="/middle.jpg" alt="halfway" fill sizes="(max-width: 768px) 100vw, 50vw" className={styles.introImg} style={{ objectFit: 'cover' }} unoptimized />
             </div>
             <div className={styles.introList}>
               <div className={styles.introItem}>

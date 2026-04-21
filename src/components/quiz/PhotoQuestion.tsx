@@ -50,7 +50,7 @@ export default function PhotoQuestion({ questionId, title, tip, options, selecte
                 categories: opt.categories
               }); 
             }}>
-              <Image src={opt.src} alt={opt.title} fill sizes="(max-width: 768px) 50vw, 33vw" className={styles.img} style={{ objectFit: 'cover' }} />
+              <Image src={opt.src} alt={opt.title} fill sizes="(max-width: 768px) 50vw, 33vw" className={styles.img} style={{ objectFit: 'cover' }} unoptimized />
               <div className={styles.labelBar}>
                 <div className={styles.labelTitle}>{opt.title}</div>
               </div>

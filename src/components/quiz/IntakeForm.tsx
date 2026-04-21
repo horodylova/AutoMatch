@@ -28,7 +28,7 @@ export default function IntakeForm({ onCompletionChange, onValuesChange }: Props
     <section className={styles.wrap}>
       <div className={styles.header}>
         <div className={styles.logoBox}>
-          <Image src="/logos/logo.svg" alt="Logo" fill className={styles.logoImg} priority />
+          <Image src="/logos/logo.svg" alt="Logo" fill className={styles.logoImg} priority unoptimized />
         </div>
         <div className={styles.headerText}>
           <h2 className={styles.title}>Part 1: Essentials</h2>

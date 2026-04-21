@@ -64,7 +64,7 @@ export default function MultiPhotoQuestion({ questionId, title, tip, options, se
             const active = selectedKeys.includes(opt.key);
             return (
             <button key={opt.key} className={active ? styles.cardActive : styles.card} onClick={() => handleSelect(opt)}>
-              <Image src={opt.src} alt={opt.title} fill sizes="(max-width: 768px) 50vw, 33vw" className={styles.img} style={{ objectFit: 'cover' }} />
+              <Image src={opt.src} alt={opt.title} fill sizes="(max-width: 768px) 50vw, 33vw" className={styles.img} style={{ objectFit: 'cover' }} unoptimized />
               <div className={styles.labelBar}>
                 <div className={styles.labelTitle}>{opt.title}</div>
               </div>
