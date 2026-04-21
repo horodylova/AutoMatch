@@ -127,43 +127,6 @@ export default function PartnersPage() {
             CarCupid matches serious buyers to your actual stock — no listings marketplace, no lead auctions, no wasted spend.
           </p>
 
-          {/* Stats strip */}
-          <div className={styles.statRow}>
-            <div className={styles.statItem}>
-              <span className={styles.statNumber}>$150</span>
-              <span className={styles.statLabel}>flat / month</span>
-            </div>
-            <div className={styles.statDivider} />
-            <div className={styles.statItem}>
-              <span className={styles.statNumber}>$0</span>
-              <span className={styles.statLabel}>per-lead fees</span>
-            </div>
-            <div className={styles.statDivider} />
-            <div className={styles.statItem}>
-              <span className={styles.statNumber}>&lt;3</span>
-              <span className={styles.statLabel}>days to activate</span>
-            </div>
-          </div>
-
-          {/* CTA hero */}
-          <div className={styles.ctaHero}>
-            <div className={styles.ctaHeroInner}>
-              <div className={styles.ctaPriceRow}>
-                <span className={styles.ctaPrice}>$150</span>
-                <span className={styles.ctaPriceSub}>/ month · flat rate · cancel anytime</span>
-              </div>
-              <Link
-                href="/dealers/order"
-                className={`${styles.orderButton} ${styles.orderButtonXL} ${styles.orderButtonActive}`}
-              >
-                Add Your Inventory
-              </Link>
-              <p className={styles.ctaNote}>
-                Full visibility into every match, view, and buyer intent signal. No black boxes.
-              </p>
-            </div>
-          </div>
-
           {/* How it works */}
           <div className={styles.howItWorksSection}>
             <h3 className={styles.howItWorksTitle}>How It Works</h3>
