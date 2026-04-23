@@ -260,15 +260,6 @@ export default function PartnersPage() {
               </p>
             </form>
           </div>
-
-          {/* Reassurance block below form */}
-          <div className={styles.formReassurance}>
-            <div className={styles.reassuranceItem}>No spam. Ever.</div>
-            <div className={styles.reassuranceDot} />
-            <div className={styles.reassuranceItem}>Reply within 1 business day</div>
-            <div className={styles.reassuranceDot} />
-            <div className={styles.reassuranceItem}>No commitment required</div>
-          </div>
         </div>
       </div>
     </div>
