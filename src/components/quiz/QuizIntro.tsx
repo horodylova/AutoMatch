@@ -13,7 +13,7 @@ export default function QuizIntro({ onNext, imageSrc }: Props) {
       </div>
       <div className={styles.content}>
         <div className={styles.media}>
-          <Image src={imageSrc || '/before-you-begin.jpg'} alt="intro" fill sizes="(max-width: 768px) 100vw, 50vw" className={styles.mediaImg} style={{ objectFit: 'cover' }} unoptimized />
+          <Image src={imageSrc || '/before-you-begin.jpg'} alt="intro" fill sizes="(max-width: 768px) 100vw, 50vw" className={styles.mediaImg} style={{ objectFit: 'cover' }} />
         </div>
         <div className={styles.list}>
           <div className={styles.item}><span className={styles.dot} /><span className={styles.itemText}>Takes about 8 minutes.</span></div>

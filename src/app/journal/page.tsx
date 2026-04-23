@@ -64,7 +64,6 @@ export default async function JournalPage({
                     fill
                     className={styles.featuredImage}
                     priority
-                    unoptimized
                   />
                 )}
               </div>
@@ -93,7 +92,6 @@ export default async function JournalPage({
                     alt={article.title}
                     fill
                     className={styles.image}
-                    unoptimized
                   />
                 )}
               </div>
