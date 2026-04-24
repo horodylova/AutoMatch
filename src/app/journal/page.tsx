@@ -9,7 +9,12 @@ export const revalidate = 60;
 
 async function getJournalPosts() {
   return client.fetch(groq`
-    *[_type == "post"] | order(isFeatured desc, _updatedAt desc, coalesce(publishedAt, _createdAt) desc) {
+    *[
+      _type == "post" &&
+      defined(slug.current) &&
+      !(_id in path("drafts.**")) &&
+      (!defined(publishedAt) || publishedAt <= now())
+    ] | order(isFeatured desc, _updatedAt desc, coalesce(publishedAt, _createdAt) desc) {
       _id,
       title,
       slug,

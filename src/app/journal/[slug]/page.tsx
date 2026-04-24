@@ -40,7 +40,12 @@ interface PortableTextVideo {
 }
 
 export async function generateStaticParams() {
-  const posts = await client.fetch<Post[]>(`*[_type == "post"]{ slug }`);
+  const posts = await client.fetch<Post[]>(`*[
+    _type == "post" &&
+    defined(slug.current) &&
+    !(_id in path("drafts.**")) &&
+    (!defined(publishedAt) || publishedAt <= now())
+  ]{ slug }`);
   return posts.map((post: Post) => ({ slug: post.slug.current }));
 }
 
@@ -79,7 +84,12 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 async function getPost(slug: string): Promise<Post> {
   return client.fetch(
-    `*[_type == "post" && slug.current == $slug][0]{
+    `*[
+      _type == "post" &&
+      slug.current == $slug &&
+      !(_id in path("drafts.**")) &&
+      (!defined(publishedAt) || publishedAt <= now())
+    ][0]{
       title,
       mainImage,
       publishedAt,
@@ -96,14 +106,25 @@ async function getPost(slug: string): Promise<Post> {
 async function getRelatedPosts(slug: string, publishedAt: string): Promise<Post[]> {
   const query = `
     {
-      "previous": *[_type == "post" && slug.current != $slug && coalesce(publishedAt, _createdAt) < $publishedAt] | order(coalesce(publishedAt, _createdAt) desc)[0...3] {
+      "previous": *[
+        _type == "post" &&
+        slug.current != $slug &&
+        !(_id in path("drafts.**")) &&
+        (!defined(publishedAt) || publishedAt <= now()) &&
+        coalesce(publishedAt, _createdAt) < $publishedAt
+      ] | order(coalesce(publishedAt, _createdAt) desc)[0...3] {
         _id,
         title,
         slug,
         mainImage,
         publishedAt
       },
-      "latest": *[_type == "post" && slug.current != $slug] | order(coalesce(publishedAt, _createdAt) desc)[0...3] {
+      "latest": *[
+        _type == "post" &&
+        slug.current != $slug &&
+        !(_id in path("drafts.**")) &&
+        (!defined(publishedAt) || publishedAt <= now())
+      ] | order(coalesce(publishedAt, _createdAt) desc)[0...3] {
         _id,
         title,
         slug,

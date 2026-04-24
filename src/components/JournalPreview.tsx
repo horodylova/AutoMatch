@@ -13,7 +13,12 @@ export default function JournalPreview() {
     const fetchPosts = async () => {
       try {
         const data = await client.fetch<Post[]>(
-          `*[_type == "post"] | order(coalesce(publishedAt, _createdAt) desc)[0...3] {
+          `*[
+            _type == "post" &&
+            defined(slug.current) &&
+            !(_id in path("drafts.**")) &&
+            (!defined(publishedAt) || publishedAt <= now())
+          ] | order(coalesce(publishedAt, _createdAt) desc)[0...3] {
             _id,
             title,
             slug,
