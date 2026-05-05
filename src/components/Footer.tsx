@@ -42,6 +42,7 @@ export default function Footer() {
                   alt="CarCupid"
                   fill
                   className={styles.logoImg}
+                  unoptimized
                 />
               </div>
             </Link>

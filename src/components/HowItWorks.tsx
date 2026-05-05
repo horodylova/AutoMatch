@@ -48,7 +48,7 @@ export function HowItWorksOriginal() {
         </div>
         <div className={styles.mediaFrame}>
           <div className={styles.media}>
-            <Image src={src} alt="Car" fill className={styles.mediaImg} sizes="(max-width: 992px) 90vw, 720px" priority />
+            <Image src={src} alt="Car" fill className={styles.mediaImg} sizes="(max-width: 992px) 90vw, 720px" priority unoptimized />
           </div>
         </div>
       </div>

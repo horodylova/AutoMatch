@@ -278,6 +278,7 @@ export default function ResultsGallery({ results = [], onSaveProgress, onBack }:
                     height={80}
                     className={`${styles.mobileLogo} ${styles.darkLogo}`}
                     priority
+                    unoptimized
                   />
                   <Image
                     src="/cropped%20logo.png"
@@ -286,6 +287,7 @@ export default function ResultsGallery({ results = [], onSaveProgress, onBack }:
                     height={80}
                     className={`${styles.mobileLogo} ${styles.lightLogo}`}
                     priority
+                    unoptimized
                   />
                 </div>
                 <div className={styles.staticCarName}>

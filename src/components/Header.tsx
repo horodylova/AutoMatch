@@ -95,6 +95,7 @@ export default function Header() {
                 priority
                 className={styles.logoImg}
                 style={{ objectFit: "contain" }}
+                unoptimized
               />
             </div>
           </Link>

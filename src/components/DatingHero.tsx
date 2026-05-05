@@ -41,7 +41,7 @@ export default function DatingHero() {
           >
             {seq.map((src, i) => (
               <SwiperSlide key={`${src}:${i}`} className={styles.slide}>
-                <Image src={src} alt="car" fill className={styles.slideImg} priority={i < 4} sizes="(max-width: 992px) 80vw, 24vw" unoptimized />
+                <Image src={src} alt="car" fill className={styles.slideImg} priority={i < 4} sizes="(max-width: 992px) 80vw, 24vw" />
               </SwiperSlide>
             ))}
           </Swiper>

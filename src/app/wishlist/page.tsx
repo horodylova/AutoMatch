@@ -50,6 +50,7 @@ export default function WishlistPage() {
                     height={160}
                     priority
                     style={{ objectFit: "contain" }}
+                    unoptimized
                   />
                 </div>
               </div>
