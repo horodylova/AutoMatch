@@ -4,10 +4,20 @@ type EventProps = {
   [key: string]: string | number | boolean;
 };
 
-export const sendEvent = (eventName: string, params?: EventProps) => {
-  if (typeof window !== 'undefined') {
-    sendGAEvent('event', eventName, params || {});
+const canTrack = () => {
+  if (typeof window === "undefined") return false;
+  const gpc = typeof navigator !== "undefined" && (navigator as unknown as { globalPrivacyControl?: boolean }).globalPrivacyControl === true;
+  if (gpc) return false;
+  try {
+    return window.localStorage.getItem("cc_consent_v1") === "accepted";
+  } catch {
+    return false;
   }
+};
+
+export const sendEvent = (eventName: string, params?: EventProps) => {
+  if (!canTrack()) return;
+  sendGAEvent('event', eventName, params || {});
 };
 
 export const trackQuizStart = () => {

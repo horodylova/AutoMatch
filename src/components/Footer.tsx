@@ -9,9 +9,13 @@ import styles from "./Footer.module.css";
 import { event } from "@/lib/pixel";
 import { trackQuizStart } from "@/lib/gtag";
 
+type ConsentChoice = "accepted" | "rejected";
+
 export default function Footer() {
   const pathname = usePathname();
   const [logoSrc, setLogoSrc] = useState<string>("/logos/logo.svg");
+  const [consentChoice, setConsentChoice] = useState<ConsentChoice | null>(null);
+  const [gpcEnabled, setGpcEnabled] = useState(false);
 
   useEffect(() => {
     const updateLogo = () => {
@@ -25,14 +29,53 @@ export default function Footer() {
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    const gpc = typeof navigator !== "undefined" && (navigator as unknown as { globalPrivacyControl?: boolean }).globalPrivacyControl === true;
+    setGpcEnabled(gpc);
+
+    const syncConsent = () => {
+      try {
+        const raw = window.localStorage.getItem("cc_consent_v1");
+        if (raw === "accepted" || raw === "rejected") {
+          setConsentChoice(raw);
+        } else {
+          setConsentChoice(null);
+        }
+      } catch {
+        setConsentChoice(null);
+      }
+    };
+
+    syncConsent();
+    window.addEventListener("cc_consent_changed", syncConsent);
+    window.addEventListener("storage", syncConsent);
+    return () => {
+      window.removeEventListener("cc_consent_changed", syncConsent);
+      window.removeEventListener("storage", syncConsent);
+    };
+  }, []);
+
   if (pathname?.startsWith("/quiz")) return null;
 
   const year = new Date().getFullYear();
 
+  const setConsent = (next: ConsentChoice) => {
+    try {
+      window.localStorage.setItem("cc_consent_v1", next);
+    } catch {
+    }
+    try {
+      window.dispatchEvent(new Event("cc_consent_changed"));
+    } catch {
+    }
+    setConsentChoice(next);
+  };
+
+  const trackingEnabled = consentChoice === "accepted" && !gpcEnabled;
+
   return (
     <footer className={styles.footer}>
       <div className={styles.inner}>
-        {/* Brand Column */}
         <div className={styles.column}>
           <div className={styles.brandRow}>
             <Link href="/" className={styles.brandLogo}>
@@ -72,7 +115,6 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Discover Column */}
         <div className={styles.column}>
           <div className={styles.navTitle}>Discover</div>
           <Link href="/quiz" className={styles.navLink} onClick={() => {
@@ -84,17 +126,43 @@ export default function Footer() {
           <Link href="/journal" className={styles.navLink}>Journal</Link>
         </div>
 
-        {/* Partners Column */}
         <div className={styles.column}>
           <div className={styles.navTitle}>Partners</div>
           <Link href="/dealers" className={styles.navLink}>For Dealers</Link>
         </div>
 
-        {/* Legal Column */}
         <div className={styles.column}>
           <div className={styles.navTitle}>Legal</div>
           <Link href="/terms" className={styles.navLink}>Terms of Service</Link>
           <Link href="/privacy" className={styles.navLink}>Privacy Policy</Link>
+          <div className={styles.doNotSell}>
+            <Link href="/privacy#do-not-sell-or-share" className={styles.navLink} id="do-not-sell-or-share">
+              Do Not Sell or Share My Personal Information
+            </Link>
+            <div className={styles.toggle} role="group" aria-label="Non-essential tracking">
+              <button
+                type="button"
+                className={styles.toggleButton}
+                onClick={() => setConsent("rejected")}
+                aria-pressed={!trackingEnabled}
+              >
+                Disable
+              </button>
+              <button
+                type="button"
+                className={styles.toggleButton}
+                onClick={() => {
+                  if (gpcEnabled) return;
+                  setConsent("accepted");
+                }}
+                aria-pressed={trackingEnabled}
+                disabled={gpcEnabled}
+              >
+                Enable
+              </button>
+            </div>
+            {gpcEnabled && <div className={styles.toggleNote}>GPC enabled</div>}
+          </div>
         </div>
       </div>
 
