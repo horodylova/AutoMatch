@@ -18,11 +18,14 @@ export default function ClientLayout({
   const pathname = usePathname();
   const isStudio = pathname?.startsWith("/studio");
   const isResults = pathname === "/results";
+  const [allowAnalytics, setAllowAnalytics] = React.useState(false);
   const [allowMarketing, setAllowMarketing] = React.useState(false);
 
   React.useEffect(() => {
     const gpcEnabled = typeof navigator !== "undefined" && (navigator as unknown as { globalPrivacyControl?: boolean }).globalPrivacyControl === true;
-    setAllowMarketing(!gpcEnabled);
+    const allow = !gpcEnabled;
+    setAllowAnalytics(allow);
+    setAllowMarketing(allow);
   }, []);
 
   if (isStudio) {
@@ -58,7 +61,7 @@ export default function ClientLayout({
           {!isResults && <Footer />}
         </main>
       </StyledComponentsRegistry>
-      <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ""} />
+      {allowAnalytics ? <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ""} /> : null}
       {allowMarketing ? <FacebookPixel /> : null}
       <CarListingTimer />
     </body>
