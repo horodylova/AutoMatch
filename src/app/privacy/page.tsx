@@ -13,8 +13,8 @@ export default function PrivacyPolicy() {
       <div className={styles.section}>
         <h2 className={styles.sectionTitle}>1. Introduction</h2>
         <p className={styles.text}>
-          CarCupid (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;) respects your privacy and is committed to protecting your personal data. 
-          This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website 
+          CarCupid (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;) respects your privacy and is committed to protecting your personal data.
+          This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website
           and use our services, including our car matching platform.
         </p>
       </div>
@@ -44,9 +44,9 @@ export default function PrivacyPolicy() {
       <div className={styles.section}>
         <h2 className={styles.sectionTitle}>4. Information Sharing</h2>
         <p className={styles.text}>
-          We may share your information with third-party partners, such as automotive dealers, solely for the purpose of 
-          facilitating the services you have requested (e.g., connecting you with a dealer who has the car you want). 
-          We do not sell your personal information to third parties for marketing purposes unrelated to our services.
+          We may share your information with third-party partners, such as automotive dealers, solely for the purpose of
+          facilitating the services you have requested (e.g., connecting you with a dealer who has the car you want).
+          We do not sell your personal information for money. However, some advertising-related disclosures (such as enabling certain pixels for cross-context behavioral advertising) may be considered a &quot;sale&quot; or &quot;sharing&quot; of personal information under some laws even if no money changes hands.
         </p>
       </div>
 
@@ -64,7 +64,7 @@ export default function PrivacyPolicy() {
       <div className={styles.section}>
         <h2 className={styles.sectionTitle}>5. Data Security</h2>
         <p className={styles.text}>
-          We implement appropriate technical and organizational measures to protect your personal data against unauthorized access, 
+          We implement appropriate technical and organizational measures to protect your personal data against unauthorized access,
           alteration, disclosure, or destruction. However, no method of transmission over the Internet is 100% secure.
         </p>
       </div>
@@ -72,7 +72,7 @@ export default function PrivacyPolicy() {
       <div className={styles.section}>
         <h2 className={styles.sectionTitle}>6. Your Rights</h2>
         <p className={styles.text}>
-          Depending on your location, you may have certain rights regarding your personal information, such as the right to access, 
+          Depending on your location, you may have certain rights regarding your personal information, such as the right to access,
           correct, or delete your data. To exercise these rights, please contact us.
         </p>
       </div>
@@ -91,7 +91,7 @@ export default function PrivacyPolicy() {
         </p>
         <p className={styles.text}>We use the following cookie categories:</p>
         <ul className={styles.list}>
-          <li className={styles.listItem}>Strictly Necessary: Required to provide core functionality and security (for example, admin authentication and session management).</li>
+          <li className={styles.listItem}>Strictly Necessary: Required to provide core functionality and security.</li>
           <li className={styles.listItem}>Analytics: Help us understand site usage and improve performance (for example, pages visited, time on page, interactions).</li>
           <li className={styles.listItem}>Advertising/Marketing: Used to measure ad performance and build audiences for advertising (for example, tracking conversions and optimizing campaigns).</li>
         </ul>
@@ -103,7 +103,7 @@ export default function PrivacyPolicy() {
           We may use third-party tools that set cookies or collect information from your device/browser.
         </p>
         <p className={styles.text}>
-          Google Analytics (GA4) (Provider: Google LLC) is used for analytics and measurement (site usage, performance, and conversions). It may collect information such as page views, events (e.g., button clicks), approximate location (derived from IP), device/browser information, and identifiers (which may include cookies and other device identifiers). We configure GA4 data retention in our Google Analytics settings and aim to use the shortest practical retention period for our analytics needs.
+          Google Analytics (GA4) (Provider: Google LLC) is used for analytics and measurement (site usage, performance, and conversions). It may collect information such as page views, events (e.g., button clicks), approximate location (derived from IP), device/browser information, and identifiers (which may include cookies and other device identifiers). GA4 data retention is configured in our Google Analytics settings.
         </p>
         <p className={styles.text}>
           Meta Pixel (Facebook Pixel) (Provider: Meta Platforms, Inc.) may be used for advertising/marketing measurement (conversion tracking), analytics related to ad performance, and audience building (where enabled). It may collect information such as page views and events, device/browser information, and identifiers (which may include cookies and other device identifiers). Meta may use this information in accordance with its own policies.
@@ -121,7 +121,7 @@ export default function PrivacyPolicy() {
         <ul className={styles.list}>
           <li className={styles.listItem}>Browser controls: Most browsers allow you to block or delete cookies.</li>
           <li className={styles.listItem}>Device controls: Your device may provide additional privacy controls.</li>
-          <li className={styles.listItem}>Cookie preferences: You can manage your cookie preferences and reject non-essential cookies (such as Analytics and Advertising/Marketing).</li>
+          <li className={styles.listItem}>On-site controls: Our cookie banner lets you accept or reject non-essential tracking. You can also use the Do Not Sell or Share controls in the website footer to disable non-essential tracking on this device.</li>
         </ul>
       </div>
 
@@ -140,11 +140,12 @@ export default function PrivacyPolicy() {
         <p className={styles.text}>
           Sale or Share: Some advertising technologies may be considered a sale or sharing of personal information under California law, even if no money changes hands, when used for cross-context behavioral advertising.
         </p>
+        <span id="do-not-sell-or-share" aria-hidden="true" />
         <p className={styles.text}>
-          How to opt out (Do Not Sell or Share): You may opt out by using our <a href="#do-not-sell-or-share" className={styles.link}>Do Not Sell or Share My Personal Information</a> link in the website footer and/or adjusting cookie preferences to reject Advertising/Marketing cookies.
+          How to opt out (Do Not Sell or Share): You may opt out by using our <a href="#do-not-sell-or-share" className={styles.link}>Do Not Sell or Share My Personal Information</a> controls in the website footer and/or choosing &quot;Reject&quot; in our cookie banner (where shown).
         </p>
         <p className={styles.text}>
-          Link location and effect: The <a href="#do-not-sell-or-share" className={styles.link}>Do Not Sell or Share My Personal Information</a> link is provided in the website footer. Using it disables non-essential tracking for that browser/device, including advertising/marketing tracking and non-essential analytics tracking.
+          Link location and effect: The <a href="#do-not-sell-or-share" className={styles.link}>Do Not Sell or Share My Personal Information</a> controls are provided in the website footer. Using them disables non-essential tracking for that browser/device, including advertising/marketing tracking and non-essential analytics tracking.
         </p>
         <p className={styles.text}>
           Global Privacy Control (GPC): We recognize the Global Privacy Control (GPC) signal as a valid request to opt out of sale/sharing for the browser/device where the signal is enabled, where required by law. If GPC is enabled, we will treat it as an opt-out of Advertising/Marketing cookies and similar tracking used for cross-context behavioral advertising for that browser/device.

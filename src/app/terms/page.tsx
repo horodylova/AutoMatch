@@ -23,8 +23,7 @@ export default function TermsOfService() {
         <h2 className={styles.sectionTitle}>2. Use of Services</h2>
         <p className={styles.text}>
           Our services are intended for users who are at least 18 years old. You agree to use our services only for lawful purposes 
-          and in accordance with these Terms. You are responsible for maintaining the confidentiality of any account information 
-          and for all activities that occur under your account.
+          and in accordance with these Terms.
         </p>
       </div>
 

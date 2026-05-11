@@ -149,6 +149,10 @@ export default function ClientLayout({
                     window.localStorage.setItem("cc_consent_v1", "accepted");
                   } catch {
                   }
+                  try {
+                    window.dispatchEvent(new Event("cc_consent_changed"));
+                  } catch {
+                  }
                   setConsentChoice("accepted");
                 }}
                 onMouseEnter={(e) => {
@@ -189,6 +193,10 @@ export default function ClientLayout({
                 onClick={() => {
                   try {
                     window.localStorage.setItem("cc_consent_v1", "rejected");
+                  } catch {
+                  }
+                  try {
+                    window.dispatchEvent(new Event("cc_consent_changed"));
                   } catch {
                   }
                   setConsentChoice("rejected");
