@@ -28,6 +28,16 @@ export default function Footer() {
   if (pathname?.startsWith("/quiz")) return null;
 
   const year = new Date().getFullYear();
+  const handleDoNotSellShare = () => {
+    try {
+      window.localStorage.setItem("cc_consent_v1", "rejected");
+    } catch {
+    }
+    try {
+      window.dispatchEvent(new Event("cc_consent_changed"));
+    } catch {
+    }
+  };
 
   return (
     <footer className={styles.footer}>
@@ -95,6 +105,14 @@ export default function Footer() {
           <div className={styles.navTitle}>Legal</div>
           <Link href="/terms" className={styles.navLink}>Terms of Service</Link>
           <Link href="/privacy" className={styles.navLink}>Privacy Policy</Link>
+          <button
+            type="button"
+            className={styles.navLink}
+            style={{ background: "none", border: "none", padding: 0, font: "inherit", cursor: "pointer" }}
+            onClick={handleDoNotSellShare}
+          >
+            Do Not Sell or Share My Personal Information
+          </button>
         </div>
       </div>
 

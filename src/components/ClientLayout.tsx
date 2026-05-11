@@ -28,16 +28,25 @@ export default function ClientLayout({
   React.useEffect(() => {
     const gpc = typeof navigator !== "undefined" && (navigator as unknown as { globalPrivacyControl?: boolean }).globalPrivacyControl === true;
     setGpcEnabled(gpc);
-    try {
-      const raw = window.localStorage.getItem("cc_consent_v1");
-      if (raw === "accepted" || raw === "rejected") {
-        setConsentChoice(raw);
-      } else {
+    const syncConsent = () => {
+      try {
+        const raw = window.localStorage.getItem("cc_consent_v1");
+        if (raw === "accepted" || raw === "rejected") {
+          setConsentChoice(raw);
+        } else {
+          setConsentChoice(null);
+        }
+      } catch {
         setConsentChoice(null);
       }
-    } catch {
-      setConsentChoice(null);
-    }
+    };
+    syncConsent();
+    window.addEventListener("cc_consent_changed", syncConsent);
+    window.addEventListener("storage", syncConsent);
+    return () => {
+      window.removeEventListener("cc_consent_changed", syncConsent);
+      window.removeEventListener("storage", syncConsent);
+    };
   }, []);
 
   React.useEffect(() => {
