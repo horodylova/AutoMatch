@@ -121,7 +121,7 @@ export default function PrivacyPolicy() {
         <ul className={styles.list}>
           <li className={styles.listItem}>Browser controls: Most browsers allow you to block or delete cookies.</li>
           <li className={styles.listItem}>Device controls: Your device may provide additional privacy controls.</li>
-          <li className={styles.listItem}>Cookie preferences: Where available on our site, you can manage your cookie preferences and reject non-essential cookies (such as Analytics and Advertising/Marketing).</li>
+          <li className={styles.listItem}>Cookie preferences: You can manage your cookie preferences and reject non-essential cookies (such as Analytics and Advertising/Marketing).</li>
         </ul>
       </div>
 
