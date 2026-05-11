@@ -141,10 +141,10 @@ export default function PrivacyPolicy() {
           Sale or Share: Some advertising technologies may be considered a sale or sharing of personal information under California law, even if no money changes hands, when used for cross-context behavioral advertising.
         </p>
         <p className={styles.text}>
-          How to opt out (Do Not Sell or Share): You may opt out by using our &quot;Do Not Sell or Share My Personal Information&quot; link (where available) and/or adjusting cookie preferences to reject Advertising/Marketing cookies.
+          How to opt out (Do Not Sell or Share): You may opt out by using our <a href="#do-not-sell-or-share" className={styles.link}>Do Not Sell or Share My Personal Information</a> link in the website footer and/or adjusting cookie preferences to reject Advertising/Marketing cookies.
         </p>
         <p className={styles.text}>
-          Link location and effect: When available, the &quot;Do Not Sell or Share My Personal Information&quot; link is provided in the website footer. Using it disables non-essential tracking for that browser/device, including advertising/marketing tracking and non-essential analytics tracking.
+          Link location and effect: The <a href="#do-not-sell-or-share" className={styles.link}>Do Not Sell or Share My Personal Information</a> link is provided in the website footer. Using it disables non-essential tracking for that browser/device, including advertising/marketing tracking and non-essential analytics tracking.
         </p>
         <p className={styles.text}>
           Global Privacy Control (GPC): We recognize the Global Privacy Control (GPC) signal as a valid request to opt out of sale/sharing for the browser/device where the signal is enabled, where required by law. If GPC is enabled, we will treat it as an opt-out of Advertising/Marketing cookies and similar tracking used for cross-context behavioral advertising for that browser/device.

@@ -107,6 +107,7 @@ export default function Footer() {
           <Link href="/privacy" className={styles.navLink}>Privacy Policy</Link>
           <button
             type="button"
+            id="do-not-sell-or-share"
             className={styles.navLink}
             style={{ background: "none", border: "none", padding: 0, font: "inherit", cursor: "pointer" }}
             onClick={handleDoNotSellShare}
