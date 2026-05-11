@@ -108,8 +108,7 @@ export default function Footer() {
           <button
             type="button"
             id="do-not-sell-or-share"
-            className={styles.navLink}
-            style={{ background: "none", border: "none", padding: 0, font: "inherit", cursor: "pointer" }}
+            className={styles.navLinkButton}
             onClick={handleDoNotSellShare}
           >
             Do Not Sell or Share My Personal Information

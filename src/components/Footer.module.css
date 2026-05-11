@@ -86,6 +86,29 @@
   transform: translateX(4px);
 }
 
+.navLinkButton {
+  font-size: 15px;
+  color: var(--app-footer-link);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  width: fit-content;
+  position: relative;
+  background: transparent;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  text-align: left;
+  line-height: 1.35;
+  white-space: normal;
+  max-width: 280px;
+}
+
+.navLinkButton:hover {
+  color: var(--app-accent-strong);
+  transform: translateX(4px);
+}
+
 .socials {
   display: flex;
   gap: 16px;
