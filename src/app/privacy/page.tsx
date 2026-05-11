@@ -51,6 +51,17 @@ export default function PrivacyPolicy() {
       </div>
 
       <div className={styles.section}>
+        <h2 className={styles.sectionTitle}>4A. Service Providers</h2>
+        <p className={styles.text}>
+          We may use trusted service providers to help us operate and deliver our services. These providers may process personal information on our behalf for the purposes described in this Privacy Policy.
+        </p>
+        <ul className={styles.list}>
+          <li className={styles.listItem}>Formspree: Used to process dealer contact form submissions.</li>
+          <li className={styles.listItem}>Brevo: Used to send emails when users request that quiz results be sent to their email address.</li>
+        </ul>
+      </div>
+
+      <div className={styles.section}>
         <h2 className={styles.sectionTitle}>5. Data Security</h2>
         <p className={styles.text}>
           We implement appropriate technical and organizational measures to protect your personal data against unauthorized access, 
@@ -131,6 +142,9 @@ export default function PrivacyPolicy() {
         </p>
         <p className={styles.text}>
           How to opt out (Do Not Sell or Share): You may opt out by using our &quot;Do Not Sell or Share My Personal Information&quot; link (where available) and/or adjusting cookie preferences to reject Advertising/Marketing cookies.
+        </p>
+        <p className={styles.text}>
+          Link location and effect: When available, the &quot;Do Not Sell or Share My Personal Information&quot; link is provided in the website footer. Using it disables non-essential tracking for that browser/device, including advertising/marketing tracking and non-essential analytics tracking.
         </p>
         <p className={styles.text}>
           Global Privacy Control (GPC): We recognize the Global Privacy Control (GPC) signal as a valid request to opt out of sale/sharing for the browser/device where the signal is enabled, where required by law. If GPC is enabled, we will treat it as an opt-out of Advertising/Marketing cookies and similar tracking used for cross-context behavioral advertising for that browser/device.

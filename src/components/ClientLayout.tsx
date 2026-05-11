@@ -107,10 +107,19 @@ export default function ClientLayout({
             padding: 16,
             maxWidth: 980,
             margin: "0 auto",
+            transition: "transform 140ms ease, box-shadow 140ms ease",
           }}
           role="dialog"
           aria-live="polite"
           aria-label="Cookie preferences"
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = "translateY(-2px)";
+            e.currentTarget.style.boxShadow = "0 18px 48px rgba(0,0,0,0.28)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = "translateY(0)";
+            e.currentTarget.style.boxShadow = "0 14px 40px rgba(0,0,0,0.25)";
+          }}
         >
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             <div style={{ fontWeight: 800, fontSize: 16 }}>Cookies & tracking</div>
@@ -133,6 +142,7 @@ export default function ClientLayout({
                   background: "var(--kendo-color-primary)",
                   color: "var(--kendo-color-on-primary)",
                   fontWeight: 700,
+                  transition: "transform 120ms ease, filter 120ms ease, opacity 120ms ease",
                 }}
                 onClick={() => {
                   try {
@@ -140,6 +150,25 @@ export default function ClientLayout({
                   } catch {
                   }
                   setConsentChoice("accepted");
+                }}
+                onMouseEnter={(e) => {
+                  if (gpcEnabled) return;
+                  e.currentTarget.style.transform = "translateY(-1px)";
+                  e.currentTarget.style.filter = "brightness(1.05)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.filter = "none";
+                }}
+                onMouseDown={(e) => {
+                  if (gpcEnabled) return;
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.filter = "brightness(0.98)";
+                }}
+                onMouseUp={(e) => {
+                  if (gpcEnabled) return;
+                  e.currentTarget.style.transform = "translateY(-1px)";
+                  e.currentTarget.style.filter = "brightness(1.05)";
                 }}
                 disabled={gpcEnabled}
               >
@@ -155,6 +184,7 @@ export default function ClientLayout({
                   background: "transparent",
                   color: "var(--kendo-color-on-app-surface)",
                   fontWeight: 700,
+                  transition: "transform 120ms ease, background-color 120ms ease, opacity 120ms ease",
                 }}
                 onClick={() => {
                   try {
@@ -162,6 +192,22 @@ export default function ClientLayout({
                   } catch {
                   }
                   setConsentChoice("rejected");
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "translateY(-1px)";
+                  e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.06)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.backgroundColor = "transparent";
+                }}
+                onMouseDown={(e) => {
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.03)";
+                }}
+                onMouseUp={(e) => {
+                  e.currentTarget.style.transform = "translateY(-1px)";
+                  e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.06)";
                 }}
               >
                 Reject
