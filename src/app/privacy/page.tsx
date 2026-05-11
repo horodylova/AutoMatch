@@ -135,6 +135,9 @@ export default function PrivacyPolicy() {
         <p className={styles.text}>
           Global Privacy Control (GPC): We recognize the Global Privacy Control (GPC) signal as a valid request to opt out of sale/sharing for the browser/device where the signal is enabled, where required by law. If GPC is enabled, we will treat it as an opt-out of Advertising/Marketing cookies and similar tracking used for cross-context behavioral advertising for that browser/device.
         </p>
+        <p className={styles.text}>
+          To better respect user privacy choices, when GPC is enabled we may also disable non-essential analytics cookies and analytics tracking for that browser/device.
+        </p>
       </div>
 
       <div className={styles.section}>
