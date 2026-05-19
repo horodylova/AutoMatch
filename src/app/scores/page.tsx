@@ -259,13 +259,13 @@ export default function Page() {
       <div className={styles.conclusion}>
         <h2 className={styles.conclusionTitle}>A Matching System That Thinks Like a Human</h2>
         <p className={styles.conclusionText}>
-          What we ended up with is not a filter and not a leaderboard. It’s a decision model. Enthusiasts see driver-focused cars. Families never see two-seat sports cars. Professionals get tools, not compromises.
+          Not a leaderboard. Not a filter. A decision model that balances preferences and enforces non-negotiables.
         </p>
 
         <div className={styles.conclusionActions}>
           <Link
             href="/quiz"
-            className={styles.conclusionPrimary}
+            className={styles.conclusionButton}
             onClick={() => {
               trackQuizStart();
               event("StartQuiz");
@@ -274,18 +274,15 @@ export default function Page() {
             Start the quiz
           </Link>
 
-          <Link href="/cars" className={styles.conclusionSecondary}>
+          <Link href="/cars" className={styles.conclusionButton}>
             Explore cars
           </Link>
-        </div>
 
-        <div className={styles.conclusionLinks}>
-          <Link href="/compare" className={styles.conclusionTertiary}>
+          <Link href="/compare" className={styles.conclusionButton}>
             Compare side by side
           </Link>
         </div>
 
-        <div className={styles.finalNote}>We stopped trying to find the best car. We started matching the right life.</div>
       </div>
     </div>
   );

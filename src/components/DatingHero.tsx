@@ -1,59 +1,51 @@
 'use client';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { Button } from '@progress/kendo-react-buttons';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay } from 'swiper/modules';
-import 'swiper/css';
+import Link from 'next/link';
 import styles from './DatingHero.module.css';
 import { trackQuizStart } from '@/lib/gtag';
 import { event } from '@/lib/pixel';
+import { useEffect, useState } from 'react';
 
-const photos = [
-  '/photos-cars/amir-riazipour-TeYK3zOIkUk-unsplash.jpg',
-  '/photos-cars/christian-agbede-j0SfhblI3Bk-unsplash.jpg',
-  '/photos-cars/cord-allman-me93lMC4ADY-unsplash.jpg',
-  '/photos-cars/dhiva-krishna-YApS6TjKJ9c-unsplash.jpg',
-  '/photos-cars/dylan-posso-nqsiVHA7HFY-unsplash.jpg',
-  '/photos-cars/jake-blucker-tMzCrBkM99Y-unsplash.jpg',
-  // '/photos-cars/mateusz-suski-D4UZJJbRjP4-unsplash.jpg',
-  '/photos-cars/nima-sarram-GynDWODbLdA-unsplash.jpg',
-  '/photos-cars/remy_loz-aFsb3W6FhAA-unsplash.jpg',
-  // '/photos-cars/serjan-midili-Vf7bdzmsIJc-unsplash.jpg',
-  // '/photos-cars/tyler-clemmensen-4gSavS9pe1s-unsplash.jpg'
-];
+const HERO_IMAGE_SRC = "/photos-cars/amir-riazipour-TeYK3zOIkUk-unsplash.jpg";
 
 export default function DatingHero() {
-  const seq = [...photos, ...photos, ...photos];
-  const router = useRouter();
+  const [showHeroImage, setShowHeroImage] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 993px)");
+    const update = () => setShowHeroImage(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
   return (
     <>
       <section className={styles.section}>
         <div className={styles.banner}>
-          <Swiper
-            modules={[Autoplay]}
-            loop={true}
-            slidesPerView={"auto"}
-            spaceBetween={12}
-            speed={800}
-            autoplay={{ delay: 3000, disableOnInteraction: false }}
-            className={styles.swiper}
-          >
-            {seq.map((src, i) => (
-              <SwiperSlide key={`${src}:${i}`} className={styles.slide}>
-                <Image src={src} alt="car" fill className={styles.slideImg} priority={i < 4} sizes="(max-width: 992px) 80vw, 24vw" />
-              </SwiperSlide>
-            ))}
-          </Swiper>
+          {showHeroImage && (
+            <>
+              <Image
+                src={HERO_IMAGE_SRC}
+                alt="car"
+                fill
+                className={styles.heroImg}
+                priority
+                fetchPriority="high"
+                loading="eager"
+                sizes="100vw"
+              />
+              <div className={styles.heroOverlay} />
+            </>
+          )}
           <div className={styles.introBox}>
             <h3 className={styles.introTitle}>CarCupid learns who you are</h3>
             <p className={styles.introText}>This isn’t a quick quiz. It’s a personality match built with depth, intuition, and real automotive intelligence</p>
-            <Button themeColor="primary" fillMode="solid" size="large" className={styles.introCta} onClick={() => {
+            <Link href="/quiz" className={styles.introCta} onClick={() => {
               trackQuizStart();
               event("StartQuizBottom");
               event("StartQuiz");
-              router.push('/quiz');
-            }}>Start Quiz</Button>
+            }}>Start Quiz</Link>
           </div>
         </div>
       </section>

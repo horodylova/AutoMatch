@@ -1,45 +1,26 @@
-"use client";
-
 import Link from "next/link";
 import Image from "next/image";
 import styles from "./JournalPreview.module.css";
 import { client, urlFor, Post } from "@/lib/sanity";
-import { useState, useEffect } from "react";
+export default async function JournalPreview() {
+  const posts = await client.fetch<Post[]>(
+    `*[
+      _type == "post" &&
+      defined(slug.current) &&
+      !(_id in path("drafts.**")) &&
+      (!defined(publishedAt) || publishedAt <= now())
+    ] | order(coalesce(publishedAt, _createdAt) desc)[0...3] {
+      _id,
+      title,
+      slug,
+      mainImage,
+      publishedAt,
+      excerpt,
+      categories[]->{title}
+    }`
+  );
 
-export default function JournalPreview() {
-  const [posts, setPosts] = useState<Post[]>([]);
-
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const data = await client.fetch<Post[]>(
-          `*[
-            _type == "post" &&
-            defined(slug.current) &&
-            !(_id in path("drafts.**")) &&
-            (!defined(publishedAt) || publishedAt <= now())
-          ] | order(coalesce(publishedAt, _createdAt) desc)[0...3] {
-            _id,
-            title,
-            slug,
-            mainImage,
-            publishedAt,
-            excerpt,
-            categories[]->{title}
-          }`
-        );
-        setPosts(data);
-      } catch (error) {
-        console.error("Failed to fetch posts:", error);
-      }
-    };
-
-    fetchPosts();
-  }, []);
-
-  if (!posts || posts.length === 0) {
-    return null;
-  }
+  if (!posts || posts.length === 0) return null;
 
   return (
     <section className={styles.container}>

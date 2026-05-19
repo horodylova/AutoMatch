@@ -1,14 +1,16 @@
 "use client";
 
 import React from "react";
+import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
 import HeaderVisibility from "./HeaderVisibility";
-import Footer from "./Footer";
-import PromoModal from "./PromoModal";
 import StyledComponentsRegistry from "@/lib/styled-registry";
 import { GoogleAnalytics } from '@next/third-parties/google';
 import FacebookPixel from "./FacebookPixel";
-import CarListingTimer from "./CarListingTimer";
+
+const Footer = dynamic(() => import("./Footer"), { ssr: false });
+const PromoModal = dynamic(() => import("./PromoModal"), { ssr: false });
+const CarListingTimer = dynamic(() => import("./CarListingTimer"), { ssr: false });
 
 type ConsentChoice = "accepted" | "rejected";
 
@@ -20,12 +22,15 @@ export default function ClientLayout({
   const pathname = usePathname();
   const isStudio = pathname?.startsWith("/studio");
   const isResults = pathname === "/results";
+  const isCars = pathname?.startsWith("/cars");
   const [allowAnalytics, setAllowAnalytics] = React.useState(false);
   const [allowMarketing, setAllowMarketing] = React.useState(false);
   const [consentChoice, setConsentChoice] = React.useState<ConsentChoice | null>(null);
   const [gpcEnabled, setGpcEnabled] = React.useState(false);
+  const [afterHydration, setAfterHydration] = React.useState(false);
 
   React.useEffect(() => {
+    setAfterHydration(true);
     const gpc = typeof navigator !== "undefined" && (navigator as unknown as { globalPrivacyControl?: boolean }).globalPrivacyControl === true;
     setGpcEnabled(gpc);
     const syncConsent = () => {
@@ -72,7 +77,7 @@ export default function ClientLayout({
       inset: 0,
       overflow: "hidden"
     }}>
-      {!isResults && <PromoModal />}
+      {!isResults && afterHydration && <PromoModal />}
       <StyledComponentsRegistry>
         <HeaderVisibility />
         <main style={{ 
@@ -85,14 +90,15 @@ export default function ClientLayout({
           justifyContent: "space-between"
         }}>
           {children}
-          {!isResults && <Footer />}
+          {!isResults && afterHydration && <Footer />}
         </main>
       </StyledComponentsRegistry>
       {allowAnalytics ? <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ""} /> : null}
       {allowMarketing ? <FacebookPixel /> : null}
-      <CarListingTimer />
+      {afterHydration && isCars ? <CarListingTimer /> : null}
       {!isStudio && !isResults && consentChoice === null && (
         <div
+          className="cc-banner"
           style={{
             position: "fixed",
             left: 16,
@@ -112,14 +118,6 @@ export default function ClientLayout({
           role="dialog"
           aria-live="polite"
           aria-label="Cookie preferences"
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = "translateY(-2px)";
-            e.currentTarget.style.boxShadow = "0 18px 48px rgba(0,0,0,0.28)";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = "translateY(0)";
-            e.currentTarget.style.boxShadow = "0 14px 40px rgba(0,0,0,0.25)";
-          }}
         >
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             <div style={{ fontWeight: 800, fontSize: 16 }}>Cookies & tracking</div>
@@ -134,11 +132,11 @@ export default function ClientLayout({
             <div style={{ display: "flex", flexWrap: "wrap", gap: 10, alignItems: "center" }}>
               <button
                 type="button"
+                className="cc-btn cc-btn-primary"
                 style={{
                   padding: "10px 14px",
                   borderRadius: 999,
                   border: "none",
-                  cursor: "pointer",
                   background: "var(--kendo-color-primary)",
                   color: "var(--kendo-color-on-primary)",
                   fontWeight: 700,
@@ -155,36 +153,17 @@ export default function ClientLayout({
                   }
                   setConsentChoice("accepted");
                 }}
-                onMouseEnter={(e) => {
-                  if (gpcEnabled) return;
-                  e.currentTarget.style.transform = "translateY(-1px)";
-                  e.currentTarget.style.filter = "brightness(1.05)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.filter = "none";
-                }}
-                onMouseDown={(e) => {
-                  if (gpcEnabled) return;
-                  e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.filter = "brightness(0.98)";
-                }}
-                onMouseUp={(e) => {
-                  if (gpcEnabled) return;
-                  e.currentTarget.style.transform = "translateY(-1px)";
-                  e.currentTarget.style.filter = "brightness(1.05)";
-                }}
                 disabled={gpcEnabled}
               >
                 Accept
               </button>
               <button
                 type="button"
+                className="cc-btn cc-btn-secondary"
                 style={{
                   padding: "10px 14px",
                   borderRadius: 999,
                   border: "1px solid var(--kendo-color-border-alt)",
-                  cursor: "pointer",
                   background: "transparent",
                   color: "var(--kendo-color-on-app-surface)",
                   fontWeight: 700,
@@ -201,27 +180,12 @@ export default function ClientLayout({
                   }
                   setConsentChoice("rejected");
                 }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-1px)";
-                  e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.06)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.backgroundColor = "transparent";
-                }}
-                onMouseDown={(e) => {
-                  e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.03)";
-                }}
-                onMouseUp={(e) => {
-                  e.currentTarget.style.transform = "translateY(-1px)";
-                  e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.06)";
-                }}
               >
                 Reject
               </button>
               <a
                 href="/privacy"
+                className="cc-link"
                 style={{
                   marginLeft: 4,
                   fontSize: 14,

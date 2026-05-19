@@ -1,12 +1,23 @@
 "use client";
 import Image from "next/image";
 import styles from "./partTwoPreview.module.css";
+import previewImage from "../../../public/lamborgini.jpg";
 
 export default function PartTwoPreview() {
   return (
     <section className={styles.hero}>
       <div className={styles.media}>
-        <Image src="/lamborgini.jpg" alt="Preview" fill priority className={styles.img} />
+        <Image
+          src={previewImage}
+          alt="Preview"
+          fill
+          priority
+          fetchPriority="high"
+          loading="eager"
+          placeholder="blur"
+          sizes="(max-width: 639px) 100vw, 50vw"
+          className={styles.img}
+        />
         <div className={styles.overlay} />
       </div>
       <div className={styles.content}>

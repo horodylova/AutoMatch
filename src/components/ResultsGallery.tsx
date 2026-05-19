@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import styles from './ResultsGallery.module.css';
@@ -88,37 +88,80 @@ function ResultCard({ car, index }: { car: CarResult; index: number }) {
 
 export default function ResultsGallery({ results = [], onSaveProgress, onBack }: ResultsGalleryProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const cardCentersRef = useRef<number[]>([]);
+  const scrollRafRef = useRef<number | null>(null);
+  const measureRafRef = useRef<number | null>(null);
   const [isSaved, setIsSaved] = useState(false);
   const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
   const [selectedShareNetwork, setSelectedShareNetwork] = useState<ShareNetwork | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
 
-  const handleScroll = () => {
-    if (scrollContainerRef.current) {
-      const container = scrollContainerRef.current;
-      const cards = Array.from(container.children) as HTMLElement[];
-      if (cards.length === 0) return;
+  const measureCards = useCallback(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+    const cards = Array.from(container.children) as HTMLElement[];
+    if (cards.length === 0) {
+      cardCentersRef.current = [];
+      return;
+    }
+    cardCentersRef.current = cards.map((card) => card.offsetLeft + card.offsetWidth / 2);
+  }, []);
 
-      const containerRect = container.getBoundingClientRect();
-      const containerCenter = containerRect.left + containerRect.width / 2;
-      
+  const scheduleMeasure = useCallback(() => {
+    if (measureRafRef.current !== null) return;
+    measureRafRef.current = window.requestAnimationFrame(() => {
+      measureRafRef.current = null;
+      measureCards();
+    });
+  }, [measureCards]);
+
+  useEffect(() => {
+    scheduleMeasure();
+    window.addEventListener('resize', scheduleMeasure);
+    return () => {
+      window.removeEventListener('resize', scheduleMeasure);
+      if (measureRafRef.current !== null) {
+        window.cancelAnimationFrame(measureRafRef.current);
+        measureRafRef.current = null;
+      }
+      if (scrollRafRef.current !== null) {
+        window.cancelAnimationFrame(scrollRafRef.current);
+        scrollRafRef.current = null;
+      }
+    };
+  }, [scheduleMeasure]);
+
+  useEffect(() => {
+    scheduleMeasure();
+    setActiveIndex((prev) => {
+      const next = Math.max(0, Math.min(prev, Math.max(0, results.length - 1)));
+      return next;
+    });
+  }, [results.length, scheduleMeasure]);
+
+  const handleScroll = () => {
+    if (scrollRafRef.current !== null) return;
+    scrollRafRef.current = window.requestAnimationFrame(() => {
+      scrollRafRef.current = null;
+      const container = scrollContainerRef.current;
+      if (!container) return;
+      const centers = cardCentersRef.current;
+      if (centers.length === 0) {
+        scheduleMeasure();
+        return;
+      }
+      const containerCenter = container.scrollLeft + container.clientWidth / 2;
       let closestIndex = 0;
       let minDiff = Infinity;
-
-      cards.forEach((card, index) => {
-        const cardRect = card.getBoundingClientRect();
-        const cardCenter = cardRect.left + cardRect.width / 2;
-        const diff = Math.abs(containerCenter - cardCenter);
+      for (let i = 0; i < centers.length; i += 1) {
+        const diff = Math.abs(containerCenter - centers[i]);
         if (diff < minDiff) {
           minDiff = diff;
-          closestIndex = index;
+          closestIndex = i;
         }
-      });
-
-      if (closestIndex !== activeIndex) {
-        setActiveIndex(closestIndex);
       }
-    }
+      setActiveIndex((prev) => (prev === closestIndex ? prev : closestIndex));
+    });
   };
 
   const handleSaveResults = () => {
@@ -140,33 +183,22 @@ export default function ResultsGallery({ results = [], onSaveProgress, onBack }:
   const scroll = (direction: 'left' | 'right') => {
     if (scrollContainerRef.current) {
       const container = scrollContainerRef.current;
-      const cards = Array.from(container.children) as HTMLElement[];
-      if (cards.length === 0) return;
-
-      const containerRect = container.getBoundingClientRect();
-      const containerCenter = containerRect.left + containerRect.width / 2;
-      
-      let closestCard = cards[0];
-      let minDiff = Infinity;
-
-      cards.forEach(card => {
-        const cardRect = card.getBoundingClientRect();
-        const cardCenter = cardRect.left + cardRect.width / 2;
-        const diff = Math.abs(containerCenter - cardCenter);
-        if (diff < minDiff) {
-          minDiff = diff;
-          closestCard = card;
-        }
-      });
-
-      const currentIndex = cards.indexOf(closestCard);
-      let targetIndex = direction === 'left' ? currentIndex - 1 : currentIndex + 1;
-
-      if (targetIndex < 0) targetIndex = 0;
-      if (targetIndex >= cards.length) targetIndex = cards.length - 1;
-
-      const targetCard = cards[targetIndex];
-      targetCard.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      const total = results.length;
+      if (total === 0) return;
+      const targetIndex = direction === 'left'
+        ? Math.max(0, activeIndex - 1)
+        : Math.min(total - 1, activeIndex + 1);
+      const centers = cardCentersRef.current;
+      const targetCenter = centers[targetIndex];
+      if (typeof targetCenter === 'number') {
+        const left = Math.max(0, targetCenter - container.clientWidth / 2);
+        container.scrollTo({ left, behavior: 'smooth' });
+        return;
+      }
+      const targetCard = container.children.item(targetIndex) as HTMLElement | null;
+      if (targetCard) {
+        targetCard.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      }
     }
   };
 
