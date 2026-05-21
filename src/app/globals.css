@@ -21,7 +21,6 @@ body {
     linear-gradient(0deg, var(--app-background-body-grid-color) 1px, transparent 1px);
   background-size: 120px 120px, 120px 120px;
   background-position: 0 0, 0 0;
-  animation: grid-scroll-up 20s linear infinite;
 }
 
 .cc-banner:hover {
@@ -71,16 +70,6 @@ body {
   max-width: 1200px;
   margin: 0 auto;
   padding: 24px;
-}
-
-.sectionFrame {
-  max-width: 1200px;
-  margin: 24px auto;
-  padding: 24px;
-  border: 1px solid var(--kendo-color-border);
-  border-radius: 24px;
-  background: transparent;
-  box-shadow: none;
 }
 
 .k-appbar {
@@ -609,61 +598,10 @@ html[data-theme="light"] {
   );
 }
 
-.scoreRange {
-  width: 100%;
-  accent-color: var(--kendo-color-primary);
-  background: transparent;
-}
-
-.scoreRange::-webkit-slider-runnable-track {
-  height: 6px;
-  background: rgba(230, 214, 180, 0.18);
-  border-radius: 999px;
-}
-
-.scoreRange::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 14px;
-  height: 14px;
-  background: var(--kendo-color-primary);
-  border: 1px solid rgba(230, 214, 180, 0.28);
-  border-radius: 50%;
-  margin-top: -4px;
-}
-
-.scoreRange::-moz-range-track {
-  height: 6px;
-  background: rgba(230, 214, 180, 0.18);
-  border-radius: 999px;
-}
-
-.scoreRange::-moz-range-thumb {
-  width: 14px;
-  height: 14px;
-  background: var(--kendo-color-primary);
-  border: 1px solid rgba(230, 214, 180, 0.28);
-  border-radius: 50%;
-}
-
-.scoreRange::-ms-track {
-  height: 6px;
-  background: transparent;
-  border-color: transparent;
-  color: transparent;
-}
-
-.scoreRange::-ms-fill-lower,
-.scoreRange::-ms-fill-upper {
-  background: rgba(230, 214, 180, 0.18);
-  border-radius: 999px;
-}
-
-.scoreRange::-ms-thumb {
-  width: 14px;
-  height: 14px;
-  background: var(--kendo-color-primary);
-  border: 1px solid rgba(230, 214, 180, 0.28);
-  border-radius: 50%;
+@media (prefers-reduced-motion: no-preference) and (min-width: 993px) {
+  body {
+    animation: grid-scroll-up 20s linear infinite;
+  }
 }
 
 @keyframes grid-scroll-up {
