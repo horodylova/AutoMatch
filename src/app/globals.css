@@ -142,10 +142,29 @@ body {
 
 .cc-banner__link {
   font-size: 14px;
-  color: var(--kendo-color-primary);
+  color: rgba(245, 245, 247, 0.92);
   text-decoration: underline;
+  text-decoration-color: rgba(245, 245, 247, 0.55);
   font-weight: 600;
   white-space: nowrap;
+}
+
+.cc-banner__link:hover,
+.cc-banner__link:focus-visible {
+  color: rgba(245, 245, 247, 1);
+  text-decoration-color: rgba(245, 245, 247, 0.8);
+  opacity: 1;
+}
+
+html[data-theme="light"] .cc-banner__link {
+  color: var(--kendo-color-primary);
+  text-decoration-color: rgba(229, 72, 63, 0.45);
+}
+
+html[data-theme="light"] .cc-banner__link:hover,
+html[data-theme="light"] .cc-banner__link:focus-visible {
+  color: var(--kendo-color-primary-hover);
+  text-decoration-color: rgba(229, 72, 63, 0.75);
 }
 
 @media (max-width: 480px) {
