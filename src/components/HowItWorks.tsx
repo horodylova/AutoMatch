@@ -1,5 +1,6 @@
 import styles from "./HowItWorks.module.css";
 import Image from "next/image";
+import k9Image from "../../public/dog in the car.jpg";
 
 export default function HowItWorks() {
   return (
@@ -57,17 +58,14 @@ export default function HowItWorks() {
         </div>
         <div className={styles.k9ImageCol}>
           <div className={styles.k9ImageInner}>
-            <picture>
-              <source media="(max-width: 768px)" srcSet="/K9%20mobile.jpg" />
-              <Image
-                src="/dog%20in%20the%20car.jpg"
-                alt="Dog in a car"
-                fill
-                className={styles.k9Img}
-                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 420px, 560px"
-                unoptimized
-              />
-            </picture>
+            <Image
+              src={k9Image}
+              alt="Dog in a car"
+              fill
+              className={styles.k9Img}
+              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 420px, 560px"
+              placeholder="blur"
+            />
             <div className={styles.k9ImgFade} />
           </div>
         </div>
