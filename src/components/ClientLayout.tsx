@@ -99,49 +99,29 @@ export default function ClientLayout({
       {!isStudio && !isResults && consentChoice === null && (
         <div
           className="cc-banner"
-          style={{
-            position: "fixed",
-            left: 16,
-            right: 16,
-            bottom: 16,
-            zIndex: 9999,
-            background: "var(--kendo-color-surface)",
-            color: "var(--kendo-color-on-app-surface)",
-            border: "1px solid var(--kendo-color-border-alt)",
-            borderRadius: 16,
-            boxShadow: "0 14px 40px rgba(0,0,0,0.25)",
-            padding: 16,
-            maxWidth: 980,
-            margin: "0 auto",
-            transition: "transform 140ms ease, box-shadow 140ms ease",
-          }}
           role="dialog"
           aria-live="polite"
           aria-label="Cookie preferences"
         >
-          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            <div style={{ fontWeight: 800, fontSize: 16 }}>Cookies & tracking</div>
-            <div style={{ fontSize: 14, lineHeight: 1.5, opacity: 0.9 }}>
-              We use analytics and marketing trackers (including Google Analytics and Meta Pixel) to understand usage and measure performance. Choose whether you want to allow non-essential cookies.
+          <div className="cc-banner__inner">
+            <div className="cc-banner__top">
+              <div className="cc-banner__title">Cookies & tracking</div>
+              <a href="/privacy" className="cc-link cc-banner__link">
+                Privacy Policy
+              </a>
+            </div>
+            <div className="cc-banner__text">
+              We use analytics and marketing trackers (including Google Analytics and Meta Pixel) to measure usage and performance. Choose whether to allow non-essential cookies.
             </div>
             {gpcEnabled && (
-              <div style={{ fontSize: 13, lineHeight: 1.4, opacity: 0.85 }}>
+              <div className="cc-banner__gpc">
                 Global Privacy Control (GPC) is enabled in your browser. We will not enable marketing or analytics tracking for this device.
               </div>
             )}
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 10, alignItems: "center" }}>
+            <div className="cc-banner__actions">
               <button
                 type="button"
                 className="cc-btn cc-btn-primary"
-                style={{
-                  padding: "10px 14px",
-                  borderRadius: 999,
-                  border: "none",
-                  background: "var(--kendo-color-primary)",
-                  color: "var(--kendo-color-on-primary)",
-                  fontWeight: 700,
-                  transition: "transform 120ms ease, filter 120ms ease, opacity 120ms ease",
-                }}
                 onClick={() => {
                   try {
                     window.localStorage.setItem("cc_consent_v1", "accepted");
@@ -160,15 +140,6 @@ export default function ClientLayout({
               <button
                 type="button"
                 className="cc-btn cc-btn-secondary"
-                style={{
-                  padding: "10px 14px",
-                  borderRadius: 999,
-                  border: "1px solid var(--kendo-color-border-alt)",
-                  background: "transparent",
-                  color: "var(--kendo-color-on-app-surface)",
-                  fontWeight: 700,
-                  transition: "transform 120ms ease, background-color 120ms ease, opacity 120ms ease",
-                }}
                 onClick={() => {
                   try {
                     window.localStorage.setItem("cc_consent_v1", "rejected");
@@ -183,19 +154,6 @@ export default function ClientLayout({
               >
                 Reject
               </button>
-              <a
-                href="/privacy"
-                className="cc-link"
-                style={{
-                  marginLeft: 4,
-                  fontSize: 14,
-                  color: "var(--kendo-color-primary)",
-                  textDecoration: "underline",
-                  fontWeight: 600,
-                }}
-              >
-                Privacy Policy
-              </a>
             </div>
           </div>
         </div>
