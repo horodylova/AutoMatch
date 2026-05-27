@@ -46,6 +46,18 @@
   object-fit: contain;
   object-position: center;
 }
+
+.logoImgLight {
+  display: none;
+}
+
+:global(html[data-theme="light"]) .logoImgLight {
+  display: block;
+}
+
+:global(html[data-theme="light"]) .logoImgDark {
+  display: none;
+}
  
 .desktopNav {
   display: flex;

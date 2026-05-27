@@ -80,7 +80,7 @@ export default function ClientLayout({
       {!isResults && afterHydration && <PromoModal />}
       <StyledComponentsRegistry>
         <HeaderVisibility />
-        <main style={{ 
+        <main id="app-scroll" style={{ 
           height: "100%", 
           overflowY: "auto", 
           overflowX: "hidden",

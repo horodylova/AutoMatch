@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import styles from "./Header.module.css";
@@ -14,16 +14,25 @@ export default function Header() {
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
   const [scrolled, setScrolled] = useState<boolean>(false);
   const [hasSavedResults, setHasSavedResults] = useState<boolean>(false);
-  const [logoSrc, setLogoSrc] = useState<string>("/logos/logo.svg");
   const [wishlistCount, setWishlistCount] = useState<number>(0);
+  const scrollElRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
+    scrollElRef.current = document.getElementById("app-scroll");
+    const getScrollTop = () => (scrollElRef.current ? scrollElRef.current.scrollTop : window.scrollY);
+    let ticking = false;
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        setScrolled(getScrollTop() > 50);
+        ticking = false;
+      });
     };
 
     handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
+    const scrollTarget: EventTarget = scrollElRef.current || window;
+    scrollTarget.addEventListener("scroll", handleScroll, { passive: true } as AddEventListenerOptions);
 
     const checkSavedResults = () => {
       const savedData = localStorage.getItem(RESULTS_STORE_KEY);
@@ -39,36 +48,30 @@ export default function Header() {
       }
       setHasSavedResults(false);
     };
-    checkSavedResults();
+    const handleWishlist = () => setWishlistCount(getWishlistCount());
 
-    const updateLogo = () => {
-      const theme = document.documentElement.getAttribute("data-theme");
-      if (theme === "light") {
-        setLogoSrc("/cropped logo.png");
-      } else {
-        setLogoSrc("/logos/logo.svg");
-      }
+    const scheduleNonCritical = () => {
+      checkSavedResults();
+      handleWishlist();
     };
 
-    updateLogo();
-    setWishlistCount(getWishlistCount());
+    if ("requestIdleCallback" in window) {
+      (window as unknown as { requestIdleCallback: (cb: () => void, opts?: { timeout: number }) => number }).requestIdleCallback(scheduleNonCritical, { timeout: 1500 });
+    } else {
+      setTimeout(scheduleNonCritical, 0);
+    }
 
-    const observer = new MutationObserver(updateLogo);
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
-    
     window.addEventListener(RESULTS_UPDATED_EVENT, checkSavedResults);
     window.addEventListener("storage", checkSavedResults);
-    const handleWishlist = () => setWishlistCount(getWishlistCount());
     window.addEventListener(WISHLIST_UPDATED_EVENT, handleWishlist);
     window.addEventListener("storage", handleWishlist);
 
     return () => {
-        window.removeEventListener("scroll", handleScroll);
+        scrollTarget.removeEventListener("scroll", handleScroll);
         window.removeEventListener(RESULTS_UPDATED_EVENT, checkSavedResults);
         window.removeEventListener("storage", checkSavedResults);
         window.removeEventListener(WISHLIST_UPDATED_EVENT, handleWishlist);
         window.removeEventListener("storage", handleWishlist);
-        observer.disconnect();
     };
   }, []);
 
@@ -89,11 +92,20 @@ export default function Header() {
           <Link href="/" className={styles.logoContainer}>
             <div className={styles.logoBox}>
               <Image
-                src={logoSrc}
+                src="/logos/logo.svg"
                 alt="CarCupid logo"
                 fill
                 priority
-                className={styles.logoImg}
+                className={`${styles.logoImg} ${styles.logoImgDark}`}
+                style={{ objectFit: "contain" }}
+                unoptimized
+              />
+              <Image
+                src="/cropped logo.png"
+                alt="CarCupid logo"
+                fill
+                priority
+                className={`${styles.logoImg} ${styles.logoImgLight}`}
                 style={{ objectFit: "contain" }}
                 unoptimized
               />
