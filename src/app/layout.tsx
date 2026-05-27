@@ -8,7 +8,7 @@ const archivo = Archivo({
   subsets: ["latin"],
   weight: ["400", "600", "800"],
   variable: "--font-archivo",
-  display: "swap",
+  display: "optional",
 });
 
 export const metadata: Metadata = {
