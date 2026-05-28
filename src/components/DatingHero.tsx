@@ -1,51 +1,29 @@
-'use client';
 import Image from 'next/image';
 import Link from 'next/link';
 import styles from './DatingHero.module.css';
-import { trackQuizStart } from '@/lib/gtag';
-import { event } from '@/lib/pixel';
-import { useEffect, useState } from 'react';
 
 const HERO_IMAGE_SRC = "/photos-cars/amir-riazipour-TeYK3zOIkUk-unsplash.jpg";
 
 export default function DatingHero() {
-  const [showHeroImage, setShowHeroImage] = useState(false);
-
-  useEffect(() => {
-    const mq = window.matchMedia("(min-width: 993px)");
-    const update = () => setShowHeroImage(mq.matches);
-    update();
-    mq.addEventListener("change", update);
-    return () => mq.removeEventListener("change", update);
-  }, []);
-
   return (
     <>
       <section className={styles.section}>
         <div className={styles.banner}>
-          {showHeroImage && (
-            <>
-              <Image
-                src={HERO_IMAGE_SRC}
-                alt="car"
-                fill
-                className={styles.heroImg}
-                priority
-                fetchPriority="high"
-                loading="eager"
-                sizes="100vw"
-              />
-              <div className={styles.heroOverlay} />
-            </>
-          )}
+          <Image
+            src={HERO_IMAGE_SRC}
+            alt="car"
+            fill
+            className={styles.heroImg}
+            priority
+            fetchPriority="high"
+            loading="eager"
+            sizes="(min-width: 993px) 100vw, 1px"
+          />
+          <div className={styles.heroOverlay} />
           <div className={styles.introBox}>
             <h3 className={styles.introTitle}>CarCupid learns who you are</h3>
             <p className={styles.introText}>This isn’t a quick quiz. It’s a personality match built with depth, intuition, and real automotive intelligence</p>
-            <Link href="/quiz" className={styles.introCta} onClick={() => {
-              trackQuizStart();
-              event("StartQuizBottom");
-              event("StartQuiz");
-            }}>Start Quiz</Link>
+            <Link href="/quiz" className={styles.introCta}>Start Quiz</Link>
           </div>
         </div>
       </section>

@@ -78,6 +78,8 @@
 @media (max-width: 992px) {
   .section { margin-top: 90px; padding: 16px 0 24px; }
   .banner { min-height: auto; height: auto; padding-bottom: 12px; }
+  .heroImg { display: none; }
+  .heroOverlay { display: none; }
   .introBox { position: relative; top: auto; left: auto; transform: none; margin: 0 auto; max-width: 560px; backdrop-filter: none; }
   .features { grid-template-columns: 1fr; }
   
