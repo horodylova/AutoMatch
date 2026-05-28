@@ -28,9 +28,16 @@ export default function ClientLayout({
   const [consentChoice, setConsentChoice] = React.useState<ConsentChoice | null>(null);
   const [gpcEnabled, setGpcEnabled] = React.useState(false);
   const [afterHydration, setAfterHydration] = React.useState(false);
+  const [deferredUI, setDeferredUI] = React.useState(false);
 
   React.useEffect(() => {
     setAfterHydration(true);
+    const schedule = () => setDeferredUI(true);
+    if ("requestIdleCallback" in window) {
+      (window as unknown as { requestIdleCallback: (cb: () => void, opts?: { timeout: number }) => number }).requestIdleCallback(schedule, { timeout: 1500 });
+    } else {
+      setTimeout(schedule, 1200);
+    }
     const gpc = typeof navigator !== "undefined" && (navigator as unknown as { globalPrivacyControl?: boolean }).globalPrivacyControl === true;
     setGpcEnabled(gpc);
     const syncConsent = () => {
@@ -77,7 +84,7 @@ export default function ClientLayout({
       inset: 0,
       overflow: "hidden"
     }}>
-      {!isResults && afterHydration && <PromoModal />}
+      {!isResults && deferredUI && <PromoModal />}
       <StyledComponentsRegistry>
         <HeaderVisibility />
         <main id="app-scroll" style={{ 
@@ -90,13 +97,13 @@ export default function ClientLayout({
           justifyContent: "space-between"
         }}>
           {children}
-          {!isResults && afterHydration && <Footer />}
+          {!isResults && deferredUI && <Footer />}
         </main>
       </StyledComponentsRegistry>
       {allowAnalytics ? <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ""} /> : null}
       {allowMarketing ? <FacebookPixel /> : null}
-      {afterHydration && isCars ? <CarListingTimer /> : null}
-      {!isStudio && !isResults && consentChoice === null && (
+      {deferredUI && isCars ? <CarListingTimer /> : null}
+      {!isStudio && !isResults && afterHydration && consentChoice === null && (
         <div
           className="cc-banner"
           role="dialog"
