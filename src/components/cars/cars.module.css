@@ -528,12 +528,12 @@
   border-color: var(--kendo-color-primary);
 }
 
-::global(html[data-theme="light"]) .cardLink:hover .card {
+:global(html[data-theme="light"]) .cardLink:hover .card {
   box-shadow: 0 12px 32px rgba(229, 72, 63, 0.15);
   border-color: var(--kendo-color-primary);
 }
 
-::global(html[data-theme="light"]) .card {
+:global(html[data-theme="light"]) .card {
   background: var(--kendo-color-surface);
   border-color: var(--kendo-color-border);
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
@@ -1017,12 +1017,12 @@
   color: var(--kendo-color-on-app-surface);
 }
 
-::global(html[data-theme="light"]) .rowLink:hover .row {
+:global(html[data-theme="light"]) .rowLink:hover .row {
   box-shadow: 0 8px 24px rgba(229, 72, 63, 0.12);
   border-color: var(--kendo-color-primary);
 }
 
-::global(html[data-theme="light"]) .row {
+:global(html[data-theme="light"]) .row {
   background: #fff;
   border-color: rgba(0,0,0,0.08);
 }
