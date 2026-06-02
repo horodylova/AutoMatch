@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import styles from './DatingHero.module.css';
 
-const HERO_IMAGE_SRC = "/photos-cars/amir-riazipour-TeYK3zOIkUk-unsplash.jpg";
+const HERO_IMAGE_SRC = "/optimized/amir-hero.webp";
 
 export default function DatingHero() {
   return (

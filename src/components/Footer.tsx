@@ -13,21 +13,10 @@ type ConsentChoice = "accepted" | "rejected";
 
 export default function Footer() {
   const pathname = usePathname();
-  const [logoSrc, setLogoSrc] = useState<string>("/logos/logo.svg");
   const [consentChoice, setConsentChoice] = useState<ConsentChoice | null>(null);
   const [gpcEnabled, setGpcEnabled] = useState(false);
 
-  useEffect(() => {
-    const updateLogo = () => {
-      const theme = document.documentElement.getAttribute("data-theme");
-      setLogoSrc(theme === "light" ? "/cropped logo.png" : "/logos/logo.svg");
-    };
-
-    updateLogo();
-    const observer = new MutationObserver(updateLogo);
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
-    return () => observer.disconnect();
-  }, []);
+  const logoSrc = "/optimized/cropped-logo.webp";
 
   useEffect(() => {
     const gpc = typeof navigator !== "undefined" && (navigator as unknown as { globalPrivacyControl?: boolean }).globalPrivacyControl === true;
@@ -85,7 +74,8 @@ export default function Footer() {
                   alt="CarCupid"
                   fill
                   className={styles.logoImg}
-                  unoptimized
+                  sizes="90px"
+                  quality={70}
                 />
               </div>
             </Link>

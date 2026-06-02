@@ -15,6 +15,7 @@ export default function Header() {
   const [scrolled, setScrolled] = useState<boolean>(false);
   const [hasSavedResults, setHasSavedResults] = useState<boolean>(false);
   const [wishlistCount, setWishlistCount] = useState<number>(0);
+  const logoSrc = "/optimized/cropped-logo.webp";
   const scrollElRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
@@ -92,22 +93,14 @@ export default function Header() {
           <Link href="/" className={styles.logoContainer}>
             <div className={styles.logoBox}>
               <Image
-                src="/logos/logo.svg"
+                src={logoSrc}
                 alt="CarCupid logo"
                 fill
                 priority
-                className={`${styles.logoImg} ${styles.logoImgDark}`}
+                sizes="64px"
+                className={styles.logoImg}
                 style={{ objectFit: "contain" }}
-                unoptimized
-              />
-              <Image
-                src="/cropped logo.png"
-                alt="CarCupid logo"
-                fill
-                priority
-                className={`${styles.logoImg} ${styles.logoImgLight}`}
-                style={{ objectFit: "contain" }}
-                unoptimized
+                quality={70}
               />
             </div>
           </Link>

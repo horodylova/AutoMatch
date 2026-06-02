@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import styles from "./CarPersonalities.module.css";
 
@@ -28,7 +30,7 @@ const logos = [
 ];
 
 function Row({ logos }: { logos: string[] }) {
-  const sequence = [...logos, ...logos, ...logos, ...logos];
+  const sequence = [...logos, ...logos];
   return (
     <div className={styles.track}>
       {sequence.map((src, i) => (

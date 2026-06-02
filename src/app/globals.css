@@ -40,9 +40,11 @@ body {
   transition: transform 140ms ease, box-shadow 140ms ease;
 }
 
-.cc-banner:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 18px 48px rgba(0,0,0,0.28);
+@media (hover: hover) and (pointer: fine) {
+  .cc-banner:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 18px 48px rgba(0,0,0,0.28);
+  }
 }
 
 .cc-banner__inner {
@@ -107,24 +109,26 @@ body {
   transition: transform 120ms ease, background-color 120ms ease, opacity 120ms ease;
 }
 
-.cc-btn:hover:not(:disabled) {
-  transform: translateY(-1px);
+@media (hover: hover) and (pointer: fine) {
+  .cc-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+  }
+  
+  .cc-btn-primary:hover:not(:disabled) {
+    filter: brightness(1.05);
+  }
+  
+  .cc-btn-secondary:hover:not(:disabled) {
+    background-color: rgba(255,255,255,0.06);
+  }
 }
 
 .cc-btn:active:not(:disabled) {
   transform: translateY(0);
 }
 
-.cc-btn-primary:hover:not(:disabled) {
-  filter: brightness(1.05);
-}
-
 .cc-btn-primary:active:not(:disabled) {
   filter: brightness(0.98);
-}
-
-.cc-btn-secondary:hover:not(:disabled) {
-  background-color: rgba(255,255,255,0.06);
 }
 
 .cc-btn-secondary:active:not(:disabled) {
@@ -149,22 +153,24 @@ body {
   white-space: nowrap;
 }
 
-.cc-banner__link:hover,
-.cc-banner__link:focus-visible {
-  color: rgba(245, 245, 247, 1);
-  text-decoration-color: rgba(245, 245, 247, 0.8);
-  opacity: 1;
+@media (hover: hover) and (pointer: fine) {
+  .cc-banner__link:hover,
+  .cc-banner__link:focus-visible {
+    color: rgba(245, 245, 247, 1);
+    text-decoration-color: rgba(245, 245, 247, 0.8);
+    opacity: 1;
+  }
+  
+  html[data-theme="light"] .cc-banner__link:hover,
+  html[data-theme="light"] .cc-banner__link:focus-visible {
+    color: var(--kendo-color-primary-hover);
+    text-decoration-color: rgba(229, 72, 63, 0.75);
+  }
 }
 
 html[data-theme="light"] .cc-banner__link {
   color: var(--kendo-color-primary);
   text-decoration-color: rgba(229, 72, 63, 0.45);
-}
-
-html[data-theme="light"] .cc-banner__link:hover,
-html[data-theme="light"] .cc-banner__link:focus-visible {
-  color: var(--kendo-color-primary-hover);
-  text-decoration-color: rgba(229, 72, 63, 0.75);
 }
 
 @media (max-width: 480px) {
@@ -531,50 +537,30 @@ html[data-theme="light"] .cc-banner__link:focus-visible {
 }
 
 html[data-theme="light"] {
-  /* DO NOT DELETE COMMENTED COLORS */
-  /* НЕ УДАЛЯТЬ ЗАКОММЕНТИРОВАННЫЕ Цвета */
-  /* --kendo-color-app-surface: #F4F5F7; */
-  --kendo-color-app-surface: #F5F6F8;
-  /* --kendo-color-surface: #FFFFFF; */
+  --kendo-color-app-surface: #F4F5F7;
   --kendo-color-surface: #FFFFFF;
-  /* --kendo-color-surface-alt: #E4E8F0; */
-  --kendo-color-surface-alt: #F0F2F5;
-  /* --kendo-color-on-app-surface: #1A252F; */
-  --kendo-color-on-app-surface: #111214;
-  /* --kendo-color-subtle: #6C6C6C; */
-  --kendo-color-subtle: #5C616A;
-  /* --kendo-color-border: rgba(10, 20, 30, 0.08); */
-  --kendo-color-border: rgba(0, 0, 0, 0.08);
-  /* --kendo-color-border-alt: rgba(10, 20, 30, 0.16); */
-  --kendo-color-border-alt: rgba(0, 0, 0, 0.16);
-  /* --app-background-body-grid-color: rgba(26, 37, 47, 0.08); */
-  --app-background-body-grid-color: rgba(17, 18, 20, 0.08);
+  --kendo-color-surface-alt: #E4E8F0;
+  --kendo-color-on-app-surface: #1A252F;
+  --kendo-color-subtle: #6C6C6C;
+  --kendo-color-border: rgba(10, 20, 30, 0.08);
+  --kendo-color-border-alt: rgba(10, 20, 30, 0.16);
+  --app-background-body-grid-color: rgba(26, 37, 47, 0.08);
   --app-background-body-accent-a: rgba(47, 126, 207, 0.16);
   --app-background-body-accent-b: rgba(201, 71, 45, 0.08);
-  /* --app-accent-strong: #2F7ECF; */
-  --app-accent-strong: var(--kendo-color-primary);
-  /* --app-accent-strong-soft: rgba(47, 126, 207, 0.13); */
-  --app-accent-strong-soft: rgba(229, 72, 63, 0.13);
+  --app-accent-strong: #2F7ECF;
+  --app-accent-strong-soft: rgba(47, 126, 207, 0.13);
   --app-header-background: rgba(255, 255, 255, 0.9);
   --app-header-background-scrolled: rgba(255, 255, 255, 0.98);
   --app-header-mobile-drawer-bg: #FFFFFF;
   --app-header-backdrop: rgba(10, 20, 30, 0.2);
-  /* --app-footer-background: #F4F5F7; */
-  --app-footer-background: var(--kendo-color-app-surface);
-  /* --app-footer-text-main: rgba(26, 37, 47, 0.9); */
-  --app-footer-text-main: rgba(17, 18, 20, 0.9);
-  /* --app-footer-text-muted: rgba(26, 37, 47, 0.8); */
-  --app-footer-text-muted: rgba(17, 18, 20, 0.8);
-  /* --app-footer-nav-title: rgba(26, 37, 47, 0.65); */
-  --app-footer-nav-title: rgba(17, 18, 20, 0.65);
-  /* --app-footer-link: rgba(26, 37, 47, 0.9); */
-  --app-footer-link: rgba(17, 18, 20, 0.9);
-  /* --app-footer-social: rgba(26, 37, 47, 0.8); */
-  --app-footer-social: rgba(17, 18, 20, 0.8);
-  /* --app-footer-bottom: rgba(26, 37, 47, 0.6); */
-  --app-footer-bottom: rgba(17, 18, 20, 0.6);
-  /* --app-footer-divider: rgba(26, 37, 47, 0.08); */
-  --app-footer-divider: rgba(0, 0, 0, 0.08);
+  --app-footer-background: #F4F5F7;
+  --app-footer-text-main: rgba(26, 37, 47, 0.9);
+  --app-footer-text-muted: rgba(26, 37, 47, 0.8);
+  --app-footer-nav-title: rgba(26, 37, 47, 0.65);
+  --app-footer-link: rgba(26, 37, 47, 0.9);
+  --app-footer-social: rgba(26, 37, 47, 0.8);
+  --app-footer-bottom: rgba(26, 37, 47, 0.6);
+  --app-footer-divider: rgba(26, 37, 47, 0.08);
   --app-footer-logo-background: transparent;
   --advice-img-filter: none;
   --advice-overlay-shadow: 0 16px 40px rgba(47, 126, 207, 0.15);
@@ -585,8 +571,7 @@ html[data-theme="light"] {
   --stats-text-color: rgba(26, 37, 47, 0.82);
   --stats-metric-label-color: rgba(26, 37, 47, 0.75);
   --stats-timeline-line: rgba(26, 37, 47, 0.12);
-  /* --stats-donut-a: #C9472D; */
-  --stats-donut-a: var(--kendo-color-primary);
+  --stats-donut-a: #C9472D;
   --stats-donut-b: #2F7ECF;
   --stats-donut-c: #4C6984;
   --stats-donut-d: #7C93A8;

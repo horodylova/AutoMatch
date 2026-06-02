@@ -5,8 +5,8 @@ import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
 import HeaderVisibility from "./HeaderVisibility";
 import StyledComponentsRegistry from "@/lib/styled-registry";
-import { GoogleAnalytics } from '@next/third-parties/google';
-import FacebookPixel from "./FacebookPixel";
+import DeferredGoogleAnalytics from "./DeferredGoogleAnalytics";
+import DeferredFacebookPixel from "./DeferredFacebookPixel";
 
 const Footer = dynamic(() => import("./Footer"), { ssr: false });
 const PromoModal = dynamic(() => import("./PromoModal"), { ssr: false });
@@ -61,6 +61,8 @@ export default function ClientLayout({
     };
   }, []);
 
+
+
   React.useEffect(() => {
     const allow = consentChoice === "accepted" && !gpcEnabled;
     setAllowAnalytics(allow);
@@ -84,7 +86,7 @@ export default function ClientLayout({
       inset: 0,
       overflow: "hidden"
     }}>
-      {!isResults && deferredUI && <PromoModal />}
+      {!isResults && deferredUI && false && <PromoModal />}
       <StyledComponentsRegistry>
         <HeaderVisibility />
         <main id="app-scroll" style={{ 
@@ -100,8 +102,8 @@ export default function ClientLayout({
           {!isResults && deferredUI && <Footer />}
         </main>
       </StyledComponentsRegistry>
-      {allowAnalytics ? <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ""} /> : null}
-      {allowMarketing ? <FacebookPixel /> : null}
+      {allowAnalytics ? <DeferredGoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ""} /> : null}
+      {allowMarketing ? <DeferredFacebookPixel /> : null}
       {deferredUI && isCars ? <CarListingTimer /> : null}
       {!isStudio && !isResults && afterHydration && consentChoice === null && (
         <div

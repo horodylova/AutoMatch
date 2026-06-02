@@ -69,11 +69,12 @@ export default function ShareButtons({ url, title }: ShareButtonsProps) {
     <div className={styles.container}>
       <div className={styles.logoWrapper}>
         <Image
-          src="/cropped logo.png"
+          src="/optimized/cropped-logo.webp"
           alt="CarCupid"
           fill
-          unoptimized
           className={styles.logo}
+          sizes="64px"
+          quality={70}
         />
       </div>
       <span className={styles.label}>Share:</span>

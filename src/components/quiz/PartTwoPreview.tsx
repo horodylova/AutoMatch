@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import styles from "./partTwoPreview.module.css";
-import previewImage from "../../../public/lamborgini.jpg";
+import previewImage from "../../../public/optimized/lamborgini.webp";
 
 export default function PartTwoPreview() {
   return (

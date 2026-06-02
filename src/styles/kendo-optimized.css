@@ -1,0 +1,65 @@
+/* Minimal Kendo UI styles - optimized for mobile performance */
+
+/* Import full Kendo theme but with optimized loading */
+@import "@progress/kendo-theme-default/dist/default-main.css";
+
+/* Ensure Kendo theme uses our CSS variables */
+:root {
+  --kendo-color-primary: #E5483F;
+  --kendo-color-primary-hover: #D75B3F;
+  --kendo-color-primary-active: #B23D2A;
+  --kendo-color-on-primary: #F5F5F7;
+  --kendo-color-app-surface: #1F1F23;
+  --kendo-color-surface: #2C2F36;
+  --kendo-color-surface-alt: #24262B;
+  --kendo-color-on-app-surface: #F5F5F7;
+  --kendo-color-subtle: #B8BCC6;
+  --kendo-color-border: rgba(255, 255, 255, 0.08);
+  --kendo-color-border-alt: rgba(255, 255, 255, 0.16);
+}
+
+html[data-theme="light"] {
+  --kendo-color-primary: #E5483F;
+  --kendo-color-primary-hover: #D75B3F;
+  --kendo-color-primary-active: #B23D2A;
+  --kendo-color-on-primary: #F5F5F7;
+  --kendo-color-app-surface: #F4F5F7;
+  --kendo-color-surface: #FFFFFF;
+  --kendo-color-surface-alt: #E4E8F0;
+  --kendo-color-on-app-surface: #1A252F;
+  --kendo-color-subtle: #6C6C6C;
+  --kendo-color-border: rgba(10, 20, 30, 0.08);
+  --kendo-color-border-alt: rgba(10, 20, 30, 0.16);
+}
+
+/* Override heavy effects for mobile devices */
+@media (max-width: 768px) {
+  /* Disable complex transitions and animations on mobile */
+  .k-button,
+  .k-button:hover,
+  .k-button:focus,
+  .k-button:active {
+    transition: none !important;
+    animation: none !important;
+    transform: none !important;
+  }
+  
+  /* Simplify shadows and effects */
+  .k-card,
+  .k-panelbar,
+  .k-grid {
+    box-shadow: none !important;
+    border: 1px solid var(--kendo-color-border) !important;
+  }
+  
+  /* Disable hover effects on touch devices */
+  @media (hover: none) and (pointer: coarse) {
+    .k-button:hover,
+    .k-card:hover,
+    .k-grid tr:hover {
+      background-color: inherit !important;
+      border-color: inherit !important;
+      box-shadow: none !important;
+    }
+  }
+}

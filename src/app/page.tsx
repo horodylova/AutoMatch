@@ -1,19 +1,16 @@
-import HowItWorks from "../components/HowItWorks";
-import CarPersonalities from "../components/CarPersonalities";
-import Stats from "../components/Stats";
-import AdviceBanner from "../components/AdviceBanner";
+import { Suspense } from "react";
 import JournalPreview from "../components/JournalPreview";
 import DatingHero from "../components/DatingHero";
+import HomeBelowFold from "../components/HomeBelowFold";
 
 export default function Page() {
   return (
     <>
       <DatingHero />
-      <HowItWorks />
-      <AdviceBanner />
-      <JournalPreview />
-      <Stats />
-      <CarPersonalities />
+      <Suspense fallback={null}>
+        <JournalPreview />
+      </Suspense>
+      <HomeBelowFold />
      
     </>
   );

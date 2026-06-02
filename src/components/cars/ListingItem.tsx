@@ -49,37 +49,56 @@ export default function ListingItem({ item, openInNewTab }: { item: ListingItemD
   };
 
   return (
-    <div className={styles.card} data-id={item.id}>
-      <div className={styles.imgWrap}>
-        <Image src={imgSrc} alt={item.title} fill unoptimized className={styles.cardImg} onError={() => setImgSrc("/no-image-available.jpg")} />
-        <button type="button" className={styles.wishBtn} aria-label="Add to wishlist" onClick={toggleWishlist}>
-          {saved ? <FaHeart /> : <FaRegHeart />}
-        </button>
-        <div className={styles.badgeBar}>
-          {item.badges.map((b) => (
-            <span key={b} className={styles.badge}>{b}</span>
-          ))}
-        </div>
-      </div>
-      <div className={styles.cardBody}>
-        <div className={styles.title}>{item.title}</div>
-        <div className={styles.subtitle}>{item.subtitle}</div>
-        <div className={styles.specs}>
-          {item.specs.map((s, i) => (
-            <span key={`${s}-${i}`} className={styles.spec}>{s}</span>
-          ))}
-        </div>
-        <div className={styles.priceRow}>
-          <div className={styles.price}>{item.price}</div>
-          <Link 
-            href={`/cars/${encodeURIComponent(item.id)}`} 
-            target={openInNewTab ? "_blank" : undefined}
-            rel={openInNewTab ? "noopener noreferrer" : undefined}
+    <Link 
+      href={`/cars/${encodeURIComponent(item.id)}`} 
+      target={openInNewTab ? "_blank" : undefined}
+      rel={openInNewTab ? "noopener noreferrer" : undefined}
+      className={styles.cardLink}
+    >
+      <div className={styles.card} data-id={item.id}>
+        <div className={styles.imgWrap}>
+          <Image src={imgSrc} alt={item.title} fill unoptimized className={styles.cardImg} onError={() => setImgSrc("/no-image-available.jpg")} />
+          <button 
+            type="button" 
+            className={styles.wishBtn} 
+            aria-label="Add to wishlist" 
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              toggleWishlist();
+            }}
           >
-            <Button themeColor="primary" className={styles.detailsBtn}>Details</Button>
-          </Link>
+            {saved ? <FaHeart /> : <FaRegHeart />}
+          </button>
+          <div className={styles.badgeBar}>
+            {item.badges.map((b) => (
+              <span key={b} className={styles.badge}>{b}</span>
+            ))}
+          </div>
+        </div>
+        <div className={styles.cardBody}>
+          <div className={styles.title}>{item.title}</div>
+          <div className={styles.subtitle}>{item.subtitle}</div>
+          <div className={styles.specs}>
+            {item.specs.map((s, i) => (
+              <span key={`${s}-${i}`} className={styles.spec}>{s}</span>
+            ))}
+          </div>
+          <div className={styles.priceRow}>
+            <div className={styles.price}>{item.price}</div>
+            <Button 
+              themeColor="primary" 
+              className={styles.detailsBtn}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+              }}
+            >
+              Details
+            </Button>
+          </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }

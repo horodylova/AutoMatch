@@ -1,5 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import styles from "./AdviceBanner.module.css";
+import bannerImage from "../../public/optimized/banner.webp";
 
 const points = [
   "Get a clear picture of what you truly need in a car — before you start shopping",
@@ -12,7 +15,7 @@ export default function AdviceBanner() {
   return (
     <section id="before-you-buy" className={styles.section}>
       <div className={styles.image}>
-        <Image src="/banner.jpg" alt="Lifestyle" fill sizes="(max-width: 992px) 100vw, 90vw" className={styles.img} unoptimized />
+        <Image src={bannerImage} alt="Lifestyle" fill sizes="(max-width: 992px) 100vw, 90vw" className={styles.img} placeholder="blur" quality={70} />
         <div className={styles.imgFilter}></div>
         <div className={styles.overlay}>
           <h3 className={styles.title}>Make smarter, <br/>confident car decisions</h3>

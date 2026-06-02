@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Archivo } from "next/font/google";
-import "@progress/kendo-theme-default/dist/all.css";
+import Script from "next/script";
 import "./globals.css";
+import "../styles/kendo-optimized.css";
 import ClientLayout from "../components/ClientLayout";
 
 const archivo = Archivo({
@@ -62,6 +63,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={archivo.variable}>
+      <head>
+        <Script
+          id="theme-init"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html:
+              '(function(){try{var t=localStorage.getItem("theme");if(t!=="dark"&&t!=="light"){t=window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";}document.documentElement.setAttribute("data-theme",t);}catch(e){}})();',
+          }}
+        />
+      </head>
       <ClientLayout>
         {children}
       </ClientLayout>

@@ -46,18 +46,6 @@
   object-fit: contain;
   object-position: center;
 }
-
-.logoImgLight {
-  display: none;
-}
-
-:global(html[data-theme="light"]) .logoImgLight {
-  display: block;
-}
-
-:global(html[data-theme="light"]) .logoImgDark {
-  display: none;
-}
  
 .desktopNav {
   display: flex;
@@ -94,8 +82,6 @@
   background: var(--app-accent-strong-soft);
   transform: translateY(-1px);
 }
-
-/* removed theme-specific logoBox background to keep logo on clean header */
 
 :global(html[data-theme="light"]) .contactButton {
   color: var(--kendo-color-on-primary);

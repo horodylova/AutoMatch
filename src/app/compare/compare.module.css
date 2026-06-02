@@ -73,9 +73,10 @@
   font-size: 14px;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: rgba(245, 245, 247, 0.55);
+  color: rgba(245, 245, 247, 0.85);
   text-align: center;
   margin-bottom: 8px;
+  font-weight: 600;
 }
 
 /* Search Input Styles (Adapted from cars.module.css) */
@@ -112,7 +113,7 @@
 }
 
 .searchField::placeholder {
-  color: rgba(245, 245, 247, 0.5);
+  color: rgba(245, 245, 247, 0.7);
 }
 
 .searchField:focus {
@@ -270,12 +271,14 @@
   font-size: 20px;
   font-weight: 700;
   margin-bottom: 4px;
+  color: rgba(245, 245, 247, 0.95);
 }
 
 .carTrim {
   font-size: 14px;
-  color: rgba(245, 245, 247, 0.6);
+  color: rgba(245, 245, 247, 0.75);
   margin-bottom: 16px;
+  font-weight: 500;
 }
 
 .changeButton {

@@ -12,40 +12,53 @@
 .introBox { position: absolute; z-index: 2; top: 50%; left: 50%; transform: translate(-50%, -50%); max-width: 640px; width: calc(100% - 32px); padding: 28px; border-radius: 18px; text-align: center; background: var(--dating-intro-bg); color: var(--dating-intro-text); box-shadow: var(--dating-intro-shadow); border: 1px solid var(--dating-intro-border); backdrop-filter: blur(8px); box-sizing: border-box; }
 .introTitle { margin: 0 0 12px 0; font-size: clamp(24px, 4vw, 36px); font-weight: 800; letter-spacing: 0.4px; }
 .introText { margin: 0 0 18px 0; font-size: clamp(14px, 2.6vw, 18px); color: var(--dating-intro-text); opacity: 0.85; line-height: 1.7; }
-.introCta { display: inline-flex; width: auto; min-width: 240px; justify-content: center; padding: 16px 32px; border-radius: 12px; background: var(--kendo-color-primary); color: var(--kendo-color-on-primary); text-decoration: none; font-weight: 600; box-sizing: border-box; transition: transform 0.15s ease, box-shadow 0.2s ease, filter 0.2s ease; will-change: transform; }
-.introCta:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(229, 72, 63, 0.35); filter: brightness(1.05); }
-.introCta:active { transform: translateY(0) scale(0.98); box-shadow: 0 4px 12px rgba(229, 72, 63, 0.25); }
+.introCta { display: inline-flex; width: auto; min-width: 240px; justify-content: center; padding: 16px 32px; border-radius: 12px; background: var(--kendo-color-primary); color: var(--kendo-color-on-primary); text-decoration: none; font-weight: 600; box-sizing: border-box; }
+@media (hover: hover) and (pointer: fine) {
+  .introCta { transition: transform 0.15s ease, box-shadow 0.2s ease, filter 0.2s ease; }
+  .introCta:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(229, 72, 63, 0.35); filter: brightness(1.05); }
+  .introCta:active { transform: translateY(0) scale(0.98); box-shadow: 0 4px 12px rgba(229, 72, 63, 0.25); }
+}
 
 .introSection { padding: 40px 24px 60px; }
 .container { max-width: 1200px; margin: 0 auto; }
 .lead { display: flex; align-items: center; justify-content: center; }
 .leadText { max-width: 840px; text-align: center; font-size: clamp(18px, 3vw, 24px); line-height: 1.6; color: var(--dating-lead-color); }
 .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 40px; }
-.featureBox { background: var(--dating-card-bg); border: 1px solid var(--dating-card-border); border-radius: 16px; padding: 20px; position: relative; overflow: hidden; transition: box-shadow 0.2s ease, border-color 0.2s ease, transform 0.15s ease; }
-.featureBox::before { content: ""; position: absolute; inset: 0; background: radial-gradient(closest-side, rgba(255, 255, 255, 0.08), rgba(229, 72, 63, 0.08) 35%, rgba(229, 72, 63, 0) 70%); opacity: 0; transition: opacity 0.25s ease; }
-.featureBox:hover { border-color: var(--dating-card-border-hover); box-shadow: 0 10px 28px rgba(0,0,0,0.25); transform: translateY(-2px); }
-.featureBox:hover::before { opacity: 1; animation: glowPulse 1.4s ease-in-out; }
+.featureBox { background: var(--dating-card-bg); border: 1px solid var(--dating-card-border); border-radius: 16px; padding: 20px; position: relative; overflow: hidden; }
+.featureBox::before { content: ""; position: absolute; inset: 0; background: radial-gradient(closest-side, rgba(255, 255, 255, 0.08), rgba(229, 72, 63, 0.08) 35%, rgba(229, 72, 63, 0) 70%); opacity: 0; }
 .featureIcon { width: 60px; height: 60px; border-radius: 12px; background: var(--dating-icon-bg); margin-bottom: 12px; display: inline-flex; align-items: center; justify-content: center; }
-.featureBox:hover .featureIcon { filter: brightness(1.05); box-shadow: var(--dating-icon-shadow); }
 .featureTitle { margin: 0 0 8px 0; font-size: clamp(18px, 2.6vw, 22px); font-weight: 700; color: var(--kendo-color-on-app-surface); }
 .featureDesc { margin: 0; font-size: clamp(14px, 2.2vw, 16px); color: var(--kendo-color-subtle); line-height: 1.6; }
+
+@media (hover: hover) and (pointer: fine) {
+  .featureBox { transition: box-shadow 0.2s ease, border-color 0.2s ease, transform 0.15s ease; }
+  .featureBox::before { transition: opacity 0.25s ease; }
+  .featureBox:hover { border-color: var(--dating-card-border-hover); box-shadow: 0 10px 28px rgba(0,0,0,0.25); transform: translateY(-2px); }
+  .featureBox:hover::before { opacity: 1; animation: glowPulse 1.4s ease-in-out; }
+  .featureBox:hover .featureIcon { filter: brightness(1.05); box-shadow: var(--dating-icon-shadow); }
+}
 
 :global(html[data-theme="light"]) .featureDesc { color: var(--kendo-color-on-app-surface); opacity: 0.85; }
 :global(html[data-theme="light"]) .featureBox::before { display: none; }
 :global(html[data-theme="light"]) .featureBox { box-shadow: 0 8px 24px rgba(229, 72, 63, 0.12); border-color: rgba(229, 72, 63, 0.15); }
-:global(html[data-theme="light"]) .featureBox:hover { box-shadow: 0 12px 32px rgba(229, 72, 63, 0.2); transform: translateY(-4px); }
 
-:global(html[data-theme="light"]) .introCta:hover {
-  box-shadow: 0 8px 20px rgba(229, 72, 63, 0.28);
-  filter: brightness(1.03);
-}
-
-:global(html[data-theme="light"]) .introCta:active {
-  box-shadow: 0 4px 10px rgba(229, 72, 63, 0.24);
+@media (hover: hover) and (pointer: fine) {
+  :global(html[data-theme="light"]) .featureBox:hover { box-shadow: 0 12px 32px rgba(229, 72, 63, 0.2); transform: translateY(-4px); }
 }
 
 :global(html[data-theme="light"]) .introCta {
   color: var(--kendo-color-on-primary);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  :global(html[data-theme="light"]) .introCta:hover {
+    box-shadow: 0 8px 20px rgba(229, 72, 63, 0.28);
+    filter: brightness(1.03);
+  }
+  
+  :global(html[data-theme="light"]) .introCta:active {
+    box-shadow: 0 4px 10px rgba(229, 72, 63, 0.24);
+  }
 }
 
 .featureHeader { display: block; }

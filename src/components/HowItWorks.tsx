@@ -1,3 +1,5 @@
+"use client";
+
 import styles from "./HowItWorks.module.css";
 import Image from "next/image";
 import k9Image from "../../public/dog in the car.jpg";
@@ -9,7 +11,7 @@ export default function HowItWorks() {
         <div className={styles.k9Content}>
           <div className={styles.k9BrandRow}>
             <Image
-              src="/cupids/k9cupid-logo-final.png"
+              src="/optimized/k9cupid-logo.webp"
               alt="k9Cupid"
               width={80}
               height={80}
