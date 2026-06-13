@@ -288,7 +288,8 @@
   .filtersPanel { position: static; top: auto; max-height: none; }
   .filtersBody { overflow: visible; }
   .filtersToggleBar { display: flex; align-items: center; justify-content: center; padding: 8px; }
-  .filtersToggleBtn { display: inline-block; padding: 10px 14px; border-radius: 12px; border: 1px solid var(--kendo-color-border); background: var(--kendo-color-surface); color: var(--kendo-color-on-app-surface); font-weight: 700; }
+  .filtersToggleBtn { display: inline-block; padding: 10px 14px; border-radius: 12px; border: 1px solid var(--kendo-color-border); background: var(--kendo-color-surface); color: var(--kendo-color-on-app-surface); font-weight: 700; cursor: pointer; transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease; }
+.filtersToggleBtn:hover { background: var(--kendo-color-surface-alt); border-color: var(--kendo-color-border-alt); }
   .card { grid-template-rows: 220px auto; }
   .badge { font-size: 11px; padding: 3px 8px; }
   .title { font-size: 17px; }

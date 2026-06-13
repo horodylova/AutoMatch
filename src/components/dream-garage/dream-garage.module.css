@@ -1,0 +1,1312 @@
+.page {
+  width: min(1180px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 40px 0 80px;
+}
+
+/* ───────────────────────── hero ───────────────────────── */
+.hero {
+  padding: 32px 0 4px;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--kendo-color-primary);
+}
+
+.eyebrow::before {
+  content: "";
+  width: 28px;
+  height: 1px;
+  background: currentColor;
+}
+
+.title {
+  margin: 18px 0 14px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(40px, 6vw, 68px);
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+  color: var(--kendo-color-on-app-surface);
+  max-width: 13ch;
+}
+
+.title em {
+  color: var(--kendo-color-primary);
+  font-style: italic;
+}
+
+.subtitle {
+  max-width: 62ch;
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--kendo-color-subtle);
+}
+
+/* ──────────────────────── builder ─────────────────────── */
+/* one calm surface holds budget + bays, instead of stacked boxes */
+.builder {
+  margin-top: 32px;
+  padding: 30px;
+  background:
+    radial-gradient(120% 80% at 50% -8%, rgba(229, 72, 63, 0.08), transparent 58%),
+    var(--kendo-color-surface);
+  border: 1px solid var(--kendo-color-border);
+  border-radius: 22px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.divider {
+  height: 1px;
+  margin: 28px 0;
+  background: var(--kendo-color-border);
+}
+
+/* budget */
+.budgetBlock {
+  display: flex;
+  flex-direction: column;
+}
+
+.budgetHead {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.kicker {
+  margin-bottom: 6px;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--kendo-color-subtle);
+}
+
+.budgetValue {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(38px, 6vw, 60px);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  color: var(--kendo-color-on-app-surface);
+}
+
+.presetRow {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.presetButton {
+  min-width: 112px;
+  padding: 9px 16px;
+  display: grid;
+  gap: 2px;
+  justify-items: center;
+  text-align: center;
+  appearance: none;
+  border: 1px solid var(--kendo-color-border);
+  border-radius: 999px;
+  background: var(--kendo-color-surface-alt);
+  color: var(--kendo-color-on-app-surface);
+  cursor: pointer;
+  transition: border-color 0.16s ease, background 0.16s ease, transform 0.16s ease, box-shadow 0.16s ease;
+}
+
+.presetButton span {
+  font-weight: 600;
+}
+
+.presetButton small {
+  color: var(--kendo-color-subtle);
+}
+
+.presetButton:hover {
+  border-color: var(--kendo-color-primary);
+  transform: translateY(-1px);
+}
+
+.presetButton[aria-pressed="true"] {
+  border-color: var(--kendo-color-primary);
+  background: rgba(229, 72, 63, 0.1);
+  box-shadow: 0 8px 20px rgba(229, 72, 63, 0.12);
+}
+
+.sliderWrap {
+  margin-top: 24px;
+}
+
+.slider {
+  width: 100%;
+  accent-color: var(--kendo-color-primary);
+}
+
+.sliderScale {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--kendo-color-subtle);
+}
+
+.sliderScale span:last-child {
+  text-align: right;
+}
+
+/* bays */
+.baysBlock {
+  display: flex;
+  flex-direction: column;
+}
+
+.blockHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.blockTitle {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(26px, 3.4vw, 34px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--kendo-color-on-app-surface);
+}
+
+.blockText {
+  margin: 8px 0 0;
+  max-width: 56ch;
+  color: var(--kendo-color-subtle);
+  line-height: 1.6;
+}
+
+.blockActions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.secondaryButton {
+  padding: 10px 16px;
+  font-weight: 600;
+  appearance: none;
+  border: 1px solid var(--kendo-color-border);
+  border-radius: 999px;
+  background: var(--kendo-color-surface-alt);
+  color: var(--kendo-color-on-app-surface);
+  cursor: pointer;
+  transition: border-color 0.16s ease, transform 0.16s ease;
+}
+
+.secondaryButton:hover {
+  border-color: var(--kendo-color-primary);
+  transform: translateY(-1px);
+}
+
+.bayGrid {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.bayCard {
+  position: relative;
+  flex: 1 1 280px;
+  padding: 18px;
+  border: 1px solid var(--kendo-color-border);
+  border-radius: 16px;
+  background: var(--kendo-color-surface-alt);
+  transition: border-color 0.16s ease;
+}
+
+.bayCard:hover {
+  border-color: color-mix(in srgb, var(--kendo-color-primary) 40%, var(--kendo-color-border));
+}
+
+/* lift a bay while its dropdown is open so the menu isn't clipped */
+.bayCard:focus-within {
+  z-index: 30;
+}
+
+.bayTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.bayMain {
+  flex: 1;
+  min-width: 0;
+}
+
+.bayNumber {
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--kendo-color-subtle);
+}
+
+.bayDescription {
+  margin-top: 8px;
+  color: var(--kendo-color-subtle);
+  min-height: 40px;
+  line-height: 1.5;
+}
+
+.removeButton {
+  padding: 8px 12px;
+  white-space: nowrap;
+  font-weight: 600;
+  appearance: none;
+  border: 1px solid var(--kendo-color-border);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--kendo-color-subtle);
+  cursor: pointer;
+  transition: border-color 0.16s ease, color 0.16s ease;
+}
+
+.removeButton:hover:not(:disabled) {
+  border-color: var(--kendo-color-primary);
+  color: var(--kendo-color-primary);
+}
+
+.removeButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.allocationRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 16px 0 8px;
+}
+
+.allocationMoney {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 24px;
+  color: var(--kendo-color-on-app-surface);
+}
+
+.allocationPct {
+  font-size: 13px;
+  color: var(--kendo-color-subtle);
+}
+
+/* ──────────────── custom dropdown (CustomSelect) ──────────────── */
+.selectRoot {
+  position: relative;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.selectTrigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--kendo-color-border);
+  background: var(--kendo-color-surface);
+  color: var(--kendo-color-on-app-surface);
+  font-size: 16px;
+  line-height: 1.2;
+  text-align: left;
+  cursor: pointer;
+  appearance: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.selectTrigger:hover {
+  border-color: var(--kendo-color-primary);
+}
+
+.selectTrigger[data-open="true"],
+.selectTrigger:focus-visible {
+  outline: none;
+  border-color: var(--kendo-color-primary);
+  box-shadow: 0 0 0 3px rgba(229, 72, 63, 0.18);
+}
+
+.selectTrigger:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.selectValue {
+  font-weight: 600;
+}
+
+.selectPlaceholder {
+  color: var(--kendo-color-subtle);
+}
+
+.selectChevron {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
+  color: var(--kendo-color-subtle);
+  transition: transform 0.2s ease;
+}
+
+.selectTrigger[data-open="true"] .selectChevron {
+  transform: rotate(180deg);
+}
+
+.selectList {
+  position: absolute;
+  z-index: 40;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  background: var(--kendo-color-surface);
+  border: 1px solid var(--kendo-color-border);
+  border-radius: 14px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18);
+  max-height: 264px;
+  overflow-y: auto;
+}
+
+.selectOption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border-radius: 9px;
+  font-size: 15px;
+  color: var(--kendo-color-on-app-surface);
+  cursor: pointer;
+  transition: background 0.12s ease;
+}
+
+.selectOption[data-active="true"] {
+  background: rgba(229, 72, 63, 0.08);
+}
+
+.selectOption[aria-selected="true"] {
+  color: var(--kendo-color-primary);
+}
+
+.selectOption[aria-selected="true"]::after {
+  content: "✓";
+  margin-left: 12px;
+  font-size: 13px;
+}
+
+/* ───────────────────────── gauge ──────────────────────── */
+.gaugeWrap {
+  margin-top: 24px;
+  padding: 18px;
+  border: 1px solid var(--kendo-color-border);
+  border-radius: 18px;
+  background:
+    radial-gradient(120% 120% at 50% 0%, rgba(229, 72, 63, 0.1), transparent 55%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0)),
+    var(--kendo-color-surface);
+}
+
+.gaugeTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.gaugeEyebrow {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--kendo-color-subtle);
+}
+
+.gaugeValue {
+  margin-top: 6px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(26px, 3vw, 34px);
+  line-height: 1;
+  color: var(--kendo-color-on-app-surface);
+}
+
+.gaugeStatus {
+  padding: 9px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(58, 196, 117, 0.22);
+  background: rgba(58, 196, 117, 0.08);
+  color: #2f9e63;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.gaugeStatusDanger {
+  border-color: rgba(229, 72, 63, 0.24);
+  background: rgba(229, 72, 63, 0.1);
+  color: #c4452f;
+}
+
+.gaugeTrack {
+  position: relative;
+  height: 66px;
+  margin-top: 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02)),
+    var(--kendo-color-surface-alt);
+  overflow: hidden;
+}
+
+.gaugeTrackGlow {
+  position: absolute;
+  inset: -30% 18% auto;
+  height: 80%;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(229, 72, 63, 0.18), transparent 72%);
+  pointer-events: none;
+}
+
+.gaugeTrackGrid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+  opacity: 0.36;
+  pointer-events: none;
+}
+
+.gaugeTrackMarkers {
+  position: absolute;
+  inset: 9px 18px auto;
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.42);
+  pointer-events: none;
+}
+
+.gaugeRail {
+  position: absolute;
+  left: 8px;
+  top: 8px;
+  bottom: 8px;
+  display: flex;
+  min-width: 0;
+  border-radius: 999px;
+  overflow: hidden;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 10px 26px rgba(229, 72, 63, 0.18);
+}
+
+.gaugeSegment {
+  position: relative;
+  min-width: 0;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  padding: 0 12px 10px;
+  border-right: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.gaugeSegment:last-child {
+  border-right: 0;
+}
+
+.gaugeSegment::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.16), transparent 55%);
+  pointer-events: none;
+}
+
+.gaugeSegmentText {
+  position: relative;
+  z-index: 1;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.9);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gaugeSegmentTone0 {
+  background: linear-gradient(135deg, #ff8f7e, #e5483f);
+}
+
+.gaugeSegmentTone1 {
+  background: linear-gradient(135deg, #f9b26e, #f0812e);
+}
+
+.gaugeSegmentTone2 {
+  background: linear-gradient(135deg, #e4b8ff, #9f6de2);
+}
+
+.gaugeSegmentTone3 {
+  background: linear-gradient(135deg, #8fd6ff, #3f87d9);
+}
+
+.gaugeSegmentTone4 {
+  background: linear-gradient(135deg, #8fe0b3, #2fa56e);
+}
+
+.gaugeOverrun {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  bottom: 8px;
+  min-width: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      rgba(255, 124, 99, 0.92) 0,
+      rgba(255, 124, 99, 0.92) 12px,
+      rgba(185, 53, 43, 0.94) 12px,
+      rgba(185, 53, 43, 0.94) 24px
+    );
+  box-shadow: 0 0 0 1px rgba(255, 124, 99, 0.18), 0 12px 30px rgba(185, 53, 43, 0.3);
+}
+
+.gaugeOverrun span {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.gaugeLegend {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+
+.gaugeLegendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  padding: 8px 10px;
+  border-radius: 999px;
+  background: var(--kendo-color-surface-alt);
+  border: 1px solid var(--kendo-color-border);
+}
+
+.gaugeLegendSwatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex: 0 0 10px;
+}
+
+.gaugeLegendText {
+  min-width: 0;
+  font-size: 12px;
+  color: var(--kendo-color-on-app-surface);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gaugeMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--kendo-color-subtle);
+}
+
+/* ─────────────────────── cta + alerts ─────────────────── */
+.ctaRow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 24px;
+}
+
+.primaryButton {
+  padding: 14px 26px;
+  font-weight: 700;
+  font-size: 16px;
+  appearance: none;
+  border: 1px solid var(--kendo-color-primary);
+  border-radius: 999px;
+  background: var(--kendo-color-primary);
+  color: var(--kendo-color-on-primary);
+  cursor: pointer;
+  box-shadow: 0 10px 24px rgba(229, 72, 63, 0.24);
+  transition: background 0.16s ease, border-color 0.16s ease, transform 0.16s ease;
+}
+
+.primaryButton:hover:not(:disabled) {
+  background: var(--kendo-color-primary-hover);
+  border-color: var(--kendo-color-primary-hover);
+  transform: translateY(-1px);
+}
+
+.primaryButton:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.inlineWarning,
+.errorBox {
+  border-radius: 14px;
+  padding: 12px 16px;
+  line-height: 1.5;
+}
+
+.inlineWarning {
+  color: #c4452f;
+  background: rgba(229, 72, 63, 0.08);
+  border: 1px solid rgba(229, 72, 63, 0.2);
+}
+
+.errorBox {
+  margin-top: 16px;
+  color: #c4452f;
+  background: rgba(185, 53, 43, 0.1);
+  border: 1px solid rgba(229, 72, 63, 0.28);
+}
+
+/* ──────────────────────── results ─────────────────────── */
+.results {
+  margin-top: 40px;
+  scroll-margin-top: 24px;
+}
+
+.resultsHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 22px;
+}
+
+.summaryStrip {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.summaryStrip > div {
+  padding: 0 22px;
+  border-left: 1px solid var(--kendo-color-border);
+}
+
+.summaryStrip > div:first-child {
+  padding-left: 0;
+  border-left: 0;
+}
+
+.summaryStrip span {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--kendo-color-subtle);
+}
+
+.summaryStrip strong {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 28px;
+  line-height: 1;
+  color: var(--kendo-color-on-app-surface);
+}
+
+.resultsPlaceholder {
+  padding: 40px 28px;
+  border: 1px dashed var(--kendo-color-border);
+  border-radius: 18px;
+  text-align: center;
+  color: var(--kendo-color-subtle);
+  line-height: 1.6;
+}
+
+.resultsPlaceholder strong {
+  color: var(--kendo-color-on-app-surface);
+}
+
+.sharePanel {
+  margin-top: 32px;
+  margin-bottom: 32px;
+  padding: 28px;
+  border-radius: 28px;
+  background:
+    radial-gradient(110% 140% at 0% 0%, rgba(229, 72, 63, 0.12), transparent 48%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0)),
+    var(--kendo-color-surface);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
+}
+
+.shareContent {
+  display: grid;
+  grid-template-columns: minmax(0, 1.02fr) minmax(320px, 0.98fr);
+  gap: 28px;
+  align-items: stretch;
+}
+
+.shareCopy {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.shareEyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--kendo-color-primary);
+}
+
+.shareEyebrow::before {
+  content: "";
+  width: 28px;
+  height: 1px;
+  background: currentColor;
+}
+
+.shareTitle {
+  margin: 14px 0 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(30px, 4vw, 42px);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  color: var(--kendo-color-on-app-surface);
+  max-width: 12ch;
+}
+
+.shareText {
+  margin: 0;
+  max-width: 46ch;
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--kendo-color-subtle);
+}
+
+.shareActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.sharePrimaryButton {
+  padding: 13px 22px;
+  appearance: none;
+  border: 0;
+  border-radius: 999px;
+  background: var(--kendo-color-primary);
+  color: var(--kendo-color-on-primary);
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 12px 26px rgba(229, 72, 63, 0.22);
+  transition: transform 0.16s ease, box-shadow 0.16s ease, filter 0.16s ease;
+}
+
+.sharePrimaryButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 16px 30px rgba(229, 72, 63, 0.24);
+  filter: saturate(1.04);
+}
+
+.shareSocials {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.shareIconButton {
+  width: 46px;
+  height: 46px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  appearance: none;
+  border: 0;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--kendo-color-surface-alt) 86%, white 14%);
+  color: var(--kendo-color-on-app-surface);
+  cursor: pointer;
+  transition: transform 0.16s ease, background-color 0.16s ease, color 0.16s ease, box-shadow 0.16s ease;
+}
+
+.shareIconButton:hover {
+  transform: translateY(-1px);
+  background: rgba(229, 72, 63, 0.12);
+  color: var(--kendo-color-primary);
+  box-shadow: 0 10px 24px rgba(229, 72, 63, 0.12);
+}
+
+.shareDeck {
+  padding: 18px;
+  border-radius: 24px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0)),
+    color-mix(in srgb, var(--kendo-color-surface-alt) 84%, white 16%);
+}
+
+.shareDeckHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.shareDeckLabel {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--kendo-color-subtle);
+}
+
+.shareDeckValue {
+  margin-top: 6px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(22px, 2.8vw, 28px);
+  line-height: 1;
+  color: var(--kendo-color-on-app-surface);
+}
+
+/* total parked — solid coral chip, white text, larger & bolder so it reads */
+.shareDeckMeta {
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: var(--kendo-color-primary);
+  color: var(--kendo-color-on-primary);
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  box-shadow: 0 8px 18px rgba(229, 72, 63, 0.24);
+}
+
+.shareCarGrid {
+  display: grid;
+  gap: 12px;
+}
+
+.shareCarCard {
+  display: flex;
+  align-items: stretch;
+  gap: 12px;
+  padding: 10px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.58);
+  backdrop-filter: blur(6px);
+}
+
+.shareCarImageWrap {
+  position: relative;
+  width: 112px;
+  flex: 0 0 112px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--kendo-color-surface);
+}
+
+.shareCarImage {
+  object-fit: cover;
+}
+
+.shareCarBody {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.shareCarRole {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--kendo-color-primary);
+}
+
+.shareCarName {
+  margin-top: 6px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 21px;
+  line-height: 1.06;
+  color: #1d1f27;
+}
+
+.shareCarMeta {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+/* chips sit on a light (white) share card → use fixed dark ink so they
+   never go grey-on-grey regardless of the active Kendo theme */
+.shareCarMeta span {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(20, 22, 28, 0.06);
+  font-size: 12px;
+  font-weight: 600;
+  color: #1d1f27;
+}
+
+/* price = the key number: coral chip, bold, always readable */
+.shareCarMeta span:first-child {
+  background: rgba(229, 72, 63, 0.14);
+  color: #c4452f;
+  font-weight: 700;
+}
+
+.resultsGrid {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.resultCard {
+  flex: 1 1 320px;
+  padding: 18px;
+  border: 1px solid var(--kendo-color-border);
+  border-radius: 18px;
+  background: var(--kendo-color-surface);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.resultHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.resultRole {
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--kendo-color-primary);
+}
+
+.resultBudget {
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--kendo-color-subtle);
+}
+
+.resultStatus {
+  padding: 7px 12px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.resultStatus[data-status="matched"] {
+  background: rgba(58, 196, 117, 0.14);
+  color: #2f9e63;
+}
+
+.resultStatus[data-status="unfilled"] {
+  background: rgba(229, 72, 63, 0.14);
+  color: #c4452f;
+}
+
+.resultImageWrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: 14px;
+  margin-top: 16px;
+  background: var(--kendo-color-surface-alt);
+}
+
+.resultImage {
+  object-fit: cover;
+}
+
+.resultName {
+  margin-top: 16px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 24px;
+  line-height: 1.1;
+  color: var(--kendo-color-on-app-surface);
+}
+
+.resultTrim {
+  margin-top: 6px;
+  color: var(--kendo-color-subtle);
+}
+
+.resultFacts {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+.resultFacts span {
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  background: var(--kendo-color-surface-alt);
+  color: var(--kendo-color-on-app-surface);
+}
+
+.resultLeftover {
+  margin-top: 14px;
+  font-size: 13px;
+  color: var(--kendo-color-subtle);
+}
+
+.unfilledBox {
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px dashed var(--kendo-color-border);
+  background: var(--kendo-color-surface-alt);
+  color: var(--kendo-color-subtle);
+  line-height: 1.5;
+}
+
+/* ─────────────────────── how it works ─────────────────── */
+.how {
+  margin-top: 48px;
+  padding-top: 28px;
+  border-top: 1px solid var(--kendo-color-border);
+}
+
+.howTitle {
+  margin: 0 0 20px;
+  font-size: 13px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--kendo-color-subtle);
+}
+
+.howSteps {
+  display: flex;
+  gap: 28px;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.howStep {
+  display: flex;
+  gap: 14px;
+  flex: 1 1 260px;
+}
+
+.howNum {
+  flex: 0 0 30px;
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(229, 72, 63, 0.12);
+  color: var(--kendo-color-primary);
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.howStepTitle {
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--kendo-color-on-app-surface);
+}
+
+.howStepText {
+  margin: 6px 0 0;
+  color: var(--kendo-color-subtle);
+  line-height: 1.6;
+}
+
+/* ───────────────────────── responsive ─────────────────── */
+@media (max-width: 900px) {
+  .page {
+    width: min(calc(100% - 24px), 1180px);
+    padding-top: 48px;
+  }
+
+  .builder {
+    padding: 22px;
+  }
+
+  .budgetHead,
+  .blockHead,
+  .resultsHead,
+  .shareDeckHeader,
+  .gaugeTop,
+  .gaugeMeta {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .shareContent {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+}
+
+@media (max-width: 640px) {
+  .page {
+    width: min(calc(100% - 20px), 1180px);
+    padding-top:50px;
+    padding-bottom: 56px;
+  }
+
+  .builder {
+    padding: 18px;
+    border-radius: 18px;
+  }
+
+  .title {
+    max-width: none;
+  }
+
+  .presetRow,
+  .blockActions {
+    width: 100%;
+  }
+
+  .presetButton,
+  .secondaryButton,
+  .primaryButton {
+    flex: 1;
+  }
+
+  .bayTop {
+    flex-direction: column;
+  }
+
+  .removeButton {
+    align-self: flex-start;
+  }
+
+  .summaryStrip > div {
+    padding: 0 16px;
+  }
+
+  .sharePanel {
+    margin-top: 24px;
+    margin-bottom: 24px;
+    padding: 20px;
+    border-radius: 22px;
+  }
+
+  .shareTitle {
+    max-width: none;
+  }
+
+  .shareActions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .sharePrimaryButton {
+    width: 100%;
+  }
+
+  .shareSocials {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .shareIconButton {
+    flex: 1 1 0;
+    border-radius: 16px;
+  }
+
+  .shareCarCard {
+    flex-direction: column;
+  }
+
+  .shareCarImageWrap {
+    width: 100%;
+    flex-basis: auto;
+    aspect-ratio: 16 / 10;
+  }
+
+  .gaugeWrap {
+    padding: 14px;
+  }
+
+  .gaugeTrack {
+    height: 58px;
+  }
+
+  .gaugeSegment {
+    padding: 0 10px 9px;
+  }
+
+  .gaugeLegend {
+    flex-direction: column;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .presetButton,
+  .secondaryButton,
+  .primaryButton,
+  .removeButton,
+  .bayCard,
+  .selectTrigger,
+  .selectChevron,
+  .selectOption,
+  .gaugeRail {
+    transition: none;
+  }
+}
