@@ -1,0 +1,623 @@
+<!--
+  CarCupid — Dream Garage
+  ------------------------------------------------------------------
+  Self-contained demo page. Drop the markup into a Next.js component,
+  move the <style> into your global/module CSS, and move the <script>
+  logic into React state (the STATE object + render functions map
+  cleanly onto useState/useMemo).
+
+  INTEGRATION POINTS (search for "// HOOK"):
+    1. matchCar(role, maxPrice)  -> replace SAMPLE_CARS lookup with a
+       call to your price DB / /api/match endpoint.
+    2. carImage(car)             -> swap the generic silhouette for a
+       real image URL from your listings.
+    3. Quiz reuse                -> prefillFromQuiz() shows where the
+       existing quiz result can seed the garage composition.
+  ------------------------------------------------------------------
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CarCupid — Dream Garage</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --ink:      #121217;   /* page background, deep charcoal        */
+    --ink-2:    #181820;   /* panels                                */
+    --ink-3:    #20212A;   /* raised cards / bays                    */
+    --ink-4:    #2A2B36;   /* hover raise                            */
+    --coral:    #EF5847;   /* primary accent (matches CarCupid)      */
+    --coral-2:  #D8412F;   /* pressed / deep                         */
+    --bone:     #F3F0EA;   /* primary text on dark, warm off-white   */
+    --mute:     #9A9BA8;   /* secondary text                         */
+    --mute-2:   #686A78;   /* tertiary / disabled                    */
+    --line:     rgba(243,240,234,.10);
+    --line-2:   rgba(243,240,234,.06);
+    --good:     #7FB58A;   /* "within budget" signal                */
+
+    --r-sm: 8px;
+    --r-md: 14px;
+    --r-lg: 22px;
+
+    --font-display: "Playfair Display", Georgia, serif;
+    --font-ui: "Space Grotesk", system-ui, sans-serif;
+  }
+
+  *{ box-sizing: border-box; }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0;
+    background:var(--ink);
+    color:var(--bone);
+    font-family:var(--font-ui);
+    font-size:16px;
+    line-height:1.5;
+    /* faint engineering grid, inherited from the CarCupid hero */
+    background-image:
+      linear-gradient(var(--line-2) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line-2) 1px, transparent 1px);
+    background-size: 64px 64px, 64px 64px;
+    background-position: -1px -1px;
+  }
+  ::selection{ background:var(--coral); color:#fff; }
+  a{ color:inherit; text-decoration:none; }
+
+  .wrap{ max-width:1180px; margin:0 auto; padding:0 28px; }
+
+  /* ---------- nav ---------- */
+  .nav{
+    position:sticky; top:0; z-index:30;
+    background:rgba(18,18,23,.82);
+    backdrop-filter:saturate(140%) blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav__row{ display:flex; align-items:center; gap:34px; height:74px; }
+  .brand{ display:flex; align-items:center; gap:10px; font-family:var(--font-display); font-weight:700; font-size:22px; }
+  .brand__mark{
+    width:34px; height:34px; border-radius:9px;
+    background:radial-gradient(120% 120% at 30% 20%, var(--coral), var(--coral-2));
+    display:grid; place-items:center; color:#fff; font-size:18px;
+    box-shadow:0 6px 18px rgba(239,88,71,.35);
+  }
+  .brand b{ color:var(--coral); }
+  .nav__links{ display:flex; gap:26px; margin-left:8px; font-family:var(--font-display); font-size:17px; color:var(--bone); }
+  .nav__links a{ opacity:.82; transition:opacity .15s; }
+  .nav__links a:hover{ opacity:1; }
+  .nav__links a[aria-current]{ color:var(--coral); opacity:1; }
+  .nav__cta{ margin-left:auto; }
+  .btn{
+    font-family:var(--font-display); font-weight:600;
+    border:0; cursor:pointer; border-radius:10px;
+    padding:12px 22px; font-size:16px; line-height:1;
+    background:var(--coral); color:#fff; transition:transform .12s, background .15s, box-shadow .15s;
+    box-shadow:0 8px 22px rgba(239,88,71,.28);
+  }
+  .btn:hover{ background:var(--coral-2); transform:translateY(-1px); }
+  .btn:active{ transform:translateY(0); }
+  .btn--ghost{
+    background:transparent; color:var(--bone);
+    border:1px solid var(--line); box-shadow:none; font-family:var(--font-ui); font-weight:600;
+  }
+  .btn--ghost:hover{ background:var(--ink-3); border-color:var(--line); }
+  .btn--lg{ padding:16px 34px; font-size:19px; }
+  .btn:focus-visible, a:focus-visible, .chip:focus-visible, input:focus-visible{
+    outline:2px solid var(--coral); outline-offset:3px;
+  }
+
+  /* ---------- hero ---------- */
+  .hero{ padding:74px 0 38px; position:relative; }
+  .eyebrow{
+    font-family:var(--font-ui); font-size:12.5px; letter-spacing:.22em; text-transform:uppercase;
+    color:var(--coral); display:inline-flex; align-items:center; gap:10px; margin-bottom:20px;
+  }
+  .eyebrow::before{ content:""; width:26px; height:1px; background:var(--coral); display:inline-block; }
+  .hero h1{
+    font-family:var(--font-display); font-weight:700;
+    font-size:clamp(38px, 6vw, 66px); line-height:1.04; letter-spacing:-.01em;
+    margin:0 0 18px; max-width:14ch;
+  }
+  .hero h1 em{ font-style:italic; color:var(--coral); }
+  .hero__sub{
+    font-size:19px; color:var(--mute); max-width:54ch; margin:0 0 36px;
+    font-family:var(--font-display); font-style:italic;
+  }
+
+  /* ---------- budget setter ---------- */
+  .budget{
+    background:linear-gradient(180deg, var(--ink-2), rgba(24,24,32,.6));
+    border:1px solid var(--line); border-radius:var(--r-lg);
+    padding:30px 30px 34px; margin-top:8px;
+  }
+  .budget__head{ display:flex; align-items:flex-end; justify-content:space-between; gap:24px; flex-wrap:wrap; }
+  .budget__label{ font-size:12.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--mute-2); }
+  .budget__value{ font-family:var(--font-display); font-weight:700; font-size:clamp(40px,7vw,62px); line-height:1; letter-spacing:-.02em; }
+  .budget__value span{ color:var(--coral); }
+  .tiers{ display:flex; gap:10px; flex-wrap:wrap; }
+  .tier{
+    font-family:var(--font-ui); font-weight:600; font-size:14px;
+    background:var(--ink-3); color:var(--mute); border:1px solid var(--line);
+    border-radius:999px; padding:9px 16px; cursor:pointer; transition:all .15s;
+  }
+  .tier:hover{ color:var(--bone); border-color:var(--mute-2); }
+  .tier[aria-pressed="true"]{ background:var(--coral); border-color:var(--coral); color:#fff; }
+  .tier small{ display:block; font-weight:400; font-size:11px; opacity:.8; }
+
+  .slider-row{ margin-top:26px; }
+  .slider-row .ticks{ display:flex; justify-content:space-between; font-size:12px; color:var(--mute-2); margin-top:10px; }
+  input[type="range"]{
+    -webkit-appearance:none; appearance:none; width:100%; height:6px; border-radius:999px;
+    background:var(--ink-4); outline:none; cursor:pointer;
+  }
+  input[type="range"]::-webkit-slider-thumb{
+    -webkit-appearance:none; appearance:none; width:24px; height:24px; border-radius:50%;
+    background:var(--coral); border:4px solid var(--ink); box-shadow:0 0 0 1px var(--coral);
+  }
+  input[type="range"]::-moz-range-thumb{
+    width:24px; height:24px; border:4px solid var(--ink); border-radius:50%;
+    background:var(--coral); box-shadow:0 0 0 1px var(--coral);
+  }
+
+  /* ---------- section frame ---------- */
+  .section{ padding:64px 0; }
+  .section--tight{ padding:34px 0 64px; }
+  .section__eyebrow{ font-size:12.5px; letter-spacing:.2em; text-transform:uppercase; color:var(--coral); margin-bottom:12px; }
+  .section__title{ font-family:var(--font-display); font-weight:600; font-size:clamp(28px,4vw,40px); margin:0 0 10px; letter-spacing:-.01em; }
+  .section__lead{ color:var(--mute); max-width:60ch; font-family:var(--font-display); font-style:italic; font-size:18px; }
+
+  /* ---------- THE GARAGE (signature) ---------- */
+  .garage{
+    margin-top:34px;
+    background:
+      radial-gradient(120% 80% at 50% -10%, rgba(239,88,71,.08), transparent 60%),
+      var(--ink-2);
+    border:1px solid var(--line); border-radius:var(--r-lg);
+    padding:30px 26px 26px; position:relative; overflow:hidden;
+  }
+  /* the garage floor line — the signature device */
+  .garage::after{
+    content:""; position:absolute; left:0; right:0; bottom:84px; height:1px;
+    background:linear-gradient(90deg, transparent, var(--line) 12%, var(--line) 88%, transparent);
+    pointer-events:none;
+  }
+  .bays{ display:grid; grid-template-columns:repeat(auto-fit, minmax(208px,1fr)); gap:16px; }
+  .bay{
+    background:var(--ink-3); border:1px solid var(--line); border-radius:var(--r-md);
+    padding:16px 16px 18px; min-height:300px; position:relative;
+    display:flex; flex-direction:column; transition:transform .18s, border-color .18s, background .18s;
+  }
+  .bay:hover{ transform:translateY(-3px); border-color:var(--mute-2); background:var(--ink-4); }
+  .bay__no{ font-family:var(--font-ui); font-size:11.5px; letter-spacing:.18em; color:var(--mute-2); text-transform:uppercase; }
+  .bay__role{ font-family:var(--font-display); font-weight:600; font-size:21px; margin:4px 0 2px; }
+  .bay__role--empty{ color:var(--mute-2); font-style:italic; font-weight:500; }
+  .bay__tag{ font-size:13px; color:var(--mute); min-height:38px; }
+
+  .bay__stage{ margin-top:auto; }
+  .car-svg{ width:100%; height:auto; display:block; }
+  .car-svg .body{ fill:rgba(243,240,234,.07); transition:fill .25s; }
+  .car-svg .wheel{ fill:rgba(243,240,234,.12); }
+  .bay.is-filled .car-svg .body{ fill:var(--coral); }
+  .bay.is-filled .car-svg .wheel{ fill:#2a1512; }
+
+  .bay__alloc{ margin-top:12px; }
+  .bay__alloc-top{ display:flex; justify-content:space-between; align-items:baseline; font-size:13px; color:var(--mute); margin-bottom:6px; }
+  .bay__alloc-top b{ font-family:var(--font-display); font-size:18px; color:var(--bone); font-weight:600; }
+  .bay__alloc input[type=range]{ height:5px; }
+
+  .bay__remove{
+    position:absolute; top:12px; right:12px; width:24px; height:24px; border-radius:50%;
+    background:transparent; border:1px solid var(--line); color:var(--mute);
+    cursor:pointer; font-size:14px; line-height:1; display:grid; place-items:center; transition:all .15s;
+  }
+  .bay__remove:hover{ border-color:var(--coral); color:var(--coral); }
+
+  .bay--add{ border-style:dashed; border-color:var(--line); background:transparent; align-items:center; justify-content:center; cursor:pointer; color:var(--mute); min-height:300px; }
+  .bay--add:hover{ border-color:var(--coral); color:var(--coral); background:rgba(239,88,71,.04); }
+  .bay--add .plus{ font-size:34px; font-family:var(--font-display); line-height:1; margin-bottom:6px; }
+
+  /* filled result inside a bay */
+  .car-name{ font-family:var(--font-display); font-weight:600; font-size:18px; margin:10px 0 2px; }
+  .car-price{ font-family:var(--font-ui); font-weight:600; color:var(--coral); font-size:15px; }
+  .car-why{ font-size:12.5px; color:var(--mute); margin-top:8px; line-height:1.45; }
+
+  /* role picker (popover) */
+  .picker{ position:absolute; inset:8px; background:var(--ink); border:1px solid var(--line); border-radius:var(--r-md); padding:14px; z-index:5; display:none; flex-direction:column; gap:7px; overflow:auto; }
+  .bay.is-picking .picker{ display:flex; }
+  .picker h4{ margin:0 0 4px; font-family:var(--font-ui); font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--mute-2); }
+  .picker button{
+    text-align:left; background:var(--ink-3); border:1px solid var(--line); color:var(--bone);
+    border-radius:9px; padding:9px 11px; cursor:pointer; transition:all .14s; font-family:var(--font-ui);
+  }
+  .picker button:hover{ border-color:var(--coral); background:var(--ink-4); }
+  .picker button b{ font-family:var(--font-display); font-weight:600; font-size:15px; display:block; }
+  .picker button small{ color:var(--mute); font-size:11.5px; }
+
+  /* ---------- budget gauge ---------- */
+  .gauge{ margin-top:24px; display:flex; align-items:center; gap:20px; flex-wrap:wrap; }
+  .gauge__bar{ flex:1 1 320px; height:12px; border-radius:999px; background:var(--ink-4); overflow:hidden; position:relative; }
+  .gauge__fill{ height:100%; width:0; border-radius:999px; background:linear-gradient(90deg,var(--coral-2),var(--coral)); transition:width .4s cubic-bezier(.4,0,.2,1); }
+  .gauge.is-over .gauge__fill{ background:linear-gradient(90deg,#b9362a,#ff7a5e); }
+  .gauge__read{ font-family:var(--font-ui); font-size:14px; color:var(--mute); white-space:nowrap; }
+  .gauge__read b{ font-family:var(--font-display); font-size:20px; color:var(--bone); font-weight:600; }
+  .gauge__read.is-over b{ color:#ff7a5e; }
+
+  .garage__actions{ margin-top:26px; display:flex; gap:14px; align-items:center; flex-wrap:wrap; }
+  .garage__hint{ color:var(--mute-2); font-size:13.5px; font-style:italic; font-family:var(--font-display); }
+
+  /* ---------- how it works ---------- */
+  .steps{ display:grid; grid-template-columns:repeat(3,1fr); gap:22px; margin-top:34px; }
+  .step{ border-top:1px solid var(--line); padding-top:18px; }
+  .step__no{ font-family:var(--font-display); font-style:italic; font-size:15px; color:var(--coral); }
+  .step h3{ font-family:var(--font-display); font-weight:600; font-size:21px; margin:8px 0 8px; }
+  .step p{ color:var(--mute); font-size:15px; margin:0; }
+
+  /* ---------- footer ---------- */
+  .foot{ border-top:1px solid var(--line); padding:40px 0; color:var(--mute-2); font-size:14px; display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; }
+
+  /* ---------- responsive ---------- */
+  @media (max-width:860px){
+    .nav__links{ display:none; }
+    .steps{ grid-template-columns:1fr; }
+    .garage::after{ display:none; }
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{ transition:none !important; animation:none !important; }
+  }
+
+  /* reveal animation */
+  @keyframes park{ from{ opacity:0; transform:translateY(14px); } to{ opacity:1; transform:translateY(0); } }
+  .bay.is-filled .car-name, .bay.is-filled .car-price, .bay.is-filled .car-why{ animation:park .45s both; }
+</style>
+</head>
+<body>
+
+  <!-- NAV (reuse your existing CarCupid header; Dream Garage marked active) -->
+  <header class="nav">
+    <div class="wrap nav__row">
+      <a class="brand" href="#"><span class="brand__mark">♥</span>Car<b>Cupid</b></a>
+      <nav class="nav__links">
+        <a href="#">Match Algorithm</a>
+        <a href="#">Car Listings</a>
+        <a href="#">Compare</a>
+        <a href="#" aria-current="page">Dream Garage</a>
+        <a href="#">For Dealers</a>
+      </nav>
+      <button class="btn nav__cta">Start Quiz</button>
+    </div>
+  </header>
+
+  <!-- HERO + BUDGET -->
+  <section class="hero">
+    <div class="wrap">
+      <span class="eyebrow">The build-a-garage experiment</span>
+      <h1>Build the garage you'd <em>actually</em> drive.</h1>
+      <p class="hero__sub">One budget. A few cars. Each one with a real job to do. Set the number, give every bay a purpose, and we'll park the right car in it.</p>
+
+      <div class="budget">
+        <div class="budget__head">
+          <div>
+            <div class="budget__label">Your total garage budget</div>
+            <div class="budget__value" id="budgetValue">$200,000</div>
+          </div>
+          <div class="tiers" id="tiers">
+            <button class="tier" data-amount="75000">Sensible<small>$75k</small></button>
+            <button class="tier" data-amount="200000" aria-pressed="true">Enthusiast<small>$200k</small></button>
+            <button class="tier" data-amount="500000">Dream<small>$500k</small></button>
+            <button class="tier" data-amount="1500000">No limits<small>$1.5M</small></button>
+          </div>
+        </div>
+        <div class="slider-row">
+          <input id="budgetRange" type="range" min="40000" max="2000000" step="5000" value="200000" aria-label="Total garage budget" />
+          <div class="ticks"><span>$40k</span><span>$2M+</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- THE GARAGE -->
+  <section class="section--tight">
+    <div class="wrap">
+      <div class="section__eyebrow">Your stalls</div>
+      <h2 class="section__title">Give each bay a job</h2>
+      <p class="section__lead">Most great garages aren't five of the same car — they're a daily, a hauler, and something that makes no sense at all. Build 2–5 bays and split the budget how you like.</p>
+
+      <div class="garage" id="garage">
+        <div class="bays" id="bays"><!-- bays injected here --></div>
+
+        <div class="gauge" id="gauge">
+          <div class="gauge__bar"><div class="gauge__fill" id="gaugeFill"></div></div>
+          <div class="gauge__read" id="gaugeRead"><b>$0</b> allocated of $200,000</div>
+        </div>
+
+        <div class="garage__actions">
+          <button class="btn btn--lg" id="revealBtn">Reveal my garage</button>
+          <button class="btn btn--ghost" id="resetBtn">Start over</button>
+          <span class="garage__hint" id="garageHint">Pick a role for each bay, then reveal.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section">
+    <div class="wrap">
+      <div class="section__eyebrow">How it works</div>
+      <h2 class="section__title">Personality first, price second</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step__no">Step one</div>
+          <h3>Set the budget</h3>
+          <p>Pick a tier or dial in an exact number. This is the ceiling for the whole garage, not per car.</p>
+        </div>
+        <div class="step">
+          <div class="step__no">Step two</div>
+          <h3>Assign the bays</h3>
+          <p>Daily, hauler, weekend thrill, off-roader — each bay tells us what that slot is for and how much it gets.</p>
+        </div>
+        <div class="step">
+          <div class="step__no">Step three</div>
+          <h3>We park the cars</h3>
+          <p>We match every bay against real new-car prices so the whole garage lands inside your number.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <div class="wrap" style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;width:100%;">
+      <span>CarCupid — Dream Garage</span>
+      <span>Matched from new-car listings · $16k–$500k per car</span>
+    </div>
+  </footer>
+
+<script>
+/* =====================================================================
+   STATE  (maps to React useState in Next)
+   ===================================================================== */
+const STATE = {
+  budget: 200000,
+  bays: [
+    { role: "daily",  alloc: 0.20 },
+    { role: "hauler", alloc: 0.40 },
+    { role: "thrill", alloc: 0.40 },
+  ],
+};
+const MAX_BAYS = 5;
+
+/* Archetypes — the "job" each bay can have */
+const ARCHETYPES = {
+  daily:    { name: "Daily Driver",  tag: "The one you'll actually start every morning." },
+  hauler:   { name: "Family Hauler", tag: "Seats, space and peace of mind for everyone aboard." },
+  thrill:   { name: "Weekend Thrill",tag: "Curvy roads, top down, no destination." },
+  statement:{ name: "The Statement", tag: "Pulls up and ends the conversation." },
+  explorer: { name: "The Explorer",  tag: "Dirt, snow, trailheads — where the map runs out." },
+  project:  { name: "The Project",   tag: "A future classic, or a soul worth restoring." },
+};
+
+/* ---------------------------------------------------------------------
+   SAMPLE_CARS — placeholder catalogue.
+   // HOOK 1: replace matchCar() below with a call to your price DB /
+   //         /api/match endpoint. This array just makes the demo move.
+   --------------------------------------------------------------------- */
+const SAMPLE_CARS = {
+  daily:    [["Honda Civic Touring",24000],["Genesis G70",42000],["BMW 3 Series",46000],["Audi A5 Sportback",52000]],
+  hauler:   [["Kia Telluride",39000],["Toyota Highlander",42000],["Volvo XC90",60000],["BMW X5 xDrive40i",66000]],
+  thrill:   [["Mazda MX-5 Miata",30000],["Toyota GR86",32000],["Chevrolet Corvette Stingray",70000],["Porsche 718 Cayman",75000]],
+  statement:[["Maserati GranTurismo",185000],["Porsche 911 Carrera S",130000],["Bentley Continental GT",250000],["Aston Martin DB12",245000]],
+  explorer: [["Ford Bronco Badlands",46000],["Toyota 4Runner TRD",44000],["Jeep Wrangler Rubicon",48000],["Land Rover Defender 110",62000]],
+  project:  [["Subaru BRZ tS",33000],["Nissan Z Performance",43000],["Ford Mustang GT",45000],["Toyota GR Supra",58000]],
+};
+
+/* Match the best car of a role that fits within maxPrice (cheapest-headroom logic). */
+function matchCar(role, maxPrice){
+  // HOOK 1: swap this block for:
+  //   return await fetch(`/api/match?role=${role}&max=${maxPrice}`).then(r=>r.json());
+  const pool = (SAMPLE_CARS[role] || []).filter(c => c[1] <= maxPrice);
+  if(!pool.length) return null;                 // nothing fits this allocation
+  pool.sort((a,b)=> b[1]-a[1]);                 // grab the most car the budget allows
+  const [name, price] = pool[0];
+  return { name, price, why: whyCopy(role, price, maxPrice) };
+}
+
+function whyCopy(role, price, maxPrice){
+  const head = Math.round((1 - price/maxPrice)*100);
+  const base = {
+    daily:"Easy to live with and cheap to run.",
+    hauler:"Room for the whole crew without feeling like a bus.",
+    thrill:"Pure driver's car — nothing wasted.",
+    statement:"Walks in like it owns the place.",
+    explorer:"Built to be pointed at the worst roads you can find.",
+    project:"A keeper that'll only get better with time.",
+  }[role];
+  return head > 8 ? `${base} Leaves ${head}% of this bay's budget on the table.` : base;
+}
+
+/* =====================================================================
+   RENDER
+   ===================================================================== */
+const $ = s => document.querySelector(s);
+const fmt = n => "$" + Math.round(n).toLocaleString("en-US");
+
+let revealed = false;
+
+function carSVG(){
+  return `<svg class="car-svg" viewBox="0 0 220 88" aria-hidden="true">
+    <path class="body" d="M14 60 C14 54 18 52 24 52 L44 52 C50 40 62 33 84 33 L120 33 C142 33 154 41 168 52 L198 54 C208 55 212 57 212 61 L212 64 C212 67 209 68 205 68 L24 68 C18 68 14 66 14 60 Z"/>
+    <circle class="wheel" cx="64" cy="68" r="13"/>
+    <circle class="wheel" cx="170" cy="68" r="13"/>
+  </svg>`;
+}
+
+function renderBays(){
+  const host = $("#bays");
+  host.innerHTML = "";
+
+  STATE.bays.forEach((bay, i) => {
+    const a = ARCHETYPES[bay.role];
+    const dollars = STATE.budget * bay.alloc;
+    const el = document.createElement("div");
+    el.className = "bay" + (revealed && bay.match ? " is-filled" : "");
+    el.dataset.index = i;
+
+    el.innerHTML = `
+      ${STATE.bays.length > 2 ? `<button class="bay__remove" data-act="remove" aria-label="Remove bay">✕</button>` : ``}
+      <div class="bay__no">Bay 0${i+1}</div>
+      <div class="bay__role ${a ? "" : "bay__role--empty"}">${a ? a.name : "Empty bay"}</div>
+      <div class="bay__tag">${a ? a.tag : "Tap to give this bay a job."}</div>
+
+      <div class="bay__stage">
+        ${carSVG()}
+        ${revealed && bay.match ? `
+          <div class="car-name">${bay.match.name}</div>
+          <div class="car-price">${fmt(bay.match.price)}</div>
+          <div class="car-why">${bay.match.why}</div>
+        ` : revealed && a && !bay.match ? `
+          <div class="car-why">No new car fits this bay's ${fmt(dollars)}. Give it more budget.</div>
+        ` : ``}
+      </div>
+
+      ${!revealed ? `
+        <div class="bay__alloc">
+          <div class="bay__alloc-top"><span>This bay</span><b>${fmt(dollars)}</b></div>
+          <input type="range" data-act="alloc" min="2" max="100" step="1" value="${Math.round(bay.alloc*100)}" aria-label="Budget for bay ${i+1}" />
+        </div>` : ``}
+
+      <div class="picker">
+        <h4>Pick a job for this bay</h4>
+        ${Object.entries(ARCHETYPES).map(([k,v]) =>
+          `<button data-act="role" data-role="${k}"><b>${v.name}</b><small>${v.tag}</small></button>`
+        ).join("")}
+      </div>
+    `;
+
+    // open picker when tapping the role area (not the slider / remove)
+    el.querySelector(".bay__role").addEventListener("click", () => openPicker(i));
+    el.querySelector(".bay__tag").addEventListener("click", () => openPicker(i));
+
+    host.appendChild(el);
+  });
+
+  // "add bay" tile
+  if(STATE.bays.length < MAX_BAYS){
+    const add = document.createElement("div");
+    add.className = "bay bay--add";
+    add.innerHTML = `<div class="plus">+</div><div>Add a bay</div>`;
+    add.addEventListener("click", addBay);
+    host.appendChild(add);
+  }
+
+  renderGauge();
+}
+
+function openPicker(i){
+  document.querySelectorAll(".bay").forEach((b,bi)=> b.classList.toggle("is-picking", bi===i && !revealed));
+}
+
+function onBayClick(e){
+  const bayEl = e.target.closest(".bay"); if(!bayEl) return;
+  const i = +bayEl.dataset.index;
+  const act = e.target.closest("[data-act]")?.dataset.act;
+  if(act === "remove"){ STATE.bays.splice(i,1); revealed=false; renderBays(); }
+  if(act === "role"){
+    STATE.bays[i].role = e.target.closest("[data-act]").dataset.role;
+    revealed=false; renderBays(); updateHint();
+  }
+}
+function onBayInput(e){
+  if(e.target.dataset.act !== "alloc") return;
+  const i = +e.target.closest(".bay").dataset.index;
+  STATE.bays[i].alloc = +e.target.value/100;
+  // live-update the dollar label without a full re-render
+  e.target.closest(".bay").querySelector(".bay__alloc-top b").textContent = fmt(STATE.budget*STATE.bays[i].alloc);
+  renderGauge();
+}
+
+function addBay(){
+  if(STATE.bays.length >= MAX_BAYS) return;
+  const taken = STATE.bays.map(b=>b.role);
+  const next = Object.keys(ARCHETYPES).find(k=>!taken.includes(k)) || "daily";
+  STATE.bays.push({ role: next, alloc: 0.15 });
+  revealed=false; renderBays(); updateHint();
+}
+
+function renderGauge(){
+  const allocated = STATE.bays.reduce((s,b)=> s + STATE.budget*b.alloc, 0);
+  const pct = Math.min(100, allocated/STATE.budget*100);
+  const over = allocated > STATE.budget + 1;
+  $("#gaugeFill").style.width = pct + "%";
+  $("#gauge").classList.toggle("is-over", over);
+  const read = $("#gaugeRead");
+  read.classList.toggle("is-over", over);
+  read.innerHTML = `<b>${fmt(allocated)}</b> ${over ? "— over by " + fmt(allocated-STATE.budget) : "allocated of " + fmt(STATE.budget)}`;
+}
+
+function updateHint(){
+  const hint = $("#garageHint");
+  const ready = STATE.bays.every(b => ARCHETYPES[b.role]);
+  hint.textContent = ready ? "Looks good — reveal whenever you're ready." : "Give every bay a role to reveal.";
+}
+
+/* =====================================================================
+   BUDGET CONTROLS
+   ===================================================================== */
+function setBudget(v){
+  STATE.budget = v;
+  $("#budgetValue").innerHTML = '<span>$</span>' + Math.round(v).toLocaleString("en-US");
+  $("#budgetRange").value = v;
+  document.querySelectorAll(".tier").forEach(t =>
+    t.setAttribute("aria-pressed", String(+t.dataset.amount === v))
+  );
+  revealed=false; renderBays();
+}
+
+$("#budgetRange").addEventListener("input", e => setBudget(+e.target.value));
+$("#tiers").addEventListener("click", e => {
+  const t = e.target.closest(".tier"); if(!t) return;
+  setBudget(+t.dataset.amount);
+});
+
+/* =====================================================================
+   REVEAL
+   ===================================================================== */
+$("#revealBtn").addEventListener("click", () => {
+  let ok = true;
+  STATE.bays.forEach(b => {
+    if(!ARCHETYPES[b.role]){ ok=false; return; }
+    b.match = matchCar(b.role, STATE.budget * b.alloc);   // HOOK 1
+  });
+  if(!ok){ updateHint(); return; }
+  revealed = true;
+  renderBays();
+  $("#garageHint").textContent = "Tweak the budget or roles and reveal again.";
+});
+
+$("#resetBtn").addEventListener("click", () => {
+  revealed = false;
+  STATE.bays.forEach(b => b.match = null);
+  renderBays(); updateHint();
+});
+
+/* ---------------------------------------------------------------------
+   // HOOK 3: prefill the garage from an existing quiz result.
+   Call this with the quiz payload to seed roles/allocations instead of
+   the defaults above.
+   --------------------------------------------------------------------- */
+function prefillFromQuiz(quiz){
+  if(!quiz) return;
+  // example shape: { budget: 250000, bays:[{role:'daily',alloc:.3}, ...] }
+  if(quiz.budget) STATE.budget = quiz.budget;
+  if(quiz.bays?.length) STATE.bays = quiz.bays;
+  setBudget(STATE.budget);
+}
+
+/* boot */
+$("#bays").addEventListener("input", onBayInput);
+$("#bays").addEventListener("click", onBayClick);
+setBudget(STATE.budget);
+updateHint();
+</script>
+</body>
+</html>

@@ -111,7 +111,7 @@ function norm(v: number, min: number, max: number): number {
   return clamp01((v - min) / (max - min));
 }
 
-function hasRealImage(car: CarSpecs) {
+export function hasRealImage(car: CarSpecs) {
   return (
     car.image && 
     !car.image.includes("placeholder") && 
