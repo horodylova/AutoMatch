@@ -1,8 +1,8 @@
 .wrap { margin-top: 18px; }
-.card { background: var(--kendo-color-tertiary-subtle); border: 1px solid var(--kendo-color-border-alt); border-radius: 20px; box-shadow: 0 10px 28px rgba(0,0,0,0.28); padding: clamp(18px, 3.5vw, 28px); color: var(--kendo-color-on-tertiary); }
+.card { background: #FFFFFF; border: 1px solid rgba(10, 20, 30, 0.10); border-radius: 20px; box-shadow: 0 10px 28px rgba(0,0,0,0.12); padding: clamp(18px, 3.5vw, 28px); color: #111214; }
 .head { display: grid; gap: 6px; text-align: center; margin-bottom: 14px; }
-.title { font-size: clamp(22px, 4.2vw, 30px); line-height: 1.25; font-weight: 800; color: var(--kendo-color-on-tertiary); }
-.tipBar { display: grid; grid-template-columns: 4px 1fr; align-items: stretch; gap: 12px; margin-top: 8px; margin-bottom: 16px; padding: 8px 12px; border-radius: 8px; background: transparent; color: var(--kendo-color-on-tertiary); border: none; }
+.title { font-size: clamp(22px, 4.2vw, 30px); line-height: 1.25; font-weight: 800; color: #111214; }
+.tipBar { display: grid; grid-template-columns: 4px 1fr; align-items: stretch; gap: 12px; margin-top: 8px; margin-bottom: 16px; padding: 8px 12px; border-radius: 8px; background: transparent; color: rgba(17, 18, 20, 0.72); border: none; }
 .tipDot { width: 4px; height: 100%; border-radius: 999px; background: var(--kendo-color-primary); }
 .grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; max-width: 880px; margin: 0 auto; align-items: start; }
 .item, .itemActive { position: relative; border-radius: 14px; overflow: hidden; border: 1px solid var(--kendo-color-border); background: var(--kendo-color-surface); box-shadow: 0 8px 22px rgba(0,0,0,0.22); cursor: pointer; aspect-ratio: 1 / 1; transition: transform 0.15s ease, box-shadow 0.2s ease, border-color 0.2s ease, background-color 0.2s ease; }
