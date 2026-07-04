@@ -1,12 +1,8 @@
-/* ─── Wrapper ────────────────────────────────────────────────────────────── */
-
 .wrap {
   display: grid;
   gap: 28px;
   padding: 0 0 8px;
 }
-
-/* ─── Header ─────────────────────────────────────────────────────────────── */
 
 .header {
   display: flex;
@@ -14,8 +10,9 @@
   gap: 16px;
   padding: 20px 24px;
   border-radius: 16px;
-  background: var(--kendo-color-surface);
-  border: 1px solid var(--kendo-color-border);
+  background: var(--quiz-surface-elevated);
+  border: 1px solid var(--quiz-border);
+  box-shadow: var(--quiz-shadow-sm);
 }
 
 .logoBox {
@@ -38,39 +35,36 @@
   font-size: 18px;
   font-weight: 700;
   letter-spacing: -0.02em;
-  color: var(--kendo-color-on-app-surface);
+  color: var(--quiz-text);
   margin: 0;
   line-height: 1.2;
 }
 
 .lead {
   font-size: 13px;
-  color: var(--kendo-color-subtle);
+  color: var(--quiz-text-muted);
   margin: 0;
   line-height: 1.5;
 }
-
-/* ─── Form grid ──────────────────────────────────────────────────────────── */
 
 .formGrid {
   display: grid;
   gap: 4px;
 }
 
-/* ─── Field ──────────────────────────────────────────────────────────────── */
-
 .field {
   display: grid;
   gap: 12px;
   padding: 18px 20px;
   border-radius: 14px;
-  background: var(--kendo-color-surface);
-  border: 1px solid var(--kendo-color-border);
+  background: var(--quiz-surface-elevated);
+  border: 1px solid var(--quiz-border);
+  box-shadow: var(--quiz-shadow-sm);
   transition: border-color 0.2s ease;
 }
 
 .field:focus-within {
-  border-color: var(--kendo-color-border-alt);
+  border-color: var(--quiz-border-strong);
 }
 
 .label {
@@ -79,12 +73,10 @@
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--kendo-color-on-app-surface);
+  color: var(--quiz-text);
   opacity: 0.45;
   cursor: default;
 }
-
-/* ─── Options (chip row) ─────────────────────────────────────────────────── */
 
 .options {
   display: flex;
@@ -100,7 +92,6 @@
   pointer-events: none;
 }
 
-/* ── Dark theme chips (default) ── */
 .option {
   display: inline-flex;
   align-items: center;
@@ -108,9 +99,9 @@
   border-radius: 999px;
   font-size: 13px;
   font-weight: 500;
-  color: rgba(245, 245, 247, 0.90);
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: var(--quiz-text);
+  background: var(--quiz-option-bg);
+  border: 1px solid var(--quiz-border);
   cursor: pointer;
   user-select: none;
   white-space: nowrap;
@@ -122,77 +113,28 @@
 }
 
 .option:hover {
-  background: rgba(229, 142, 60, 0.14);
-  border-color: rgba(229, 142, 60, 0.45);
-  color: #F0C08A;
+  background: var(--quiz-option-hover-bg);
+  border-color: var(--quiz-accent-border);
+  color: var(--quiz-text);
 }
 
 .option:has(input:checked) {
-  background: rgba(229, 72, 63, 0.16);
-  border-color: var(--kendo-color-primary);
-  color: var(--kendo-color-primary);
-  box-shadow: 0 0 0 1px var(--kendo-color-primary) inset;
+  background: var(--quiz-option-active-bg);
+  border-color: var(--quiz-accent-border);
+  color: var(--quiz-text);
+  box-shadow: var(--quiz-selection-shadow);
   font-weight: 600;
 }
-
-/* ─── Help text ──────────────────────────────────────────────────────────── */
 
 .help {
   font-size: 12px;
-  color: var(--kendo-color-subtle);
+  color: var(--quiz-text-muted);
   margin: 0;
   opacity: 0.65;
   line-height: 1.5;
-  border-top: 1px solid var(--kendo-color-border);
+  border-top: 1px solid var(--quiz-border);
   padding-top: 10px;
 }
-
-/* ─── Light theme ────────────────────────────────────────────────────────── */
-
-:global(html[data-theme="light"]) .header,
-:global(html[data-theme="light"]) .field {
-  background: #fff;
-  border-color: rgba(0, 0, 0, 0.10);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
-}
-
-/* Light chips: white bg + visible grey border — clearly legible */
-:global(html[data-theme="light"]) .option {
-  color: rgba(17, 18, 20, 0.80);
-  background: #fff;
-  border: 1.5px solid rgba(0, 0, 0, 0.18);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-}
-
-/* Warm amber hover — stands out on light bg */
-:global(html[data-theme="light"]) .option:hover {
-  background: #FFF4E8;
-  border-color: #E8924A;
-  color: #B5600F;
-  box-shadow: 0 1px 4px rgba(232, 146, 74, 0.20);
-}
-
-/* Selected: primary red */
-:global(html[data-theme="light"]) .option:has(input:checked) {
-  background: rgba(229, 72, 63, 0.08);
-  border-color: var(--kendo-color-primary);
-  color: var(--kendo-color-primary);
-  box-shadow: 0 0 0 1px var(--kendo-color-primary) inset;
-  font-weight: 600;
-}
-
-:global(html[data-theme="light"]) .label {
-  opacity: 0.40;
-  color: #111214;
-}
-
-:global(html[data-theme="light"]) .help {
-  color: #1A252F;
-  opacity: 0.85;
-  border-top-color: rgba(0, 0, 0, 0.08);
-}
-
-/* ─── Responsive ─────────────────────────────────────────────────────────── */
 
 @media (min-width: 640px) {
   .wrap { gap: 32px; }

@@ -93,6 +93,23 @@
   object-fit: cover;
 }
 
+.embeddedBlock {
+  clear: both;
+  width: 100%;
+  max-width: 100%;
+  margin: 48px 0;
+}
+
+.embeddedBlock::after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+.embeddedBlock > * {
+  max-width: 100%;
+}
+
 .body {
   font-size: 20px;
   line-height: 1.8;
@@ -256,6 +273,10 @@
   
   .body {
     font-size: 18px;
+  }
+
+  .embeddedBlock {
+    margin: 24px 0;
   }
 
   .imageLeft, .imageRight, .imageCenter {

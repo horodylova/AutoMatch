@@ -1,20 +1,16 @@
-.wrap { border: 1px solid rgba(10, 20, 30, 0.10); background: #FFFFFF; border-radius: 24px; padding: clamp(18px, 4vw, 28px); box-shadow: 0 12px 32px rgba(0,0,0,0.18); }
+.wrap { border: 1px solid var(--quiz-border); background: var(--quiz-surface-elevated); border-radius: 24px; padding: clamp(18px, 4vw, 28px); box-shadow: var(--quiz-shadow-md); }
 .head { display: grid; gap: 6px; text-align: center; }
-.title { font-size: clamp(28px, 5vw, 40px); line-height: 1.2; font-weight: 800; color: #111214 !important; }
-.subtitle { font-size: clamp(16px, 3vw, 18px); line-height: 1.6; color: rgba(17, 18, 20, 0.78) !important; }
+.title { font-size: clamp(28px, 5vw, 40px); line-height: 1.2; font-weight: 800; color: var(--quiz-text); }
+.subtitle { font-size: clamp(16px, 3vw, 18px); line-height: 1.6; color: var(--quiz-text-muted); }
 .content { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: center; margin-top: 12px; }
-.media { position: relative; border-radius: 20px; overflow: hidden; background: var(--kendo-color-app-surface); aspect-ratio: 4 / 3; }
+.media { position: relative; border-radius: 20px; overflow: hidden; background: var(--quiz-media-surface); aspect-ratio: 4 / 3; }
 .mediaImg { filter: drop-shadow(0 10px 24px rgba(229,72,63,0.28)); }
 .list { display: grid; gap: 10px; }
 .item { display: grid; grid-template-columns: 24px 1fr; align-items: start; gap: 10px; padding: 8px 10px; border-radius: 12px; }
-.dot { width: 14px; height: 14px; border-radius: 50%; background: var(--kendo-color-primary); box-shadow: 0 0 0 4px rgba(229,72,63,0.18); }
-.itemText { font-size: 15px; line-height: 1.6; color: #111214 !important; }
+.dot { width: 14px; height: 14px; border-radius: 50%; background: var(--quiz-accent); box-shadow: 0 0 0 4px rgba(229,72,63,0.18); }
+.itemText { font-size: 15px; line-height: 1.6; color: var(--quiz-text); }
 .actions { display: flex; justify-content: center; margin-top: 16px; }
-.next { padding: 12px 18px; border-radius: 999px; border: 1px solid var(--kendo-color-border-alt); background: var(--kendo-color-primary); color: var(--kendo-color-on-primary); cursor: pointer; box-shadow: 0 8px 22px rgba(229,72,63,0.24); }
-
-:global(html[data-theme="light"]) .wrap {
-  background: #FFFFFF;
-}
+.next { padding: 12px 18px; border-radius: 999px; border: none; background: var(--quiz-accent); color: var(--quiz-on-accent); cursor: pointer; box-shadow: 0 8px 22px rgba(229,72,63,0.24); }
 
 @media (max-width: 768px) {
   .content { grid-template-columns: 1fr; }

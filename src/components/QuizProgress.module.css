@@ -1,26 +1,23 @@
 .wrap { width: 100%; }
 .svg { width: 100%; height: 120px; display: block; }
 .road { fill: none; stroke: var(--road-stroke-color, rgba(255, 255, 255, 0.12)); stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
-.progress { fill: none; stroke: var(--kendo-color-primary); stroke-width: 8; stroke-linecap: butt; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.progress { fill: none; stroke: var(--quiz-accent); stroke-width: 8; stroke-linecap: butt; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
 .car { transition: transform 200ms ease; }
 .carImage { transition: transform 0.3s ease; }
-:global(html[data-theme="light"]) .carImage {
-  transform: translateY(-8px);
-}
 .carImg { width: 120px; height: 90px; }
 
-.introWrap { margin-top: 12px; background: #FFFFFF; border: 1px solid rgba(10, 20, 30, 0.10); border-radius: 24px; box-shadow: 0 12px 32px rgba(0,0,0,0.18); padding: clamp(18px, 4vw, 28px); color: #111214; }
+.introWrap { margin-top: 12px; background: var(--quiz-surface-elevated); border: 1px solid var(--quiz-border); border-radius: 24px; box-shadow: var(--quiz-shadow-md); padding: clamp(18px, 4vw, 28px); color: var(--quiz-text); }
 .introHead { text-align: center; display: grid; gap: 6px; }
-.introTitle { font-size: clamp(28px, 5vw, 40px); line-height: 1.2; font-weight: 800; color: #111214 !important; }
-.introSubtitle { font-size: clamp(16px, 3vw, 18px); line-height: 1.6; color: rgba(17, 18, 20, 0.78) !important; opacity: 1; }
+.introTitle { font-size: clamp(28px, 5vw, 40px); line-height: 1.2; font-weight: 800; color: var(--quiz-text); }
+.introSubtitle { font-size: clamp(16px, 3vw, 18px); line-height: 1.6; color: var(--quiz-text-muted); opacity: 1; }
 .introContent { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: center; margin-top: 12px; }
-.introMedia { position: relative; border-radius: 20px; overflow: hidden; background: var(--kendo-color-app-surface); aspect-ratio: 4 / 3; }
+.introMedia { position: relative; border-radius: 20px; overflow: hidden; background: var(--quiz-media-surface); aspect-ratio: 4 / 3; }
 .introImg { width: 100%; height: 100%; object-fit: cover; }
 .introList { display: grid; gap: 12px; }
-.introItem { position: relative; padding: 10px 12px 10px 18px; border-radius: 12px; background: #FFFFFF; border: 1px solid rgba(10, 20, 30, 0.10); box-shadow: 0 4px 14px rgba(0,0,0,0.08); }
+.introItem { position: relative; padding: 10px 12px 10px 18px; border-radius: 12px; background: var(--quiz-surface-soft); border: 1px solid var(--quiz-border); box-shadow: var(--quiz-shadow-sm); }
 .introItem::before { content: ""; position: absolute; left: 8px; top: 12px; bottom: 12px; width: 4px; border-radius: 999px; background: linear-gradient(180deg, rgba(229,72,63,0.85), rgba(229,72,63,0.35)); box-shadow: 0 0 0 2px rgba(229,72,63,0.12); }
 .introDot { display: none; }
-.introText { font-size: 15px; line-height: 1.6; color: #111214 !important; }
+.introText { font-size: 15px; line-height: 1.6; color: var(--quiz-text); }
 .introActions { display: flex; justify-content: flex-end; margin-top: 16px; }
 .introNext {
   justify-self: center;
@@ -32,8 +29,8 @@
   letter-spacing: 0.5px;
   border-radius: 999px;
   border: none;
-  background: var(--kendo-color-primary);
-  color: var(--kendo-color-on-primary);
+  background: var(--quiz-accent);
+  color: var(--quiz-on-accent);
   cursor: pointer;
   box-shadow: 0 10px 24px rgba(229,72,63,0.3);
   transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, background-color 0.3s ease;
@@ -42,7 +39,7 @@
 .introNext:hover {
   transform: translateY(-4px) scale(1.05);
   box-shadow: 0 16px 32px rgba(229,72,63,0.4);
-  background: var(--kendo-color-primary-hover);
+  background: var(--quiz-accent-hover);
 }
 
 .introNext:active {
@@ -54,10 +51,6 @@
 .maskProgressStroke { fill: none; stroke: #fff; stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
 .roadGlow { fill: none; stroke: var(--road-glow-stroke-color, rgba(245, 245, 247, 0.75)); stroke-width: 12; stroke-linecap: round; stroke-linejoin: round; filter: blur(2px); opacity: 0.5; animation: glowPulse 2.6s ease-in-out infinite; }
 .progressGlow { fill: none; stroke: var(--progress-glow-stroke-color, rgba(229, 72, 63, 0.95)); stroke-width: 12; stroke-linecap: round; stroke-linejoin: round; filter: blur(2px); opacity: 0.6; animation: glowPulse 2s ease-in-out infinite; }
-
-:global(html[data-theme="light"]) .introWrap {
-  color: #111214;
-}
 
 @keyframes glowPulse {
   0% { opacity: 0.35; }

@@ -3,14 +3,15 @@
   gap: 8px;
   padding: 20px 24px;
   border-radius: 16px;
-  background: var(--kendo-color-surface);
-  border: 1px solid var(--kendo-color-border);
-  border-left: 3px solid var(--kendo-color-primary);
+  background: var(--quiz-surface-elevated);
+  border: 1px solid var(--quiz-border);
+  border-left: 3px solid var(--quiz-accent);
+  box-shadow: var(--quiz-shadow-sm);
 }
 
 .lead {
   font-size: 14px;
-  color: var(--kendo-color-subtle);
+  color: var(--quiz-text-muted);
   margin: 0;
   line-height: 1.6;
 }
@@ -20,7 +21,7 @@
   font-weight: 600;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: var(--kendo-color-primary);
+  color: var(--quiz-accent);
   margin: 0;
   opacity: 0.85;
 }
@@ -31,7 +32,7 @@
   background: none;
   border: none;
   font: inherit;
-  color: var(--kendo-color-primary);
+  color: var(--quiz-accent);
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.05em;
@@ -39,17 +40,6 @@
   cursor: pointer;
 }
 .continueLink:hover { text-decoration: underline; }
-
-/* ─── Light theme ────────────────────────────────────────────────────────── */
-
-:global(html[data-theme="light"]) .header {
-  background: #fff;
-  border-color: rgba(0, 0, 0, 0.10);
-  border-left-color: var(--kendo-color-primary);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
-}
-
-/* ─── Responsive ─────────────────────────────────────────────────────────── */
 
 @media (min-width: 640px) {
   .header {

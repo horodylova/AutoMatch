@@ -1,0 +1,100 @@
+.page {
+  --quiz-accent: #e5483f;
+  --quiz-accent-hover: #f06a63;
+  --quiz-on-accent: #fff8f6;
+  --quiz-page-bg: #081018;
+  --quiz-page-bg-alt: #121d28;
+  --quiz-surface: rgba(11, 17, 24, 0.92);
+  --quiz-surface-elevated: rgba(17, 25, 35, 0.96);
+  --quiz-surface-soft: rgba(22, 33, 45, 0.9);
+  --quiz-surface-contrast: rgba(10, 15, 22, 0.88);
+  --quiz-media-surface: #0d151d;
+  --quiz-option-bg: rgba(18, 27, 37, 0.92);
+  --quiz-option-hover-bg: rgba(229, 72, 63, 0.12);
+  --quiz-option-active-bg: rgba(229, 72, 63, 0.18);
+  --quiz-pill-bg: rgba(10, 15, 22, 0.78);
+  --quiz-check-bg: rgba(245, 245, 247, 0.94);
+  --quiz-check-mark: #111214;
+  --quiz-text: #f4f7fb;
+  --quiz-text-muted: rgba(225, 232, 240, 0.76);
+  --quiz-text-soft: rgba(225, 232, 240, 0.58);
+  --quiz-border: rgba(255, 255, 255, 0.1);
+  --quiz-border-strong: rgba(255, 255, 255, 0.18);
+  --quiz-accent-border: rgba(229, 72, 63, 0.58);
+  --quiz-shadow-lg: 0 28px 80px rgba(0, 0, 0, 0.42);
+  --quiz-shadow-md: 0 18px 42px rgba(0, 0, 0, 0.32);
+  --quiz-shadow-sm: 0 10px 24px rgba(0, 0, 0, 0.24);
+  --quiz-selection-shadow: 0 0 0 1px rgba(229, 72, 63, 0.18), 0 18px 42px rgba(229, 72, 63, 0.22);
+  --quiz-inset-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+  --road-stroke-color: rgba(255, 255, 255, 0.14);
+  --road-glow-stroke-color: rgba(245, 245, 247, 0.72);
+  --road-glow-color: rgba(245, 245, 247, 1);
+  --progress-glow-stroke-color: rgba(229, 72, 63, 0.95);
+  --progress-glow-color: rgba(229, 72, 63, 1);
+  --quiz-icon-filter: invert(90%) sepia(4%) saturate(291%) hue-rotate(177deg) brightness(103%) contrast(97%);
+  --kendo-color-primary: var(--quiz-accent);
+  --kendo-color-primary-hover: var(--quiz-accent-hover);
+  --kendo-color-on-primary: var(--quiz-on-accent);
+  --kendo-color-app-surface: var(--quiz-page-bg);
+  --kendo-color-surface: var(--quiz-surface);
+  --kendo-color-surface-alt: var(--quiz-surface-soft);
+  --kendo-color-border: var(--quiz-border);
+  --kendo-color-border-alt: var(--quiz-border-strong);
+  --kendo-color-subtle: var(--quiz-text-muted);
+  --kendo-color-on-app-surface: var(--quiz-text);
+  --kendo-color-tertiary-subtle: var(--quiz-surface-elevated);
+  --kendo-color-tertiary-subtle-hover: var(--quiz-option-hover-bg);
+  --kendo-color-tertiary-subtle-active: var(--quiz-option-active-bg);
+  --kendo-color-on-tertiary: var(--quiz-text);
+  position: relative;
+  min-height: 100dvh;
+  background:
+    radial-gradient(circle at top, rgba(229, 72, 63, 0.18), rgba(229, 72, 63, 0) 26%),
+    radial-gradient(circle at 20% 20%, rgba(91, 141, 239, 0.14), rgba(91, 141, 239, 0) 24%),
+    linear-gradient(180deg, var(--quiz-page-bg) 0%, var(--quiz-page-bg-alt) 100%);
+  color: var(--quiz-text);
+}
+
+:global(html[data-theme="light"]) .page {
+  --quiz-page-bg: #f7f4ef;
+  --quiz-page-bg-alt: #edf2f7;
+  --quiz-surface: rgba(255, 255, 255, 0.9);
+  --quiz-surface-elevated: #ffffff;
+  --quiz-surface-soft: #f4f6f9;
+  --quiz-surface-contrast: #edf2f7;
+  --quiz-media-surface: #e8edf3;
+  --quiz-option-bg: #ffffff;
+  --quiz-option-hover-bg: rgba(229, 72, 63, 0.08);
+  --quiz-option-active-bg: rgba(229, 72, 63, 0.12);
+  --quiz-pill-bg: rgba(255, 255, 255, 0.9);
+  --quiz-check-bg: rgba(229, 72, 63, 0.12);
+  --quiz-check-mark: #c93a31;
+  --quiz-text: #12202b;
+  --quiz-text-muted: rgba(18, 32, 43, 0.72);
+  --quiz-text-soft: rgba(18, 32, 43, 0.56);
+  --quiz-border: rgba(10, 20, 30, 0.1);
+  --quiz-border-strong: rgba(10, 20, 30, 0.18);
+  --quiz-accent-border: rgba(229, 72, 63, 0.46);
+  --quiz-shadow-lg: 0 24px 60px rgba(15, 23, 42, 0.12);
+  --quiz-shadow-md: 0 14px 32px rgba(15, 23, 42, 0.12);
+  --quiz-shadow-sm: 0 8px 18px rgba(15, 23, 42, 0.08);
+  --quiz-selection-shadow: 0 0 0 1px rgba(229, 72, 63, 0.14), 0 14px 30px rgba(229, 72, 63, 0.12);
+  --quiz-inset-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+  --road-stroke-color: rgba(18, 32, 43, 0.22);
+  --road-glow-stroke-color: rgba(18, 32, 43, 0.3);
+  --road-glow-color: rgba(18, 32, 43, 0.5);
+  --quiz-icon-filter: none;
+  background:
+    radial-gradient(circle at top, rgba(229, 72, 63, 0.14), rgba(229, 72, 63, 0) 24%),
+    radial-gradient(circle at 20% 20%, rgba(91, 141, 239, 0.08), rgba(91, 141, 239, 0) 22%),
+    linear-gradient(180deg, var(--quiz-page-bg) 0%, var(--quiz-page-bg-alt) 100%);
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.stage {
+  padding-right: 4px;
+}

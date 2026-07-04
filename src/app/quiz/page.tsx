@@ -29,6 +29,7 @@ import { fetchDataset } from "../../lib/dataset";
 import { saveResults, getPreliminaryCandidates } from "../../utils/storage";
 import { trackQuizComplete, trackQuizStart } from "@/lib/gtag";
 import { event } from "@/lib/pixel";
+import pageStyles from "./QuizPage.module.css";
 
 export default function Page() {
   const quiz = useQuiz();
@@ -489,7 +490,9 @@ export default function Page() {
   };
 
   return (
-    <div style={{
+    <div
+      className={pageStyles.page}
+      style={{
       paddingLeft: "clamp(16px, 4vw, 32px)",
       paddingRight: "clamp(16px, 4vw, 32px)",
       paddingTop: quiz.showGallery 
@@ -500,7 +503,8 @@ export default function Page() {
         : (quiz.isMobile ? "calc(240px + env(safe-area-inset-bottom, 0px))" : "60px"),
       height: "100dvh",
       overflowY: "auto",
-    }}>
+    }}
+    >
 
       <QuizHeader onExit={() => { setExitDestination("/"); quiz.setShowExitModal(true); }} />
 
@@ -577,7 +581,7 @@ export default function Page() {
         />
       ) : (
         <>
-          <div style={{ maxWidth: 1000, margin: "0 auto" }}>
+          <div className={pageStyles.container}>
             <QuizProgress 
                 current={quiz.current} 
                 total={quiz.total} 
@@ -588,7 +592,7 @@ export default function Page() {
                 onShowResults={() => quiz.setShowGallery(true)}
             />
             
-            <div style={{ paddingRight: 4 }}>
+            <div className={pageStyles.stage}>
               {showPartTwoStart ? (
                 <PartTwoPreview />
               ) : showIntakeStart ? (

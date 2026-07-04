@@ -155,7 +155,11 @@ const components = {
   types: {
     poll: ({ value }: { value: { question: string; optionA: string; optionB: string; _key?: string } }) => {
       const id = value._key || (value.question || "").slice(0, 24);
-      return <PollBlock id={id} question={value.question} optionA={value.optionA} optionB={value.optionB} />;
+      return (
+        <div className={styles.embeddedBlock}>
+          <PollBlock id={id} question={value.question} optionA={value.optionA} optionB={value.optionB} />
+        </div>
+      );
     },
     image: ({ value }: { value: PortableTextImage }) => {
       if (!value?.asset) {
@@ -179,7 +183,7 @@ const components = {
           src={urlFor(value).width(width).url()}
           alt={value.alt || 'Article image'}
           width={width}
-          height={Math.round(width * 0.75)} // Default aspect ratio fallback
+          height={Math.round(width * 0.75)}
           className={styles.image}
           unoptimized
           style={{
@@ -190,7 +194,7 @@ const components = {
         />
       );
 
-      return (
+      const imageBlock = (
         <div className={wrapperClass}>
           {value.link ? (
             <Link href={value.link} target={value.link.startsWith('http') ? '_blank' : undefined} rel={value.link.startsWith('http') ? 'noopener noreferrer' : undefined}>
@@ -201,6 +205,8 @@ const components = {
           )}
         </div>
       );
+
+      return position === 'center' ? <div className={styles.embeddedBlock}>{imageBlock}</div> : imageBlock;
     },
     videoBanner: ({ value }: { value: PortableTextVideo }) => {
       if (!value?.asset?._ref) {
@@ -236,7 +242,7 @@ const components = {
         />
       );
 
-      return (
+      const videoBlock = (
         <div className={wrapperClass}>
           {value.link ? (
             <Link href={value.link} target={value.link.startsWith('http') ? '_blank' : undefined} rel={value.link.startsWith('http') ? 'noopener noreferrer' : undefined}>
@@ -247,6 +253,8 @@ const components = {
           )}
         </div>
       );
+
+      return position === 'center' ? <div className={styles.embeddedBlock}>{videoBlock}</div> : videoBlock;
     },
   },
 };
@@ -314,7 +322,11 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             poll: ({ value }: { value: { question: string; optionA: string; optionB: string; _key?: string } }) => {
               const idBase = value._key || (value.question || "").slice(0, 24);
               const id = `${slug}:${idBase}`;
-              return <PollBlock id={id} question={value.question} optionA={value.optionA} optionB={value.optionB} />;
+              return (
+                <div className={styles.embeddedBlock}>
+                  <PollBlock id={id} question={value.question} optionA={value.optionA} optionB={value.optionB} />
+                </div>
+              );
             },
           },
         };
