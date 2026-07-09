@@ -222,12 +222,12 @@
   border-radius: 10px;
   font-size: 14px;
   font-weight: 700;
-  background: var(--kendo-color-on-app-surface);
-  color: var(--kendo-color-on-tertiary);
+  background: var(--kendo-color-surface);
+  color: var(--kendo-color-on-app-surface);
   border: 1px solid var(--kendo-color-border-alt);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.22);
   text-decoration: none;
-  transition: filter 0.15s ease, box-shadow 0.15s ease;
+  transition: filter 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease, color 0.15s ease;
 }
 .secondaryBtn:hover {
   filter: brightness(1.05);
