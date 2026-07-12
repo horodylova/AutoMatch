@@ -374,7 +374,7 @@ html[data-theme="light"] .cc-banner__link {
   --kendo-color-series-f-subtle: #2B2727;
   --kendo-color-series-f-bolder: #5A5454;
 
-  --kendo-font-family: var(--font-archivo), sans-serif;
+  --kendo-font-family: var(--font-plus-jakarta-sans), sans-serif;
   --kendo-font-size: 16px;
   --kendo-font-size-sm: 14px;
   --kendo-font-size-md: var(--kendo-font-size);

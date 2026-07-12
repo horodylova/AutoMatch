@@ -4,6 +4,7 @@ import Image from "next/image";
 import styles from "./journal.module.css";
 import { groq } from "next-sanity";
 import JournalViewTracker from "@/components/JournalViewTracker";
+import DreamGarageJournalBanner from "./DreamGarageJournalBanner";
 
 export const revalidate = 60;
 
@@ -89,35 +90,48 @@ export default async function JournalPage({
           )}
 
           {/* Regular Articles */}
-          {currentRegularArticles.map((article) => (
-            <Link key={article._id} href={`/journal/${article.slug.current}`} className={styles.card}>
-              <div className={styles.imageWrapper}>
-                {article.mainImage && (
-                  <Image
-                    src={urlFor(article.mainImage).width(600).height(400).url()}
-                    alt={article.title}
-                    fill
-                    className={styles.image}
-                    unoptimized
-                  />
-                )}
-              </div>
-              <div className={styles.cardBody}>
-                <span className={styles.category}>
-                  {article.categories && article.categories.length > 0 ? article.categories[0].title : "Journal"}
-                </span>
-                <h3 className={styles.cardTitle}>{article.title}</h3>
-                <p className={styles.cardExcerpt}>{article.excerpt}</p>
-                <div className={styles.readMore}>
-                  Read Article
-                  <svg className={styles.arrow} width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M12 5L19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </div>
-              </div>
-            </Link>
-          ))}
+          {(() => {
+            const nodes: React.ReactNode[] = [];
+            const insertAt = 3;
+
+            currentRegularArticles.forEach((article, index) => {
+              if (index === insertAt) {
+                nodes.push(<DreamGarageJournalBanner key="dream-garage-journal-banner" />);
+              }
+
+              nodes.push(
+                <Link key={article._id} href={`/journal/${article.slug.current}`} className={styles.card}>
+                  <div className={styles.imageWrapper}>
+                    {article.mainImage && (
+                      <Image
+                        src={urlFor(article.mainImage).width(600).height(400).url()}
+                        alt={article.title}
+                        fill
+                        className={styles.image}
+                        unoptimized
+                      />
+                    )}
+                  </div>
+                  <div className={styles.cardBody}>
+                    <span className={styles.category}>
+                      {article.categories && article.categories.length > 0 ? article.categories[0].title : "Journal"}
+                    </span>
+                    <h3 className={styles.cardTitle}>{article.title}</h3>
+                    <p className={styles.cardExcerpt}>{article.excerpt}</p>
+                    <div className={styles.readMore}>
+                      Read Article
+                      <svg className={styles.arrow} width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M12 5L19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </div>
+                  </div>
+                </Link>
+              );
+            });
+
+            return nodes;
+          })()}
         </div>
 
         {/* Pagination Controls */}

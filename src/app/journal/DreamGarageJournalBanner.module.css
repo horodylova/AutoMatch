@@ -1,0 +1,207 @@
+.banner {
+  --journal-banner-wash-from: rgba(255, 255, 255, 0.03);
+  --journal-banner-wash-to: rgba(255, 255, 255, 0);
+  --journal-banner-figure-wash-from: rgba(255, 255, 255, 0.04);
+  --journal-banner-figure-wash-to: rgba(255, 255, 255, 0);
+  --journal-banner-rail-sheen: rgba(255, 255, 255, 0.12);
+
+  grid-column: 1 / -1;
+  width: 100%;
+  flex-basis: 100%;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  padding: 26px 28px;
+  border-radius: 20px;
+  border: 1px solid var(--kendo-color-border);
+  text-decoration: none;
+  color: inherit;
+  background:
+    radial-gradient(90% 150% at 100% 0%, rgba(229, 72, 63, 0.14), transparent 48%),
+    linear-gradient(180deg, var(--journal-banner-wash-from), var(--journal-banner-wash-to)),
+    var(--kendo-color-surface);
+  transition: border-color 0.16s ease, transform 0.16s ease, box-shadow 0.16s ease;
+}
+
+.banner:hover {
+  border-color: var(--kendo-color-primary);
+  transform: translateY(-1px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+}
+
+.banner:focus-visible {
+  outline: 2px solid var(--kendo-color-primary);
+  outline-offset: 3px;
+}
+
+.copy {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.badge {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--kendo-color-primary);
+}
+
+.title {
+  margin: 8px 0 6px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(22px, 2.6vw, 30px);
+  line-height: 1.08;
+  color: var(--kendo-color-on-app-surface);
+  max-width: 22ch;
+}
+
+.sub {
+  margin: 0 0 18px;
+  max-width: 52ch;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--kendo-color-subtle);
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 20px;
+  border-radius: 999px;
+  background: var(--kendo-color-primary);
+  color: var(--kendo-color-on-primary);
+  font-weight: 700;
+  box-shadow: 0 8px 20px rgba(229, 72, 63, 0.22);
+}
+
+.figure {
+  flex: 0 0 240px;
+  width: 240px;
+  padding: 16px;
+  border-radius: 16px;
+  border: 1px solid var(--kendo-color-border);
+  background:
+    linear-gradient(180deg, var(--journal-banner-figure-wash-from), var(--journal-banner-figure-wash-to)),
+    var(--kendo-color-surface-alt);
+}
+
+.figHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  gap: 12px;
+}
+
+.figHead span {
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--kendo-color-subtle);
+}
+
+.figHead strong {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 20px;
+  color: var(--kendo-color-on-app-surface);
+}
+
+.rail {
+  display: flex;
+  height: 34px;
+  border-radius: 999px;
+  overflow: hidden;
+  box-shadow: inset 0 1px 0 var(--journal-banner-rail-sheen);
+}
+
+.seg {
+  height: 100%;
+  flex: 1;
+  border-right: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.seg:last-child {
+  border-right: 0;
+}
+
+.figTags {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--kendo-color-border);
+  background: var(--kendo-color-surface);
+  font-size: 11px;
+  color: var(--kendo-color-on-app-surface);
+}
+
+.tag i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.seg[data-tone="0"],
+.tag i[data-tone="0"] {
+  background: linear-gradient(135deg, #ff8f7e, #e5483f);
+}
+
+.seg[data-tone="1"],
+.tag i[data-tone="1"] {
+  background: linear-gradient(135deg, #8fe0b3, #2fa56e);
+}
+
+:global(html[data-theme="light"]) .banner {
+  --journal-banner-wash-from: rgba(26, 37, 47, 0.04);
+  --journal-banner-wash-to: rgba(26, 37, 47, 0);
+  --journal-banner-figure-wash-from: rgba(26, 37, 47, 0.04);
+  --journal-banner-figure-wash-to: rgba(26, 37, 47, 0);
+  --journal-banner-rail-sheen: rgba(26, 37, 47, 0.08);
+
+  box-shadow: 0 8px 20px rgba(26, 37, 47, 0.06);
+}
+
+:global(html[data-theme="light"]) .figure {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+@media (max-width: 760px) {
+  .banner {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 20px;
+    padding: 22px 20px;
+  }
+
+  .title {
+    max-width: none;
+  }
+
+  .figure {
+    width: 100%;
+    flex-basis: auto;
+  }
+
+  .cta {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .banner {
+    transition: none;
+  }
+}

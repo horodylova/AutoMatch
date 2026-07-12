@@ -27,8 +27,9 @@
 .resultCount { font-size: 14px; color: var(--kendo-color-subtle); }
 .toolbarRight { display: flex; align-items: center; gap: 14px; }
 .viewToggle { display: inline-flex; align-items: center; gap: 6px; }
-.iconBtn { width: 36px; height: 36px; border-radius: 10px; border: 1px solid var(--kendo-color-border); background: var(--kendo-color-surface); display: inline-flex; align-items: center; justify-content: center; }
-.iconBtnActive { width: 36px; height: 36px; border-radius: 10px; border: 1px solid var(--kendo-color-primary); background: var(--kendo-color-primary); box-shadow: 0 6px 18px rgba(229, 72, 63, 0.22); display: inline-flex; align-items: center; justify-content: center; }
+.iconBtn { width: 36px; height: 36px; border-radius: 10px; border: 1px solid var(--kendo-color-border); background: var(--kendo-color-surface); color: var(--kendo-color-on-app-surface); opacity: 0.82; display: inline-flex; align-items: center; justify-content: center; transition: color 0.18s ease, opacity 0.18s ease, border-color 0.18s ease, background-color 0.18s ease; }
+.iconBtn:hover { opacity: 1; border-color: var(--kendo-color-border-alt); background: var(--kendo-color-surface-alt); }
+.iconBtnActive { width: 36px; height: 36px; border-radius: 10px; border: 1px solid var(--kendo-color-primary); background: var(--kendo-color-primary); color: var(--kendo-color-on-primary); box-shadow: 0 6px 18px rgba(229, 72, 63, 0.22); display: inline-flex; align-items: center; justify-content: center; }
 .sortRow { display: inline-flex; align-items: center; gap: 8px; }
 .sortLabel { font-size: 13px; color: var(--kendo-color-subtle); }
 .pills { display: inline-flex; gap: 8px; }

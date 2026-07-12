@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import ListingItem, { ListingItemData } from "./ListingItem";
 import ListingRow, { ListingRowData } from "./ListingRow";
+import DreamGarageListingBanner from "./DreamGarageListingBanner";
 import ResultsToolbar from "./ResultsToolbar";
 import Pagination from "./Pagination";
 import styles from "./cars.module.css";
@@ -413,9 +414,15 @@ export default function ListingList({ filters }: { filters?: FiltersData }) {
               {(() => {
                 const items = pageRows.map(r => toItem(r));
                 const nodes: React.ReactNode[] = [];
-                const insertAt = 6;
+                const dreamGarageInsertAt = 6;
+                const partnerInsertAt = 12;
                 items.forEach((item, i) => {
-                  if (i === insertAt) nodes.push(<PromoBannerK9 key="promo-k9" />);
+                  if (i === dreamGarageInsertAt) {
+                    nodes.push(<DreamGarageListingBanner key="promo-dream-garage" />);
+                  }
+                  if (i === partnerInsertAt) {
+                    nodes.push(<PromoBannerK9 key="promo-k9" />);
+                  }
                   const key = item.id || `g-${start + i}`;
                   nodes.push(<ListingItem key={key} item={item} />);
                 });
