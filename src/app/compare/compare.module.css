@@ -587,7 +587,7 @@
 }
 
 :global(html[data-theme="light"]) .subtitle {
-  color: var(--kendo-color-subtle);
+  color: rgba(19, 32, 42, 0.84);
 }
 
 :global(html[data-theme="light"]) .selectionCard {
@@ -637,12 +637,12 @@
 }
 
 :global(html[data-theme="light"]) .carTrim {
-  color: var(--kendo-color-subtle);
+  color: rgba(19, 32, 42, 0.8);
 }
 
 :global(html[data-theme="light"]) .changeButton {
   border-color: rgba(0, 0, 0, 0.15);
-  color: var(--kendo-color-subtle);
+  color: rgba(19, 32, 42, 0.82);
 }
 
 :global(html[data-theme="light"]) .changeButton:hover {
@@ -671,7 +671,7 @@
 }
 
 :global(html[data-theme="light"]) .stickyTrim {
-  color: var(--kendo-color-subtle);
+  color: rgba(19, 32, 42, 0.8);
 }
 
 :global(html[data-theme="light"]) .row {
@@ -679,7 +679,7 @@
 }
 
 :global(html[data-theme="light"]) .rowLabel {
-  color: var(--kendo-color-subtle);
+  color: rgba(19, 32, 42, 0.76);
 }
 
 :global(html[data-theme="light"]) .rowValue.highlight {

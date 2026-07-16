@@ -1297,6 +1297,32 @@
   }
 }
 
+:global(html[data-theme="light"]) .subtitle,
+:global(html[data-theme="light"]) .kicker,
+:global(html[data-theme="light"]) .presetButton small,
+:global(html[data-theme="light"]) .sliderScale,
+:global(html[data-theme="light"]) .blockText,
+:global(html[data-theme="light"]) .bayNumber,
+:global(html[data-theme="light"]) .bayDescription,
+:global(html[data-theme="light"]) .removeButton,
+:global(html[data-theme="light"]) .allocationPct,
+:global(html[data-theme="light"]) .selectPlaceholder,
+:global(html[data-theme="light"]) .selectChevron,
+:global(html[data-theme="light"]) .gaugeEyebrow,
+:global(html[data-theme="light"]) .gaugeMeta,
+:global(html[data-theme="light"]) .summaryStrip span,
+:global(html[data-theme="light"]) .resultsPlaceholder,
+:global(html[data-theme="light"]) .shareText,
+:global(html[data-theme="light"]) .shareDeckLabel,
+:global(html[data-theme="light"]) .resultBudget,
+:global(html[data-theme="light"]) .resultTrim,
+:global(html[data-theme="light"]) .resultLeftover,
+:global(html[data-theme="light"]) .unfilledBox,
+:global(html[data-theme="light"]) .howTitle,
+:global(html[data-theme="light"]) .howStepText {
+  color: rgba(19, 32, 42, 0.82);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .presetButton,
   .secondaryButton,
