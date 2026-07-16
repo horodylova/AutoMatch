@@ -121,6 +121,10 @@
   box-shadow: 0 4px 14px rgba(26, 37, 47, 0.05);
 }
 
+:global(html[data-theme="light"]) .sub {
+  color: rgba(19, 32, 42, 0.84);
+}
+
 @media (max-width: 640px) {
   .banner {
     flex-direction: column;
