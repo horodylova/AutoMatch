@@ -544,8 +544,8 @@ html[data-theme="light"] {
   --kendo-color-app-surface: #F4F5F7;
   --kendo-color-surface: #FFFFFF;
   --kendo-color-surface-alt: #E4E8F0;
-  --kendo-color-on-app-surface: #1A252F;
-  --kendo-color-subtle: #6C6C6C;
+  --kendo-color-on-app-surface: #18232D;
+  --kendo-color-subtle: #495866;
   --kendo-color-border: rgba(10, 20, 30, 0.08);
   --kendo-color-border-alt: rgba(10, 20, 30, 0.16);
   --app-background-body-grid-color: rgba(26, 37, 47, 0.08);
@@ -558,12 +558,12 @@ html[data-theme="light"] {
   --app-header-mobile-drawer-bg: #FFFFFF;
   --app-header-backdrop: rgba(10, 20, 30, 0.2);
   --app-footer-background: #F4F5F7;
-  --app-footer-text-main: rgba(26, 37, 47, 0.9);
-  --app-footer-text-muted: rgba(26, 37, 47, 0.8);
-  --app-footer-nav-title: rgba(26, 37, 47, 0.65);
-  --app-footer-link: rgba(26, 37, 47, 0.9);
-  --app-footer-social: rgba(26, 37, 47, 0.8);
-  --app-footer-bottom: rgba(26, 37, 47, 0.6);
+  --app-footer-text-main: rgba(24, 35, 45, 0.94);
+  --app-footer-text-muted: rgba(24, 35, 45, 0.82);
+  --app-footer-nav-title: rgba(24, 35, 45, 0.74);
+  --app-footer-link: rgba(24, 35, 45, 0.92);
+  --app-footer-social: rgba(24, 35, 45, 0.84);
+  --app-footer-bottom: rgba(24, 35, 45, 0.72);
   --app-footer-divider: rgba(26, 37, 47, 0.08);
   --app-footer-logo-background: transparent;
   --advice-img-filter: none;
@@ -572,8 +572,8 @@ html[data-theme="light"] {
   --car-personalities-subtitle-bg: rgba(255, 255, 255, 0.85);
   --car-personalities-logo-filter: none;
   --stats-subtitle-color: rgba(26, 37, 47, 0.9);
-  --stats-text-color: rgba(26, 37, 47, 0.82);
-  --stats-metric-label-color: rgba(26, 37, 47, 0.75);
+  --stats-text-color: rgba(24, 35, 45, 0.88);
+  --stats-metric-label-color: rgba(24, 35, 45, 0.8);
   --stats-timeline-line: rgba(26, 37, 47, 0.12);
   --stats-donut-a: #C9472D;
   --stats-donut-b: #2F7ECF;
@@ -586,8 +586,8 @@ html[data-theme="light"] {
   --journal-title-color: rgba(26, 37, 47, 0.95);
   --journal-label-color: var(--kendo-color-primary);
   --journal-card-title-color: rgba(26, 37, 47, 0.95);
-  --journal-card-excerpt-color: rgba(26, 37, 47, 0.78);
-  --journal-card-category-color: rgba(26, 37, 47, 0.55);
+  --journal-card-excerpt-color: rgba(24, 35, 45, 0.84);
+  --journal-card-category-color: rgba(24, 35, 45, 0.68);
   --journal-action-color: rgba(26, 37, 47, 0.95);
   --journal-card-bg: #FFFFFF;
   --journal-card-border: var(--kendo-color-border);
@@ -595,12 +595,12 @@ html[data-theme="light"] {
   --journal-viewall-border-color: var(--kendo-color-border);
   --journal-viewall-bg-hover: rgba(10, 20, 30, 0.06);
   --advice-title-color: var(--kendo-color-on-app-surface);
-  --advice-text-color: rgba(26, 37, 47, 0.82);
+  --advice-text-color: rgba(24, 35, 45, 0.88);
   --advice-overlay-bg: rgba(255, 255, 255, 0.92);
   --advice-overlay-border: var(--kendo-color-border);
   --advice-check-bg: var(--kendo-color-primary);
-  --how-subtitle-color: rgba(26, 37, 47, 0.75);
-  --how-comma-color: rgba(26, 37, 47, 0.5);
+  --how-subtitle-color: rgba(24, 35, 45, 0.82);
+  --how-comma-color: rgba(24, 35, 45, 0.62);
   --how-media-overlay-opacity: 0.2;
   /* --how-glow-strong: rgba(47, 126, 207, 0.25); */
   --how-glow-strong: rgba(229, 72, 63, 0.25);
@@ -610,7 +610,7 @@ html[data-theme="light"] {
   --dating-card-bg: var(--kendo-color-surface);
   --dating-card-border: var(--kendo-color-border);
   --dating-card-border-hover: var(--kendo-color-border-alt);
-  --dating-lead-color: rgba(26, 37, 47, 0.75);
+  --dating-lead-color: rgba(24, 35, 45, 0.84);
   --dating-icon-bg: var(--app-accent-strong-soft);
   /* --dating-icon-shadow: 0 4px 14px rgba(47, 126, 207, 0.15); */
   --dating-icon-shadow: 0 4px 14px rgba(229, 72, 63, 0.15);

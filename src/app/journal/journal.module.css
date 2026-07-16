@@ -280,7 +280,7 @@
 }
 
 :global(html[data-theme="light"]) .featuredExcerpt {
-  color: rgba(26, 37, 47, 0.75);
+  color: rgba(24, 35, 45, 0.84);
 }
 
 :global(html[data-theme="light"]) .card {
@@ -386,7 +386,7 @@
 }
 
 :global(html[data-theme="light"]) .cardExcerpt {
-  color: rgba(26, 37, 47, 0.7);
+  color: rgba(24, 35, 45, 0.8);
 }
 
 :global(html[data-theme="light"]) .readMore {
