@@ -260,7 +260,7 @@
 .stage {
   position: relative;
   flex: 1;
-  min-height: min(560px, calc(100vh - 255px));
+  min-height: min(500px, calc(100vh - 300px));
   padding-top: 4px;
 }
 
@@ -426,8 +426,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 22px;
-  padding: 18px 0 18px;
+  gap: 34px;
+  padding: 10px 0 14px;
 }
 
 .actionButton {
@@ -451,29 +451,29 @@
 }
 
 .actionNo {
-  width: 58px;
-  height: 58px;
+  width: 66px;
+  height: 66px;
   border: 1px solid var(--kendo-color-border);
 }
 
 .actionNo svg {
-  width: 23px;
-  height: 23px;
+  width: 27px;
+  height: 27px;
   stroke: var(--kendo-color-primary);
   stroke-width: 2.4;
   fill: none;
 }
 
 .actionYes {
-  width: 68px;
-  height: 68px;
+  width: 80px;
+  height: 80px;
   background: var(--kendo-color-primary);
   box-shadow: 0 7px 22px rgba(229, 72, 63, 0.34);
 }
 
 .actionYes svg {
-  width: 29px;
-  height: 29px;
+  width: 34px;
+  height: 34px;
   fill: #fff;
 }
 
