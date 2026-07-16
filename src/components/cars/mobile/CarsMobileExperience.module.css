@@ -40,32 +40,35 @@
 .gate {
   position: relative;
   flex: 1;
-  padding: 18px 16px 132px;
+  padding: 10px 16px 124px;
 }
 
 .eyebrow {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.14em;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--kendo-color-primary);
-  margin-bottom: 8px;
+  margin-bottom: 6px;
+  line-height: 1.2;
 }
 
 .title {
-  margin: 0 0 8px;
-  font-size: 28px;
-  line-height: 1.16;
-  letter-spacing: -0.02em;
-  max-width: 11ch;
+  margin: 0 0 6px;
+  font-size: 34px;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  font-weight: 800;
+  max-width: 12ch;
 }
 
 .sub {
-  margin: 0 0 22px;
-  font-size: 14px;
-  line-height: 1.55;
+  margin: 0 0 16px;
+  font-size: 16px;
+  line-height: 1.42;
   color: var(--kendo-color-subtle);
-  max-width: 38ch;
+  font-weight: 500;
+  max-width: 32ch;
 }
 
 .loadingNote {
