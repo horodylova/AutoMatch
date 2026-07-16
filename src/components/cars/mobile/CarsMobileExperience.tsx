@@ -222,6 +222,14 @@ export default function CarsMobileExperience({
     window.sessionStorage.removeItem(SESSION_KEY);
   }, []);
 
+  const goToGate = useCallback((clearStoredState = false) => {
+    setError(null);
+    setStep("gate");
+    if (clearStoredState) {
+      clearSession();
+    }
+  }, [clearSession]);
+
   const buildDeck = useCallback(
     async (nextFilters: FiltersData) => {
       setLoadingDeck(true);
@@ -386,7 +394,7 @@ export default function CarsMobileExperience({
           <button type="button" className={styles.primaryButton} onClick={() => startDeck(draft)}>
             Try again
           </button>
-          <button type="button" className={styles.ghostButton} onClick={() => setStep("gate")}>
+          <button type="button" className={styles.ghostButton} onClick={() => goToGate()}>
             Back to filters
           </button>
         </div>
@@ -402,8 +410,7 @@ export default function CarsMobileExperience({
         onNope={handleNope}
         onDropBroken={handleDropBroken}
         onEditFilters={() => {
-          setStep("gate");
-          clearSession();
+          goToGate(true);
         }}
         onPersist={() => persistSession("deck", deckItems, filters, showStartOver)}
       />
@@ -421,8 +428,7 @@ export default function CarsMobileExperience({
             type="button"
             className={styles.primaryButton}
             onClick={() => {
-              setStep("gate");
-              clearSession();
+              goToGate(true);
             }}
           >
             Widen my filters
