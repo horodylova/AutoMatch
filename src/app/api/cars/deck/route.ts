@@ -1,21 +1,39 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { Row } from "@/lib/dataset";
 
 const PAGE_SIZE = 50;
 
 type PriceRange = { min?: number; max?: number };
 type Cursor = { make: string; model: string } | null;
+type Filters = {
+  makes: string[];
+  priceMin?: number;
+  priceMax?: number;
+  priceRanges: PriceRange[];
+  body: string[];
+  fuel: string[];
+  drive: string[];
+  transmission: string[];
+  cylinders: string[];
+  query?: string;
+};
 
-const PRICE_SQL = `NULLIF(REGEXP_REPLACE(COALESCE("Base MSRP"::text, ''), '[^0-9.]', '', 'g'), '')::numeric`;
-const YEAR_SQL = `NULLIF(REGEXP_REPLACE(COALESCE("Year"::text, ''), '[^0-9]', '', 'g'), '')::int`;
-const SEARCH_SQL = `LOWER(CONCAT_WS(' ', COALESCE("Make"::text, ''), COALESCE("Model"::text, ''), COALESCE("Trim"::text, ''), COALESCE("Year"::text, '')))`;
-const IMAGE_SQL = `COALESCE("Image URL"::text, '')`;
-const FUEL_SQL = `LOWER(COALESCE("Fuel type"::text, ''))`;
-const TRANS_SQL = `LOWER(REGEXP_REPLACE(COALESCE("Transmission"::text, ''), '\\m\\d+\\s*-?\\s*speed\\s*', '', 'g'))`;
-
-function normalizeList(values: string[]): string[] {
-  return values.map((value) => value.trim()).filter(Boolean);
-}
+type GroupedItem = {
+  id: string;
+  make: string;
+  model: string;
+  trim: string;
+  year: number | null;
+  price: number | null;
+  imageUrl: string;
+  specs: {
+    engine: string;
+    hp: string;
+    seats: string;
+  };
+  versionCount: number;
+};
 
 function parseNumber(value: string | null): number | undefined {
   if (!value) return undefined;
@@ -47,274 +65,249 @@ function encodeCursor(cursor: Cursor): string | null {
   return Buffer.from(JSON.stringify(cursor), "utf8").toString("base64url");
 }
 
-function sqlQuote(value: string): string {
-  return `'${value.replace(/'/g, "''")}'`;
+function num(v: unknown): number {
+  const raw = String(v ?? "").trim();
+  const cleaned = raw.replace(/[^0-9.]/g, "");
+  const n = Number(cleaned);
+  return Number.isFinite(n) ? n : 0;
 }
 
-function andAll(parts: string[]): string {
-  return parts.length > 0 ? parts.map((part) => `(${part})`).join(" AND ") : "TRUE";
+function toCell(value: unknown): string | number | boolean | null {
+  if (value == null) return null;
+  if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") return value;
+  return String(value);
 }
 
-function orAll(parts: string[]): string {
-  return parts.length > 0 ? parts.map((part) => `(${part})`).join(" OR ") : "FALSE";
+function getCell(row: Row, idx: Record<string, number>, key: string): string {
+  const columnIndex = idx[key.toLowerCase()] ?? -1;
+  if (columnIndex < 0) return "";
+  return String(row[columnIndex] ?? "").trim();
 }
 
-function buildWhere(searchParams: URLSearchParams): string {
-  const makes = normalizeList(searchParams.getAll("make"));
-  const body = normalizeList(searchParams.getAll("body"));
-  const fuel = normalizeList(searchParams.getAll("fuel"));
-  const drive = normalizeList(searchParams.getAll("drive"));
-  const transmission = normalizeList(searchParams.getAll("transmission"));
-  const cylinders = normalizeList(searchParams.getAll("cylinders"));
-  const priceMin = parseNumber(searchParams.get("priceMin"));
-  const priceMax = parseNumber(searchParams.get("priceMax"));
-  const priceRanges = parsePriceRanges(searchParams.getAll("priceRange"));
-  const queryTokens = normalizeList((searchParams.get("query") || "").toLowerCase().split(/\s+/));
+function normalizeImage(raw: string): string {
+  const first = raw.split(/[;,]/).map((part) => part.trim()).filter(Boolean)[0] || "";
+  if (!first) return "";
+  if (!first.startsWith("/") && !first.startsWith("http")) {
+    return `/photos-cars/${encodeURIComponent(first)}`;
+  }
+  return first.replace(/\s+/g, "%20");
+}
 
-  const where: string[] = [];
+function hasRealPhoto(raw: string): boolean {
+  const normalized = normalizeImage(raw);
+  if (!normalized) return false;
+  const lower = normalized.toLowerCase();
+  return !lower.includes("placeholder") && !lower.includes("no-image-available") && !lower.includes("hold tight");
+}
 
-  if (makes.length > 0) {
-    where.push(`LOWER(COALESCE("Make"::text, '')) IN (${makes.map((value) => sqlQuote(value.toLowerCase())).join(", ")})`);
+function buildFilters(searchParams: URLSearchParams): Filters {
+  return {
+    makes: searchParams.getAll("make").map((value) => value.trim()).filter(Boolean),
+    priceMin: parseNumber(searchParams.get("priceMin")),
+    priceMax: parseNumber(searchParams.get("priceMax")),
+    priceRanges: parsePriceRanges(searchParams.getAll("priceRange")),
+    body: searchParams.getAll("body").map((value) => value.trim()).filter(Boolean),
+    fuel: searchParams.getAll("fuel").map((value) => value.trim()).filter(Boolean),
+    drive: searchParams.getAll("drive").map((value) => value.trim()).filter(Boolean),
+    transmission: searchParams.getAll("transmission").map((value) => value.trim()).filter(Boolean),
+    cylinders: searchParams.getAll("cylinders").map((value) => value.trim()).filter(Boolean),
+    query: (searchParams.get("query") || "").trim() || undefined,
+  };
+}
+
+function rowMatchesFilters(row: Row, idx: Record<string, number>, filters: Filters, allCylSet: Set<string>): boolean {
+  if (filters.makes.length > 0) {
+    const make = getCell(row, idx, "make").toLowerCase();
+    const ok = filters.makes.some((label) => make === label.toLowerCase());
+    if (!ok) return false;
   }
 
-  if (typeof priceMin === "number" || typeof priceMax === "number") {
-    const rangeParts: string[] = [];
-    if (typeof priceMin === "number") rangeParts.push(`${PRICE_SQL} >= ${priceMin}`);
-    if (typeof priceMax === "number") rangeParts.push(`${PRICE_SQL} <= ${priceMax}`);
-    where.push(andAll(rangeParts));
-  }
-
-  if (priceRanges.length > 0) {
-    where.push(
-      orAll(priceRanges.map((range) => {
-        const rangeParts: string[] = [];
-        if (typeof range.min === "number") rangeParts.push(`${PRICE_SQL} >= ${range.min}`);
-        if (typeof range.max === "number") rangeParts.push(`${PRICE_SQL} <= ${range.max}`);
-        return andAll(rangeParts);
-      }))
-    );
-  }
-
-  if (body.length > 0) {
-    where.push(`LOWER(COALESCE("Body type"::text, '')) IN (${body.map((value) => sqlQuote(value.toLowerCase())).join(", ")})`);
-  }
-
-  if (fuel.length > 0) {
-    const fuelConditions = fuel.map((value) => {
-      const label = value.toLowerCase();
-      if (label === "electric") {
-        return `${FUEL_SQL} LIKE '%electric%' OR ${FUEL_SQL} LIKE '%bev%'`;
-      }
-      if (label === "hydrogen") {
-        return `${FUEL_SQL} LIKE '%hydrogen%'`;
-      }
-      if (label === "diesel") {
-        return `${FUEL_SQL} LIKE '%diesel%'`;
-      }
-      if (label === "hybrid") {
-        return `${FUEL_SQL} LIKE '%hybrid%' OR ${FUEL_SQL} LIKE '%plug-in%' OR ${FUEL_SQL} LIKE '%phev%'`;
-      }
-      if (label === "flex-fuel") {
-        return `${FUEL_SQL} LIKE '%flex%' OR ${FUEL_SQL} LIKE '%e85%'`;
-      }
-      if (label === "gasoline") {
-        return `(${FUEL_SQL} LIKE '%gasoline%' OR ${FUEL_SQL} LIKE '%petrol%' OR ${FUEL_SQL} LIKE '%unleaded%')
-          AND ${FUEL_SQL} NOT LIKE '%hybrid%'
-          AND ${FUEL_SQL} NOT LIKE '%plug-in%'
-          AND ${FUEL_SQL} NOT LIKE '%phev%'
-          AND ${FUEL_SQL} NOT LIKE '%flex%'
-          AND ${FUEL_SQL} NOT LIKE '%e85%'`;
-      }
-      return `${FUEL_SQL} LIKE ${sqlQuote(`%${label}%`)}`;
+  if (filters.priceRanges.length > 0) {
+    const value = num(getCell(row, idx, "base msrp"));
+    const ok = filters.priceRanges.some((range) => {
+      if (typeof range.min === "number" && value < range.min) return false;
+      if (typeof range.max === "number" && value > range.max) return false;
+      return true;
     });
-    where.push(orAll(fuelConditions));
+    if (!ok) return false;
+  } else if (typeof filters.priceMin !== "undefined" || typeof filters.priceMax !== "undefined") {
+    const value = num(getCell(row, idx, "base msrp"));
+    if (typeof filters.priceMin === "number" && value < filters.priceMin) return false;
+    if (typeof filters.priceMax === "number" && value > filters.priceMax) return false;
   }
 
-  if (drive.length > 0) {
-    where.push(`LOWER(COALESCE("Drive type"::text, '')) IN (${drive.map((value) => sqlQuote(value.toLowerCase())).join(", ")})`);
+  if (filters.body.length > 0) {
+    const body = getCell(row, idx, "body type").toLowerCase();
+    const ok = filters.body.some((label) => body === label.toLowerCase());
+    if (!ok) return false;
   }
 
-  if (transmission.length > 0) {
-    const transmissionConditions = transmission.map((value) => {
-      const label = value.toLowerCase();
-      const automatic = `${TRANS_SQL} LIKE '%automatic%' OR ${TRANS_SQL} LIKE '%direct drive%' OR ${TRANS_SQL} LIKE '%cvt%'`;
-      const manual = `${TRANS_SQL} LIKE '%manual%'`;
-      const mixed = `${TRANS_SQL} LIKE '%automated%' OR ${TRANS_SQL} LIKE '%dual%' OR ${TRANS_SQL} LIKE '%semi%' OR ${TRANS_SQL} LIKE '%sequential%' OR ((${automatic}) AND (${manual}))`;
-      if (label === "manual") {
-        return `(${manual}) AND NOT (${mixed}) AND NOT (${automatic})`;
+  if (filters.fuel.length > 0) {
+    const fuel = getCell(row, idx, "fuel type").toLowerCase();
+    const ok = filters.fuel.some((label) => {
+      const l = label.toLowerCase();
+      if (l === "electric") return fuel.includes("electric") || fuel.includes("bev");
+      if (l === "hydrogen") return fuel.includes("hydrogen");
+      if (l === "diesel") return fuel.includes("diesel");
+      if (l === "hybrid") return fuel.includes("hybrid") || fuel.includes("plug-in") || fuel.includes("phev");
+      if (l === "flex-fuel") return fuel.includes("flex") || fuel.includes("e85");
+      if (l === "gasoline") {
+        const isGas = fuel.includes("gasoline") || fuel.includes("petrol") || fuel.includes("unleaded");
+        const isHybrid = fuel.includes("hybrid") || fuel.includes("plug-in") || fuel.includes("phev");
+        const isFlex = fuel.includes("flex") || fuel.includes("e85");
+        return isGas && !isHybrid && !isFlex;
       }
-      if (label === "mixed") {
-        return mixed;
-      }
-      return `(${automatic}) AND NOT (${mixed})`;
+      return fuel.includes(l);
     });
-    where.push(orAll(transmissionConditions));
+    if (!ok) return false;
   }
 
-  if (cylinders.length > 0) {
-    where.push(`LOWER(COALESCE("Cylinders"::text, '')) IN (${cylinders.map((value) => sqlQuote(value.toLowerCase())).join(", ")})`);
+  if (filters.drive.length > 0) {
+    const drive = getCell(row, idx, "drive type").toLowerCase();
+    const ok = filters.drive.some((label) => drive === label.toLowerCase());
+    if (!ok) return false;
   }
 
-  if (queryTokens.length > 0) {
-    where.push(andAll(queryTokens.map((token) => `${SEARCH_SQL} LIKE ${sqlQuote(`%${token}%`)}`)));
+  if (filters.transmission.length > 0) {
+    const raw = getCell(row, idx, "transmission").toLowerCase();
+    const cleaned = raw.replace(/\b\d+\s*-?\s*speed\s*/g, "").trim();
+    const automatic = cleaned.includes("automatic") || cleaned.includes("direct drive") || cleaned.includes("cvt");
+    const manual = cleaned.includes("manual");
+    const mixed = cleaned.includes("automated") || cleaned.includes("dual") || cleaned.includes("semi") || cleaned.includes("sequential") || (automatic && manual);
+    let label = "Automatic";
+    if (mixed) label = "Mixed";
+    else if (manual && !mixed && !automatic) label = "Manual";
+    const ok = filters.transmission.some((value) => value.toLowerCase() === label.toLowerCase());
+    if (!ok) return false;
   }
 
-  return andAll(where);
+  if (filters.cylinders.length > 0) {
+    const allSelected = allCylSet.size > 0 && filters.cylinders.length >= allCylSet.size;
+    if (!allSelected) {
+      const cylinders = getCell(row, idx, "cylinders").toLowerCase();
+      const ok = cylinders ? filters.cylinders.some((value) => value.toLowerCase() === cylinders) : false;
+      if (!ok) return false;
+    }
+  }
+
+  if (filters.query) {
+    const q = filters.query.toLowerCase();
+    const hay = [
+      getCell(row, idx, "make"),
+      getCell(row, idx, "model"),
+      getCell(row, idx, "trim"),
+      getCell(row, idx, "year"),
+    ]
+      .join(" ")
+      .toLowerCase();
+    const tokens = q.split(/\s+/).filter(Boolean);
+    const ok = tokens.every((token) => hay.includes(token));
+    if (!ok) return false;
+  }
+
+  return true;
 }
 
-function buildBaseCte(whereSql: string): string {
-  return `
-    WITH filtered AS (
-      SELECT
-        "ID"::text AS id,
-        "Make"::text AS make,
-        "Model"::text AS model,
-        "Trim"::text AS trim,
-        "Trim (description)"::text AS trim_description,
-        "Image URL"::text AS image_url,
-        "Engine size (L)"::text AS engine_size,
-        "Horsepower (hp)"::text AS horsepower,
-        "Total seating"::text AS total_seating,
-        ${YEAR_SQL} AS year_num,
-        ${PRICE_SQL} AS price_num,
-        COUNT(*) OVER (PARTITION BY "Make", "Model")::int AS version_count
-      FROM teo.teo_cars
-      WHERE ${whereSql}
-    ),
-    photo_eligible AS (
-      SELECT *
-      FROM filtered
-      WHERE ${IMAGE_SQL} <> ''
-        AND ${IMAGE_SQL} NOT ILIKE '%placeholder%'
-        AND ${IMAGE_SQL} NOT ILIKE '%no-image-available%'
-        AND ${IMAGE_SQL} NOT ILIKE '%hold tight%'
-    ),
-    grouped AS (
-      SELECT DISTINCT ON (make, model)
-        id,
-        make,
-        model,
-        trim,
-        trim_description,
-        image_url,
-        BTRIM(SPLIT_PART(image_url, ';', 1)) AS primary_image_url,
-        year_num,
-        price_num,
-        engine_size,
-        horsepower,
-        total_seating,
-        version_count
-      FROM photo_eligible
-      ORDER BY make, model, year_num DESC NULLS LAST, price_num ASC NULLS LAST, id ASC
-    ),
-    deduped AS (
-      SELECT DISTINCT ON (primary_image_url)
-        id,
-        make,
-        model,
-        trim,
-        trim_description,
-        primary_image_url,
-        year_num,
-        price_num,
-        engine_size,
-        horsepower,
-        total_seating,
-        version_count
-      FROM grouped
-      ORDER BY primary_image_url, make, model
-    )
-  `;
+function chooseRepresentative(rows: Row[], idx: Record<string, number>): Row | null {
+  const eligible = rows.filter((row) => hasRealPhoto(getCell(row, idx, "image url")));
+  if (eligible.length === 0) return null;
+
+  return [...eligible].sort((a, b) => {
+    const yearDiff = num(getCell(b, idx, "year")) - num(getCell(a, idx, "year"));
+    if (yearDiff !== 0) return yearDiff;
+    const priceDiff = num(getCell(a, idx, "base msrp")) - num(getCell(b, idx, "base msrp"));
+    if (priceDiff !== 0) return priceDiff;
+    return getCell(a, idx, "id").localeCompare(getCell(b, idx, "id"));
+  })[0] || null;
+}
+
+function groupRows(rows: Row[], idx: Record<string, number>): GroupedItem[] {
+  const grouped = new Map<string, Row[]>();
+
+  rows.forEach((row) => {
+    const make = getCell(row, idx, "make");
+    const model = getCell(row, idx, "model");
+    const key = `${make}|${model}`;
+    if (!grouped.has(key)) grouped.set(key, []);
+    grouped.get(key)?.push(row);
+  });
+
+  const candidates: GroupedItem[] = [];
+
+  grouped.forEach((groupRowsForModel) => {
+    const representative = chooseRepresentative(groupRowsForModel, idx);
+    if (!representative) return;
+
+    const imageUrl = normalizeImage(getCell(representative, idx, "image url"));
+    if (!imageUrl) return;
+
+    candidates.push({
+      id: getCell(representative, idx, "id"),
+      make: getCell(representative, idx, "make"),
+      model: getCell(representative, idx, "model"),
+      trim: getCell(representative, idx, "trim") || getCell(representative, idx, "trim (description)"),
+      year: num(getCell(representative, idx, "year")) || null,
+      price: num(getCell(representative, idx, "base msrp")) || null,
+      imageUrl,
+      specs: {
+        engine: getCell(representative, idx, "engine size (l)"),
+        hp: getCell(representative, idx, "horsepower (hp)"),
+        seats: getCell(representative, idx, "total seating"),
+      },
+      versionCount: groupRowsForModel.length,
+    });
+  });
+
+  const imageDeduped = new Map<string, GroupedItem>();
+  candidates
+    .sort((a, b) => a.imageUrl.localeCompare(b.imageUrl) || a.make.localeCompare(b.make) || a.model.localeCompare(b.model))
+    .forEach((item) => {
+      if (!imageDeduped.has(item.imageUrl)) imageDeduped.set(item.imageUrl, item);
+    });
+
+  return Array.from(imageDeduped.values()).sort((a, b) => a.make.localeCompare(b.make) || a.model.localeCompare(b.model));
 }
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const cursor = parseCursor(searchParams.get("cursor"));
-    const whereSql = buildWhere(searchParams);
-    const baseCte = buildBaseCte(whereSql);
-    const cursorSql = cursor
-      ? `WHERE (make > ${sqlQuote(cursor.make)} OR (make = ${sqlQuote(cursor.make)} AND model > ${sqlQuote(cursor.model)}))`
-      : "";
+    const filters = buildFilters(searchParams);
 
-    const countQuery = `
-      ${baseCte}
-      SELECT COUNT(*)::int AS total_groups
-      FROM deduped
-    `;
+    const cols = (await prisma.$queryRawUnsafe(
+      "SELECT column_name FROM information_schema.columns WHERE table_schema = 'teo' AND table_name = 'teo_cars' ORDER BY ordinal_position"
+    )) as Array<{ column_name: string }>;
+    const headers = cols.map((column: { column_name: string }) => column.column_name);
+    const quoted = headers.map((header: string) => `"${header.replace(/"/g, '""')}"`).join(", ");
+    const sql = `SELECT ${quoted} FROM teo.teo_cars`;
+    const rawRows = (await prisma.$queryRawUnsafe(sql)) as Array<Record<string, unknown>>;
+    const rows: Row[] = rawRows.map((row: Record<string, unknown>) => headers.map((header: string) => toCell(row[header])));
+    const idx = Object.fromEntries(headers.map((header: string, i: number) => [header.toLowerCase(), i]));
 
-    const itemsQuery = `
-      ${baseCte}
-      SELECT
-        id,
-        make,
-        model,
-        trim,
-        trim_description,
-        primary_image_url,
-        year_num,
-        price_num,
-        engine_size,
-        horsepower,
-        total_seating,
-        version_count
-      FROM deduped
-      ${cursorSql}
-      ORDER BY make, model
-      LIMIT ${PAGE_SIZE + 1}
-    `;
+    const cIdx = idx["cylinders"] ?? -1;
+    const allCylSet = new Set<string>();
+    if (cIdx >= 0) {
+      rows.forEach((row) => {
+        const raw = String(row[cIdx] ?? "").trim().toLowerCase();
+        if (raw) allCylSet.add(raw);
+      });
+    }
 
-    const countRows = (await prisma.$queryRawUnsafe(countQuery)) as Array<{ total_groups: number }>;
-    const [{ total_groups: totalGroups = 0 } = { total_groups: 0 }] = countRows;
+    const filteredRows = rows.filter((row) => rowMatchesFilters(row, idx, filters, allCylSet));
+    const groupedItems = groupRows(filteredRows, idx);
+    const totalGroups = groupedItems.length;
 
-    const rows = (await prisma.$queryRawUnsafe(itemsQuery)) as Array<{
-      id: string;
-      make: string;
-      model: string;
-      trim: string | null;
-      trim_description: string | null;
-      primary_image_url: string;
-      year_num: number | null;
-      price_num: number | string | null;
-      engine_size: string | null;
-      horsepower: string | null;
-      total_seating: string | null;
-      version_count: number;
-    }>;
-
-    const hasMore = rows.length > PAGE_SIZE;
-    const pageRows = hasMore ? rows.slice(0, PAGE_SIZE) : rows;
-    const lastItem = hasMore ? pageRows[pageRows.length - 1] : null;
+    const cursorIndex = cursor
+      ? groupedItems.findIndex((item) => item.make === cursor.make && item.model === cursor.model)
+      : -1;
+    const startIndex = cursorIndex >= 0 ? cursorIndex + 1 : 0;
+    const pageItems = groupedItems.slice(startIndex, startIndex + PAGE_SIZE + 1);
+    const hasMore = pageItems.length > PAGE_SIZE;
+    const items = hasMore ? pageItems.slice(0, PAGE_SIZE) : pageItems;
+    const lastItem = hasMore ? items[items.length - 1] : null;
 
     return NextResponse.json({
-      items: pageRows.map((row: {
-        id: string;
-        make: string;
-        model: string;
-        trim: string | null;
-        trim_description: string | null;
-        primary_image_url: string;
-        year_num: number | null;
-        price_num: number | string | null;
-        engine_size: string | null;
-        horsepower: string | null;
-        total_seating: string | null;
-        version_count: number;
-      }) => ({
-        id: row.id,
-        make: row.make,
-        model: row.model,
-        trim: row.trim || row.trim_description || "",
-        year: row.year_num,
-        price: row.price_num == null ? null : Number(row.price_num),
-        imageUrl: row.primary_image_url,
-        specs: {
-          engine: row.engine_size || "",
-          hp: row.horsepower || "",
-          seats: row.total_seating || "",
-        },
-        versionCount: row.version_count,
-      })),
+      items,
       nextCursor: lastItem ? encodeCursor({ make: lastItem.make, model: lastItem.model }) : null,
       totalGroups,
     });
