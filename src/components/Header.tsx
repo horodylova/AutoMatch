@@ -15,8 +15,10 @@ export default function Header() {
   const [scrolled, setScrolled] = useState<boolean>(false);
   const [hasSavedResults, setHasSavedResults] = useState<boolean>(false);
   const [wishlistCount, setWishlistCount] = useState<number>(0);
+  const [wishlistPop, setWishlistPop] = useState<boolean>(false);
   const logoSrc = "/optimized/cropped-logo.webp";
   const scrollElRef = useRef<HTMLElement | null>(null);
+  const prevWishlistCountRef = useRef<number | null>(null);
 
   useEffect(() => {
     scrollElRef.current = document.getElementById("app-scroll");
@@ -49,7 +51,18 @@ export default function Header() {
       }
       setHasSavedResults(false);
     };
-    const handleWishlist = () => setWishlistCount(getWishlistCount());
+    const handleWishlist = () => {
+      const nextCount = getWishlistCount();
+      setWishlistCount((prev) => {
+        if (prevWishlistCountRef.current !== null && nextCount > prev) {
+          setWishlistPop(false);
+          requestAnimationFrame(() => setWishlistPop(true));
+          window.setTimeout(() => setWishlistPop(false), 350);
+        }
+        prevWishlistCountRef.current = nextCount;
+        return nextCount;
+      });
+    };
 
     const scheduleNonCritical = () => {
       checkSavedResults();
@@ -141,7 +154,7 @@ export default function Header() {
         </div>
 
         <div className={styles.headerRight}>
-          <Link href="/wishlist" className={styles.wishlistIconBtn} aria-label="Open wishlist">
+          <Link href="/wishlist" className={`${styles.wishlistIconBtn} ${wishlistPop ? styles.wishlistPop : ""}`} aria-label="Open wishlist">
             <FaHeart />
             <span className={styles.wishlistBadge}>{wishlistCount}</span>
           </Link>
@@ -159,7 +172,7 @@ export default function Header() {
 
      
         <div className={styles.mobileMenu}>
-          <Link href="/wishlist" className={styles.wishlistIconBtn} aria-label="Open wishlist">
+          <Link href="/wishlist" className={`${styles.wishlistIconBtn} ${wishlistPop ? styles.wishlistPop : ""}`} aria-label="Open wishlist">
             <FaHeart />
             <span className={styles.wishlistBadge}>{wishlistCount}</span>
           </Link>

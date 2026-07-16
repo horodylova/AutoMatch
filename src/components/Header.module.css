@@ -140,6 +140,9 @@
 .wishlistIconBtn:active {
   transform: translateY(0) scale(0.98);
 }
+.wishlistPop {
+  animation: wishlistPop 0.35s ease;
+}
 .wishlistIconBtn svg {
   width: 18px;
   height: 18px;
@@ -204,8 +207,20 @@
 .hamburger span {
   width: 100%;
   height: 2px;
-  background: var(--app-accent-strong);
+  background: var(--kendo-color-on-app-surface);
   border-radius: 2px;
+}
+
+@keyframes wishlistPop {
+  0% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(1.18);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 

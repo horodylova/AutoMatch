@@ -1,0 +1,540 @@
+.shell {
+  --mobile-shell-edge: rgba(255, 255, 255, 0.04);
+  --mobile-panel-bg: rgba(255, 255, 255, 0.03);
+  --mobile-panel-shadow: 0 14px 34px rgba(0, 0, 0, 0.18);
+  --mobile-footer-fade: linear-gradient(to top, rgba(10, 14, 20, 0.96) 62%, rgba(10, 14, 20, 0));
+  --mobile-card-shadow: 0 20px 44px rgba(0, 0, 0, 0.24);
+  --mobile-card-shadow-soft: 0 10px 24px rgba(0, 0, 0, 0.16);
+  --mobile-action-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
+  --mobile-bar-bg: rgba(255, 255, 255, 0.04);
+  --mobile-hint-bg: rgba(255, 255, 255, 0.04);
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 100px);
+  color: var(--kendo-color-on-app-surface);
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+.loading,
+.error,
+.end {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 14px;
+  padding: 32px 20px 120px;
+}
+
+.loadingSpinner {
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  border: 3px solid var(--kendo-color-border);
+  border-top-color: var(--kendo-color-primary);
+  animation: spin 0.8s linear infinite;
+}
+
+.gate {
+  position: relative;
+  flex: 1;
+  padding: 18px 16px 132px;
+}
+
+.eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--kendo-color-primary);
+  margin-bottom: 8px;
+}
+
+.title {
+  margin: 0 0 8px;
+  font-size: 28px;
+  line-height: 1.16;
+  letter-spacing: -0.02em;
+  max-width: 11ch;
+}
+
+.sub {
+  margin: 0 0 22px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--kendo-color-subtle);
+  max-width: 38ch;
+}
+
+.group {
+  margin-bottom: 16px;
+  padding: 14px 14px 15px;
+  border: 1px solid var(--kendo-color-border);
+  border-radius: 18px;
+  background:
+    linear-gradient(180deg, var(--mobile-panel-bg), rgba(255, 255, 255, 0)),
+    var(--kendo-color-surface);
+  box-shadow: var(--mobile-panel-shadow);
+  backdrop-filter: blur(10px);
+}
+
+.groupLabel {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 10px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.groupLabel::before {
+  content: "";
+  width: 3px;
+  height: 13px;
+  border-radius: 999px;
+  background: var(--kendo-color-primary);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  border: 1px solid var(--kendo-color-border);
+  background: var(--kendo-color-surface);
+  color: var(--kendo-color-on-app-surface);
+  border-radius: 999px;
+  padding: 8px 13px;
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform 0.14s ease, border-color 0.14s ease, background-color 0.14s ease, color 0.14s ease;
+  box-shadow: inset 0 1px 0 var(--mobile-shell-edge);
+}
+
+.chip:active {
+  transform: scale(0.96);
+}
+
+.chip:hover {
+  border-color: var(--kendo-color-border-alt);
+}
+
+.chipSelected {
+  background: var(--kendo-color-primary);
+  border-color: var(--kendo-color-primary);
+  color: var(--kendo-color-on-primary);
+  font-weight: 600;
+  box-shadow: 0 10px 18px rgba(229, 72, 63, 0.2);
+}
+
+.gateFooter {
+  position: sticky;
+  bottom: 0;
+  margin: 0 -16px -120px;
+  padding: 16px 16px calc(20px + env(safe-area-inset-bottom, 0));
+  background: var(--mobile-footer-fade);
+  backdrop-filter: blur(16px);
+}
+
+.primaryButton,
+.secondaryButton,
+.ghostButton,
+.deckSecondaryButton {
+  width: 100%;
+  border: none;
+  border-radius: 14px;
+  font: inherit;
+  cursor: pointer;
+}
+
+.primaryButton {
+  background: var(--kendo-color-primary);
+  color: var(--kendo-color-on-primary);
+  padding: 16px;
+  font-size: 15px;
+  font-weight: 700;
+  box-shadow: 0 6px 18px rgba(229, 72, 63, 0.28);
+  transition: transform 0.16s ease, box-shadow 0.16s ease;
+}
+
+.secondaryButton {
+  margin-top: 11px;
+  background: transparent;
+  color: var(--kendo-color-subtle);
+  font-size: 12.5px;
+  text-decoration: underline;
+  padding: 0;
+}
+
+.primaryButton:hover,
+.ghostButton:hover,
+.deckSecondaryButton:hover,
+.detailsButton:hover {
+  transform: translateY(-1px);
+}
+
+.deck {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 16px 24px;
+}
+
+.deckBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 0 14px;
+}
+
+.deckCount {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 34px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid var(--kendo-color-border);
+  background: var(--mobile-bar-bg);
+  font-size: 12px;
+  color: var(--kendo-color-subtle);
+  font-weight: 500;
+  box-shadow: inset 0 1px 0 var(--mobile-shell-edge);
+}
+
+.deckCount strong {
+  color: var(--kendo-color-on-app-surface);
+  font-weight: 700;
+}
+
+.deckSecondaryButton {
+  width: auto;
+  background: var(--kendo-color-surface);
+  border: 1px solid var(--kendo-color-border);
+  color: var(--kendo-color-on-app-surface);
+  border-radius: 999px;
+  padding: 6px 13px;
+  font-size: 12px;
+  font-weight: 600;
+  box-shadow: inset 0 1px 0 var(--mobile-shell-edge);
+  transition: transform 0.16s ease, border-color 0.16s ease, background-color 0.16s ease;
+}
+
+.stage {
+  position: relative;
+  flex: 1;
+  min-height: min(560px, calc(100vh - 255px));
+  padding-top: 4px;
+}
+
+.card {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: var(--kendo-color-surface);
+  border: 1px solid var(--kendo-color-border);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: var(--mobile-card-shadow);
+  user-select: none;
+  transform-origin: 50% 100%;
+}
+
+.cardTop {
+  cursor: grab;
+  pointer-events: auto;
+}
+
+.cardTop:active {
+  cursor: grabbing;
+}
+
+.cardUnder {
+  pointer-events: none;
+  box-shadow: var(--mobile-card-shadow-soft);
+}
+
+.photoWrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--kendo-color-surface-alt);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  pointer-events: none;
+}
+
+.versionBadge {
+  position: absolute;
+  left: 11px;
+  bottom: 11px;
+  background: rgba(28, 26, 25, 0.76);
+  backdrop-filter: blur(6px);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 5px 10px;
+  border-radius: 999px;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.18);
+}
+
+.cardBody {
+  padding: 16px 16px 18px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0)),
+    var(--kendo-color-surface);
+}
+
+.cardTitle {
+  margin: 0 0 5px;
+  font-size: 21px;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.cardTrim {
+  margin: 0 0 11px;
+  font-size: 12.5px;
+  color: var(--kendo-color-subtle);
+  min-height: 18px;
+}
+
+.specs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 13px;
+}
+
+.spec {
+  border: 1px solid var(--kendo-color-border);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--kendo-color-subtle);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.priceRow {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.priceLabel {
+  display: block;
+  margin-bottom: 1px;
+  font-size: 10.5px;
+  color: var(--kendo-color-subtle);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.priceValue {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.detailsButton {
+  border: 1px solid var(--kendo-color-primary);
+  color: var(--kendo-color-primary);
+  background: transparent;
+  border-radius: 10px;
+  padding: 8px 15px;
+  font-size: 12.5px;
+  font-weight: 700;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  transition: transform 0.16s ease, box-shadow 0.16s ease, background-color 0.16s ease;
+}
+
+.stamp {
+  position: absolute;
+  top: 18px;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  padding: 6px 14px;
+  border: 3px solid;
+  border-radius: 9px;
+  pointer-events: none;
+}
+
+.stampLike {
+  left: 16px;
+  color: #2e9e6b;
+  border-color: #2e9e6b;
+  transform: rotate(-14deg);
+}
+
+.stampNope {
+  right: 16px;
+  color: var(--kendo-color-primary);
+  border-color: var(--kendo-color-primary);
+  transform: rotate(14deg);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  padding: 18px 0 18px;
+}
+
+.actionButton {
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  background: var(--kendo-color-surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--mobile-action-shadow);
+  transition: transform 0.14s ease, box-shadow 0.14s ease;
+}
+
+.actionButton:active {
+  transform: scale(0.9);
+}
+
+.actionButton:hover {
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.2);
+}
+
+.actionNo {
+  width: 58px;
+  height: 58px;
+  border: 1px solid var(--kendo-color-border);
+}
+
+.actionNo svg {
+  width: 23px;
+  height: 23px;
+  stroke: var(--kendo-color-primary);
+  stroke-width: 2.4;
+  fill: none;
+}
+
+.actionYes {
+  width: 68px;
+  height: 68px;
+  background: var(--kendo-color-primary);
+  box-shadow: 0 7px 22px rgba(229, 72, 63, 0.34);
+}
+
+.actionYes svg {
+  width: 29px;
+  height: 29px;
+  fill: #fff;
+}
+
+.hint {
+  width: fit-content;
+  margin: 0 auto;
+  text-align: center;
+  font-size: 11px;
+  color: var(--kendo-color-subtle);
+  padding: 8px 12px 10px;
+  border-radius: 999px;
+  background: var(--mobile-hint-bg);
+  border: 1px solid var(--kendo-color-border);
+  box-shadow: inset 0 1px 0 var(--mobile-shell-edge);
+}
+
+.endIcon {
+  font-size: 42px;
+}
+
+.endTitle {
+  margin: 0;
+  font-size: 26px;
+  letter-spacing: -0.02em;
+}
+
+.endText {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--kendo-color-subtle);
+}
+
+.ghostButton {
+  background: var(--kendo-color-surface);
+  border: 1px solid var(--kendo-color-border);
+  color: var(--kendo-color-on-app-surface);
+  padding: 15px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: transform 0.16s ease, border-color 0.16s ease, background-color 0.16s ease;
+}
+
+.buttonStack {
+  width: min(360px, 100%);
+  display: grid;
+  gap: 10px;
+}
+
+:global(html[data-theme="light"]) .shell {
+  --mobile-shell-edge: rgba(20, 31, 40, 0.08);
+  --mobile-panel-bg: rgba(20, 31, 40, 0.03);
+  --mobile-panel-shadow: 0 12px 28px rgba(20, 31, 40, 0.06);
+  --mobile-footer-fade: linear-gradient(to top, rgba(247, 249, 251, 0.96) 62%, rgba(247, 249, 251, 0));
+  --mobile-card-shadow: 0 18px 38px rgba(20, 31, 40, 0.08);
+  --mobile-card-shadow-soft: 0 8px 18px rgba(20, 31, 40, 0.06);
+  --mobile-action-shadow: 0 8px 20px rgba(20, 31, 40, 0.08);
+  --mobile-bar-bg: rgba(20, 31, 40, 0.03);
+  --mobile-hint-bg: rgba(20, 31, 40, 0.035);
+}
+
+:global(html[data-theme="light"]) .group,
+:global(html[data-theme="light"]) .deckCount,
+:global(html[data-theme="light"]) .deckSecondaryButton,
+:global(html[data-theme="light"]) .hint {
+  box-shadow: none;
+}
+
+:global(html[data-theme="light"]) .photoWrap {
+  border-bottom-color: rgba(20, 31, 40, 0.06);
+}
+
+:global(html[data-theme="light"]) .spec {
+  background: rgba(20, 31, 40, 0.03);
+}
+
+:global(html[data-theme="light"]) .detailsButton {
+  box-shadow: none;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loadingSpinner,
+  .chip,
+  .card,
+  .actionButton {
+    animation: none;
+    transition: none;
+  }
+}
