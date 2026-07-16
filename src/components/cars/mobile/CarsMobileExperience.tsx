@@ -21,6 +21,7 @@ const SwipeDeck = dynamic(() => import("./SwipeDeck"), {
 
 const DISMISSED_KEY = "cc_dismissed";
 const SESSION_KEY = "cars:mobileDeck:v1";
+const RESTORE_ON_RETURN_KEY = "cars:mobileDeck:restore-on-return";
 
 type Step = "gate" | "deck" | "end";
 type Options = {
@@ -110,6 +111,21 @@ function filtersToParams(filters: FiltersData): URLSearchParams {
   return params;
 }
 
+function scrollAppToTop(): void {
+  if (typeof document !== "undefined") {
+    const scrollRoot = document.getElementById("app-scroll");
+    if (scrollRoot) {
+      scrollRoot.scrollTo({ top: 0, left: 0, behavior: "auto" });
+      scrollRoot.scrollTop = 0;
+    }
+  }
+  if (typeof window !== "undefined") {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  }
+}
+
 export default function CarsMobileExperience({
   filters,
   onFiltersChange,
@@ -171,32 +187,6 @@ export default function CarsMobileExperience({
     };
   }, []);
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    try {
-      const raw = window.sessionStorage.getItem(SESSION_KEY);
-      if (!raw) {
-        setRestored(true);
-        return;
-      }
-      const parsed = JSON.parse(raw) as PersistedState;
-      if (!parsed || !Array.isArray(parsed.items)) {
-        setRestored(true);
-        return;
-      }
-      onFiltersChange(parsed.filters || EMPTY_FILTERS);
-      setDraft(parsed.filters || EMPTY_FILTERS);
-      setDeckItems(parsed.items);
-      setTotalGroups(parsed.totalGroups || 0);
-      setShowStartOver(Boolean(parsed.showStartOver));
-      setStep(parsed.step === "deck" || parsed.step === "end" ? parsed.step : "gate");
-    } catch {
-      // Ignore invalid session state.
-    } finally {
-      setRestored(true);
-    }
-  }, [onFiltersChange]);
-
   const persistSession = useCallback(
     (
       nextStep: Step = step,
@@ -223,11 +213,77 @@ export default function CarsMobileExperience({
     window.sessionStorage.removeItem(SESSION_KEY);
   }, []);
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const shouldRestore = window.sessionStorage.getItem(RESTORE_ON_RETURN_KEY) === "1";
+      window.sessionStorage.removeItem(RESTORE_ON_RETURN_KEY);
+      if (!shouldRestore) {
+        clearSession();
+        onFiltersChange(EMPTY_FILTERS);
+        setDraft(EMPTY_FILTERS);
+        setDeckItems([]);
+        setTotalGroups(0);
+        setShowStartOver(false);
+        setStep("gate");
+        setRestored(true);
+        window.requestAnimationFrame(() => {
+          window.requestAnimationFrame(() => {
+            scrollAppToTop();
+          });
+        });
+        return;
+      }
+      const raw = window.sessionStorage.getItem(SESSION_KEY);
+      if (!raw) {
+        setRestored(true);
+        window.requestAnimationFrame(() => {
+          window.requestAnimationFrame(() => {
+            scrollAppToTop();
+          });
+        });
+        return;
+      }
+      const parsed = JSON.parse(raw) as PersistedState;
+      if (!parsed || !Array.isArray(parsed.items)) {
+        setRestored(true);
+        window.requestAnimationFrame(() => {
+          window.requestAnimationFrame(() => {
+            scrollAppToTop();
+          });
+        });
+        return;
+      }
+      onFiltersChange(parsed.filters || EMPTY_FILTERS);
+      setDraft(parsed.filters || EMPTY_FILTERS);
+      setDeckItems(parsed.items);
+      setTotalGroups(parsed.totalGroups || 0);
+      setShowStartOver(Boolean(parsed.showStartOver));
+      setStep(parsed.step === "deck" || parsed.step === "end" ? parsed.step : "gate");
+    } catch {
+      // Ignore invalid session state.
+    } finally {
+      setRestored(true);
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => {
+          scrollAppToTop();
+        });
+      });
+    }
+  }, [clearSession, onFiltersChange]);
+
   const goToGate = useCallback((clearStoredState = false) => {
     setError(null);
     setStep("gate");
     if (clearStoredState) {
       clearSession();
+    }
+    if (typeof window !== "undefined") {
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => {
+          scrollAppToTop();
+        });
+      });
     }
   }, [clearSession]);
 
@@ -295,15 +351,11 @@ export default function CarsMobileExperience({
   useEffect(() => {
     if (!shouldSnapToTopRef.current || loadingDeck || step !== "deck") return;
     shouldSnapToTopRef.current = false;
-    if (typeof window !== "undefined") {
+    window.requestAnimationFrame(() => {
       window.requestAnimationFrame(() => {
-        window.requestAnimationFrame(() => {
-          window.scrollTo({ top: 0, left: 0, behavior: "auto" });
-          document.documentElement.scrollTop = 0;
-          document.body.scrollTop = 0;
-        });
+        scrollAppToTop();
       });
-    }
+    });
   }, [loadingDeck, step]);
 
   const handleToggleList = (key: keyof FiltersData, value: string) => {
@@ -434,7 +486,12 @@ export default function CarsMobileExperience({
         onEditFilters={() => {
           goToGate(true);
         }}
-        onPersist={() => persistSession("deck", deckItems, filters, showStartOver)}
+        onPersist={() => {
+          if (typeof window !== "undefined") {
+            window.sessionStorage.setItem(RESTORE_ON_RETURN_KEY, "1");
+          }
+          persistSession("deck", deckItems, filters, showStartOver);
+        }}
       />
     );
   }
