@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./CarsMobileExperience.module.css";
 import { fetchDataset, getBodyTypes, getCylinderCounts, getDriveTypes, getFuelTypes, getMakes, getTransmissionTypes } from "@/lib/dataset";
@@ -129,6 +129,7 @@ export default function CarsMobileExperience({
   const [showStartOver, setShowStartOver] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [restored, setRestored] = useState(false);
+  const shouldSnapToTopRef = useRef(false);
 
   useEffect(() => {
     setDraft(filters);
@@ -277,12 +278,33 @@ export default function CarsMobileExperience({
 
   const startDeck = useCallback(
     async (nextFilters: FiltersData) => {
+      shouldSnapToTopRef.current = true;
+      if (typeof document !== "undefined") {
+        const active = document.activeElement;
+        if (active instanceof HTMLElement) {
+          active.blur();
+        }
+      }
       onFiltersChange(nextFilters);
       setDraft(nextFilters);
       await buildDeck(nextFilters);
     },
     [buildDeck, onFiltersChange]
   );
+
+  useEffect(() => {
+    if (!shouldSnapToTopRef.current || loadingDeck || step !== "deck") return;
+    shouldSnapToTopRef.current = false;
+    if (typeof window !== "undefined") {
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => {
+          window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+          document.documentElement.scrollTop = 0;
+          document.body.scrollTop = 0;
+        });
+      });
+    }
+  }, [loadingDeck, step]);
 
   const handleToggleList = (key: keyof FiltersData, value: string) => {
     setDraft((prev) => {
@@ -367,7 +389,7 @@ export default function CarsMobileExperience({
     [draft.priceRanges]
   );
 
-  if (!restored || loadingOptions) {
+  if (!restored) {
     return (
       <div className={styles.loading}>
         <div className={styles.loadingSpinner} />
@@ -454,6 +476,12 @@ export default function CarsMobileExperience({
         <p className={styles.sub}>
           Pick what matters. We&apos;ll deal you a stack of deduped matches. Swipe right to save, left to pass.
         </p>
+
+        {loadingOptions ? (
+          <div className={styles.loadingNote} aria-live="polite">
+            Loading more filter options...
+          </div>
+        ) : null}
 
         <div className={styles.group}>
           <div className={styles.groupLabel}>Price</div>
@@ -569,6 +597,19 @@ export default function CarsMobileExperience({
               </div>
             </div>
           </>
+        ) : loadingOptions ? (
+          <div className={styles.loadingGroups} aria-hidden="true">
+            {["Make", "Body type", "Fuel", "Drive type", "Transmission", "Cylinders"].map((label) => (
+              <div key={label} className={styles.group}>
+                <div className={styles.groupLabel}>{label}</div>
+                <div className={styles.chips}>
+                  <span className={styles.loadingChip} />
+                  <span className={styles.loadingChip} />
+                  <span className={styles.loadingChip} />
+                </div>
+              </div>
+            ))}
+          </div>
         ) : null}
 
         <div className={styles.gateFooter}>
