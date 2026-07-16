@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>CarCupid — Mobile Swipe Prototype</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --red:#D93A2B;
+    --red-dark:#B22D20;
+    --green:#2E9E6B;
+    --ink:#1C1A19;
+    --muted:#726C69;
+    --line:#E7E1DD;
+    --cream:#FBF7F4;
+    --card:#FFFFFF;
+    --shadow:0 12px 32px rgba(28,26,25,.14);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  body{
+    font-family:'Inter',system-ui,sans-serif;
+    background:#EDE7E2;
+    color:var(--ink);
+    display:flex;align-items:center;justify-content:center;
+    min-height:100vh;padding:24px 12px;
+  }
+  .phone{
+    width:390px;height:820px;max-height:calc(100vh - 48px);
+    background:var(--cream);
+    border-radius:36px;
+    box-shadow:0 24px 60px rgba(0,0,0,.28);
+    overflow:hidden;position:relative;
+    display:flex;flex-direction:column;
+  }
+  @media (max-width:430px){
+    body{padding:0}
+    .phone{width:100vw;height:100vh;max-height:100vh;border-radius:0}
+  }
+
+  /* ---------- header ---------- */
+  .hdr{
+    flex:none;height:60px;background:#fff;border-bottom:1px solid var(--line);
+    display:flex;align-items:center;justify-content:space-between;padding:0 16px;
+    position:relative;z-index:40;
+  }
+  .logo{font-family:'Playfair Display',serif;font-weight:800;font-size:20px;color:var(--ink);letter-spacing:-.02em}
+  .logo span{color:var(--red)}
+  .hdr-right{display:flex;align-items:center;gap:14px}
+  .wish{
+    position:relative;width:38px;height:38px;border-radius:50%;
+    border:1px solid var(--line);background:#fff;
+    display:flex;align-items:center;justify-content:center;cursor:pointer;
+  }
+  .wish svg{width:18px;height:18px;fill:var(--red)}
+  .wish b{
+    position:absolute;top:-5px;right:-5px;background:var(--red);color:#fff;
+    font-size:10px;font-weight:700;min-width:18px;height:18px;border-radius:9px;
+    display:flex;align-items:center;justify-content:center;padding:0 4px;
+  }
+  .wish.pop{animation:pop .35s ease}
+  @keyframes pop{0%{transform:scale(1)}45%{transform:scale(1.25)}100%{transform:scale(1)}}
+  .burger{display:flex;flex-direction:column;gap:4px;cursor:pointer}
+  .burger i{width:22px;height:2px;background:var(--ink);border-radius:2px}
+
+  /* ---------- screens ---------- */
+  .screen{flex:1;overflow-y:auto;display:none;flex-direction:column}
+  .screen.on{display:flex}
+
+  /* ---------- filter gate ---------- */
+  .gate{padding:22px 18px 100px}
+  .eyebrow{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--red);margin-bottom:8px}
+  .gate h1{font-family:'Playfair Display',serif;font-size:27px;line-height:1.2;letter-spacing:-.02em;margin-bottom:8px}
+  .gate p.sub{font-size:14px;color:var(--muted);line-height:1.5;margin-bottom:22px}
+  .fgroup{margin-bottom:20px}
+  .flabel{
+    display:flex;align-items:center;gap:7px;
+    font-size:13px;font-weight:700;margin-bottom:10px;
+  }
+  .flabel::before{content:"";width:3px;height:13px;background:var(--red);border-radius:2px}
+  .chips{display:flex;flex-wrap:wrap;gap:7px}
+  .chip{
+    border:1px solid var(--line);background:#fff;border-radius:999px;
+    padding:8px 13px;font-size:12.5px;font-weight:500;cursor:pointer;
+    transition:all .14s ease;color:var(--ink);
+  }
+  .chip:active{transform:scale(.96)}
+  .chip.sel{background:var(--red);border-color:var(--red);color:#fff;font-weight:600}
+  .gate-foot{
+    position:absolute;bottom:0;left:0;right:0;padding:14px 18px 20px;
+    background:linear-gradient(to top,var(--cream) 62%,rgba(251,247,244,0));
+  }
+  .btn-main{
+    width:100%;background:var(--red);color:#fff;border:none;border-radius:14px;
+    padding:16px;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;
+    box-shadow:0 6px 18px rgba(217,58,43,.32);
+  }
+  .btn-main:active{transform:scale(.985);background:var(--red-dark)}
+  .btn-skip{
+    display:block;width:100%;margin-top:11px;background:none;border:none;
+    font-family:inherit;font-size:12.5px;color:var(--muted);
+    text-decoration:underline;cursor:pointer;
+  }
+
+  /* ---------- deck ---------- */
+  .deck-bar{
+    flex:none;display:flex;align-items:center;justify-content:space-between;
+    padding:11px 16px;
+  }
+  .deck-count{font-size:12px;color:var(--muted);font-weight:500}
+  .deck-count b{color:var(--ink);font-weight:700}
+  .btn-edit{
+    border:1px solid var(--line);background:#fff;border-radius:999px;
+    padding:6px 13px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;color:var(--ink);
+  }
+  .stage{flex:1;position:relative;padding:0 16px}
+
+  .card{
+    position:absolute;top:0;left:16px;right:16px;
+    background:var(--card);border-radius:20px;overflow:hidden;
+    box-shadow:var(--shadow);
+    will-change:transform;
+    cursor:grab;
+    user-select:none;
+  }
+  .card:active{cursor:grabbing}
+  .card.anim{transition:transform .42s cubic-bezier(.2,.7,.3,1),opacity .42s ease}
+  .card.settle{transition:transform .3s cubic-bezier(.2,.8,.3,1)}
+
+  .ph{position:relative;width:100%;aspect-ratio:16/9;background:#F0EBE7;overflow:hidden}
+  .ph img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
+  .badge-ver{
+    position:absolute;left:11px;bottom:11px;
+    background:rgba(28,26,25,.76);backdrop-filter:blur(6px);
+    color:#fff;font-size:11px;font-weight:600;
+    padding:5px 10px;border-radius:999px;
+  }
+  .cbody{padding:15px 16px 17px}
+  .cbody h2{
+    font-family:'Playfair Display',serif;font-size:20px;line-height:1.22;
+    letter-spacing:-.01em;margin-bottom:5px;
+  }
+  .ctrim{font-size:12.5px;color:var(--muted);margin-bottom:11px}
+  .specs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:13px}
+  .spec{
+    border:1px solid var(--line);border-radius:999px;padding:4px 10px;
+    font-size:11.5px;font-weight:500;color:var(--muted);
+  }
+  .price-row{display:flex;align-items:flex-end;justify-content:space-between}
+  .price small{display:block;font-size:10.5px;color:var(--muted);font-weight:600;letter-spacing:.05em;text-transform:uppercase;margin-bottom:1px}
+  .price b{font-size:22px;font-weight:700;letter-spacing:-.02em}
+  .btn-det{
+    border:1px solid var(--red);color:var(--red);background:#fff;
+    border-radius:10px;padding:8px 15px;font-size:12.5px;font-weight:700;
+    font-family:inherit;cursor:pointer;
+  }
+
+  /* stamps */
+  .stamp{
+    position:absolute;top:18px;font-family:'Playfair Display',serif;
+    font-size:26px;font-weight:800;letter-spacing:.06em;
+    padding:6px 14px;border:3px solid;border-radius:9px;
+    opacity:0;pointer-events:none;
+  }
+  .stamp.like{left:16px;color:var(--green);border-color:var(--green);transform:rotate(-14deg)}
+  .stamp.nope{right:16px;color:var(--red);border-color:var(--red);transform:rotate(14deg)}
+
+  /* ---------- actions ---------- */
+  .acts{
+    flex:none;display:flex;align-items:center;justify-content:center;gap:22px;
+    padding:16px 0 22px;
+  }
+  .act{
+    border:none;border-radius:50%;cursor:pointer;background:#fff;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 5px 16px rgba(28,26,25,.13);
+  }
+  .act:active{transform:scale(.9)}
+  .act.no{width:58px;height:58px}
+  .act.no svg{width:23px;height:23px;stroke:var(--red);stroke-width:2.4;fill:none}
+  .act.yes{width:68px;height:68px;background:var(--red);box-shadow:0 7px 22px rgba(217,58,43,.38)}
+  .act.yes svg{width:29px;height:29px;fill:#fff}
+  .hint{
+    text-align:center;font-size:11px;color:var(--muted);
+    padding-bottom:12px;
+  }
+
+  /* ---------- end ---------- */
+  .end{
+    flex:1;display:none;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;padding:30px 30px 60px;
+  }
+  .end.on{display:flex}
+  .end-ico{font-size:44px;margin-bottom:14px}
+  .end h2{font-family:'Playfair Display',serif;font-size:24px;margin-bottom:8px;letter-spacing:-.02em}
+  .end p{font-size:13.5px;color:var(--muted);line-height:1.55;margin-bottom:24px}
+  .end .btn-main{margin-bottom:10px}
+  .btn-ghost{
+    width:100%;background:#fff;border:1px solid var(--line);border-radius:14px;
+    padding:15px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;color:var(--ink);
+  }
+
+  /* toast */
+  .toast{
+    position:absolute;left:50%;bottom:104px;transform:translate(-50%,14px);
+    background:var(--ink);color:#fff;font-size:12.5px;font-weight:600;
+    padding:10px 16px;border-radius:999px;opacity:0;pointer-events:none;
+    transition:all .26s ease;z-index:60;white-space:nowrap;
+  }
+  .toast.on{opacity:1;transform:translate(-50%,0)}
+
+  @media (prefers-reduced-motion:reduce){
+    *{transition-duration:.01ms !important;animation-duration:.01ms !important}
+  }
+</style>
+</head>
+<body>
+<div class="phone">
+
+  <div class="hdr">
+    <div class="logo">Car<span>Cupid</span></div>
+    <div class="hdr-right">
+      <div class="wish" id="wish">
+        <svg viewBox="0 0 24 24"><path d="M12 21s-8-5.2-8-10.4A4.6 4.6 0 0 1 12 7a4.6 4.6 0 0 1 8 3.6C20 15.8 12 21 12 21z"/></svg>
+        <b id="wishN">0</b>
+      </div>
+      <div class="burger"><i></i><i></i><i></i></div>
+    </div>
+  </div>
+
+  <!-- GATE -->
+  <div class="screen on" id="sGate">
+    <div class="gate">
+      <div class="eyebrow">Step 1 of 2</div>
+      <h1>Tell us your type</h1>
+      <p class="sub">Pick what matters. We'll deal you a stack of matches — swipe right to save, left to pass.</p>
+
+      <div class="fgroup">
+        <div class="flabel">Price</div>
+        <div class="chips" data-g="price">
+          <div class="chip">Under $20k</div><div class="chip">$20k–$35k</div>
+          <div class="chip sel">$35k–$50k</div><div class="chip sel">$50k–$75k</div>
+          <div class="chip">$75k–$120k</div><div class="chip">$120k+</div>
+        </div>
+      </div>
+
+      <div class="fgroup">
+        <div class="flabel">Make</div>
+        <div class="chips" data-g="make">
+          <div class="chip">Acura</div><div class="chip sel">BMW</div><div class="chip">Audi</div>
+          <div class="chip sel">Porsche</div><div class="chip">Ford</div><div class="chip">GMC</div>
+          <div class="chip sel">Jeep</div><div class="chip">Honda</div>
+        </div>
+      </div>
+
+      <div class="fgroup">
+        <div class="flabel">Body type</div>
+        <div class="chips" data-g="body">
+          <div class="chip sel">SUV</div><div class="chip">Sedan</div><div class="chip sel">Convertible</div>
+          <div class="chip">Coupe</div><div class="chip">Truck</div><div class="chip">Hatchback</div>
+        </div>
+      </div>
+
+      <div class="fgroup">
+        <div class="flabel">Fuel</div>
+        <div class="chips" data-g="fuel">
+          <div class="chip sel">Gasoline</div><div class="chip">Diesel</div>
+          <div class="chip">Electric</div><div class="chip">Hybrid</div>
+        </div>
+      </div>
+    </div>
+    <div class="gate-foot">
+      <button class="btn-main" id="btnStart">Deal my cards</button>
+      <button class="btn-skip" id="btnSkip">Skip — show me everything</button>
+    </div>
+  </div>
+
+  <!-- DECK -->
+  <div class="screen" id="sDeck">
+    <div class="deck-bar">
+      <div class="deck-count"><b id="left">0</b> models left</div>
+      <button class="btn-edit" id="btnEdit">Edit filters</button>
+    </div>
+    <div class="stage" id="stage"></div>
+    <div class="acts">
+      <button class="act no" id="aNo"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg></button>
+      <button class="act yes" id="aYes"><svg viewBox="0 0 24 24"><path d="M12 21s-8-5.2-8-10.4A4.6 4.6 0 0 1 12 7a4.6 4.6 0 0 1 8 3.6C20 15.8 12 21 12 21z"/></svg></button>
+    </div>
+    <div class="hint">Drag the card or tap the buttons</div>
+  </div>
+
+  <!-- END -->
+  <div class="screen" id="sEnd">
+    <div class="end on">
+      <div class="end-ico">🏁</div>
+      <h2>That's the whole deck</h2>
+      <p id="endTxt">You went through every model matching your filters.</p>
+      <button class="btn-main" id="btnWiden">Widen my filters</button>
+      <button class="btn-ghost" id="btnWish">View wishlist (<span id="endN">0</span>)</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+</div>
+
+<script>
+const CARS = [
+  {make:"Porsche",model:"718 Boxster",trim:"Spyder RS 2dr Convertible",spec:["4.0L","493 HP","2 seats"],price:160700,vers:6,img:"https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&h=450&fit=crop"},
+  {make:"Jeep",model:"Grand Cherokee L",trim:"Laredo X 4dr SUV 4WD",spec:["3.6L","293 HP","5 seats"],price:44035,vers:9,img:"https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=800&h=450&fit=crop"},
+  {make:"BMW",model:"M4 Competition",trim:"xDrive 2dr Coupe",spec:["3.0L","503 HP","4 seats"],price:87200,vers:4,img:"https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800&h=450&fit=crop"},
+  {make:"Acura",model:"MDX",trim:"Base 4dr SUV AWD",spec:["3.5L","290 HP","5 seats"],price:51200,vers:12,img:"https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=800&h=450&fit=crop"},
+  {make:"Ford",model:"Bronco",trim:"Wildtrak 4dr SUV 4WD",spec:["2.7L","330 HP","5 seats"],price:52400,vers:7,img:"https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=800&h=450&fit=crop"},
+  {make:"Audi",model:"RS 5",trim:"Sportback 4dr quattro",spec:["2.9L","444 HP","5 seats"],price:79800,vers:3,img:"https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=800&h=450&fit=crop"},
+];
+
+const $=id=>document.getElementById(id);
+const stage=$('stage'), toast=$('toast');
+let queue=[], wish=0, cards=[];
+
+// filters
+document.querySelectorAll('.chip').forEach(c=>c.onclick=()=>c.classList.toggle('sel'));
+
+function show(s){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('on'));$(s).classList.add('on');}
+function say(t){toast.textContent=t;toast.classList.add('on');clearTimeout(toast._t);toast._t=setTimeout(()=>toast.classList.remove('on'),1500);}
+function money(n){return '$'+n.toLocaleString('en-US');}
+
+function build(){
+  queue=[...CARS];
+  stage.innerHTML='';cards=[];
+  queue.forEach((c,i)=>{
+    const el=document.createElement('div');
+    el.className='card';
+    el.innerHTML=`
+      <div class="ph">
+        <img src="${c.img}" alt="${c.make} ${c.model}">
+        ${c.vers>1?`<div class="badge-ver">${c.vers} versions</div>`:''}
+      </div>
+      <div class="cbody">
+        <h2>${c.make} ${c.model}</h2>
+        <div class="ctrim">${c.trim}</div>
+        <div class="specs">${c.spec.map(s=>`<div class="spec">${s}</div>`).join('')}</div>
+        <div class="price-row">
+          <div class="price"><small>From</small><b>${money(c.price)}</b></div>
+          <button class="btn-det">Details</button>
+        </div>
+      </div>
+      <div class="stamp like">LIKE</div>
+      <div class="stamp nope">NOPE</div>`;
+    stage.appendChild(el);cards.push(el);
+  });
+  cards.reverse().forEach((el,i)=>{}); // keep DOM order
+  layout();
+  drag();
+  $('left').textContent=queue.length;
+}
+
+function layout(){
+  const live=cards.filter(c=>!c.dead);
+  live.forEach((el,i)=>{
+    el.style.zIndex=100-i;
+    if(i===0){el.style.display='block';el.style.transform='translate(0,0) rotate(0deg)';el.style.opacity='1';}
+    else if(i<3){
+      el.style.display='block';
+      el.style.transform=`translateY(${i*9}px) scale(${1-i*.04})`;
+      el.style.opacity='1';
+    } else el.style.display='none';
+  });
+  $('left').textContent=live.length;
+  if(!live.length){$('endN').textContent=wish;show('sEnd');}
+}
+
+function drag(){
+  cards.forEach(el=>{
+    let sx=0,sy=0,dx=0,dy=0,down=false;
+    const like=el.querySelector('.like'), nope=el.querySelector('.nope');
+    const start=e=>{
+      if(e.target.closest('.btn-det')) return;
+      if(el!==cards.filter(c=>!c.dead)[0]) return;
+      down=true;el.classList.remove('anim','settle');
+      const p=e.touches?e.touches[0]:e;sx=p.clientX;sy=p.clientY;
+    };
+    const move=e=>{
+      if(!down)return;
+      const p=e.touches?e.touches[0]:e;
+      dx=p.clientX-sx;dy=p.clientY-sy;
+      el.style.transform=`translate(${dx}px,${dy}px) rotate(${dx*.055}deg)`;
+      const o=Math.min(Math.abs(dx)/90,1);
+      like.style.opacity=dx>0?o:0;
+      nope.style.opacity=dx<0?o:0;
+      if(e.cancelable)e.preventDefault();
+    };
+    const end=()=>{
+      if(!down)return;down=false;
+      if(Math.abs(dx)>95){fly(el,dx>0?1:-1);}
+      else{
+        el.classList.add('settle');
+        el.style.transform='translate(0,0) rotate(0deg)';
+        like.style.opacity=0;nope.style.opacity=0;
+      }
+      dx=dy=0;
+    };
+    el.addEventListener('mousedown',start);el.addEventListener('touchstart',start,{passive:true});
+    window.addEventListener('mousemove',move);el.addEventListener('touchmove',move,{passive:false});
+    window.addEventListener('mouseup',end);el.addEventListener('touchend',end);
+  });
+}
+
+function fly(el,dir){
+  el.dead=true;
+  el.classList.add('anim');
+  el.style.transform=`translate(${dir*520}px,${-40}px) rotate(${dir*24}deg)`;
+  el.style.opacity='0';
+  if(dir>0){
+    wish++;$('wishN').textContent=wish;
+    $('wish').classList.remove('pop');void $('wish').offsetWidth;$('wish').classList.add('pop');
+    say('💘 Saved to wishlist');
+  }
+  setTimeout(()=>{el.style.display='none';layout();},240);
+}
+
+function act(dir){
+  const live=cards.filter(c=>!c.dead);
+  if(live[0])fly(live[0],dir);
+}
+
+$('btnStart').onclick=()=>{build();show('sDeck');};
+$('btnSkip').onclick=()=>{build();show('sDeck');say('Showing all models');};
+$('btnEdit').onclick=()=>show('sGate');
+$('btnWiden').onclick=()=>show('sGate');
+$('btnWish').onclick=()=>say('→ /wishlist');
+$('aYes').onclick=()=>act(1);
+$('aNo').onclick=()=>act(-1);
+</script>
+</body>
+</html>
