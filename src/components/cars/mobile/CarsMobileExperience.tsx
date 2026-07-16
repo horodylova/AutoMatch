@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./CarsMobileExperience.module.css";
 import { fetchDataset, getBodyTypes, getCylinderCounts, getDriveTypes, getFuelTypes, getMakes, getTransmissionTypes } from "@/lib/dataset";
@@ -9,7 +9,9 @@ import { addWishlistItem, getWishlist, getWishlistCount } from "@/utils/storage"
 import { FiltersData } from "../Filters";
 import { SwipeDeckItem, SwipeDeckResponse } from "./types";
 
-const SwipeDeck = dynamic(() => import("./SwipeDeck"), {
+const loadSwipeDeck = () => import("./SwipeDeck");
+
+const SwipeDeck = dynamic(loadSwipeDeck, {
   ssr: false,
   loading: () => (
     <div className={styles.loading}>
@@ -22,6 +24,7 @@ const SwipeDeck = dynamic(() => import("./SwipeDeck"), {
 const DISMISSED_KEY = "cc_dismissed";
 const SESSION_KEY = "cars:mobileDeck:v1";
 const RESTORE_ON_RETURN_KEY = "cars:mobileDeck:restore-on-return";
+const SNAP_TIMEOUT_MS = 1200;
 
 type Step = "gate" | "deck" | "end";
 type Options = {
@@ -111,19 +114,46 @@ function filtersToParams(filters: FiltersData): URLSearchParams {
   return params;
 }
 
-function scrollAppToTop(): void {
-  if (typeof document !== "undefined") {
-    const scrollRoot = document.getElementById("app-scroll");
-    if (scrollRoot) {
-      scrollRoot.scrollTo({ top: 0, left: 0, behavior: "auto" });
-      scrollRoot.scrollTop = 0;
+function collectScrollRoots(from?: HTMLElement | null): Array<Element | Window> {
+  const roots: Array<Element | Window> = [];
+  if (typeof document === "undefined") return roots;
+
+  const named = document.getElementById("app-scroll");
+  if (named) roots.push(named);
+
+  let node: HTMLElement | null = from?.parentElement ?? null;
+  while (node && node !== document.body) {
+    const style = window.getComputedStyle(node);
+    const overflowY = style.overflowY;
+    const scrollable = overflowY === "auto" || overflowY === "scroll" || overflowY === "overlay";
+    if (scrollable && node.scrollHeight > node.clientHeight && !roots.includes(node)) {
+      roots.push(node);
     }
+    node = node.parentElement;
   }
-  if (typeof window !== "undefined") {
-    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
-    document.documentElement.scrollTop = 0;
-    document.body.scrollTop = 0;
-  }
+
+  const scrollingElement = document.scrollingElement;
+  if (scrollingElement && !roots.includes(scrollingElement)) roots.push(scrollingElement);
+  if (document.documentElement && !roots.includes(document.documentElement)) roots.push(document.documentElement);
+  if (document.body && !roots.includes(document.body)) roots.push(document.body);
+  if (typeof window !== "undefined") roots.push(window);
+
+  return roots;
+}
+
+function scrollAppToTop(from?: HTMLElement | null): void {
+  if (typeof window === "undefined") return;
+  collectScrollRoots(from).forEach((root) => {
+    if (root === window) {
+      window.scrollTo(0, 0);
+      return;
+    }
+    const element = root as Element;
+    if (typeof (element as HTMLElement).scrollTo === "function") {
+      (element as HTMLElement).scrollTo({ top: 0, left: 0, behavior: "auto" });
+    }
+    element.scrollTop = 0;
+  });
 }
 
 export default function CarsMobileExperience({
@@ -146,6 +176,12 @@ export default function CarsMobileExperience({
   const [error, setError] = useState<string | null>(null);
   const [restored, setRestored] = useState(false);
   const shouldSnapToTopRef = useRef(false);
+  const deckHostRef = useRef<HTMLDivElement | null>(null);
+  const endHostRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    loadSwipeDeck();
+  }, []);
 
   useEffect(() => {
     setDraft(filters);
@@ -227,31 +263,19 @@ export default function CarsMobileExperience({
         setShowStartOver(false);
         setStep("gate");
         setRestored(true);
-        window.requestAnimationFrame(() => {
-          window.requestAnimationFrame(() => {
-            scrollAppToTop();
-          });
-        });
+        shouldSnapToTopRef.current = true;
         return;
       }
       const raw = window.sessionStorage.getItem(SESSION_KEY);
       if (!raw) {
         setRestored(true);
-        window.requestAnimationFrame(() => {
-          window.requestAnimationFrame(() => {
-            scrollAppToTop();
-          });
-        });
+        shouldSnapToTopRef.current = true;
         return;
       }
       const parsed = JSON.parse(raw) as PersistedState;
       if (!parsed || !Array.isArray(parsed.items)) {
         setRestored(true);
-        window.requestAnimationFrame(() => {
-          window.requestAnimationFrame(() => {
-            scrollAppToTop();
-          });
-        });
+        shouldSnapToTopRef.current = true;
         return;
       }
       onFiltersChange(parsed.filters || EMPTY_FILTERS);
@@ -260,15 +284,11 @@ export default function CarsMobileExperience({
       setTotalGroups(parsed.totalGroups || 0);
       setShowStartOver(Boolean(parsed.showStartOver));
       setStep(parsed.step === "deck" || parsed.step === "end" ? parsed.step : "gate");
+      shouldSnapToTopRef.current = true;
     } catch {
-      // Ignore invalid session state.
+      shouldSnapToTopRef.current = true;
     } finally {
       setRestored(true);
-      window.requestAnimationFrame(() => {
-        window.requestAnimationFrame(() => {
-          scrollAppToTop();
-        });
-      });
     }
   }, [clearSession, onFiltersChange]);
 
@@ -278,10 +298,12 @@ export default function CarsMobileExperience({
     if (clearStoredState) {
       clearSession();
     }
+    shouldSnapToTopRef.current = true;
     if (typeof window !== "undefined") {
       window.requestAnimationFrame(() => {
         window.requestAnimationFrame(() => {
           scrollAppToTop();
+          shouldSnapToTopRef.current = false;
         });
       });
     }
@@ -341,6 +363,7 @@ export default function CarsMobileExperience({
           active.blur();
         }
       }
+      scrollAppToTop();
       onFiltersChange(nextFilters);
       setDraft(nextFilters);
       await buildDeck(nextFilters);
@@ -348,15 +371,67 @@ export default function CarsMobileExperience({
     [buildDeck, onFiltersChange]
   );
 
-  useEffect(() => {
-    if (!shouldSnapToTopRef.current || loadingDeck || step !== "deck") return;
-    shouldSnapToTopRef.current = false;
-    window.requestAnimationFrame(() => {
-      window.requestAnimationFrame(() => {
-        scrollAppToTop();
+  useLayoutEffect(() => {
+    if (!shouldSnapToTopRef.current) return;
+    if (loadingDeck) return;
+    if (step !== "deck" && step !== "end") return;
+
+    const host = step === "deck" ? deckHostRef.current : endHostRef.current;
+    if (!host) return;
+
+    let cancelled = false;
+    let frame = 0;
+    let observer: ResizeObserver | null = null;
+    let timeoutId = 0;
+    let lastHeight = -1;
+    let stableTicks = 0;
+
+    const stop = () => {
+      if (cancelled) return;
+      cancelled = true;
+      if (frame) window.cancelAnimationFrame(frame);
+      if (timeoutId) window.clearTimeout(timeoutId);
+      if (observer) observer.disconnect();
+      shouldSnapToTopRef.current = false;
+    };
+
+    const tick = () => {
+      if (cancelled) return;
+      const height = host.getBoundingClientRect().height;
+      scrollAppToTop(host);
+
+      if (height > 0 && height === lastHeight) {
+        stableTicks += 1;
+      } else {
+        stableTicks = 0;
+      }
+      lastHeight = height;
+
+      if (stableTicks >= 3) {
+        stop();
+        return;
+      }
+      frame = window.requestAnimationFrame(tick);
+    };
+
+    if (typeof ResizeObserver !== "undefined") {
+      observer = new ResizeObserver(() => {
+        if (cancelled) return;
+        scrollAppToTop(host);
       });
-    });
-  }, [loadingDeck, step]);
+      observer.observe(host);
+    }
+
+    frame = window.requestAnimationFrame(tick);
+    timeoutId = window.setTimeout(stop, SNAP_TIMEOUT_MS);
+
+    return () => {
+      if (frame) window.cancelAnimationFrame(frame);
+      if (timeoutId) window.clearTimeout(timeoutId);
+      if (observer) observer.disconnect();
+      cancelled = true;
+    };
+  }, [loadingDeck, step, deckItems.length, restored]);
 
   const handleToggleList = (key: keyof FiltersData, value: string) => {
     setDraft((prev) => {
@@ -430,6 +505,7 @@ export default function CarsMobileExperience({
   const resetDismissed = async () => {
     writeDismissed(new Set<string>());
     setShowStartOver(false);
+    shouldSnapToTopRef.current = true;
     await buildDeck(filters);
   };
 
@@ -478,27 +554,29 @@ export default function CarsMobileExperience({
 
   if (step === "deck" && deckItems.length > 0) {
     return (
-      <SwipeDeck
-        items={deckItems}
-        onLike={handleLike}
-        onNope={handleNope}
-        onDropBroken={handleDropBroken}
-        onEditFilters={() => {
-          goToGate(true);
-        }}
-        onPersist={() => {
-          if (typeof window !== "undefined") {
-            window.sessionStorage.setItem(RESTORE_ON_RETURN_KEY, "1");
-          }
-          persistSession("deck", deckItems, filters, showStartOver);
-        }}
-      />
+      <div ref={deckHostRef}>
+        <SwipeDeck
+          items={deckItems}
+          onLike={handleLike}
+          onNope={handleNope}
+          onDropBroken={handleDropBroken}
+          onEditFilters={() => {
+            goToGate(true);
+          }}
+          onPersist={() => {
+            if (typeof window !== "undefined") {
+              window.sessionStorage.setItem(RESTORE_ON_RETURN_KEY, "1");
+            }
+            persistSession("deck", deckItems, filters, showStartOver);
+          }}
+        />
+      </div>
     );
   }
 
   if (step === "end") {
     return (
-      <div className={styles.end}>
+      <div ref={endHostRef} className={styles.end}>
         <div className={styles.endIcon}>🏁</div>
         <h2 className={styles.endTitle}>That&apos;s the whole deck</h2>
         <p className={styles.endText}>You went through every model matching your filters.</p>
