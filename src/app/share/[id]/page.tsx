@@ -1,38 +1,28 @@
 import { Metadata } from 'next';
-import { getSheetData } from '@/lib/googleSheets';
+import prisma from '@/lib/prisma';
 import ClientRedirect from './ClientRedirect';
 
-// Replicating logic from dataset.ts to ensure consistency without importing client-side code
 async function getCarData(id: string) {
-  const sheetId = process.env.NEXT_PUBLIC_SHEET_ID || process.env.GOOGLE_SHEETS_SPREADSHEET_ID || "";
-  const range = process.env.NEXT_PUBLIC_SHEET_RANGE || process.env.SHEET_NAME || "DATABASE";
-
-  if (!sheetId) return null;
-
   try {
-    const values = await getSheetData(sheetId, range);
-    if (!values || values.length < 5) return null;
+    const car = await prisma.catalogCar.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        year: true,
+        imageUrl: true,
+        make: { select: { name: true } },
+        model: { select: { name: true } },
+      },
+    });
 
-    const headers = (values[1] || []).map(v => String(v ?? "").trim().toLowerCase());
-    const idIdx = headers.indexOf("id");
-    const makeIdx = headers.indexOf("make");
-    const modelIdx = headers.indexOf("model");
-    const yearIdx = headers.indexOf("year");
-    const imageIdx = headers.indexOf("primary image");
-
-    if (idIdx === -1 || imageIdx === -1) return null;
-
-    const rows = values.slice(4);
-    const row = rows.find(r => String(r[idIdx] ?? "").trim() === id);
-
-    if (!row) return null;
+    if (!car) return null;
 
     return {
-      id: String(row[idIdx] ?? ""),
-      make: String(row[makeIdx] ?? ""),
-      model: String(row[modelIdx] ?? ""),
-      year: String(row[yearIdx] ?? ""),
-      image: String(row[imageIdx] ?? ""),
+      id: car.id,
+      make: car.make.name,
+      model: car.model.name,
+      year: String(car.year),
+      image: car.imageUrl ?? "",
     };
   } catch (error) {
     console.error("Error fetching car data for share:", error);
