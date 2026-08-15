@@ -49,7 +49,7 @@ const MPGE_BANDS: Band[] = [
   { label: "120+ MPGe", min: 120 },
 ];
 
-type Props = { onApply?: (f: FiltersData) => void };
+type Props = { onApply?: (f: FiltersData) => void; onReady?: () => void };
 
 function toggle(list: string[], value: string): string[] {
   return list.includes(value) ? list.filter(v => v !== value) : [...list, value];
@@ -62,7 +62,7 @@ function bandsToRanges(labels: string[], bands: Band[]): { min?: number; max?: n
     .map(b => ({ min: b.min, max: b.max }));
 }
 
-export default function Filters({ onApply }: Props) {
+export default function Filters({ onApply, onReady }: Props) {
   const [facets, setFacets] = useState<CatalogFacets | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
 
@@ -85,8 +85,14 @@ export default function Filters({ onApply }: Props) {
     if (didInit.current) return;
     didInit.current = true;
     fetchCatalogFacets()
-      .then(setFacets)
-      .catch(err => setLoadError(err instanceof Error ? err.message : "Failed to load filters"));
+      .then(value => {
+        setFacets(value);
+        onReady?.();
+      })
+      .catch(err => {
+        setLoadError(err instanceof Error ? err.message : "Failed to load filters");
+        onReady?.();
+      });
   }, []);
 
   useEffect(() => {
@@ -157,7 +163,7 @@ export default function Filters({ onApply }: Props) {
   }
 
   if (!facets) {
-    return <div className={styles.filtersPanel}>Loading filters…</div>;
+    return <div className={styles.filtersPanel} />;
   }
 
   const chip = (label: string, active: boolean, onClick: () => void, count?: number) => (

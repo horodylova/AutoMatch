@@ -112,7 +112,7 @@ function toItem(car: CatalogItem): ListingItemData {
   };
 }
 
-export default function ListingList({ filters }: { filters: FiltersData }) {
+export default function ListingList({ filters, onReady }: { filters: FiltersData; onReady?: () => void }) {
   const [items, setItems] = useState<CatalogItem[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -173,11 +173,13 @@ export default function ListingList({ filters }: { filters: FiltersData }) {
         setItems(result.items);
         setTotal(result.total);
         setLoading(false);
+        onReady?.();
       })
       .catch(err => {
         if (!active || err.name === "AbortError") return;
         setError(err instanceof Error ? err.message : "Failed to load cars");
         setLoading(false);
+        onReady?.();
       });
 
     return () => {
