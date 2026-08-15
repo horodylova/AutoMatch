@@ -3,8 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("POSTGRES_PRISMA_URL")
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL")
   directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
@@ -33,42 +33,42 @@ enum PaymentMethod {
 }
 
 model Dealer {
-  id          String   @id @default(uuid())
-  name        String
-  slug        String   @unique
-  feedUrl     String?
-  contactName String?
-  contactEmail String?
-  contactPhone String?
-  website     String?
-  feedType    FeedType?
-  syncEnabled Boolean  @default(true)
-  billingStatus BillingStatus @default(active)
-  termStartAt DateTime?
-  termEndAt   DateTime?
+  id               String        @id @default(uuid())
+  name             String
+  slug             String        @unique
+  feedUrl          String?
+  contactName      String?
+  contactEmail     String?
+  contactPhone     String?
+  website          String?
+  feedType         FeedType?
+  syncEnabled      Boolean       @default(true)
+  billingStatus    BillingStatus @default(active)
+  termStartAt      DateTime?
+  termEndAt        DateTime?
   stripeCustomerId String?
-  cars        Car[]
-  payments    Payment[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  cars             Car[]
+  payments         Payment[]
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
 
   @@index([termEndAt])
 }
 
 model Car {
-  id          String   @id @default(uuid())
-  vin         String
-  make        String
-  model       String
-  year        Int
-  price       Decimal  @db.Decimal(10, 2)
-  mileage     Int?
-  imageUrl    String?
-  features    Json?
-  dealerId    String
-  dealer      Dealer   @relation(fields: [dealerId], references: [id])
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(uuid())
+  vin       String
+  make      String
+  model     String
+  year      Int
+  price     Decimal  @db.Decimal(10, 2)
+  mileage   Int?
+  imageUrl  String?
+  features  Json?
+  dealerId  String
+  dealer    Dealer   @relation(fields: [dealerId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([dealerId, vin])
 }
@@ -95,25 +95,213 @@ model DealerContactRequest {
 }
 
 model Payment {
-  id                 String   @id @default(uuid())
-  dealerId           String
-  dealer             Dealer   @relation(fields: [dealerId], references: [id])
-  amount             Int
-  currency           String
-  provider           String   @default("stripe")
-  status             PaymentStatus
-  method             PaymentMethod
+  id                    String        @id @default(uuid())
+  dealerId              String
+  dealer                Dealer        @relation(fields: [dealerId], references: [id])
+  amount                Int
+  currency              String
+  provider              String        @default("stripe")
+  status                PaymentStatus
+  method                PaymentMethod
   stripePaymentIntentId String?
-  stripeInvoiceId    String?
-  stripeSessionId    String?
-  stripeCustomerId   String?
-  termMonths         Int
-  startDate          DateTime
-  endDate            DateTime
-  createdAt          DateTime @default(now())
+  stripeInvoiceId       String?
+  stripeSessionId       String?
+  stripeCustomerId      String?
+  termMonths            Int
+  startDate             DateTime
+  endDate               DateTime
+  createdAt             DateTime      @default(now())
 
-  @@index([dealerId, createdAt])
   @@unique([stripePaymentIntentId])
   @@unique([stripeInvoiceId])
   @@unique([stripeSessionId])
+  @@index([dealerId, createdAt])
+}
+
+model Make {
+  id      Int            @id @default(autoincrement())
+  name    String         @unique
+  slug    String         @unique
+  logoUrl String?
+  models  CatalogModel[]
+  cars    CatalogCar[]
+}
+
+model CatalogModel {
+  id     Int          @id @default(autoincrement())
+  name   String
+  slug   String
+  makeId Int
+  make   Make         @relation(fields: [makeId], references: [id])
+  cars   CatalogCar[]
+
+  @@unique([makeId, name])
+  @@index([makeId])
+}
+
+model BodyType {
+  id   Int          @id @default(autoincrement())
+  name String       @unique
+  slug String       @unique
+  cars CatalogCar[]
+}
+
+model FuelType {
+  id   Int          @id @default(autoincrement())
+  name String       @unique
+  slug String       @unique
+  cars CatalogCar[]
+}
+
+model DriveType {
+  id   Int          @id @default(autoincrement())
+  name String       @unique
+  slug String       @unique
+  cars CatalogCar[]
+}
+
+model Transmission {
+  id   Int          @id @default(autoincrement())
+  name String       @unique
+  slug String       @unique
+  cars CatalogCar[]
+}
+
+model EngineType {
+  id   Int          @id @default(autoincrement())
+  name String       @unique
+  slug String       @unique
+  cars CatalogCar[]
+}
+
+model CatalogCar {
+  id             String        @id
+  makeId         Int
+  make           Make          @relation(fields: [makeId], references: [id])
+  modelId        Int
+  model          CatalogModel  @relation(fields: [modelId], references: [id])
+  bodyTypeId     Int?
+  bodyType       BodyType?     @relation(fields: [bodyTypeId], references: [id])
+  fuelTypeId     Int?
+  fuelType       FuelType?     @relation(fields: [fuelTypeId], references: [id])
+  driveTypeId    Int?
+  driveType      DriveType?    @relation(fields: [driveTypeId], references: [id])
+  transmissionId Int?
+  transmission   Transmission? @relation(fields: [transmissionId], references: [id])
+  engineTypeId   Int?
+  engineType     EngineType?   @relation(fields: [engineTypeId], references: [id])
+
+  year         Int
+  trim         String?
+  basePrice    Int?
+  horsepower   Int?
+  cylinders    String?
+  seating      Int?
+  mpgCombined  Int?
+  mpgeCombined Int?
+  imageUrl     String?
+
+  spec      CatalogSpec?
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  @@index([makeId, modelId])
+  @@index([year])
+  @@index([basePrice])
+  @@index([bodyTypeId])
+  @@index([fuelTypeId])
+  @@index([driveTypeId])
+  @@index([transmissionId])
+  @@index([engineTypeId])
+  @@index([mpgCombined])
+  @@index([mpgeCombined])
+}
+
+model CatalogSpec {
+  carId String     @id
+  car   CatalogCar @relation(fields: [carId], references: [id], onDelete: Cascade)
+
+  trimDescription String?
+  baseInvoice     Int?
+  colorsExterior  String?
+  colorsInterior  String?
+  doors           Int?
+
+  lengthIn          Float?
+  widthIn           Float?
+  heightIn          Float?
+  wheelbaseIn       Float?
+  frontTrackIn      Float?
+  rearTrackIn       Float?
+  groundClearanceIn Float?
+  angleOfApproach   Float?
+  angleOfDeparture  Float?
+  turningCircleFt   Float?
+  dragCoefficient   Float?
+
+  epaInteriorVolumeCuFt Float?
+  cargoCapacityCuFt     Float?
+  maxCargoCapacityCuFt  Float?
+  curbWeightLbs         Int?
+  grossWeightLbs        Int?
+  maxPayloadLbs         Int?
+  maxTowingCapacityLbs  Int?
+
+  engineSizeL   Float?
+  horsepowerRpm Int?
+  torqueFtLbs   Int?
+  torqueRpm     Int?
+  valve         String?
+  valveTiming   String?
+  camType       String?
+  engineType    String?
+
+  fuelTankCapacityGal   Float?
+  epaCityHighwayMpg     String?
+  rangeMilesCityHwy     String?
+  epaCityHighwayMpge    String?
+  electricRange         String?
+  epaElectricityRange   String?
+  epaKwhPer100Mi        String?
+  epaTimeToChargeAt240V String?
+  batteryCapacity       String?
+  costToDrive           String?
+  fastChargePortType    String?
+
+  countryOfFinalAssembly String?
+  countryOfOrigin        String?
+  carClassification      String?
+  platformCode           String?
+
+  frontHeadRoomIn     Float?
+  frontHipRoomIn      Float?
+  frontLegRoomIn      Float?
+  frontShoulderRoomIn Float?
+  rearHeadRoomIn      Float?
+  rearHipRoomIn       Float?
+  rearLegRoomIn       Float?
+  rearShoulderRoomIn  Float?
+
+  warrantyBasic      String?
+  warrantyDrivetrain String?
+  warrantyRoadside   String?
+  warrantyRust       String?
+
+  sourceUrl String?
+  review    String?
+  pro       String?
+  con       String?
+  whatsNew  String?
+
+  nhtsaOverallRating  String?
+  newPriceRange       String?
+  usedPriceRange      String?
+  scorecardOverall    Float?
+  scorecardDriving    Float?
+  scorecardComfort    Float?
+  scorecardInterior   Float?
+  scorecardUtility    Float?
+  scorecardTechnology Float?
+
+  dateAdded DateTime?
 }
