@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./CarsMobileExperience.module.css";
-import { fetchDataset, getBodyTypes, getCylinderCounts, getDriveTypes, getFuelTypes, getMakes, getTransmissionTypes } from "@/lib/dataset";
+import { fetchCatalogFacets } from "@/lib/catalog-client";
 import { addWishlistItem, getWishlist, getWishlistCount } from "@/utils/storage";
 import { FiltersData } from "../Filters";
 import { SwipeDeckItem, SwipeDeckResponse } from "./types";
@@ -191,15 +191,15 @@ export default function CarsMobileExperience({
     let active = true;
     const run = async () => {
       try {
-        const dataset = await fetchDataset();
+        const facets = await fetchCatalogFacets();
         if (!active) return;
         setOptions({
-          makes: getMakes(dataset),
-          body: getBodyTypes(dataset),
-          fuel: getFuelTypes(dataset),
-          drive: getDriveTypes(dataset),
-          transmission: getTransmissionTypes(dataset),
-          cylinders: getCylinderCounts(dataset),
+          makes: facets.makes.map(m => m.name),
+          body: facets.bodyTypes.map(b => b.name),
+          fuel: facets.powertrains.map(p => p.name),
+          drive: facets.driveTypes.map(d => d.name),
+          transmission: facets.transmissions.map(t => t.name),
+          cylinders: facets.cylinders.map(c => c.name),
         });
       } finally {
         if (active) setLoadingOptions(false);
