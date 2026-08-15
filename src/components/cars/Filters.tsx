@@ -12,6 +12,7 @@ export type FiltersData = {
   priceRanges?: { min?: number; max?: number }[];
   body?: string[];
   powertrains?: string[];
+  fuel?: string[];
   drive?: string[];
   transmission?: string[];
   cylinders?: string[];
