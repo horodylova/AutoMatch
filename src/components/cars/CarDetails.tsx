@@ -1,7 +1,8 @@
 "use client";
 import { useEffect, useMemo, useState, useCallback } from "react";
 import { createPortal } from "react-dom";
-import { fetchDataset, Row } from "@/lib/dataset";
+import { Row } from "@/lib/dataset";
+import Loader from "@/components/Loader";
 import styles from "./cars.module.css";
 import DetailsGallery from "./DetailsGallery";
 import DetailsKVSection from "./DetailsKVSection";
@@ -18,6 +19,7 @@ function splitList(s: string): string[] {
 export default function CarDetails({ id, initialRow, initialIdx }: Props) {
   const [row, setRow] = useState<Row | null>(initialRow ?? null);
   const [idx, setIdx] = useState<Record<string, number>>(initialIdx ?? {});
+  const [loading, setLoading] = useState(!(row && Object.keys(initialIdx ?? {}).length > 0));
   const [isDealerModalOpen, setIsDealerModalOpen] = useState(false);
   const [dealerResults, setDealerResults] = useState<DealerResult[] | null>(null);
   const [isSearchingDealers, setIsSearchingDealers] = useState(false);
@@ -26,21 +28,24 @@ export default function CarDetails({ id, initialRow, initialIdx }: Props) {
     if (row && Object.keys(idx).length > 0) return;
     let active = true;
     const run = async () => {
-      const ds = await fetchDataset();
-      const idIdx = ds.idx["id"] ?? -1;
-      let found: Row | null = null;
-      if (idIdx >= 0) {
-        for (const r of ds.rows) {
-          const val = String(r[idIdx] ?? "").trim();
-          if (val && val === id) {
-            found = r;
-            break;
-          }
+      try {
+        const response = await fetch(`/api/catalog/car/${encodeURIComponent(id)}`);
+        if (!response.ok) {
+          if (active) setRow(null);
+          return;
         }
-      }
-      if (active) {
-        setRow(found);
-        setIdx(ds.idx);
+        const payload = await response.json();
+        if (!active) return;
+        if (payload?.data?.row && payload?.data?.idx) {
+          setRow(payload.data.row as Row);
+          setIdx(payload.data.idx as Record<string, number>);
+        } else {
+          setRow(null);
+        }
+      } catch {
+        if (active) setRow(null);
+      } finally {
+        if (active) setLoading(false);
       }
     };
     run();
@@ -231,6 +236,14 @@ export default function CarDetails({ id, initialRow, initialIdx }: Props) {
     setDealerResults(null);
     setIsDealerModalOpen(false);
   };
+
+  if (loading) {
+    return (
+      <div className={styles.details}>
+        <Loader />
+      </div>
+    );
+  }
 
   return (
     <div className={styles.details}>
