@@ -5,10 +5,8 @@ import ListingList from "@/components/cars/ListingList";
 import CarsMobileExperience from "@/components/cars/mobile/CarsMobileExperience";
 import styles from "@/components/cars/cars.module.css";
 import Loader from "@/components/Loader";
-import { fetchDataset } from "@/lib/dataset";
 
 export default function Page() {
-  const [ready, setReady] = useState(false);
   const [isMobile, setIsMobile] = useState<boolean | null>(null);
   const [filters, setFilters] = useState<FiltersData>({ makes: [] });
 
@@ -20,17 +18,6 @@ export default function Page() {
     query.addEventListener("change", apply);
     return () => query.removeEventListener("change", apply);
   }, []);
-
-  useEffect(() => {
-    if (isMobile === true) return;
-    let active = true;
-    const run = async () => {
-      await fetchDataset();
-      if (active) setReady(true);
-    };
-    run();
-    return () => { active = false; };
-  }, [isMobile]);
 
   if (isMobile === null) {
     return (
@@ -50,14 +37,10 @@ export default function Page() {
 
   return (
     <div className={styles.page}>
-      {ready ? (
-        <div className={styles.layout}>
-          <Filters onApply={setFilters} />
-          <ListingList filters={filters} />
-        </div>
-      ) : (
-        <Loader />
-      )}
+      <div className={styles.layout}>
+        <Filters onApply={setFilters} />
+        <ListingList filters={filters} />
+      </div>
     </div>
   );
 }

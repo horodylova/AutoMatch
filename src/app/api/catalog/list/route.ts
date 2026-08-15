@@ -173,6 +173,7 @@ export async function GET(request: NextRequest) {
           driveType: { select: { name: true } },
           transmission: { select: { name: true } },
           engineType: { select: { name: true } },
+          spec: { select: { trimDescription: true, engineSizeL: true } },
         },
       }),
     ]);
@@ -198,6 +199,8 @@ export async function GET(request: NextRequest) {
       transmission: r.transmission?.name ?? null,
       engineType: r.engineType?.name ?? null,
       powertrain: labelForEngine(r.engineType?.name),
+      trimDescription: r.spec?.trimDescription ?? null,
+      engineSizeL: r.spec?.engineSizeL ?? null,
     }));
 
     const response = NextResponse.json({
