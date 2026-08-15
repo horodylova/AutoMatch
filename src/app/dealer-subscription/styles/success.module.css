@@ -1,0 +1,227 @@
+/* ─── Success / Cancel pages ─── */
+.successWrap {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 16px 40px;
+}
+
+.successCard {
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  border-radius: 20px;
+  background: var(--kendo-color-surface-alt);
+  border: 1px solid var(--kendo-color-border-alt);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.22);
+  text-align: center;
+  padding: 40px 36px 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* green checkmark circle */
+.successIcon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(34, 197, 94, 0.12);
+  border: 2px solid rgba(34, 197, 94, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  flex-shrink: 0;
+}
+
+.successIconRing {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(34, 197, 94, 0.12);
+  border: 2px solid rgba(34, 197, 94, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  flex-shrink: 0;
+}
+
+.successIcon svg {
+  width: 30px;
+  height: 30px;
+  stroke: #22c55e;
+  stroke-width: 2.5;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.successIconRing svg {
+  width: 30px;
+  height: 30px;
+  stroke: #22c55e;
+  stroke-width: 2.5;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.successLogo {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 20px;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.successTitle {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.2px;
+  margin: 0 0 10px;
+  color: var(--kendo-color-on-app-surface);
+}
+
+.successSubtitle {
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--kendo-color-subtle);
+  margin: 0 auto 28px;
+  max-width: 420px;
+}
+
+/* Primary CTA — full width, bold */
+.successPrimary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 48px;
+  padding: 0 24px;
+  background: var(--kendo-color-primary);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: filter 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 6px 20px rgba(229, 72, 63, 0.32);
+  letter-spacing: 0.01em;
+  margin-bottom: 10px;
+}
+
+.successPrimary:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 28px rgba(229, 72, 63, 0.42);
+}
+
+/* Two ghost buttons side by side */
+.successActions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.successActionsRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  width: 100%;
+}
+
+.successSecondaryRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  width: 100%;
+}
+
+.successSecondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  padding: 0 16px;
+  background: transparent;
+  color: var(--kendo-color-on-app-surface);
+  border: 1px solid var(--kendo-color-border);
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+  white-space: nowrap;
+}
+
+.successSecondary:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.22);
+  transform: translateY(-1px);
+}
+
+.successNote {
+  margin-top: 20px;
+  font-size: 13px;
+  color: var(--kendo-color-subtle);
+  line-height: 1.5;
+  opacity: 0.75;
+}
+
+/* Theme-specific tuning */
+:root[data-theme="dark"] .successCard {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--kendo-color-border);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.30);
+}
+
+:root[data-theme="light"] .successCard {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
+}
+
+:global(html[data-theme="light"]) .successSecondary:hover {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.2);
+}
+
+:global(html[data-theme="light"]) .successIcon {
+  background: rgba(34, 197, 94, 0.08);
+  border-color: rgba(34, 197, 94, 0.25);
+}
+
+@media (max-width: 480px) {
+  .successCard {
+    padding: 32px 20px 28px;
+    border-radius: 16px;
+  }
+
+  .successTitle {
+    font-size: 24px;
+  }
+
+  .successSubtitle {
+    font-size: 14px;
+    margin-bottom: 24px;
+  }
+
+  .successSecondaryRow {
+    grid-template-columns: 1fr;
+  }
+
+  .successActionsRow {
+    grid-template-columns: 1fr;
+  }
+
+  .successSecondary {
+    height: 44px;
+  }
+}

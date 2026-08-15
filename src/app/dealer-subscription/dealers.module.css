@@ -1,0 +1,882 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 100px 24px 80px;
+  font-family: var(--kendo-font-family, sans-serif);
+  color: var(--kendo-color-on-app-surface);
+  flex: 1;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.contentWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  width: 100%;
+  align-items: center;
+}
+
+/* Header Row base styles (mobile) */
+.headerRow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.logoWrapper {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin-bottom: 1.5rem;
+}
+
+.image {
+  object-fit: contain;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--kendo-color-on-app-surface);
+  margin: 0;
+}
+
+/* Utility classes for responsive text */
+.mobileOnly {
+  display: block;
+}
+
+.desktopOnly {
+  display: none;
+}
+
+/* Desktop layout */
+@media (min-width: 900px) {
+  .mobileOnly {
+    display: none;
+  }
+
+  .desktopOnly {
+    display: block;
+  }
+
+  .container {
+    padding-top: 150px;
+  }
+
+  .title {
+    font-size: 2.5rem;
+  }
+
+  .contentWrapper {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 4rem;
+  }
+
+  .infoSection {
+    flex: 1;
+    padding-right: 2rem;
+  }
+
+  .headerRow {
+    flex-direction: row;
+    align-items: center;
+    text-align: left;
+    gap: 1.5rem;
+  }
+
+  .logoWrapper {
+    margin-bottom: 0;
+    flex-shrink: 0;
+  }
+
+  .formSection {
+    flex: 1;
+    max-width: 500px;
+  }
+
+  .subtitle {
+    font-size: 1.25rem;
+  }
+
+  .bodyText {
+    font-size: 1.1rem;
+  }
+
+  .featureItem {
+    font-size: 1.1rem;
+  }
+
+  .formTitle {
+    font-size: 1.5rem;
+  }
+
+  .pricingTeaser {
+    font-size: 1.2rem;
+  }
+}
+
+.formSection {
+  width: 100%;
+}
+
+.subtitle {
+  font-size: 1.1rem;
+  color: var(--kendo-color-subtle, #666);
+  font-weight: 300;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.bodyText {
+  font-size: 1rem;
+  color: var(--kendo-color-on-app-surface);
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.formCard {
+  background: var(--kendo-color-surface, #15202B);
+  padding: 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--kendo-color-border, rgba(255, 255, 255, 0.08));
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media (min-width: 900px) {
+  .formCard {
+    padding: 2.5rem;
+  }
+}
+
+.formTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--kendo-color-on-app-surface, #F5F5F7);
+}
+
+/* New: small descriptor under form title */
+.formSubnote {
+  font-size: 0.88rem;
+  color: var(--kendo-color-subtle);
+  margin: 0 0 1.5rem;
+  line-height: 1.5;
+}
+
+.formGroup {
+  margin-bottom: 1.25rem;
+}
+
+.label {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--kendo-color-on-app-surface, #F5F5F7);
+}
+
+/* New: muted "(optional)" suffix in labels */
+.labelOptional {
+  font-weight: 400;
+  opacity: 0.55;
+  font-size: 0.82rem;
+}
+
+.input,
+.textarea,
+.select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--kendo-color-border, rgba(255, 255, 255, 0.08));
+  font-family: inherit;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  background: var(--kendo-color-surface, #15202B);
+  color: var(--kendo-color-on-app-surface, #F5F5F7);
+  -webkit-text-fill-color: var(--kendo-color-on-app-surface, #F5F5F7);
+  caret-color: var(--kendo-color-on-app-surface, #F5F5F7);
+}
+
+.select {
+  appearance: none;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23F5F5F7' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1em;
+  padding-right: 2.5rem;
+  color-scheme: dark;
+}
+
+.select option {
+  background-color: var(--kendo-color-surface, #15202B);
+  color: var(--kendo-color-on-app-surface, #F5F5F7);
+  padding: 10px;
+}
+
+.input:-webkit-autofill,
+.input:-webkit-autofill:hover,
+.input:-webkit-autofill:focus,
+.textarea:-webkit-autofill,
+.textarea:-webkit-autofill:hover,
+.textarea:-webkit-autofill:focus,
+.select:-webkit-autofill,
+.select:-webkit-autofill:hover,
+.select:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--kendo-color-on-app-surface, #F5F5F7);
+  -webkit-box-shadow: 0 0 0px 1000px var(--kendo-color-surface, #15202B) inset;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: rgba(245, 245, 247, 0.42);
+  font-style: italic;
+}
+
+.input:focus,
+.textarea:focus,
+.select:focus {
+  outline: none;
+  border-color: var(--kendo-color-primary, #E5483F);
+  box-shadow: 0 0 0 3px rgba(229, 72, 63, 0.15);
+  background: var(--kendo-color-surface, #15202B);
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.submitButton {
+  width: 100%;
+  padding: 14px;
+  background: var(--kendo-color-primary, #e63946);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 0.5rem;
+  letter-spacing: 0.01em;
+}
+
+.submitButton:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(229, 72, 63, 0.32);
+}
+
+.submitButton:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+  filter: none;
+  opacity: 0.7;
+  box-shadow: none;
+}
+
+.disclaimer {
+  margin-top: 1rem;
+  font-size: 0.78rem;
+  color: var(--kendo-color-subtle, #999);
+  text-align: center;
+  line-height: 1.4;
+}
+
+.disclaimer a {
+  color: var(--kendo-color-primary, #E5483F);
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.disclaimer a:hover {
+  text-decoration: underline;
+  opacity: 0.9;
+}
+
+/* ─── Form reassurance strip (below the card) ─── */
+.formReassurance {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+  padding: 0 4px;
+}
+
+.reassuranceItem {
+  font-size: 0.78rem;
+  color: var(--kendo-color-subtle);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.reassuranceDot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--kendo-color-subtle);
+  opacity: 0.4;
+  flex-shrink: 0;
+}
+
+/* ─── Toast ─── */
+.toastContainer {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  pointer-events: none;
+}
+
+/* Legacy classes kept for compatibility */
+.pricingTeaser {
+  margin-top: 4rem;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--kendo-color-on-app-surface);
+  max-width: 600px;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 1.5rem 2rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.certaintyCue {
+  margin-top: 2rem;
+  text-align: center;
+  max-width: 600px;
+}
+
+.certaintyCue p {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--kendo-color-subtle, #999);
+  line-height: 1.5;
+}
+
+.certaintyCue strong {
+  color: var(--kendo-color-primary);
+  font-weight: 700;
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+}
+
+/* Light Theme Overrides */
+:global(html[data-theme="light"]) .container {
+  color: var(--kendo-color-on-app-surface);
+}
+
+:global(html[data-theme="light"]) .title {
+  color: var(--kendo-color-on-app-surface);
+}
+
+:global(html[data-theme="light"]) .subtitle {
+  color: rgba(17, 18, 20, 0.7);
+}
+
+:global(html[data-theme="light"]) .bodyText,
+:global(html[data-theme="light"]) .stepDescription,
+:global(html[data-theme="light"]) .featureItem {
+  color: rgba(17, 18, 20, 0.8);
+}
+
+:global(html[data-theme="light"]) .howItWorksTitle {
+  color: rgba(17, 18, 20, 0.5);
+}
+
+:global(html[data-theme="light"]) .formTitle {
+  color: var(--kendo-color-on-app-surface);
+}
+
+:global(html[data-theme="light"]) .formSubnote {
+  color: rgba(17, 18, 20, 0.55);
+}
+
+:global(html[data-theme="light"]) .trustSignal {
+  color: rgba(17, 18, 20, 0.6);
+  border-left-color: var(--kendo-color-primary);
+}
+
+:global(html[data-theme="light"]) .featureIcon {
+  color: var(--kendo-color-primary);
+}
+
+:global(html[data-theme="light"]) .formCard {
+  background: #FFFFFF;
+  border-color: rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+:global(html[data-theme="light"]) .label {
+  color: rgba(17, 18, 20, 0.85);
+}
+
+:global(html[data-theme="light"]) .input,
+:global(html[data-theme="light"]) .textarea,
+:global(html[data-theme="light"]) .select {
+  background: #FFFFFF;
+  border-color: rgba(0, 0, 0, 0.15);
+  color: var(--kendo-color-on-app-surface);
+  -webkit-text-fill-color: var(--kendo-color-on-app-surface);
+}
+
+:global(html[data-theme="light"]) .input::placeholder,
+:global(html[data-theme="light"]) .textarea::placeholder {
+  color: rgba(17, 18, 20, 0.35);
+  font-style: italic;
+}
+
+:global(html[data-theme="light"]) .input:focus,
+:global(html[data-theme="light"]) .textarea:focus,
+:global(html[data-theme="light"]) .select:focus {
+  border-color: var(--kendo-color-primary);
+  box-shadow: 0 0 0 3px rgba(229, 72, 63, 0.1);
+}
+
+:global(html[data-theme="light"]) .select {
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231A252F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1em;
+}
+
+:global(html[data-theme="light"]) .select option {
+  background-color: #FFFFFF;
+  color: var(--kendo-color-on-app-surface);
+}
+
+:global(html[data-theme="light"]) .input:-webkit-autofill,
+:global(html[data-theme="light"]) .input:-webkit-autofill:hover,
+:global(html[data-theme="light"]) .input:-webkit-autofill:focus,
+:global(html[data-theme="light"]) .textarea:-webkit-autofill,
+:global(html[data-theme="light"]) .textarea:-webkit-autofill:hover,
+:global(html[data-theme="light"]) .textarea:-webkit-autofill:focus,
+:global(html[data-theme="light"]) .select:-webkit-autofill,
+:global(html[data-theme="light"]) .select:-webkit-autofill:hover,
+:global(html[data-theme="light"]) .select:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--kendo-color-on-app-surface);
+  -webkit-box-shadow: 0 0 0px 1000px #FFFFFF inset;
+}
+
+:global(html[data-theme="light"]) .pricingTeaser {
+  background: rgba(229, 72, 63, 0.05);
+  border-color: rgba(229, 72, 63, 0.1);
+  color: var(--kendo-color-on-app-surface);
+}
+
+:global(html[data-theme="light"]) .certaintyCue p {
+  color: rgba(17, 18, 20, 0.6);
+}
+
+:global(html[data-theme="light"]) .certaintyCue strong {
+  color: var(--kendo-color-primary);
+}
+
+/* ─── Order Card (used on /dealer-subscription/order page) ─── */
+.orderCard {
+  margin-top: 2rem;
+  padding: 16px;
+  border: 1px solid var(--kendo-color-border);
+  border-radius: 14px;
+  background: var(--kendo-color-surface);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+  display: grid;
+  gap: 10px;
+}
+.orderTitle {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--kendo-color-on-app-surface);
+}
+.orderText {
+  margin: 0;
+  color: var(--kendo-color-on-app-surface);
+  opacity: 0.9;
+  line-height: 1.5;
+}
+.orderActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.orderButton {
+  display: inline-block;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: var(--kendo-color-primary);
+  color: var(--kendo-color-on-primary);
+  border: 1px solid var(--kendo-color-border-alt);
+  box-shadow: 0 8px 22px rgba(229, 72, 63, 0.28);
+  text-decoration: none;
+  font-weight: 800;
+  cursor: pointer;
+}
+.orderButtonActive {
+  background: linear-gradient(180deg, var(--kendo-color-primary) 0%, rgba(229,72,63,0.95) 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 12px 28px rgba(229, 72, 63, 0.38);
+}
+.orderButtonXL {
+  padding: 14px 22px;
+  font-size: 1.05rem;
+  border-radius: 12px;
+}
+.orderButton:hover {
+  filter: brightness(1.06);
+  box-shadow: 0 10px 28px rgba(229, 72, 63, 0.32);
+}
+.orderButton:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(229,72,63,0.35), 0 10px 28px rgba(229,72,63,0.32);
+}
+.orderButton:disabled {
+  background: #6b6b6b;
+  color: rgba(255,255,255,0.7);
+  border-color: rgba(255,255,255,0.12);
+  box-shadow: none;
+  transform: none;
+  filter: none;
+  cursor: not-allowed;
+}
+.orderNote {
+  font-size: 0.9rem;
+  color: var(--kendo-color-subtle);
+}
+
+.orderForm {
+  display: grid;
+  gap: 16px;
+}
+.orderGrid {
+  display: grid;
+  gap: 16px;
+}
+.orderGroup {
+  display: grid;
+  gap: 8px;
+}
+.orderLabel {
+  font-weight: 600;
+  color: var(--kendo-color-on-app-surface);
+}
+.orderCheck {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  color: var(--kendo-color-on-app-surface);
+}
+.checkWrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+.checkbox {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+.checkboxUi {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  border: 2px solid var(--kendo-color-border, rgba(255,255,255,0.2));
+  display: inline-block;
+  background: rgba(255,255,255,0.06);
+  box-shadow: inset 0 0 0 2px transparent;
+  transition: all 0.15s ease;
+}
+.checkbox:focus-visible + .checkboxUi {
+  box-shadow: 0 0 0 3px rgba(229, 72, 63, 0.35);
+}
+.checkbox:checked + .checkboxUi {
+  background: var(--kendo-color-primary);
+  border-color: var(--kendo-color-primary);
+  box-shadow: inset 0 0 0 2px rgba(0,0,0,0.1);
+}
+.checkbox:checked + .checkboxUi::after {
+  content: "";
+  display: block;
+  width: 8px;
+  height: 4px;
+  border: 2px solid var(--kendo-color-on-primary, #fff);
+  border-top: 0;
+  border-right: 0;
+  transform: translate(3px, 4px) rotate(-45deg);
+}
+.checkLabel {
+  color: var(--kendo-color-on-app-surface);
+  font-weight: 600;
+}
+.collapseSlot {
+  height: 52px;
+  display: grid;
+  align-items: center;
+  overflow: hidden;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  opacity: 0;
+  transform: translateY(-4px);
+  pointer-events: none;
+}
+.collapseSlot.open {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+.hintSlot {
+  height: 28px;
+  display: grid;
+  align-items: center;
+  overflow: hidden;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  opacity: 0;
+  transform: translateY(-4px);
+  pointer-events: none;
+}
+.hintSlot.open {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+.orderHint {
+  font-size: 0.9rem;
+  color: var(--kendo-color-subtle);
+}
+
+/* DatePicker */
+.datePickerWrap {
+  position: relative;
+  width: 100%;
+  display: inline-block;
+}
+:global(.dpInput) {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--kendo-color-border, rgba(255, 255, 255, 0.08));
+  font-family: inherit;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  background: var(--kendo-color-surface, #15202B);
+  color: var(--kendo-color-on-app-surface, #F5F5F7);
+  text-align: left;
+}
+:global(.dpInput:focus) {
+  outline: none;
+  border-color: var(--kendo-color-primary, #E5483F);
+  box-shadow: 0 0 0 3px rgba(229, 72, 63, 0.15);
+}
+:global(.dpPopover) {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: auto;
+  z-index: 50;
+  background: var(--kendo-color-surface);
+  color: var(--kendo-color-on-app-surface);
+  border: 1px solid var(--kendo-color-border);
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  padding: 10px;
+  width: 320px;
+  max-width: 90vw;
+  box-sizing: border-box;
+}
+:global(.dpHeader) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+:global(.dpNav) {
+  border: 1px solid var(--kendo-color-border);
+  background: transparent;
+  color: var(--kendo-color-on-app-surface);
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+:global(.dpLabel) {
+  font-weight: 700;
+}
+:global(.dpWeekRow) {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-bottom: 4px;
+}
+:global(.dpWeek) {
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--kendo-color-subtle);
+}
+:global(.dpGrid) {
+  display: grid;
+  grid-template-rows: repeat(6, auto);
+  gap: 3px;
+}
+:global(.dpRow) {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+:global(.dpDay) {
+  border: 1px solid var(--kendo-color-border);
+  background: transparent;
+  color: var(--kendo-color-on-app-surface);
+  border-radius: 6px;
+  padding: 6px;
+  cursor: pointer;
+}
+:global(.dpDay:hover) {
+  border-color: var(--kendo-color-primary);
+}
+:global(.dpDayMuted) {
+  opacity: 0.5;
+}
+:global(.dpDayDisabled) {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+:global(.dpSelected) {
+  background: var(--kendo-color-primary);
+  color: var(--kendo-color-on-primary);
+  border-color: var(--kendo-color-primary);
+}
+:global(html[data-theme="light"]) :global(.dpInput) {
+  background: #FFFFFF;
+  color: var(--kendo-color-on-app-surface);
+  border-color: rgba(0,0,0,0.15);
+}
+:global(html[data-theme="light"]) :global(.dpPopover) {
+  background: #FFFFFF;
+  color: var(--kendo-color-on-app-surface);
+  border-color: rgba(0,0,0,0.15);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+.orderNotice {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--kendo-color-border);
+  background: rgba(229, 72, 63, 0.08);
+  color: var(--kendo-color-on-app-surface);
+}
+.orderLink {
+  color: var(--kendo-color-primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 2px;
+  font-weight: 600;
+}
+.orderLink:hover {
+  filter: brightness(1.1);
+}
+:global(html[data-theme="light"]) .orderLink {
+  color: #C9472D;
+}
+.orderCols {
+  display: grid;
+  gap: 10px;
+}
+@media (min-width: 700px) {
+  .orderCols {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+.pillRow {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.pill,
+.pillActive {
+  border: 1px solid var(--kendo-color-border);
+  background: transparent;
+  color: var(--kendo-color-on-app-surface);
+  padding: 8px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.pillActive {
+  background: var(--kendo-color-primary);
+  color: var(--kendo-color-on-primary);
+  border-color: var(--kendo-color-primary);
+}
+.radioRow {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.radioItem {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  color: var(--kendo-color-on-app-surface);
+  cursor: pointer;
+}
+.radioItem input {
+  accent-color: var(--kendo-color-primary);
+}
+.orderSecondary {
+  display: inline-block;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--kendo-color-on-app-surface);
+  border: 1px solid var(--kendo-color-border);
+  text-decoration: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.orderSummary {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--kendo-color-border);
+  background: linear-gradient(180deg, rgba(229,72,63,0.12), transparent);
+  margin-bottom: 12px;
+}
+.orderSummaryLabel {
+  color: var(--kendo-color-subtle);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.orderTotal {
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: var(--kendo-color-on-app-surface);
+}

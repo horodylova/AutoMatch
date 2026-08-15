@@ -8,14 +8,51 @@ datasource db {
   directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
+enum FeedType {
+  HOMENET
+  CSV
+  SFTP
+}
+
+enum BillingStatus {
+  active
+  expired
+  past_due
+}
+
+enum PaymentStatus {
+  succeeded
+  failed
+  processing
+}
+
+enum PaymentMethod {
+  card
+  us_bank_account
+  invoice
+}
+
 model Dealer {
   id          String   @id @default(uuid())
   name        String
   slug        String   @unique
   feedUrl     String?
+  contactName String?
+  contactEmail String?
+  contactPhone String?
+  website     String?
+  feedType    FeedType?
+  syncEnabled Boolean  @default(true)
+  billingStatus BillingStatus @default(active)
+  termStartAt DateTime?
+  termEndAt   DateTime?
+  stripeCustomerId String?
   cars        Car[]
+  payments    Payment[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  @@index([termEndAt])
 }
 
 model Car {
@@ -55,4 +92,28 @@ model DealerContactRequest {
   status         String   @default("new")
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
+}
+
+model Payment {
+  id                 String   @id @default(uuid())
+  dealerId           String
+  dealer             Dealer   @relation(fields: [dealerId], references: [id])
+  amount             Int
+  currency           String
+  provider           String   @default("stripe")
+  status             PaymentStatus
+  method             PaymentMethod
+  stripePaymentIntentId String?
+  stripeInvoiceId    String?
+  stripeSessionId    String?
+  stripeCustomerId   String?
+  termMonths         Int
+  startDate          DateTime
+  endDate            DateTime
+  createdAt          DateTime @default(now())
+
+  @@index([dealerId, createdAt])
+  @@unique([stripePaymentIntentId])
+  @@unique([stripeInvoiceId])
+  @@unique([stripeSessionId])
 }
