@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "./compare.module.css";
-import { fetchDataset, Dataset } from "@/lib/dataset";
+import { Row } from "@/lib/dataset";
 import { CarSpecs, parseCarData } from "@/utils/carScoring";
 import CompareSearch from "@/components/compare/CompareSearch";
 import CompareView from "@/components/compare/CompareView";
@@ -12,7 +12,6 @@ import { FaHeart, FaRegHeart } from "react-icons/fa6";
 import { addWishlistItem, isWishlisted, removeWishlistItem, WISHLIST_UPDATED_EVENT } from "@/utils/storage";
 
 export default function ComparePage() {
-  const [dataset, setDataset] = useState<Dataset | null>(null);
   const [car1, setCar1] = useState<CarSpecs | null>(null);
   const [car2, setCar2] = useState<CarSpecs | null>(null);
   const [isComparing, setIsComparing] = useState(false);
@@ -32,28 +31,31 @@ export default function ComparePage() {
       }
     }
     
-    fetchDataset().then((ds) => {
-      setDataset(ds);
-      
-      if (typeof window !== "undefined") {
-        const params = new URLSearchParams(window.location.search);
-        const car1Id = params.get("car1");
-        
-        if (car1Id && ds) {
-          const idIdx = ds.idx["id"] ?? -1;
-          const foundRow = ds.rows.find(r => String(r[idIdx] ?? "") === car1Id);
-          
-          if (foundRow) {
-            const car = parseCarData(foundRow, ds.idx);
-            setCar1(car);
+    const loadSharedCar = async () => {
+      if (typeof window === "undefined") return;
+      const params = new URLSearchParams(window.location.search);
+      const car1Id = params.get("car1");
+
+      if (car1Id) {
+        try {
+          const response = await fetch(`/api/catalog/car/${encodeURIComponent(car1Id)}`);
+          if (response.ok) {
+            const payload = await response.json();
+            const row = payload?.data?.row as Row | undefined;
+            const idx = payload?.data?.idx as Record<string, number> | undefined;
+            if (row && idx) setCar1(parseCarData(row, idx));
           }
-        }
-        
-        if (hasSharedCar) {
-          setIsLoadingSharedCar(false);
+        } catch {
+          // shared car could not be loaded
         }
       }
-    });
+
+      if (hasSharedCar) {
+        setIsLoadingSharedCar(false);
+      }
+    };
+
+    loadSharedCar();
   }, []);
 
   useEffect(() => {
@@ -184,7 +186,6 @@ export default function ComparePage() {
             </div>
           ) : (
             <CompareSearch 
-              dataset={dataset} 
               onSelect={handleSelect1} 
               placeholder="Search first car..."
             />
@@ -221,7 +222,6 @@ export default function ComparePage() {
             </div>
           ) : (
             <CompareSearch 
-              dataset={dataset} 
               onSelect={handleSelect2} 
               placeholder="Search second car..."
             />
