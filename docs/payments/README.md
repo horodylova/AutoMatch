@@ -32,7 +32,9 @@ Publishing means adding a link. Nothing else needs to change in the code.
 | `POST /api/dealers/checkout` | Creates a Stripe Checkout session in `payment` mode (one-off) |
 | `POST /api/dealers/invoice` | Issues an invoice through Stripe |
 | `POST /api/payments/confirm` | Confirms payment and sends the confirmation email via Brevo |
-| `GET /api/cron/subscriptions-reconcile` | Scheduled reconciliation of subscription state, sends renewal and failure notices |
+| `POST /api/webhooks/stripe` | Receives Stripe events as they happen. Records renewals, extends the dealer term and sends renewal emails |
+| `GET /api/cron/subscriptions-reconcile` | Scheduled safety net. Re-checks recent invoices and fills in anything the webhook missed |
+| `POST /api/admin/dealers/[id]/unsubscribe` | Cancels a dealer subscription. Sits behind admin authentication |
 
 These endpoints respond as soon as the environment variables below are set. They are not protected by the absence of a link. If the site is public and the variables are populated, the endpoints are callable directly.
 
@@ -62,18 +64,30 @@ Required before the flow will work:
 - `BREVO_API_KEY` — confirmation and reconciliation emails
 - `CRON_SECRET` — guards the reconciliation endpoint
 
-`STRIPE_WEBHOOK_SECRET` is present in the environment from earlier work. There is no webhook handler on `master`; confirmation runs through `/api/payments/confirm` and the reconciliation cron instead.
+- `STRIPE_WEBHOOK_SECRET` — verifies that incoming webhook calls genuinely come from Stripe
+
+The webhook and the reconciliation cron overlap deliberately. The webhook reacts immediately but can be missed if the endpoint is unreachable; the cron sweeps up afterwards. Both write through the same unique Stripe ID columns, so a payment processed twice cannot produce two rows.
 
 ## To publish
 
 1. **Migrate the database first.** Run `npx prisma migrate dev --name add-payments` locally against a development database, review the generated SQL, then apply it to production with `npx prisma migrate deploy`. Nothing below will work until the `Payment` table and the new `Dealer` columns exist. Take a database backup before applying to production.
 2. Populate the environment variables above in Vercel, using live Stripe keys rather than test keys.
 3. Create the monthly Price in Stripe and set `STRIPE_PRICE_SUBSCRIPTION_MONTHLY`.
-4. Schedule `GET /api/cron/subscriptions-reconcile` and pass `CRON_SECRET`.
-5. Run a full test transaction in Stripe test mode and confirm a row lands in `Payment`.
-6. Add a link to `/dealer-subscription` from the header, footer, or the `/dealers` page.
+4. Register the webhook endpoint in the Stripe dashboard, pointing at `https://carcupid.fit/api/webhooks/stripe`, and copy the signing secret into `STRIPE_WEBHOOK_SECRET`.
+5. Schedule `GET /api/cron/subscriptions-reconcile` and pass `CRON_SECRET`.
+6. Run a full test transaction in Stripe test mode and confirm a row lands in `Payment`.
+7. Add a link to `/dealer-subscription` from the header, footer, or the `/dealers` page.
 
-Steps 1 to 5 are invisible to visitors. Step 6 is what makes the system public, so leave it until everything else is verified.
+Steps 1 to 6 are invisible to visitors. Step 7 is what makes the system public, so leave it until everything else is verified.
+
+## Known gap
+
+There is no button in the admin interface that calls the unsubscribe endpoint, and the dealer form does not collect contact details. Both were built on the payment branch alongside changes that were not carried over, because they would have altered the live admin area before the payment system is in use.
+
+Two consequences for whoever publishes this:
+
+- Cancelling a subscription currently requires calling `POST /api/admin/dealers/[id]/unsubscribe` directly rather than clicking something.
+- `/api/payments/confirm` matches a dealer by `contactEmail`, but that field cannot be filled from the admin form as it stands. Add the contact fields to the dealer form before going live, or dealer records will need editing by hand.
 
 ## Before publishing, check the data source
 
