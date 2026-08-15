@@ -23,9 +23,8 @@ import IntakeForm from "../../components/quiz/IntakeForm";
 import InterimCandidates from "../../components/quiz/InterimCandidates";
 import { BudgetBand } from "@/utils/initialCandidates";
 import { QUIZ_QUESTIONS } from "../../constants/quizQuestions";
-import { parseCarData, matchCars, Row, ScoredCar, QuizFilters } from "../../utils/carScoring";
+import { parseCarData, ScoredCar, QuizFilters } from "../../utils/carScoring";
 import { Categories, CategoryValue } from "../../constants/categories";
-import { fetchDataset } from "../../lib/dataset";
 import { saveResults, getPreliminaryCandidates } from "../../utils/storage";
 import { trackQuizComplete, trackQuizStart } from "@/lib/gtag";
 import { event } from "@/lib/pixel";
@@ -47,8 +46,6 @@ export default function Page() {
   const [intakeReadiness, setIntakeReadiness] = useState<string>("");
   const part1TrackedRef = useRef(false);
   
-  const [rows, setRows] = useState<Row[]>([]);
-  const [idx, setIdx] = useState<Record<string, number>>({});
   const [topMatches, setTopMatches] = useState<ScoredCar[]>([]);
   const [lastFilters, setLastFilters] = useState<QuizFilters | null>(null);
   const [interimFromResults, setInterimFromResults] = useState(false);
@@ -72,14 +69,7 @@ export default function Page() {
     event("StartQuizView");
   }, []);
 
-  useEffect(() => {
-    async function load() {
-      const ds = await fetchDataset();
-      setIdx(ds.idx);
-      setRows(ds.rows.slice(9));
-    }
-    load();
-  }, []);
+
 
   const { showIntro: qShowIntro, showHalfway: qShowHalfway, showFinal: qShowFinal, current: qCurrent } = quiz;
   useEffect(() => {
@@ -104,7 +94,9 @@ export default function Page() {
   }, [setQuizIntro]);
 
   useEffect(() => {
-    if (quiz.showFinal && rows.length > 0 && Object.keys(idx).length > 0) {
+    if (!quiz.showFinal) return;
+    let active = true;
+    const run = async () => {
       const prefs = Object.values(Categories).reduce((acc, cat) => {
         acc[cat] = 0;
         return acc;
@@ -169,8 +161,7 @@ export default function Page() {
         }
       });
 
-      const cars = rows.map((r) => parseCarData(r, idx));
-      const validCars = cars.filter(c => c.image && c.image !== "/placeholder-car.jpg");
+
      
       const filters: QuizFilters = {};
       
@@ -351,17 +342,15 @@ export default function Page() {
 
       const prelim = getPreliminaryCandidates();
       const prelimIds = (prelim?.ids || []).filter(Boolean);
-      const prelimSet = new Set(prelimIds);
-      const primaryPool = prelimIds.length > 0 ? validCars.filter(c => prelimSet.has(c.id)) : validCars;
 
-      const matchesPrimary = matchCars(primaryPool, prefs, filters);
-      let matches = matchesPrimary;
-      if (matchesPrimary.length < 12) {
-        const allMatches = matchCars(validCars, prefs, filters);
-        const seenIds = new Set(matchesPrimary.map(m => m.car.id));
-        const merged = [...matchesPrimary, ...allMatches.filter(m => !seenIds.has(m.car.id))];
-        matches = merged;
-      }
+      const response = await fetch("/api/quiz/match", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ preferences: prefs, filters, primaryIds: prelimIds, limit: 60 }),
+      });
+      if (!response.ok) return;
+      const payload = await response.json();
+      const matches: ScoredCar[] = payload?.items || [];
 
       const uniqueMatches: ScoredCar[] = [];
       const seenMakes = new Set<string>();
@@ -377,12 +366,15 @@ export default function Page() {
         if (uniqueMatches.length >= 12) break;
       }
 
+      if (!active) return;
       setTopMatches(uniqueMatches);
       setLastFilters(filters);
       trackQuizComplete(uniqueMatches.length);
       event("CompletedQuiz", { matches_count: uniqueMatches.length });
-    }
-  }, [quiz.showFinal, rows, idx, quiz.answers]);
+    };
+    run();
+    return () => { active = false; };
+  }, [quiz.showFinal, quiz.answers]);
 
   const renderQuestion = () => {
     if (quiz.showIntro || quiz.showHalfway || quiz.showFinal) return null;
@@ -611,8 +603,6 @@ export default function Page() {
                 />
               ) : showInterim ? (
                 <InterimCandidates 
-                  rows={rows} 
-                  idx={idx} 
                   budget={intakeBudget} 
                   includeUpcoming={intakeIncludeUpcoming}
                   onContinue={() => {

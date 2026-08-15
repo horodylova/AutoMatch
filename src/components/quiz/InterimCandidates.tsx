@@ -1,10 +1,19 @@
 "use client";
-import { useMemo, useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import stylesCars from "../cars/cars.module.css";
 import headerStyles from "./InterimCandidates.module.css";
 import ListingItem from "../cars/ListingItem";
-import { Row } from "@/utils/carScoring";
-import { buildInitialCandidates, BudgetBand } from "@/utils/initialCandidates";
+import { BudgetBand } from "@/utils/initialCandidates";
+
+type Candidate = {
+  id: string;
+  make: string;
+  model: string;
+  trim: string;
+  year: number;
+  baseMsrp: number;
+  image: string;
+};
 import { setPreliminaryCandidates, setPreliminarySnapshot } from "@/utils/storage";
 
 function toItem(c: { id: string; image: string; make: string; model: string; trim: string; year: number; baseMsrp: number }) {
@@ -22,21 +31,33 @@ function toItem(c: { id: string; image: string; make: string; model: string; tri
 }
 
 export default function InterimCandidates({
-  rows,
-  idx,
   budget,
   includeUpcoming,
   onContinue,
   context
 }: {
-  rows: Row[];
-  idx: Record<string, number>;
   budget: BudgetBand;
   includeUpcoming: boolean;
   onContinue?: () => void;
   context?: "quiz" | "results";
 }) {
-  const candidates = useMemo(() => buildInitialCandidates(rows, idx, budget, includeUpcoming, 1000), [rows, idx, budget, includeUpcoming]);
+  const [candidates, setCandidates] = useState<Candidate[]>([]);
+
+  useEffect(() => {
+    let active = true;
+    const params = new URLSearchParams({
+      budget,
+      includeUpcoming: String(includeUpcoming),
+      cap: "1000",
+    });
+    fetch(`/api/quiz/candidates?${params.toString()}`)
+      .then(response => (response.ok ? response.json() : null))
+      .then(payload => {
+        if (active && payload?.items) setCandidates(payload.items as Candidate[]);
+      })
+      .catch(() => {});
+    return () => { active = false; };
+  }, [budget, includeUpcoming]);
   const pageSize = 24;
   const [page, setPage] = useState(1);
   const total = candidates.length;
